@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { sendInquiryAlert } from "../../inquiry-notify";
 
 export const runtime = "edge";
 
@@ -162,6 +163,10 @@ export async function POST(request: Request) {
         new Date().toISOString(),
       )
       .run();
+
+    await sendInquiryAlert(env, {
+      kind, language, source, name, email, organization, role, region, interest, context, decision, contactMethod,
+    });
 
     return NextResponse.json({ ok: true });
   } catch (caught) {
