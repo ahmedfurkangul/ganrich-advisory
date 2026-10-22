@@ -8,7 +8,7 @@ Site, Furkan'ın kendi Cloudflare hesabında Cloudflare Workers üzerinde çalı
 |---|---|---|---|---|---|
 | Yerel / test | `ganrich-advisory` | `npm run start` → localhost:3000 | yer tutucu (`site-creator-d1`) | yerel | Testler bununla çalışır |
 | `preview` | `ganrich-preview` | https://ganrich-preview.ahmedfurkangul.workers.dev | `ganrich-preview-db` | `ganrich-preview-docs` | Yayında, üretim verisi yok |
-| `production` | henüz yok | ganrichadvisory.com | henüz yok | henüz yok | Alan adı geçişi onaylanınca eklenecek |
+| `production` | `ganrich-advisory` | ganrichadvisory.com (geçişten sonra) | `ganrich-prod-db` | `ganrich-prod-docs` | Yapılandırıldı; alan adı 2. aşamada bağlanacak |
 
 Bütün bağlamalar (D1, R2, değişkenler) kaynakta, [`wrangler.jsonc`](wrangler.jsonc) içindedir. Build sırasında `CLOUDFLARE_ENV` ortamı seçer; `dist/` dosyaları elle düzenlenmez.
 
