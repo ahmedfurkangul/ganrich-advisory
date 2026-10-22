@@ -68,7 +68,7 @@ const forbidden = [
   "[LINKEDIN]",
 ].filter(marker => prospectSource.includes(marker));
 check("Prospect-facing placeholder audit is clean", forbidden.length === 0, forbidden.join(", "));
-check("Verified direct email remains available", prospectSource.includes("furkangul@gmail.com"), "verified contact email is absent");
+check("Verified direct email remains available", prospectSource.includes("furkangul@ganrichadvisory.com"), "verified contact email is absent");
 
 const buildEntry = "dist/server/index.js";
 check("Deployable server entry exists", await exists(buildEntry), "run npm run build");

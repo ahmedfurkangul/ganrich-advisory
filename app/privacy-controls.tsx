@@ -5,7 +5,7 @@ import type { Lang } from "./content";
 
 const STORAGE_KEY = "ganrich-privacy-choice-v1";
 const OPEN_EVENT = "ganrich:open-cookie-preferences";
-const OPTIONAL_STORAGE = ["ganrich-briefing-tray", "ganrich-framer-en", "ganrich-framer-tr", "ganrich-reading-mode"];
+const OPTIONAL_STORAGE = ["ganrich-briefing-tray", "ganrich-framer-en", "ganrich-framer-tr", "ganrich-draft-framer-en", "ganrich-draft-framer-tr", "ganrich-draft-market-compass", "ganrich-draft-board-brief-en", "ganrich-draft-board-brief-tr", "ganrich-draft-ai-value-lens", "ganrich-reading-mode"];
 
 type PreferenceState = {
   version: "1.0";

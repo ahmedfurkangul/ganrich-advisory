@@ -6,26 +6,25 @@
 
 ## 2. Brand and visual direction
 
-- Position: strategic judgment + regional fluency + applied AI + practical execution.
-- Preferred tagline: “Clarity for consequential decisions.” / “Kritik kararlar için netlik.”
-- Personality: measured, perceptive, discreet, cosmopolitan, and precise.
-- Visual language: warm paper, deep forest, fine rules, asymmetric editorial grids, abstract evidence graphics, and no conventional consulting stock imagery.
-- Voice: short decision-led headlines, specific arguments, explicit trade-offs, no promotional clichés.
+- Position (October 2026 redesign): founder-led strategy advice for owners and leadership teams of established Turkish companies, organised around three situations: expansion beyond Türkiye, outgrowing the founding structure, and where AI creates measurable value. See `docs/REDESIGN-SUMMARY.md`.
+- Home headline: “Independent strategy advice for the next stage of growth.” / “Büyümenin bir sonraki aşaması için bağımsız strateji danışmanlığı.” The earlier tagline “Clarity for consequential decisions.” is retired.
+- Personality: measured, perceptive, discreet, and precise. AI is presented as a research method, not the headline.
+- Visual language: warm paper, deep forest, fine rules, asymmetric editorial grids, the founder's own portrait, clearly labelled fictional exhibits, and no stock imagery.
+- Voice: short decision-led headlines, specific arguments, explicit trade-offs, no promotional clichés. Avoid repeating “clarity”, “complexity”, “consequential” and “transformation”.
 
 ## 3. Final sitemap
 
 - `/en` and `/tr`
-- Expertise / Uzmanlık
-- Markets / Coğrafyalar
-- Insights / İçgörüler
-- One web-native insight template in both languages
+- Expertise / Uzmanlık, with three engagement pages: Market Entry Decision Sprint, Operating Model Review, AI Value Diagnostic
+- How we work / Çalışma biçimimiz
+- Insights / İçgörüler, category pages and one web-native article template in both languages
+- Decision Lab / Karar Laboratuvarı and its five tools plus changelog
 - About / Hakkımızda
 - Contact / İletişim
-- Privacy / Gizlilik
-- Legal notice / Yasal bilgilendirme
-- KVKK
+- Markets / Coğrafyalar (same URL, now the Türkiye → Gulf corridor page; footer and related links, not primary nav)
+- Private executive briefing, privacy centre, cookie notice, KVKK, data rights, AI transparency, terms and legal notice
 
-The content model supports future expertise-detail, regional, country, report, person, and case-study pages without launching empty sections now.
+Primary navigation: Expertise · How we work · Insights · Decision Lab · About, plus a Contact button.
 
 ## 4. Design tokens
 

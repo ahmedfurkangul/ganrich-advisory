@@ -374,7 +374,7 @@ details[open] .plus { transform: rotate(45deg); }
 }
 
 /* Phase 5 interaction and small-screen safeguards */
-h1, h2, h3 { overflow-wrap: break-word; hyphens: auto; }
+h1, h2, h3 { overflow-wrap: break-word; hyphens: manual; }
 main section[id], .expertise-row[id] { scroll-margin-top: 150px; }
 summary, button, select, input:not([type="checkbox"]):not([type="radio"]):not([type="range"]) { min-height: 44px; }
 .button.compact, .explore-trigger, .save-control, .reading-modes button, .command-input button { min-height: 44px; }

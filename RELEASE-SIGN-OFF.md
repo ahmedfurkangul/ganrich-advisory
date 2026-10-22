@@ -16,7 +16,7 @@ This record is intentionally unsigned. Check an item only after the named owner 
 
 - [ ] Brand name, logo, EN copy, and TR copy approved.
 - [ ] Ahmed Furkan Gul biography and profile destinations reconfirmed.
-- [ ] `furkangul@gmail.com` approved as the public direct contact, or replaced with a verified domain mailbox.
+- [x] Public direct contact replaced with the domain mailbox `furkangul@ganrichadvisory.com` (owner-confirmed 22 October 2026; delivery not tested from this environment).
 - [ ] Launch without client proof vignettes approved, or verified vignettes supplied.
 - [ ] Newsletter remains absent, or its approved ESP and consent workflow are documented.
 - [ ] Analytics remains off, or its approved provider and event policy are documented.

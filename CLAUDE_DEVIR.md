@@ -55,3 +55,12 @@ PDF stüdyosunun editör kimliği mevcut Sites/ChatGPT oturum başlıklarına da
 ## Claude'a verilebilecek başlangıç isteği
 
 “Bu ZIP Ganrich Advisory sitesinin mevcut kaynak kodudur. Önce CLAUDE_DEVIR.md, package.json, vite.config.ts ve SITE-SYSTEM.md dosyalarını incele. Mevcut Türkçe/İngilizce içerikleri, rotaları ve marka tasarımını koruyarak talep edeceğim geliştirmeleri bu proje üzerinde yap. Mevcut Vinext/Cloudflare mimarisini dikkate al. Canlı D1 kayıtları ve R2 PDF dosyaları ZIP'te bulunmuyor.”
+
+## Ekim 2026 yeniden tasarımı
+
+22 Ekim 2026'da `redesign/positioning-and-ux` dalında konumlandırma, içerik, tasarım ve Karar Laboratuvarı yenilendi. Orijinal dışa aktarma `backup/original` dalında duruyor. Bu çalışma yayına alınmadı.
+
+- Değişikliklerin özeti, doğrulama sonuçları ve yerel kurulum: `docs/REDESIGN-SUMMARY.md`
+- Sahibinin onayı gereken konular ve doğrulanamayan sistemler (D1, R2, PDF stüdyosu girişi, yeni e-posta adresinin teslimatı): `docs/REVIEW-DECISIONS.md`
+- Denetim ve plan: `docs/REDESIGN-AUDIT-AND-PLAN.md`
+- Herkese açık iletişim adresi artık `furkangul@ganrichadvisory.com`.

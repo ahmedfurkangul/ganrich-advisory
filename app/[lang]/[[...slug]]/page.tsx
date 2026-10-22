@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Site from "../../site";
+import { AboutPage, EngagementPage, ExpertisePage, HomePage, HowWeWorkPage, MarketsPage } from "../../practice";
 import { insightArticles, insightCategoryForKind, insightIndex, Lang, pageKind, routeMap } from "../../content";
 import { absoluteUrl, SITE_NAME, SITE_ORIGIN } from "../../site-config";
 
@@ -8,14 +9,18 @@ type Props = { params: Promise<{ lang: string; slug?: string[] }> };
 
 const metaCopy = {
   en: {
-    home: ["Ganrich Advisory | Strategy, Transformation and Applied AI", "Ganrich Advisory is a boutique strategy and management consulting firm helping leaders shape growth, transformation, operating models, and applied AI across Türkiye, MENA, Europe, and Africa."],
-    expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
-    markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
-    insights: ["Insights | Ganrich Advisory", "Strategic perspectives, executive briefings, reports, frameworks, and data notes designed to be used."],
+    home: ["Ganrich Advisory | Independent Strategy Advice for Turkish Companies", "Founder-led strategy advice for owners and leadership teams of established Turkish companies: expansion beyond Türkiye, operating-model change as the business outgrows its founding structure, and where AI creates measurable value."],
+    serviceMarketEntry: ["Market Entry Decision Sprint | Ganrich Advisory", "Decide where to expand beyond Türkiye, through which entry model, and how much to commit before the evidence is in."],
+    serviceOperatingModel: ["Operating Model Review | Ganrich Advisory", "Make clear who decides what as a Turkish company outgrows the way it was founded."],
+    serviceAiValue: ["AI Value Diagnostic | Ganrich Advisory", "Find the few operating decisions and workflows where AI would create measurable value, and what must be true first."],
+    howWeWork: ["How We Work | Ganrich Advisory", "Founder-led engagements with explicit evidence and a written result. What the first conversation covers and what you receive."],
+    expertise: ["Expertise | Ganrich Advisory", "Three engagements, each built around one decision: market entry, operating model and AI value."],
+    markets: ["Türkiye → Gulf | Ganrich Advisory", "Dated, sourced observations on the Türkiye–Gulf corridor and the questions they leave open for Turkish companies."],
+    insights: ["Insights | Ganrich Advisory", "Signed perspectives on market entry, operating models and applied AI, each with sources, a counterargument and questions for the board."],
     article: ["Decision Quality in the Age of Applied AI | Ganrich Advisory", "A Ganrich perspective on framing AI value around evidence, judgement, and consequential decisions."],
     articleTransformation: ["From Transformation Activity to Value | Ganrich Advisory", "A practical perspective on using decision cadence, ownership, dependencies, and value signals to move transformation forward."],
     articleMarketEntry: ["Market Entry Is a Sequence of Commitments | Ganrich Advisory", "A framework for separating reversible learning from irreversible investment in market-entry decisions."],
-    decisionLab: ["Decision Lab | Ganrich Advisory", "Executive tools for framing decisions, testing assumptions, comparing alternatives, and preparing action."],
+    decisionLab: ["Decision Lab | Ganrich Advisory", "Five free tools to structure a decision before you discuss it. They run in your browser and need no account or email."],
     decisionAtlas: ["Decision Atlas | Ganrich Advisory", "Explore Ganrich Advisory through the consequential decision currently on your agenda."],
     decisionFramer: ["Decision Framer | Ganrich Advisory", "Turn a broad executive priority into a structured, editable preliminary decision brief."],
     marketCompass: ["Market Entry Compass | Ganrich Advisory", "Compare market opportunity and organizational readiness using transparent, editable assumptions."],
@@ -23,20 +28,24 @@ const metaCopy = {
     aiValueLens: ["AI Value Lens | Ganrich Advisory", "Assess an AI use case across value, repeatability, readiness, adoption, and risk control."],
     decisionLabChangelog: ["Decision Lab Changelog | Ganrich Advisory", "See what is live, what changed, and what remains under evaluation in the Ganrich Decision Lab."],
     privateBriefing: ["Private Executive Briefing | Ganrich Advisory", "Move from a published perspective, signal, or tool to a prepared discussion about your specific decision."],
-    about: ["About | Ganrich Advisory", "Independent thinking, regional fluency, and applied AI for decisions that do not fit a template."],
-    contact: ["Contact | Ganrich Advisory", "Start a senior conversation about the strategic decision on your agenda."],
+    about: ["About | Ganrich Advisory", "Ganrich Advisory is a founder-led practice. Ahmed Furkan Gul: former Chief Strategy and Business Development Officer at Tay Group and Assistant Professor at İstanbul Kent University."],
+    contact: ["Contact | Ganrich Advisory", "Describe the decision in a few sentences. Only your name, email and a short description are required."],
     legal: ["Legal | Ganrich Advisory", "Ganrich Advisory website legal information."],
     trust: ["Privacy + Trust | Ganrich Advisory", "Privacy choices, current-site facts, AI transparency, and legal information at Ganrich Advisory."],
   },
   tr: {
-    home: ["Ganrich Advisory | Strateji, Dönüşüm ve Uygulamalı Yapay Zekâ", "Ganrich Advisory; Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika’da büyüme, dönüşüm, işletim modeli ve uygulamalı yapay zekâ gündemlerinde liderlere destek sunan butik bir strateji ve yönetim danışmanlığı firmasıdır."],
-    expertise: ["Uzmanlık | Ganrich Advisory", "Strateji, büyüme, işletim modeli, yapay zekâ, organizasyon ve uygulama için karar odaklı uzmanlık."],
-    markets: ["Coğrafyalar | Ganrich Advisory", "Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika için pazara özgü kanıtlara dayalı bölgesel bakışlar."],
-    insights: ["İçgörüler | Ganrich Advisory", "Kullanılmak için geliştirilen stratejik bakışlar, yönetici bilgilendirmeleri, raporlar, çerçeveler ve veri notları."],
+    home: ["Ganrich Advisory | Türk Şirketleri için Bağımsız Strateji Danışmanlığı", "Köklü Türk şirketlerinin sahiplerine ve yönetim ekiplerine kurucu liderliğinde strateji danışmanlığı: Türkiye dışına açılma, şirket kuruluş yapısını aştığında işletim modeli ve yapay zekânın ölçülebilir değer yarattığı alanlar."],
+    serviceMarketEntry: ["Pazara Giriş Karar Sprinti | Ganrich Advisory", "Türkiye dışında nereye, hangi giriş modeliyle açılacağınıza ve kanıt oluşmadan ne kadar taahhüt vereceğinize karar verin."],
+    serviceOperatingModel: ["İşletim Modeli İncelemesi | Ganrich Advisory", "Bir Türk şirketi kuruluş biçiminin ötesine geçerken hangi kararı kimin vereceğini netleştirin."],
+    serviceAiValue: ["Yapay Zekâ Değer Teşhisi | Ganrich Advisory", "Yapay zekânın ölçülebilir değer yaratacağı birkaç işletim kararını ve iş akışını, öncesinde nelerin doğru olması gerektiğiyle birlikte belirleyin."],
+    howWeWork: ["Çalışma Biçimimiz | Ganrich Advisory", "Kurucu liderliğinde, açık kanıtla ve yazılı sonuçla yürüyen çalışmalar. İlk görüşmede neler konuşulur, sonunda ne alırsınız."],
+    expertise: ["Uzmanlık | Ganrich Advisory", "Her biri tek bir karar etrafında kurulu üç çalışma biçimi: pazara giriş, işletim modeli ve yapay zekâ değeri."],
+    markets: ["Türkiye → Körfez | Ganrich Advisory", "Türkiye–Körfez koridoruna ilişkin tarihli ve kaynaklı gözlemler ve Türk şirketleri için açık bıraktıkları sorular."],
+    insights: ["İçgörüler | Ganrich Advisory", "Pazara giriş, işletim modeli ve uygulamalı yapay zekâ üzerine kaynaklı, karşı görüşü ve yönetim kurulu sorularını içeren imzalı bakışlar."],
     article: ["Uygulamalı Yapay Zekâ Çağında Karar Kalitesi | Ganrich Advisory", "Yapay zekâ değerini kanıt, muhakeme ve kritik kararlar etrafında çerçeveleyen Ganrich bakışı."],
     articleTransformation: ["Dönüşüm Faaliyetinden Değere | Ganrich Advisory", "Dönüşümü ilerletmek için karar ritmini, sahipliği, bağımlılıkları ve değer göstergelerini ele alan uygulamalı bir bakış."],
     articleMarketEntry: ["Pazara Giriş, Taahhütler Dizisidir | Ganrich Advisory", "Pazara giriş kararlarında geri döndürülebilir öğrenmeyi geri döndürülemez yatırımdan ayıran bir çerçeve."],
-    decisionLab: ["Karar Laboratuvarı | Ganrich Advisory", "Kararları çerçevelemek, varsayımları sınamak, alternatifleri karşılaştırmak ve uygulamaya hazırlanmak için yönetici araçları."],
+    decisionLab: ["Karar Laboratuvarı | Ganrich Advisory", "Bir kararı konuşmadan önce yapılandırmak için beş ücretsiz araç. Tarayıcınızda çalışır; hesap ya da e-posta gerektirmez."],
     decisionAtlas: ["Karar Atlası | Ganrich Advisory", "Ganrich Advisory’i gündeminizdeki kritik karar üzerinden keşfedin."],
     decisionFramer: ["Karar Çerçeveleyici | Ganrich Advisory", "Geniş bir yönetici önceliğini yapılandırılmış ve düzenlenebilir bir ön karar özetine dönüştürün."],
     marketCompass: ["Pazara Giriş Pusulası | Ganrich Advisory", "Pazar fırsatını ve kurumsal hazırlığı şeffaf, düzenlenebilir varsayımlarla karşılaştırın."],
@@ -44,8 +53,8 @@ const metaCopy = {
     aiValueLens: ["Yapay Zekâ Değer Merceği | Ganrich Advisory", "Bir yapay zekâ kullanım alanını değer, tekrarlanabilirlik, hazırlık, benimseme ve risk kontrolü üzerinden değerlendirin."],
     decisionLabChangelog: ["Karar Laboratuvarı Değişiklik Günlüğü | Ganrich Advisory", "Ganrich Karar Laboratuvarında nelerin yayında, nelerin değiştiğini ve hangi araçların değerlendirmede olduğunu görün."],
     privateBriefing: ["Özel Yönetici Brifingi | Ganrich Advisory", "Yayımlanmış bir perspektif, sinyal veya araçtan kurumunuza özgü karar hakkında hazırlıklı bir görüşmeye geçin."],
-    about: ["Hakkımızda | Ganrich Advisory", "Bir şablona sığmayan kararlar için bağımsız düşünce, bölgesel derinlik ve uygulamalı yapay zekâ."],
-    contact: ["İletişim | Ganrich Advisory", "Gündeminizdeki stratejik karar hakkında kıdemli bir görüşme başlatın."],
+    about: ["Hakkımızda | Ganrich Advisory", "Ganrich Advisory kurucu liderliğinde bir danışmanlıktır. Ahmed Furkan Gul: Tay Group eski Strateji ve İş Geliştirme Direktörü (CSO), İstanbul Kent Üniversitesi Dr. Öğretim Üyesi."],
+    contact: ["İletişim | Ganrich Advisory", "Kararı birkaç cümleyle anlatın. Yalnızca adınız, e-postanız ve kısa bir açıklama zorunludur."],
     legal: ["Hukuki Bilgilendirme | Ganrich Advisory", "Ganrich Advisory internet sitesi hukuki bilgileri."],
     trust: ["Gizlilik + Güven | Ganrich Advisory", "Ganrich Advisory gizlilik tercihleri, mevcut site olguları, yapay zekâ şeffaflığı ve hukuki bilgileri."],
   },
@@ -121,7 +130,7 @@ export default async function LocalizedPage({ params }: Props) {
       logo: { "@type": "ImageObject", url: absoluteUrl("/brand/ganrich-advisory-threshold.png") },
       description: metaCopy[lang].home[1],
       founder: { "@id": personId },
-      areaServed: ["Türkiye", "Middle East and North Africa", "Europe", "Africa"],
+      areaServed: ["Türkiye", "Gulf Cooperation Council"],
     },
     {
       "@type": "BreadcrumbList",
@@ -154,5 +163,12 @@ export default async function LocalizedPage({ params }: Props) {
   });
   const structuredData = { "@context": "https://schema.org", "@graph": graph };
   const serializedStructuredData = JSON.stringify(structuredData).replace(/</g, "\\u003c");
-  return <><Site lang={lang} route={route}/><script type="application/ld+json" dangerouslySetInnerHTML={{__html: serializedStructuredData}}/></>;
+  const practicePage = kind === "home" ? <HomePage lang={lang}/>
+    : kind === "expertise" ? <ExpertisePage lang={lang}/>
+      : kind.startsWith("service") ? <EngagementPage lang={lang} kind={kind}/>
+        : kind === "howWeWork" ? <HowWeWorkPage lang={lang}/>
+          : kind === "markets" ? <MarketsPage lang={lang}/>
+            : kind === "about" ? <AboutPage lang={lang}/>
+              : null;
+  return <><Site lang={lang} route={route}>{practicePage}</Site><script type="application/ld+json" dangerouslySetInnerHTML={{__html: serializedStructuredData}}/></>;
 }

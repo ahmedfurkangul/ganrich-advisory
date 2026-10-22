@@ -128,7 +128,7 @@ The automated gate covers:
 3. **[Verified need; owner input missing] Proof:** decide whether to provide factual anonymized engagement vignettes or launch without a proof section.
 4. **[High confidence] Newsletter:** keep absent for launch, or select an ESP and complete the consent work above.
 5. **[High confidence] Analytics:** keep disabled for launch, or approve a provider and complete privacy review.
-6. **[Owner decision] Direct contact:** confirm whether `furkangul@gmail.com` should remain the public contact or be replaced by a domain mailbox.
+6. **[Owner decision] Direct contact:** resolved 22 October 2026: the public contact is `furkangul@ganrichadvisory.com` (owner-confirmed).
 7. **[Owner decision] Production:** explicitly approve deployment of the reviewed Sites version after the final manual checks below.
 
 ## 6. Final manual release checks
