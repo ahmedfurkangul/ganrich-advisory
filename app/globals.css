@@ -172,6 +172,8 @@ details[open] .plus { transform: rotate(45deg); }
 .founder-mark { min-height: 620px; position: relative; display: grid; place-items: center; align-self: start; overflow: hidden; border: 1px solid rgba(251,250,247,.18); background: radial-gradient(circle at 70% 25%, rgba(152,125,102,.28), transparent 31%), linear-gradient(145deg, rgba(251,250,247,.03), rgba(18,21,19,.24)); }
 .founder-mark:before, .founder-mark:after { content: ""; position: absolute; border: 1px solid rgba(251,250,247,.16); border-radius: 50%; }
 .founder-mark:before { width: 82%; aspect-ratio: 1; left: -34%; top: 9%; }.founder-mark:after { width: 72%; aspect-ratio: 1; right: -28%; bottom: -4%; }
+.founder-mark > picture, .founder-mark img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.founder-mark > i, .founder-mark > small { z-index: 2; }
 .founder-mark > span { position: relative; z-index: 2; font: clamp(70px,9vw,140px)/1 var(--serif); letter-spacing: -.08em; color: var(--ivory); }
 .founder-mark > i { position: absolute; left: 26px; top: 24px; color: var(--bronze); font: 10px var(--sans); font-style: normal; }.founder-mark > small { position: absolute; right: 25px; bottom: 23px; color: var(--bronze); font-size: 9px; letter-spacing: .18em; }
 .founder-profile header { padding-bottom: 35px; border-bottom: 1px solid rgba(251,250,247,.22); }.founder-profile h2 { margin: 24px 0 20px; font-size: clamp(52px,6vw,88px); }.founder-profile header p { margin: 0; color: var(--bronze); font-size: 11px; letter-spacing: .11em; text-transform: uppercase; }
