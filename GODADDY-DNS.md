@@ -4,14 +4,15 @@
 
 ## Kaynak ve kapsam
 
-Kayıtlar 22 Ekim 2026'da GoDaddy'nin yetkili nameserver'ı `ns11.domaincontrol.com` sorgulanarak okundu. Dışarıdan sorgu tam liste vermez: bilinmeyen alt alan adları burada olmayabilir. **Kesin liste için GoDaddy panelinden zone dosyası dışa aktarılmalı** (Alan adı → DNS → … → Export Zone File). Bu, Furkan'ın GoDaddy'ye kendisinin giriş yapmasını gerektirir ve henüz yapılmadı.
+Kayıtlar 22 Ekim 2026'da GoDaddy'nin yetkili nameserver'ı `ns11.domaincontrol.com` sorgulanarak okundu. Dışarıdan sorgu tam liste vermez: bilinmeyen alt alan adları burada olmayabilir. Panel 22 Ekim 2026'da okundu (aşağıdaki son dört kayıt yalnızca panelde görüldü). Geçişten hemen önce GoDaddy'nin kendi Export Zone File çıktısı da alınmalı.
 
 ## Alan adı
 
 | Ayar | Değer |
 |---|---|
 | Kayıt kuruluşu | GoDaddy (bitiş 2027-07-23) |
-| Nameserver | `ns11.domaincontrol.com`, `ns12.domaincontrol.com` (TTL 3600) |
+| Nameserver | `ns11.domaincontrol.com`, `ns12.domaincontrol.com` (TTL 3600, GoDaddy varsayılanı) |
+| Yönlendirme (forwarding) | Kurulu değil |
 | DNSSEC | Kapalı (DS kaydı yok) |
 | Kilit | `clientUpdateProhibited`: nameserver değişikliğinden önce GoDaddy'de kaldırılması gerekebilir |
 | SOA serial | 2026082303 (minimum TTL 600) |
@@ -38,6 +39,12 @@ Kayıtlar 22 Ekim 2026'da GoDaddy'nin yetkili nameserver'ı `ns11.domaincontrol.
 | `_sipfederationtls._tcp` | SRV | 3600 | 100 1 5061 sipfed.online.lync.com | Teams/Skype |
 | `email` | CNAME | 3600 | email.secureserver.net | GoDaddy webmail |
 | `_domainconnect` | CNAME | 3600 | _domainconnect.gd.domaincontrol.com | GoDaddy Domain Connect |
+| `_cf-custom-hostname` | TXT | 3600 | aa9799bb-26ff-4f4a-a8ed-2dd0e758ca8c | ChatGPT Sites (Cloudflare for SaaS) doğrulaması |
+| `_cf-custom-hostname.www` | TXT | 3600 | a41cf22a-8e03-4ebc-aa68-3b3deb22dc03 | ChatGPT Sites (Cloudflare for SaaS) doğrulaması |
+| `_openai-site-verification` | TXT | 3600 | (panelde görülen değer) | ChatGPT Sites alan adı doğrulaması |
+| `_openai-site-verification.www` | TXT | 3600 | (panelde görülen değer) | ChatGPT Sites alan adı doğrulaması |
+
+Son dört kayıt dışarıdan sorguda görünmedi; GoDaddy panelinde okundu (panelde toplam 24 kayıt). Mevcut site Cloudflare for SaaS üzerinden sunulduğu için bu doğrulama kayıtları geçiş tamamlanana kadar silinmemelidir. Panel görünümünün BIND biçimli kopyası Furkan'ın Mac'inde: `~/Documents/ganrich-advisory-preview/godaddy-zone-export-2026-10-22.txt` (GoDaddy'nin kendi dışa aktarma dosyası değil).
 
 E-posta notu: MX kaydı Microsoft 365'e yönlendirir; bu, belirli bir posta kutusunun (örneğin furkangul@ganrichadvisory.com) var olduğunu veya çalıştığını kanıtlamaz. Gelen/giden test, Furkan'ın belirleyeceği gerçek bir kutuyla ayrıca yapılmalıdır.
 
