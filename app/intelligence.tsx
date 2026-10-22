@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { HandoffLink, ToolIntro, takeHandoff } from "./decision-handoff";
 import { expertise, insightArticles, insightHref, insights, Lang, markets, routeMap } from "./content";
 import { optionalPreferencesEnabled } from "./privacy-center";
 
@@ -38,17 +39,11 @@ function emitSave(item: BriefItem) {
   window.dispatchEvent(new CustomEvent("ganrich-save", { detail: item }));
 }
 
-function contextualContactHref(lang: Lang, tool: string, decision: string, context = "", interest = "") {
-  const params = new URLSearchParams({ tool, decision });
-  if (context) params.set("context", context);
-  if (interest) params.set("interest", interest);
-  return `/${lang}/${routeMap[lang].contact}?${params.toString()}`;
-}
 
 function ToolScopeNote({ lang }: { lang: Lang }) {
   return <p className="disclaimer">{lang === "en"
-    ? "This tool structures user-entered information for preliminary exploration. It does not provide a Ganrich recommendation, verify the evidence, or replace professional, legal, investment, or accountable executive judgment."
-    : "Bu araç, kullanıcı tarafından girilen bilgileri ön keşif amacıyla yapılandırır. Ganrich önerisi sunmaz, kanıtı doğrulamaz; profesyonel, hukuki, yatırım veya sorumlu yönetici muhakemesinin yerine geçmez."}</p>;
+    ? "This is a preliminary framework based on your inputs, not a validated diagnostic. Inputs stay in the current page unless you explicitly save, export, email, or carry them into a review request. A review can help challenge assumptions, identify missing evidence, and define the next decision."
+    : "Bu, girdilerinize dayanan bir ön çerçevedir; doğrulanmış bir tanı aracı değildir. Kaydetme, dışa aktarma, e-posta veya değerlendirme talebine aktarma işlemini seçmedikçe girdiler bu sayfada kalır. Değerlendirme, varsayımları sınamaya ve eksik kanıtı belirlemeye yardımcı olabilir."}</p>;
 }
 
 export function SaveControl({ lang, item }: { lang: Lang; item: BriefItem }) {
@@ -308,6 +303,7 @@ function IntelligenceHero({ label, title, intro }: { label: string; title: strin
 
 export function DecisionLabPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
+  const [need, setNeed] = useState("decisionFramer");
   const active = [
     [isEn ? "Decision Atlas" : "Karar Atlası", isEn ? "Begin with the decision and reveal the most relevant expertise, evidence, and tools." : "Karardan başlayın; ilgili uzmanlığı, kanıtı ve araçları görünür kılın.", m.decisionAtlas],
     [isEn ? "Decision Framer" : "Karar Çerçeveleyici", isEn ? "Convert an imprecise priority into a structured, editable decision brief." : "Belirsiz bir önceliği yapılandırılmış ve düzenlenebilir karar özetine dönüştürün.", m.decisionFramer],
@@ -318,9 +314,10 @@ export function DecisionLabPage({ lang }: { lang: Lang }) {
   return (
     <>
       <IntelligenceHero label={isEn ? "DECISION LAB" : "KARAR LABORATUVARI"} title={isEn ? "Work on the decision before the engagement begins." : "Danışmanlık çalışması başlamadan önce karar üzerinde çalışın."} intro={isEn ? "A focused environment for framing choices, testing assumptions, comparing alternatives, and preparing a better leadership discussion." : "Tercihleri çerçevelemek, varsayımları sınamak, alternatifleri karşılaştırmak ve daha nitelikli bir liderlik görüşmesine hazırlanmak için odaklı bir ortam."}/>
+      <section className="tool-recommendation"><label htmlFor="tool-need">{isEn ? "What would help you move forward?" : "İlerlemenize ne yardımcı olur?"}</label><select id="tool-need" value={need} onChange={e=>setNeed(e.target.value)}><option value="decisionFramer">{isEn ? "I need to clarify the decision" : "Kararı netleştirmem gerekiyor"}</option><option value="marketCompass">{isEn ? "I need to compare two markets" : "İki pazarı karşılaştırmam gerekiyor"}</option><option value="boardBriefBuilder">{isEn ? "I need to prepare a board memo" : "Yönetim kurulu notu hazırlamam gerekiyor"}</option><option value="aiValueLens">{isEn ? "I need to examine an AI opportunity" : "Yapay zekâ fırsatını incelemem gerekiyor"}</option></select><a href={`/${lang}/${m[need]}`}>{isEn ? "Open the recommended tool" : "Önerilen aracı açın"} ↗</a><p>{isEn ? "Try a fictional worked example, then edit the inputs. No account or email is required." : "Kurgusal örneği deneyin, ardından girdileri değiştirin. Hesap veya e-posta gerekmez."}</p></section>
       <section className="available-tools section">
         <div className="section-head-compact"><span className="eyebrow">{isEn ? "AVAILABLE NOW" : "ŞİMDİ KULLANILABİLİR"}</span><h2>{isEn ? "Five instruments. One decision standard." : "Beş araç. Tek karar standardı."}</h2></div>
-        <div className="tool-cards">{active.map((tool, i) => <article key={tool[0]}><span>0{i + 1}</span><h3>{tool[0]}</h3><p>{tool[1]}</p><a href={`/${lang}/${tool[2]}`}>{isEn ? "Open the tool" : "Aracı açın"} <i aria-hidden="true">↗</i></a></article>)}</div>
+        <div className="tool-cards">{active.map((tool, i) => <article key={tool[0]}><span>0{i + 1}</span><h3>{tool[0]}</h3><p>{tool[1]}</p><p className="tool-meta">{(isEn?["2–3 min · a relevant starting point","5–8 min · an editable decision brief","4–6 min · a weighted comparison","5–10 min · a printable memo","3–5 min · a readiness profile"]:["2–3 dk · ilgili başlangıç noktası","5–8 dk · düzenlenebilir karar özeti","4–6 dk · ağırlıklı karşılaştırma","5–10 dk · yazdırılabilir not","3–5 dk · hazırlık profili"])[i]}</p><a href={`/${lang}/${tool[2]}`}>{isEn ? "Open the tool" : "Aracı açın"} <i aria-hidden="true">↗</i></a></article>)}</div>
         <a className="lab-changelog-link" href={`/${lang}/${m.decisionLabChangelog}`}><span>{isEn ? "DECISION LAB CHANGELOG" : "KARAR LABORATUVARI DEĞİŞİKLİK GÜNLÜĞÜ"}</span><strong>{isEn ? "See what is live, what changed, and what remains under evaluation." : "Nelerin yayında, nelerin değiştiğini ve hangi araçların değerlendirmede olduğunu görün."}</strong><i aria-hidden="true">↗</i></a>
       </section>
       <section className="limitations-band"><strong>{isEn ? "What these tools do not do" : "Bu araçların yapmadığı şeyler"}</strong><p>{isEn ? "They structure exploration. They do not replace professional judgment, verified evidence, legal review, investment advice, or a decision owner." : "Keşif sürecini yapılandırırlar. Profesyonel muhakemenin, doğrulanmış kanıtın, hukuk incelemesinin, yatırım tavsiyesinin veya karar sahibinin yerine geçmezler."}</p></section>
@@ -381,7 +378,7 @@ export function DecisionAtlasPage({ lang }: { lang: Lang }) {
             <a className="button" href={`/${lang}/${toolHref}`}>{isEn ? "Continue analysis" : "Analize devam et"}</a>
             <SaveControl lang={lang} item={{ id: `atlas-${decision}-${region}`, title: selected[0], type: isEn ? "Decision pathway" : "Karar yolu", href: `/${lang}/${m.decisionAtlas}?decision=${decision}&region=${region}` }}/>
             <button type="button" onClick={() => window.print()}>{isEn ? "Export / print" : "Dışa aktar / yazdır"}</button>
-            <a href={contextualContactHref(lang, isEn ? "Decision Atlas" : "Karar Atlası", selected[0], `${markets[lang][region][0]} · ${urgency} · ${maturity}`)}>{isEn ? "Discuss this decision" : "Bu kararı görüşün"}</a>
+            <HandoffLink lang={lang} data={{tool:"Decision Atlas",decision:selected[0],context:`${markets[lang][region][0]} · ${urgency} · ${maturity}`}}>{isEn ? "Review this decision with Ganrich" : "Bu kararı Ganrich ile değerlendirin"}</HandoffLink>
           </div>
           <small>{isEn ? "Shareable pathway · selections only · no confidential data" : "Paylaşılabilir yol · yalnızca seçimler · gizli veri içermez"}</small>
           <ToolScopeNote lang={lang}/>
@@ -414,23 +411,16 @@ export function DecisionFramerPage({ lang }: { lang: Lang }) {
   const [answers, setAnswers] = useState<string[]>(Array(10).fill(""));
   const [done, setDone] = useState(false);
   const [statement, setStatement] = useState("");
-  const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
+    window.history.replaceState(null, "", window.location.pathname);
     let initial = Array(10).fill("") as string[];
     if (optionalPreferencesEnabled()) {
       const stored = localStorage.getItem(`ganrich-framer-${lang}`);
-      if (stored) try { initial = JSON.parse(stored); } catch { /* ignore invalid local draft */ }
+      if (stored) try { const parsed = JSON.parse(stored); if (Array.isArray(parsed) && parsed.length === 10 && parsed.every(x => typeof x === "string")) initial = parsed.map(x=>x.slice(0,700)); } catch { /* ignore invalid local draft */ }
     }
-    initial = initial.map((answer, index) => (params.get(`a${index}`) ?? answer).slice(0, 700));
-    queueMicrotask(() => { setAnswers(initial); setHydrated(true); });
+    queueMicrotask(() => { setAnswers(initial); });
   }, [lang]);
-  useEffect(() => {
-    if (!hydrated) return;
-    const params = new URLSearchParams();
-    answers.forEach((answer, index) => { if (answer.trim()) params.set(`a${index}`, answer.trim()); });
-    window.history.replaceState(null, "", `${window.location.pathname}${params.size ? `?${params.toString()}` : ""}`);
-  }, [answers, hydrated]);
+
   const update = (index: number, value: string) => {
     const next = answers.map((answer, i) => i === index ? value : answer);
     setAnswers(next); if (optionalPreferencesEnabled()) localStorage.setItem(`ganrich-framer-${lang}`, JSON.stringify(next));
@@ -442,6 +432,7 @@ export function DecisionFramerPage({ lang }: { lang: Lang }) {
   return (
     <>
       <IntelligenceHero label={isEn ? "DECISION FRAMER" : "KARAR ÇERÇEVELEYİCİ"} title={isEn ? "A better answer begins with a better-framed decision." : "Daha iyi bir yanıt, daha doğru çerçevelenmiş bir kararla başlar."} intro={isEn ? "Create a meaningful on-screen result before deciding whether to export, share, or request a Ganrich review." : "Dışa aktarma, paylaşma veya Ganrich değerlendirmesi talep etmeden önce ekranda anlamlı bir sonuç oluşturun."}/>
+<ToolIntro lang={lang} time={isEn ? "About 5–8 minutes" : "Yaklaşık 5–8 dakika"} output={isEn ? "An editable decision brief" : "Düzenlenebilir karar özeti"} onExample={()=>{setAnswers(isEn ? ["Delegate routine pricing decisions to sales managers", "Approvals are delaying customer responses", "Faster responses within agreed margin limits", "Delegate within limits or retain central approval", "Protect minimum margin and contract requirements", "Managers can apply clear rules consistently", "Which exceptions need founder review", "Founder, commercial lead, finance lead", "Delayed quotes and management attention", "Recent pricing cases and margin exceptions"] : ["Rutin fiyat kararlarını satış yöneticilerine devretmek", "Onaylar müşteriye yanıtı geciktiriyor", "Marj sınırları içinde daha hızlı yanıt", "Sınırlı yetki devri veya merkezî onay", "Asgari marjı ve sözleşme koşullarını korumak", "Yöneticiler açık kuralları tutarlı uygular", "Hangi istisnalar kurucu onayı gerektiriyor", "Kurucu, ticari lider ve finans lideri", "Geciken teklifler ve yönetim zamanı", "Yakın dönem fiyat ve marj istisnaları"]);setDone(false);setStep(0);}} onClear={()=>{setAnswers(Array(10).fill(""));setStatement("");setStep(0);setDone(false);try{localStorage.removeItem(`ganrich-framer-${lang}`);}catch{}}}/>
       <section className="framer section">
         {!done ? (
           <div className="framer-workspace">
@@ -472,8 +463,8 @@ export function DecisionFramerPage({ lang }: { lang: Lang }) {
               <SaveControl lang={lang} item={{ id: "decision-framer-result", title: statement, type: isEn ? "Decision brief" : "Karar özeti", href: `/${lang}/${m.decisionFramer}` }}/>
               <button type="button" onClick={() => window.print()}>{isEn ? "Export brief" : "Brifingi dışa aktar"}</button>
               <a href={`mailto:?subject=${encodeURIComponent(isEn ? "My preliminary decision brief" : "Ön karar özetim")}&body=${encodeURIComponent(statement)}`}>{isEn ? "Email to myself" : "Kendime e-posta gönder"}</a>
-              <a href={`/${lang}/${m.boardBriefBuilder}?decision=${encodeURIComponent(statement)}&recommendation=${encodeURIComponent(answers[3])}&evidence=${encodeURIComponent(answers[9])}`}>{isEn ? "Build a board brief" : "Yönetim kurulu brifingi oluştur"}</a>
-              <a href={contextualContactHref(lang, isEn ? "Decision Framer" : "Karar Çerçeveleyici", statement, answers[9])}>{isEn ? "Discuss this decision" : "Bu kararı görüşün"}</a>
+              <HandoffLink lang={lang} target="boardBriefBuilder" data={{decision:statement,recommendation:answers[3],evidence:answers[9]}}>{isEn ? "Build a board brief" : "Yönetim kurulu brifingi oluştur"}</HandoffLink>
+              <HandoffLink lang={lang} data={{tool:"Decision Framer",decision:statement,context:answers[9]}}>{isEn ? "Review this decision with Ganrich" : "Bu kararı Ganrich ile değerlendirin"}</HandoffLink>
               <button type="button" onClick={() => { setDone(false); setStep(0); }}>{isEn ? "Start again" : "Yeniden başla"}</button>
             </div>
             <ToolScopeNote lang={lang}/>
@@ -492,37 +483,14 @@ export function MarketCompassPage({ lang }: { lang: Lang }) {
   const [marketsInput, setMarketsInput] = useState<MarketScore[]>([{ name: "", scores: [50, 50, 50, 50] }, { name: "", scores: [50, 50, 50, 50] }]);
   const [weights, setWeights] = useState([25, 25, 25, 25]);
   const [result, setResult] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
   const weightTotal = weights.reduce((a, b) => a + b, 0);
   const score = (market: MarketScore) => weightTotal ? Math.round(market.scores.reduce((sum, value, i) => sum + (i === 3 ? 100 - value : value) * weights[i], 0) / weightTotal) : 0;
   const updateScore = (marketIndex: number, dimension: number, value: number) => setMarketsInput(marketsInput.map((market, i) => i === marketIndex ? { ...market, scores: market.scores.map((scoreValue, j) => j === dimension ? value : scoreValue) } : market));
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const parseScores = (key: string) => (params.get(key) ?? "").split(",").map(Number).filter((value) => Number.isFinite(value) && value >= 0 && value <= 100);
-    const parsedWeights = parseScores("w");
-    const nextMarkets = [0, 1].map((index) => {
-      const scores = parseScores(`s${index}`);
-      return { name: (params.get(`m${index}`) ?? "").slice(0, 80), scores: scores.length === 4 ? scores : [50, 50, 50, 50] };
-    });
-    queueMicrotask(() => {
-      setMarketsInput(nextMarkets);
-      if (parsedWeights.length === 4) setWeights(parsedWeights);
-      setHydrated(true);
-    });
-  }, []);
-  useEffect(() => {
-    if (!hydrated) return;
-    const params = new URLSearchParams();
-    marketsInput.forEach((market, index) => {
-      if (market.name.trim()) params.set(`m${index}`, market.name.trim());
-      params.set(`s${index}`, market.scores.join(","));
-    });
-    params.set("w", weights.join(","));
-    window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
-  }, [marketsInput, weights, hydrated]);
+  useEffect(() => { window.history.replaceState(null, "", window.location.pathname); }, []);
   return (
     <>
       <IntelligenceHero label={isEn ? "MARKET ENTRY COMPASS" : "PAZARA GİRİŞ PUSULASI"} title={isEn ? "Market attractiveness is only one part of the decision." : "Pazarın cazibesi, kararın yalnızca bir boyutudur."} intro={isEn ? "Compare opportunity and organisational readiness using assumptions you control. No unsupported country data is inserted." : "Fırsat ve kurumsal hazırlığı, kontrol ettiğiniz varsayımlarla karşılaştırın. Desteklenmeyen ülke verileri eklenmez."}/>
+<ToolIntro lang={lang} time={isEn ? "About 4–6 minutes" : "Yaklaşık 4–6 dakika"} output={isEn ? "A weighted comparison of two markets" : "İki pazarın ağırlıklı karşılaştırması"} onExample={()=>{setMarketsInput([{name:isEn?"Illustrative market A":"Temsili pazar A",scores:[75,70,40,60]},{name:isEn?"Illustrative market B":"Temsili pazar B",scores:[60,80,75,35]}]);setWeights([25,25,25,25]);setResult(true);}} onClear={()=>{setMarketsInput([{name:"",scores:[50,50,50,50]},{name:"",scores:[50,50,50,50]}]);setWeights([25,25,25,25]);setResult(false);}}/>
       <section className="compass section">
         <div className="source-key"><span><i className="user"/> {isEn ? "User-entered assumption" : "Kullanıcı varsayımı"}</span><span><i className="ganrich"/> {isEn ? "Ganrich research: not included" : "Ganrich araştırması: dâhil değil"}</span><span><i className="external"/> {isEn ? "External data: not included" : "Haricî veri: dâhil değil"}</span></div>
         <div className="weight-editor">
@@ -534,7 +502,7 @@ export function MarketCompassPage({ lang }: { lang: Lang }) {
         </div>
         {!weightTotal && <p className="form-error" role="alert">{isEn ? "At least one weighting must be greater than zero." : "En az bir ağırlık sıfırdan büyük olmalıdır."}</p>}
         <button className="button" type="button" disabled={!weightTotal || marketsInput.some((market) => market.name.trim().length < 2)} onClick={() => setResult(true)}>{isEn ? "Compare markets" : "Pazarları karşılaştır"}</button>
-        {result && <div className="compass-result" aria-live="polite"><header><span className="eyebrow">{isEn ? "DIRECTIONAL · USER-ENTERED ASSUMPTIONS" : "YÖN GÖSTERİCİ · KULLANICI VARSAYIMLARI"}</span><h2>{isEn ? "Opportunity–readiness comparison" : "Fırsat–hazırlık karşılaştırması"}</h2></header><div className="score-bars">{marketsInput.map((market) => <div key={market.name}><strong>{market.name}</strong><i><span style={{ width: `${score(market)}%` }}/></i><output>{score(market)} / 100</output></div>)}</div><table><caption className="sr-only">{isEn ? "Market comparison scores" : "Pazar karşılaştırma puanları"}</caption><thead><tr><th>{isEn ? "Dimension" : "Boyut"}</th>{marketsInput.map((market) => <th key={market.name}>{market.name}</th>)}</tr></thead><tbody>{dimensions.map((dimension, i) => <tr key={dimension}><th>{dimension}</th>{marketsInput.map((market) => <td key={market.name}>{market.scores[i]}</td>)}</tr>)}</tbody></table><div className="compass-interpretation"><section><span>{isEn ? "WHAT THIS SUGGESTS" : "SONUCUN GÖSTERDİĞİ"}</span><p>{isEn ? "The current assumptions create a relative comparison. They do not establish market attractiveness or readiness as fact." : "Mevcut varsayımlar göreli bir karşılaştırma oluşturur. Pazar cazibesini veya hazırlığı gerçek olarak ortaya koymaz."}</p></section><section><span>{isEn ? "EVIDENCE GAP" : "KANIT AÇIĞI"}</span><p>{isEn ? "Validate each input with dated, market-specific research and internal capability evidence." : "Her girdiyi tarihli, pazara özgü araştırma ve iç yetkinlik kanıtıyla doğrulayın."}</p></section></div><div className="result-actions"><SaveControl lang={lang} item={{ id: "market-compass-result", title: `${marketsInput[0].name} / ${marketsInput[1].name}`, type: isEn ? "Market comparison" : "Pazar karşılaştırması", href: `/${lang}/${m.marketCompass}` }}/><button type="button" onClick={() => window.print()}>{isEn ? "Export / print" : "Dışa aktar / yazdır"}</button><a href={contextualContactHref(lang, isEn ? "Market Entry Compass" : "Pazara Giriş Pusulası", `${marketsInput[0].name} / ${marketsInput[1].name}`, `${dimensions.map((dimension, index) => `${dimension}: ${marketsInput[0].scores[index]} / ${marketsInput[1].scores[index]}`).join("; ")}`, expertise[lang][1][0])}>{isEn ? "Discuss this decision" : "Bu kararı görüşün"}</a></div><ToolScopeNote lang={lang}/></div>}
+        {result && <div className="compass-result" aria-live="polite"><header><span className="eyebrow">{isEn ? "DIRECTIONAL · USER-ENTERED ASSUMPTIONS" : "YÖN GÖSTERİCİ · KULLANICI VARSAYIMLARI"}</span><h2>{isEn ? "Opportunity–readiness comparison" : "Fırsat–hazırlık karşılaştırması"}</h2></header><div className="score-bars">{marketsInput.map((market) => <div key={market.name}><strong>{market.name}</strong><i><span style={{ width: `${score(market)}%` }}/></i><output>{score(market)} / 100</output></div>)}</div><table><caption className="sr-only">{isEn ? "Market comparison scores" : "Pazar karşılaştırma puanları"}</caption><thead><tr><th>{isEn ? "Dimension" : "Boyut"}</th>{marketsInput.map((market) => <th key={market.name}>{market.name}</th>)}</tr></thead><tbody>{dimensions.map((dimension, i) => <tr key={dimension}><th>{dimension}</th>{marketsInput.map((market) => <td key={market.name}>{market.scores[i]}</td>)}</tr>)}</tbody></table><div className="compass-interpretation"><section><span>{isEn ? "WHAT THIS SUGGESTS" : "SONUCUN GÖSTERDİĞİ"}</span><p>{isEn ? "The current assumptions create a relative comparison. They do not establish market attractiveness or readiness as fact." : "Mevcut varsayımlar göreli bir karşılaştırma oluşturur. Pazar cazibesini veya hazırlığı gerçek olarak ortaya koymaz."}</p></section><section><span>{isEn ? "EVIDENCE GAP" : "KANIT AÇIĞI"}</span><p>{isEn ? "Validate each input with dated, market-specific research and internal capability evidence." : "Her girdiyi tarihli, pazara özgü araştırma ve iç yetkinlik kanıtıyla doğrulayın."}</p></section></div><div className="result-actions"><SaveControl lang={lang} item={{ id: "market-compass-result", title: `${marketsInput[0].name} / ${marketsInput[1].name}`, type: isEn ? "Market comparison" : "Pazar karşılaştırması", href: `/${lang}/${m.marketCompass}` }}/><button type="button" onClick={() => window.print()}>{isEn ? "Export / print" : "Dışa aktar / yazdır"}</button><HandoffLink lang={lang} data={{tool:"Market Entry Compass",decision:`${marketsInput[0].name} / ${marketsInput[1].name}`,context:dimensions.map((d,i)=>`${d}: ${marketsInput[0].scores[i]} / ${marketsInput[1].scores[i]}`).join("; "),interest:expertise[lang][1][0]}}>{isEn ? "Review this decision with Ganrich" : "Bu kararı Ganrich ile değerlendirin"}</HandoffLink></div><ToolScopeNote lang={lang}/></div>}
       </section>
     </>
   );
@@ -557,7 +525,6 @@ export function BoardBriefBuilderPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
   const [brief, setBrief] = useState<BoardBrief>(emptyBoardBrief);
   const [generated, setGenerated] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
   const labels: Array<[keyof BoardBrief, string, string]> = isEn ? [
     ["decision", "Decision required", "State the choice the board is being asked to make."],
     ["recommendation", "Management recommendation", "State the recommended path in one direct sentence."],
@@ -578,25 +545,14 @@ export function BoardBriefBuilderPage({ lang }: { lang: Lang }) {
     ["owner", "Sorumlu sahip ve zamanlama", "Sorumlu rolü ve bir sonraki gözden geçirme noktasını belirtin."],
   ];
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const next = { ...emptyBoardBrief };
-    (Object.keys(next) as Array<keyof BoardBrief>).forEach((key) => { next[key] = (params.get(key) ?? "").slice(0, 1200); });
-    queueMicrotask(() => { setBrief(next); setHydrated(true); });
-  }, []);
-  useEffect(() => {
-    if (!hydrated) return;
-    const params = new URLSearchParams();
-    (Object.keys(brief) as Array<keyof BoardBrief>).forEach((key) => { if (brief[key].trim()) params.set(key, brief[key].trim()); });
-    window.history.replaceState(null, "", `${window.location.pathname}${params.size ? `?${params.toString()}` : ""}`);
-  }, [brief, hydrated]);
-
+  useEffect(() => { window.history.replaceState(null, "", window.location.pathname); const handoff=takeHandoff("boardBriefBuilder"); if(handoff)queueMicrotask(()=>setBrief({...emptyBoardBrief,decision:handoff.decision||"",recommendation:handoff.recommendation||"",evidence:handoff.evidence||""})); }, []);
   const update = (key: keyof BoardBrief, value: string) => setBrief((current) => ({ ...current, [key]: value }));
   const complete = generated || [brief.decision, brief.recommendation, brief.evidence, brief.action].every((value) => value.trim().length >= 10);
   const emailBody = labels.map(([key, label]) => `${label.toUpperCase()}\n${brief[key] || "—"}`).join("\n\n");
 
   return <>
     <IntelligenceHero label={isEn ? "BOARD BRIEF BUILDER" : "YÖNETİM KURULU BRİFİNGİ OLUŞTURUCU"} title={isEn ? "Make the decision visible on one page." : "Kararı tek sayfada görünür kılın."} intro={isEn ? "Convert a framed choice into a concise board memo that distinguishes recommendation, evidence, uncertainty, risk, and required action." : "Çerçevelenmiş bir tercihi; öneri, kanıt, belirsizlik, risk ve gerekli eylemi birbirinden ayıran özlü bir yönetim kurulu notuna dönüştürün."}/>
+<ToolIntro lang={lang} time={isEn ? "About 5–10 minutes" : "Yaklaşık 5–10 dakika"} output={isEn ? "A printable board decision memo" : "Yazdırılabilir yönetim kurulu karar notu"} onExample={()=>{setBrief(isEn?{decision:"Approve a bounded distributor evaluation",recommendation:"Test one channel before committing to a local team",rationale:"Customer interest needs commercial validation",alternatives:"Direct entry or defer expansion",evidence:"Illustrative only: demand, partner economics, and service requirements still need validation",risks:"Partner dependence; retain customer feedback and review rights",action:"Authorize research and set the next investment gate",owner:"Commercial lead; review after evidence is collected"}:{decision:"Sınırlı bir distribütör değerlendirmesini onaylamak",recommendation:"Yerel ekip kurmadan önce tek bir kanalı sınamak",rationale:"Müşteri ilgisi ticari doğrulama gerektiriyor",alternatives:"Doğrudan giriş veya genişlemeyi erteleme",evidence:"Temsili örnek: talep, ortak ekonomisi ve hizmet gereksinimleri doğrulanmalı",risks:"Ortak bağımlılığı; müşteri geri bildirimi ve inceleme hakkını korumak",action:"Araştırmayı yetkilendirmek ve sonraki yatırım eşiğini belirlemek",owner:"Ticari lider; kanıt toplandıktan sonra değerlendirme"});setGenerated(true);}} onClear={()=>{setBrief(emptyBoardBrief);setGenerated(false);}}/>
     <section className="board-builder section">
       {!generated ? <form className="board-form" onSubmit={(event) => { event.preventDefault(); setGenerated(true); }}>
         <header><span className="eyebrow">{isEn ? "ONE-PAGE INPUT DISCIPLINE" : "TEK SAYFALIK GİRDİ DİSİPLİNİ"}</span><h2>{isEn ? "Write for the decision, not the archive." : "Arşiv için değil, karar için yazın."}</h2><p>{isEn ? "Use concise, non-confidential language. Four core fields are required; the remainder make the board discussion stronger." : "Kısa ve gizli bilgi içermeyen bir dil kullanın. Dört temel alan zorunludur; diğer alanlar yönetim kurulu görüşmesini güçlendirir."}</p></header>
@@ -612,7 +568,7 @@ export function BoardBriefBuilderPage({ lang }: { lang: Lang }) {
           <SaveControl lang={lang} item={{ id: "board-brief-result", title: brief.decision, type: isEn ? "Board brief" : "Yönetim kurulu brifingi", href: `/${lang}/${m.boardBriefBuilder}` }}/>
           <button type="button" onClick={() => window.print()}>{isEn ? "Export / print PDF" : "Dışa aktar / PDF yazdır"}</button>
           <a href={`mailto:?subject=${encodeURIComponent(isEn ? "Preliminary board decision memo" : "Ön yönetim kurulu karar notu")}&body=${encodeURIComponent(emailBody)}`}>{isEn ? "Email to myself" : "Kendime e-posta gönder"}</a>
-          <a href={contextualContactHref(lang, isEn ? "Board Brief Builder" : "Yönetim Kurulu Brifingi Oluşturucu", brief.decision, `${brief.recommendation}\n${brief.evidence}`)}>{isEn ? "Discuss this decision" : "Bu kararı görüşün"}</a>
+          <HandoffLink lang={lang} data={{tool:"Board Brief Builder",decision:brief.decision,context:brief.recommendation+"\n"+brief.evidence}}>{isEn ? "Review this decision with Ganrich" : "Bu kararı Ganrich ile değerlendirin"}</HandoffLink>
           <button type="button" onClick={() => setGenerated(false)}>{isEn ? "Edit inputs" : "Girdileri düzenle"}</button>
         </div>
         {complete && <ToolScopeNote lang={lang}/>}
@@ -639,7 +595,6 @@ export function AIValueLensPage({ lang }: { lang: Lang }) {
   const [useCase, setUseCase] = useState("");
   const [scores, setScores] = useState([50, 50, 50, 50, 50]);
   const [result, setResult] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
   const weights = [30, 20, 20, 15, 15];
   const total = Math.round(scores.reduce((sum, value, index) => sum + value * weights[index], 0) / 100);
   const interpretation = total >= 70
@@ -648,29 +603,15 @@ export function AIValueLensPage({ lang }: { lang: Lang }) {
       ? (isEn ? ["VALIDATE THE VALUE CASE", "Potential is visible, but one or more readiness conditions should be strengthened before committing to scale."] : ["DEĞER VAKASINI DOĞRULAYIN", "Potansiyel görünür durumda; ancak ölçek kararından önce bir veya daha fazla hazırlık koşulu güçlendirilmeli."])
       : (isEn ? ["STRENGTHEN THE FOUNDATIONS", "The current assumptions do not yet support prioritization. Clarify the decision, data, operating change, or risk controls first."] : ["TEMELLERİ GÜÇLENDİRİN", "Mevcut varsayımlar henüz önceliklendirmeyi desteklemiyor. Önce kararı, veriyi, işletim değişikliğini veya risk kontrollerini netleştirin."]);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const parsed = (params.get("scores") ?? "").split(",").map(Number).filter((value) => Number.isFinite(value) && value >= 0 && value <= 100);
-    queueMicrotask(() => {
-      setUseCase((params.get("useCase") ?? "").slice(0, 160));
-      if (parsed.length === 5) setScores(parsed);
-      setHydrated(true);
-    });
-  }, []);
-  useEffect(() => {
-    if (!hydrated) return;
-    const params = new URLSearchParams({ scores: scores.join(",") });
-    if (useCase.trim()) params.set("useCase", useCase.trim());
-    window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
-  }, [useCase, scores, hydrated]);
-
+  useEffect(() => { window.history.replaceState(null, "", window.location.pathname); }, []);
   return <>
     <IntelligenceHero label={isEn ? "AI VALUE LENS" : "YAPAY ZEKÂ DEĞER MERCEĞİ"} title={isEn ? "Begin with value. Test readiness. Keep judgment accountable." : "Değerle başlayın. Hazırlığı sınayın. Muhakemeyi sorumlu tutun."} intro={isEn ? "Assess one use case as an operating decision—not as a technology demonstration. The result is directional and based only on your assumptions." : "Bir kullanım alanını teknoloji gösterisi olarak değil, işletim kararı olarak değerlendirin. Sonuç yön göstericidir ve yalnızca sizin varsayımlarınıza dayanır."}/>
+<ToolIntro lang={lang} time={isEn ? "About 3–5 minutes" : "Yaklaşık 3–5 dakika"} output={isEn ? "A directional value and readiness profile" : "Yön gösterici değer ve hazırlık profili"} onExample={()=>{setUseCase(isEn?"Illustrative production exception triage":"Temsili üretim istisnası değerlendirmesi");setScores([80,75,40,55,60]);setResult(true);}} onClear={()=>{setUseCase("");setScores([50,50,50,50,50]);setResult(false);}}/>
     <section className="ai-lens section">
       <div className="ai-lens-input">
         <header><span className="eyebrow">{isEn ? "USE-CASE ASSESSMENT" : "KULLANIM ALANI DEĞERLENDİRMESİ"}</span><h2>{isEn ? "Make the value logic explicit." : "Değer mantığını görünür kılın."}</h2></header>
         <label className="use-case-name">{isEn ? "Decision or workflow to assess" : "Değerlendirilecek karar veya iş akışı"}<input value={useCase} onChange={(event) => setUseCase(event.target.value)} minLength={3} maxLength={160} placeholder={isEn ? "e.g. production scheduling exception decisions" : "ör. üretim planlaması istisna kararları"}/></label>
-        <div className="lens-dimensions">{dimensions.map(([label, hint], index) => <label key={label}><span>{label}</span><small>{hint}</small><input type="range" min="0" max="100" value={scores[index]} onChange={(event) => setScores(scores.map((score, scoreIndex) => scoreIndex === index ? Number(event.target.value) : score))}/><output>{scores[index]}</output></label>)}</div>
+        <p className="tool-meta">{isEn ? "Illustrative weighted index: value 30%, repeatability 20%, data 20%, adoption 15%, risk control 15%. Thresholds of 50 and 70 organize discussion; they are not a validated diagnostic." : "Temsili ağırlıklı endeks: değer %30, tekrarlanabilirlik %20, veri %20, benimseme %15, risk kontrolü %15. 50 ve 70 eşikleri görüşmeyi yapılandırır; doğrulanmış tanı ölçütü değildir."}</p><div className="lens-dimensions">{dimensions.map(([label, hint], index) => <label key={label}><span>{label}</span><small>{hint}</small><input type="range" min="0" max="100" value={scores[index]} onChange={(event) => setScores(scores.map((score, scoreIndex) => scoreIndex === index ? Number(event.target.value) : score))}/><output>{scores[index]}</output></label>)}</div>
         <button className="button" type="button" disabled={useCase.trim().length < 3} onClick={() => setResult(true)}>{isEn ? "Assess the use case" : "Kullanım alanını değerlendir"}</button>
       </div>
       {result && <div className="ai-lens-result" aria-live="polite">
@@ -681,7 +622,7 @@ export function AIValueLensPage({ lang }: { lang: Lang }) {
         <div className="result-actions">
           <SaveControl lang={lang} item={{ id: "ai-value-lens-result", title: useCase, type: isEn ? "AI value assessment" : "Yapay zekâ değer değerlendirmesi", href: `/${lang}/${m.aiValueLens}` }}/>
           <button type="button" onClick={() => window.print()}>{isEn ? "Export / print" : "Dışa aktar / yazdır"}</button>
-          <a href={contextualContactHref(lang, isEn ? "AI Value Lens" : "Yapay Zekâ Değer Merceği", useCase, `${interpretation[0]} · ${total}/100`, expertise[lang][3][0])}>{isEn ? "Discuss this decision" : "Bu kararı görüşün"}</a>
+          <HandoffLink lang={lang} data={{tool:"AI Value Lens",decision:useCase,context:`${interpretation[0]} · ${total}/100`,interest:expertise[lang][3][0]}}>{isEn ? "Review this decision with Ganrich" : "Bu kararı Ganrich ile değerlendirin"}</HandoffLink>
         </div>
         <ToolScopeNote lang={lang}/>
       </div>}
@@ -693,14 +634,14 @@ export function DecisionLabChangelogPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
   const live = isEn ? [
     ["Decision Atlas", "URL-persistent decision, region, urgency, and maturity pathway."],
-    ["Decision Framer", "Validated five-step framing, shareable state, print export, and board-brief handoff."],
-    ["Market Entry Compass", "Validated weights, shareable assumptions, comparison export, and contextual handoff."],
+    ["Decision Framer", "Validated five-step framing, private inputs, print export, and explicit board-brief handoff."],
+    ["Market Entry Compass", "Validated weights, private assumptions, comparison export, and contextual handoff."],
     ["Board Brief Builder", "One-page decision memorandum with export, save, and email actions."],
     ["AI Value Lens", "Directional value-readiness profile with an explicit evidence-building next step."],
   ] : [
     ["Karar Atlası", "URL üzerinden kalıcı karar, coğrafya, aciliyet ve olgunluk yolu."],
-    ["Karar Çerçeveleyici", "Doğrulamalı beş adım, paylaşılabilir durum, yazdırma ve yönetim kurulu brifingi aktarımı."],
-    ["Pazara Giriş Pusulası", "Doğrulamalı ağırlıklar, paylaşılabilir varsayımlar, karşılaştırma çıktısı ve bağlamsal aktarım."],
+    ["Karar Çerçeveleyici", "Doğrulamalı beş adım, özel girdiler, yazdırma ve yönetim kurulu brifingi aktarımı."],
+    ["Pazara Giriş Pusulası", "Doğrulamalı ağırlıklar, özel varsayımlar, karşılaştırma çıktısı ve bağlamsal aktarım."],
     ["Yönetim Kurulu Brifingi Oluşturucu", "Dışa aktarma, kaydetme ve e-posta eylemleriyle tek sayfalık karar notu."],
     ["Yapay Zekâ Değer Merceği", "Açık kanıt oluşturma adımıyla yön gösterici değer-hazırlık profili."],
   ];

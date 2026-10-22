@@ -24,13 +24,13 @@ test("server-renders the English consultancy experience", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Ganrich Advisory \| Strategy, Transformation and Applied AI<\/title>/i);
-  assert.match(html, /Clarity for consequential decisions\./);
-  assert.match(html, /Strategic clarity, built for execution\./);
-  assert.match(html, /AI accelerates the work\. Judgment determines the answer\./);
+  assert.match(html, /The next move\. Thought through\./);
+  assert.match(html, /Market Entry Decision Sprint/);
+  assert.match(html, /industrial teams putting AI to work/);
   assert.match(html, /Start a conversation/);
   assert.match(html, /hrefLang="tr"/);
   assert.match(html, /\/og\/en\/home\.png/);
-  assert.match(html, /threshold-field/);
+  assert.match(html, /sample-memo/);
   assert.doesNotMatch(html, /\[EMAIL\]|\[LINKEDIN\]/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
 });
@@ -40,8 +40,8 @@ test("server-renders localized Turkish content and metadata", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /Ganrich Advisory \| Strateji, Dönüşüm ve Uygulamalı Yapay Zekâ/);
-  assert.match(html, /Kritik kararlar için netlik\./);
-  assert.match(html, /Uygulamaya dönüşen stratejik netlik\./);
+  assert.match(html, /Sonraki adım\. Sağlam bir kararla\./);
+  assert.match(html, /İşletim Modeli İncelemesi/);
   assert.match(html, /Görüşme başlatın/);
   assert.match(html, /hrefLang="en"/);
   assert.match(html, /\/og\/tr\/home\.png/);
@@ -116,21 +116,12 @@ test("publishes page-specific bilingual social cards", async () => {
   ]);
 });
 
-test("hardens Decision Lab state, export, briefing, and contextual handoff", async () => {
-  const [intelligence, site] = await Promise.all([
-    readFile(new URL("../app/intelligence.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/site.tsx", import.meta.url), "utf8"),
-  ]);
-
-  assert.match(intelligence, /params\.set\("decision"/);
-  assert.match(intelligence, /params\.set\(`a\$\{index\}`/);
-  assert.match(intelligence, /params\.set\(`s\$\{index\}`/);
-  assert.match(intelligence, /Export \/ print PDF/);
-  assert.match(intelligence, /Email this to me/);
-  assert.match(intelligence, /Discuss this decision/);
-  assert.match(intelligence, /This tool structures user-entered information/);
-  assert.match(site, /Tool context/);
-  assert.match(site, /defaultValue=\{prefill\.context\}/);
+test("renders bilingual engagement, sample, and decision-note journeys", async () => {
+  const paths=["/en/expertise/market-entry","/en/expertise/operating-model","/en/expertise/ai-value","/en/sample-work","/en/insights/entry-model-choice","/en/insights/founder-decision-rights","/en/insights/ai-pilot-or-process","/en/insights/transformation-value-review","/tr/uzmanlik/pazara-giris","/tr/uzmanlik/isletim-modeli","/tr/uzmanlik/yapay-zeka-degeri","/tr/ornek-calismalar","/tr/icgoruler/pazara-giris-modeli","/tr/icgoruler/kurucu-karar-haklari","/tr/icgoruler/yapay-zeka-pilotu-ve-surec","/tr/icgoruler/donusum-deger-takibi"];
+  for(const path of paths){const response=await render(path);assert.equal(response.status,200,path);const html=await response.text();assert.match(html,/rel="canonical"/);assert.match(html,/hrefLang="tr"/);assert.doesNotMatch(html,/href="[^"]*undefined/);}
+  const contact=await (await render("/en/contact")).text();
+  assert.match(contact,/What are you deciding/);assert.match(contact,/optional/);
+  const markets=await (await render("/en/markets")).text();assert.doesNotMatch(markets,/Content architecture/);
 });
 
 test("keeps core interactions keyboard-operable and marketing JavaScript within budget", async () => {
@@ -148,10 +139,10 @@ test("keeps core interactions keyboard-operable and marketing JavaScript within 
   const assetSources = await Promise.all(assets.map((asset) => readFile(new URL(`../dist/client${asset}`, import.meta.url))));
   const compressedBytes = assetSources.reduce((total, source) => total + gzipSync(source).byteLength, 0);
 
-  assert.match(html, /aria-controls="home-market-panel"/);
+  assert.match(html, /href="\/en\/expertise\/market-entry"/);
   assert.match(html, /aria-expanded="false"/);
-  assert.match(site, /event\.key === "ArrowRight"/);
-  assert.match(site, /tabIndex=\{region === i \? 0 : -1\}/);
+
+
   assert.match(shell, /role="dialog" aria-modal="true" aria-labelledby="briefing-tray-title"/);
   assert.match(shell, /aria-controls="ganrich-command"/);
   assert.match(site, /lazy\(\(\) => import\("\.\/intelligence"\)/);
@@ -240,7 +231,7 @@ test("keeps principal internal links inside the published route inventory", asyn
 
 test("makes insight search functional and governs dynamic PDF report discovery", async () => {
   const [siteSource, reportSource, englishRoute, turkishRoute, css] = await Promise.all([
-    readFile(new URL("../app/site.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/marketing-pages.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/pdf-insight-pages.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/[lang]/insights/report/[slug]/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/[lang]/icgoruler/rapor/[slug]/page.tsx", import.meta.url), "utf8"),
