@@ -76,7 +76,7 @@ function Footer({ lang }: { lang: Lang }) {
     <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Strategic judgment, regional fluency, and applied AI for consequential decisions." : "Kritik kararlar için stratejik muhakeme, bölgesel derinlik ve uygulamalı yapay zekâ."}</p></div>
     <div className="footer-links">
       <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.expertise}`}>{t.nav[0]}</a><a href={`/${lang}/${m.sampleWork}`}>{t.nav[1]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[2]}</a><a href={`/${lang}/${m.decisionLab}`}>{t.nav[3]}</a><a href={`/${lang}/${m.about}`}>{t.nav[4]}</a><a href={`/${lang}/${m.markets}`}>{lang === "en" ? "Markets" : "Coğrafyalar"}</a></div>
-      <div><span>{lang === "en" ? "Contact" : "İletişim"}</span><a href={`/${lang}/${m.contact}`}>{t.cta}</a><a href="mailto:furkangul@gmail.com">furkangul@gmail.com</a><a href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
+      <div><span>{lang === "en" ? "Contact" : "İletişim"}</span><a href={`/${lang}/${m.contact}`}>{t.cta}</a><a href="mailto:furkangul@ganrichadvisory.com">furkangul@ganrichadvisory.com</a><a href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
     </div>
     <nav className="footer-trust-links" aria-label={lang === "en" ? "Privacy and legal" : "Gizlilik ve hukuk"}>
       <a href={`/${lang}/${m.privacyCenter}`}>{lang === "en" ? "Privacy center" : "Gizlilik merkezi"}</a>
