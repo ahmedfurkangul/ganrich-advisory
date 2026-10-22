@@ -402,3 +402,10 @@ test("removes starter-only infrastructure and keeps production system assets", a
   await access(new URL("../public/og.png", import.meta.url));
   await assert.rejects(access(new URL("../app/_sites-preview", import.meta.url)));
 });
+
+test("returns 404 for paths outside the /en and /tr trees", async () => {
+  const response = await render("/missing-page");
+  assert.equal(response.status, 404);
+  const english = await render("/en");
+  assert.equal(english.status, 200);
+});
