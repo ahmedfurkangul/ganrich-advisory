@@ -53,7 +53,9 @@ const metaCopy = {
 } as const;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const p = await params; const lang: Lang = p.lang === "tr" ? "tr" : "en"; const route = p.slug?.join("/") ?? ""; const kind = pageKind(lang, route);
+  const p = await params;
+  if (p.lang !== "en" && p.lang !== "tr") return { title: "Page not found | Ganrich Advisory", robots: { index: false, follow: false } };
+  const lang: Lang = p.lang === "tr" ? "tr" : "en"; const route = p.slug?.join("/") ?? ""; const kind = pageKind(lang, route);
   const trustKinds = ["privacyCenter", "privacy", "kvkk", "cookies", "cookiePreferences", "dataRights", "aiTransparency", "terms", "vendors", "policyUpdates"];
   const metaKind = (trustKinds.includes(kind) ? "trust" : kind) as keyof typeof metaCopy.en;
   const article = kind.startsWith("article") ? insightArticles[lang][insightIndex(kind)] : null;
@@ -94,7 +96,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function LocalizedPage({ params }: Props) {
-  const p = await params; const lang: Lang = p.lang === "tr" ? "tr" : "en"; const route = p.slug?.join("/") ?? "";
+  const p = await params;
+  // Only /en and /tr exist; any other first segment (e.g. /missing-page) is a 404, not the English home page.
+  if (p.lang !== "en" && p.lang !== "tr") notFound();
+  const lang: Lang = p.lang === "tr" ? "tr" : "en"; const route = p.slug?.join("/") ?? "";
   const kind = pageKind(lang, route);
   if (kind === "notFound") notFound();
   const article = kind.startsWith("article") ? insightArticles[lang][insightIndex(kind)] : null;
