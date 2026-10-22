@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { listPdfInsights } from "../../../db/pdf-insights";
+import { editorFromRequest } from "../../editor-auth";
 
 export const dynamic = "force-dynamic";
 
 const MAX_FILE_SIZE = 75 * 1024 * 1024;
 
-function editorEmail(request: Request): string | null {
-  return request.headers.get("oai-authenticated-user-email");
+async function editorEmail(request: Request): Promise<string | null> {
+  return (await editorFromRequest(request))?.email ?? null;
 }
 
 function forbidden() {
@@ -35,7 +36,7 @@ export async function GET(request: Request) {
   const status = url.searchParams.get("status") ?? undefined;
   const languageParam = url.searchParams.get("language");
   const language = languageParam === "tr" ? "tr" : languageParam === "en" ? "en" : undefined;
-  if (status !== "published" && !editorEmail(request)) return forbidden();
+  if (status !== "published" && !(await editorEmail(request))) return forbidden();
 
   try {
     return NextResponse.json({ insights: await listPdfInsights({ status, language }) });
@@ -46,7 +47,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   const { env } = await import("cloudflare:workers");
-  const email = editorEmail(request);
+  const email = await editorEmail(request);
   if (!email) return forbidden();
   if (!env.DB || !env.DOCUMENTS) return NextResponse.json({ error: "Document storage is unavailable." }, { status: 503 });
 
@@ -153,7 +154,7 @@ export async function PATCH(request: Request) {
   const body = await request.json() as Record<string, unknown>;
   const configuredKey = (env as unknown as { PDF_INGEST_KEY?: string }).PDF_INGEST_KEY;
   const batchEditor = configuredKey && body.ingestKey === configuredKey && typeof body.editor === "string" ? body.editor : null;
-  const email = editorEmail(request) ?? batchEditor;
+  const email = (await editorEmail(request)) ?? batchEditor;
   if (!email) return forbidden();
   const id = typeof body.id === "string" ? body.id : "";
   if (!id) return NextResponse.json({ error: "Insight ID is required." }, { status: 400 });

@@ -27,51 +27,22 @@ This starter does not use `wrangler.jsonc`.
 - `examples/d1/` contains an optional D1 example surface
 - `drizzle.config.ts` supports local migration generation when needed
 
-## Workspace Auth Headers
+## Editor Identity
 
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
+The PDF studio and the PDF APIs recognise an editor only through
+`app/editor-auth.ts`. The `EDITOR_AUTH` variable picks the source:
 
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
+- `access`: a Cloudflare Access token (`Cf-Access-Jwt-Assertion` header or
+  `CF_Authorization` cookie). Its RS256 signature, issuer
+  (`ACCESS_TEAM_DOMAIN`), audience (`ACCESS_AUD`) and expiry are verified, and
+  the email must appear in the comma-separated `EDITOR_EMAILS` list.
+- `sites`: the `oai-authenticated-user-*` headers set by ChatGPT Sites. Use this
+  only on that platform, which removes client-supplied copies.
+- unset or anything else: nobody is an editor; studio pages return 404 and the
+  editor APIs return 401.
 
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
-```
-
-## Optional Dispatch-Owned ChatGPT Sign-In
-
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
-
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+Outside `sites` mode, `worker/index.ts` deletes any incoming
+`oai-authenticated-user-*` headers, so they cannot be spoofed on Cloudflare.
 
 Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
 OAuth cookies, and identity header injection. Do not implement app routes for

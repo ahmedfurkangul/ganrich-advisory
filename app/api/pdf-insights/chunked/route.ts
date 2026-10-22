@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { editorFromRequest } from "../../../editor-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -72,7 +73,7 @@ export async function POST(request: Request) {
   const body = await request.json() as Record<string, unknown>;
   const configuredKey = (env as unknown as { PDF_INGEST_KEY?: string }).PDF_INGEST_KEY;
   const batchEditor = configuredKey && body.ingestKey === configuredKey && typeof body.editor === "string" ? body.editor : null;
-  const editor = request.headers.get("oai-authenticated-user-email") ?? batchEditor;
+  const editor = (await editorFromRequest(request))?.email ?? batchEditor;
   if (!editor) return forbidden();
   if (!env.DB || !env.DOCUMENTS) return NextResponse.json({ error: "Document storage is unavailable." }, { status: 503 });
 
