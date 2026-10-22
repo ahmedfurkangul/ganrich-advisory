@@ -33,7 +33,7 @@ export async function renderInsightFeed(lang: Lang) {
       <link>${escapeXml(link)}</link>
       <guid isPermaLink="true">${escapeXml(link)}</guid>
       <description>${escapeXml(article.thesis)}</description>
-      <author>furkangul@gmail.com (${escapeXml(article.author)})</author>
+      <author>furkangul@ganrichadvisory.com (${escapeXml(article.author)})</author>
       <category>${escapeXml(article.topic)}</category>
       ${published ? `<pubDate>${published.toUTCString()}</pubDate>` : ""}
       <source url="${feedUrl}">${isEn ? "The Ganrich Brief" : "Ganrich Bülteni"}</source>

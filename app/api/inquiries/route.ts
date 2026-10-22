@@ -82,8 +82,8 @@ export async function POST(request: Request) {
 
   if (
     !kind || !source || name.length < 2 || !emailPattern.test(email)
-    || !organization || !region || !interest || context.length < 30
-    || (kind === "briefing" && decision.length < 15) || !privacyAcknowledged
+    || context.length < 20 || !privacyAcknowledged
+    || (kind === "briefing" && (decision.length < 15 || !organization || !region || !interest))
   ) {
     return error(
       language,

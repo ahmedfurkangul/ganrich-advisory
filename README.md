@@ -1,4 +1,10 @@
-# vinext-starter
+# Ganrich Advisory website
+
+Bilingual (EN/TR) site for Ganrich Advisory on Vinext and Cloudflare Workers. For the October 2026 redesign, local setup and verification notes see [docs/REDESIGN-SUMMARY.md](docs/REDESIGN-SUMMARY.md); open owner decisions are in [docs/REVIEW-DECISIONS.md](docs/REVIEW-DECISIONS.md).
+
+The notes below come from the original vinext starter.
+
+## vinext-starter
 
 A clean full-stack starter running on
 [vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and

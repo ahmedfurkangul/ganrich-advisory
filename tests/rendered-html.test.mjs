@@ -23,14 +23,18 @@ test("server-renders the English consultancy experience", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Ganrich Advisory \| Strategy, Transformation and Applied AI<\/title>/i);
-  assert.match(html, /Clarity for consequential decisions\./);
-  assert.match(html, /Strategic clarity, built for execution\./);
-  assert.match(html, /AI accelerates the work\. Judgment determines the answer\./);
+  assert.match(html, /<title>Ganrich Advisory \| Independent Strategy Advice for Turkish Companies<\/title>/i);
+  assert.match(html, /Independent strategy advice for the next stage of growth\./);
+  assert.match(html, /Three situations we work on\./);
+  assert.match(html, /Market Entry Decision Sprint/);
+  assert.match(html, /Operating Model Review/);
+  assert.match(html, /AI Value Diagnostic/);
+  assert.match(html, /Illustrative example · fictional company · not client work/);
   assert.match(html, /Start a conversation/);
   assert.match(html, /hrefLang="tr"/);
   assert.match(html, /\/og\/en\/home\.png/);
-  assert.match(html, /threshold-field/);
+  assert.match(html, /\/people\/ahmed-furkan-gul\.webp/);
+  assert.doesNotMatch(html, /consequential decisions/i);
   assert.doesNotMatch(html, /\[EMAIL\]|\[LINKEDIN\]/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
 });
@@ -39,9 +43,9 @@ test("server-renders localized Turkish content and metadata", async () => {
   const response = await render("/tr");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Ganrich Advisory \| Strateji, Dönüşüm ve Uygulamalı Yapay Zekâ/);
-  assert.match(html, /Kritik kararlar için netlik\./);
-  assert.match(html, /Uygulamaya dönüşen stratejik netlik\./);
+  assert.match(html, /Ganrich Advisory \| Türk Şirketleri için Bağımsız Strateji Danışmanlığı/);
+  assert.match(html, /Büyümenin bir sonraki aşaması için bağımsız strateji danışmanlığı\./);
+  assert.match(html, /Pazara Giriş Karar Sprinti/);
   assert.match(html, /Görüşme başlatın/);
   assert.match(html, /hrefLang="en"/);
   assert.match(html, /\/og\/tr\/home\.png/);
@@ -53,7 +57,10 @@ test("publishes the verified bilingual founder profile", async () => {
   const englishHtml = await english.text();
   assert.match(englishHtml, /Ahmed Furkan Gul/);
   assert.match(englishHtml, /Founder, Ganrich Advisory/);
-  assert.match(englishHtml, /Tay Group/);
+  assert.match(englishHtml, /Chief Strategy and Business Development Officer at Tay Group/);
+  assert.match(englishHtml, /not through Ganrich client engagements/);
+  assert.match(englishHtml, /furkangul@ganrichadvisory\.com/);
+  assert.doesNotMatch(englishHtml, /gmail\.com/);
   assert.match(englishHtml, /Assistant Professor at İstanbul Kent University/);
   assert.match(englishHtml, /https:\/\/www\.linkedin\.com\/in\/furkangul\//);
   assert.doesNotMatch(englishHtml, /\[FOUNDER NAME\]/);
@@ -67,12 +74,20 @@ test("publishes the verified bilingual founder profile", async () => {
 
 test("server-renders the bilingual strategic intelligence routes", async () => {
   const routes = [
-    ["/en/decision-lab", /Decision Lab/, /Work on the decision/],
+    ["/en/decision-lab", /Decision Lab/, /Free tools to structure a decision before you discuss it\./],
+    ["/en/expertise/market-entry-decision-sprint", /Market Entry Decision Sprint/, /What you receive/],
+    ["/en/expertise/operating-model-review", /Operating Model Review/, /Decision-rights map/],
+    ["/en/expertise/ai-value-diagnostic", /AI Value Diagnostic/, /Not the right engagement for/],
+    ["/tr/uzmanlik/pazara-giris-karar-sprinti", /Pazara Giriş Karar Sprinti/, /Size teslim edilenler/],
+    ["/en/how-we-work", /How we work/, /How evidence becomes a recommendation\./],
+    ["/tr/calisma-bicimimiz", /Çalışma biçimimiz/, /Kanıt nasıl öneriye dönüşür\./],
+    ["/en/markets", /Türkiye → Gulf/, /reviewed 24 July 2026/],
     ["/tr/karar-laboratuvari/karar-atlasi", /Karar Atlası/, /Karardan başlayın/],
     ["/en/decision-lab/decision-framer", /Decision Framer/, /What decision needs to be made/],
-    ["/en/decision-lab/market-entry-compass", /Market Entry Compass/, /EDITABLE WEIGHTS/],
+    ["/en/decision-lab/market-entry-compass", /Market Entry Compass/, /Decide what matters for this decision\./],
     ["/en/decision-lab/board-brief-builder", /Board Brief Builder/, /Write for the decision, not the archive/],
     ["/tr/karar-laboratuvari/yapay-zeka-deger-mercegi", /Yapay Zekâ Değer Merceği/, /Değer mantığını görünür kılın/],
+    ["/en/decision-lab/ai-value-lens", /AI Value Lens/, /Try a worked example/],
     ["/en/decision-lab/changelog", /Decision Lab Changelog/, /Five live tools/],
     ["/en/private-executive-briefing", /Private Executive Briefing/, /Request the briefing/],
     ["/en/insights/decision-quality-applied-ai", /Decision quality in the age of applied AI/, /24 July 2026/],
@@ -116,21 +131,45 @@ test("publishes page-specific bilingual social cards", async () => {
   ]);
 });
 
-test("hardens Decision Lab state, export, briefing, and contextual handoff", async () => {
-  const [intelligence, site] = await Promise.all([
+test("keeps visitor text out of URLs and makes drafts and sharing deliberate", async () => {
+  const [intelligence, site, practice] = await Promise.all([
     readFile(new URL("../app/intelligence.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/site.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/practice.tsx", import.meta.url), "utf8"),
   ]);
 
-  assert.match(intelligence, /params\.set\("decision"/);
-  assert.match(intelligence, /params\.set\(`a\$\{index\}`/);
-  assert.match(intelligence, /params\.set\(`s\$\{index\}`/);
+  // Only the index of a predefined Atlas question and an engagement key may appear in a query string.
+  assert.doesNotMatch(intelligence, /params\.set\(/);
+  assert.doesNotMatch(intelligence, /searchParams\.(?:get|set)\("(?:useCase|scores|context|decision|m\d|a\d)"/);
+  assert.doesNotMatch(site, /searchParams\.get\("(?:context|decision|tool)"\)/);
+  assert.match(intelligence, /\?decision=\$\{decision\}/);
+  assert.match(practice, /\?topic=\$\{item\.key\}/);
+  assert.match(intelligence, /sessionStorage\.setItem\(HANDOFF_KEY/);
+  assert.match(site, /sessionStorage\.getItem\(HANDOFF_KEY\)/);
+  assert.match(site, /sessionStorage\.removeItem\(HANDOFF_KEY\)/);
+  assert.match(intelligence, /Keep a draft on this device/);
+  assert.match(intelligence, /localStorage\.removeItem\(storageKey\)/);
+  assert.match(intelligence, /if \(!keep\) return;/);
+  assert.match(intelligence, /Try a worked example/);
+  assert.match(intelligence, /not a validated diagnostic/);
   assert.match(intelligence, /Export \/ print PDF/);
   assert.match(intelligence, /Email this to me/);
+  assert.match(intelligence, /Copy summary/);
   assert.match(intelligence, /Discuss this decision/);
   assert.match(intelligence, /This tool structures user-entered information/);
-  assert.match(site, /Tool context/);
-  assert.match(site, /defaultValue=\{prefill\.context\}/);
+});
+
+test("asks only for name, email and a short description on the contact form", async () => {
+  const [response, inquiryApi] = await Promise.all([
+    render("/en/contact?topic=serviceAiValue"),
+    readFile(new URL("../app/api/inquiries/route.ts", import.meta.url), "utf8"),
+  ]);
+  const html = await response.text();
+  const required = [...html.matchAll(/<(?:input|textarea|select)[^>]*\brequired\b[^>]*>/g)].map((match) => match[0].match(/name="([^"]+)"/)?.[1]).filter(Boolean);
+  assert.deepEqual(required.sort(), ["context", "email", "name", "privacyAcknowledged"]);
+  assert.match(html, /Add context \(optional\)/);
+  assert.match(inquiryApi, /context\.length < 20/);
+  assert.match(inquiryApi, /kind === "briefing" && \(decision\.length < 15 \|\| !organization/);
 });
 
 test("keeps core interactions keyboard-operable and marketing JavaScript within budget", async () => {
@@ -148,14 +187,14 @@ test("keeps core interactions keyboard-operable and marketing JavaScript within 
   const assetSources = await Promise.all(assets.map((asset) => readFile(new URL(`../dist/client${asset}`, import.meta.url))));
   const compressedBytes = assetSources.reduce((total, source) => total + gzipSync(source).byteLength, 0);
 
-  assert.match(html, /aria-controls="home-market-panel"/);
+  assert.match(html, /aria-controls="primary-nav"/);
   assert.match(html, /aria-expanded="false"/);
-  assert.match(site, /event\.key === "ArrowRight"/);
-  assert.match(site, /tabIndex=\{region === i \? 0 : -1\}/);
+  assert.match(site, /event\.key === "Escape"/);
+  assert.match(site, /aria-pressed=\{filter === "all"\}/);
   assert.match(shell, /role="dialog" aria-modal="true" aria-labelledby="briefing-tray-title"/);
   assert.match(shell, /aria-controls="ganrich-command"/);
   assert.match(site, /lazy\(\(\) => import\("\.\/intelligence"\)/);
-  assert.match(intelligence, /event\.key === "ArrowRight"/);
+  assert.match(intelligence, /aria-valuenow=\{filled\}/);
   assert.match(controls, /event\.key === "Escape"/);
   assert.match(privacy, /Trust should be designed into the experience/);
   assert.match(css, /min-height: 44px/);

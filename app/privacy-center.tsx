@@ -9,6 +9,12 @@ const OPTIONAL_STORAGE = [
   "ganrich-briefing-tray",
   "ganrich-framer-en",
   "ganrich-framer-tr",
+  "ganrich-draft-framer-en",
+  "ganrich-draft-framer-tr",
+  "ganrich-draft-market-compass",
+  "ganrich-draft-board-brief-en",
+  "ganrich-draft-board-brief-tr",
+  "ganrich-draft-ai-value-lens",
   "ganrich-reading-mode",
 ];
 
@@ -264,8 +270,8 @@ const pages: Record<Lang, Record<TrustKind, {
       title: "A deliberately small technology footprint.",
       intro: "The site is designed to work without analytics or advertising technologies.",
       sections: [
-        ["Essential", "Security and delivery technologies, the requested language choice, and the record of your privacy preference. These cannot be switched off through this interface."],
-        ["Optional functional", "Saved briefing items, reading mode, and Decision Lab drafts stored in your browser. These are off unless you enable them."],
+        ["Essential", "Security and delivery technologies, the requested language choice, and the record of your privacy preference. These cannot be switched off through this interface. When you choose to carry a Decision Lab summary into the contact form, it is held in this browser tab only (session storage) until you send or remove it."],
+        ["Optional functional", "Saved briefing items, reading mode, and Decision Lab drafts stored in your browser. These are off unless you enable them; a Decision Lab draft is kept only after you tick “Keep a draft on this device” in that tool, and unticking it deletes the draft."],
         ["Not deployed", "Analytics, advertising, cross-site tracking, and third-party embedded media are not active in the current build."],
         ["How to change your mind", "Open Cookie preferences from the footer. Choosing Essential only removes the optional local preference keys used by this site."],
       ],
@@ -367,8 +373,8 @@ const pages: Record<Lang, Record<TrustKind, {
       title: "Bilinçli biçimde küçük bir teknoloji izi.",
       intro: "Site, analitik veya reklam teknolojileri olmadan çalışacak şekilde tasarlanmıştır.",
       sections: [
-        ["Zorunlu", "Güvenlik ve sunum teknolojileri, talep edilen dil seçimi ve gizlilik tercihinizin kaydı. Bunlar bu arayüzden kapatılamaz."],
-        ["İsteğe bağlı işlevsel", "Tarayıcınızda saklanan brifing öğeleri, okuma modu ve Karar Laboratuvarı taslakları. İzin vermediğiniz sürece kapalıdır."],
+        ["Zorunlu", "Güvenlik ve sunum teknolojileri, talep edilen dil seçimi ve gizlilik tercihinizin kaydı. Bunlar bu arayüzden kapatılamaz. Bir Karar Laboratuvarı özetini iletişim formuna taşımayı seçtiğinizde özet, siz gönderene ya da kaldırana kadar yalnızca bu tarayıcı sekmesinde (oturum belleği) tutulur."],
+        ["İsteğe bağlı işlevsel", "Tarayıcınızda saklanan brifing öğeleri, okuma modu ve Karar Laboratuvarı taslakları. İzin vermediğiniz sürece kapalıdır; bir Karar Laboratuvarı taslağı yalnızca o araçta “Taslağı bu cihazda sakla” seçeneğini işaretlediğinizde tutulur, işareti kaldırmak taslağı siler."],
         ["Kullanılmayanlar", "Analitik, reklam, siteler arası izleme ve üçüncü taraf gömülü medya mevcut sürümde etkin değildir."],
         ["Tercih değişikliği", "Alt bilgiden Çerez tercihlerini açın. Yalnızca zorunlu seçimi, bu sitenin kullandığı isteğe bağlı yerel tercih anahtarlarını kaldırır."],
       ],

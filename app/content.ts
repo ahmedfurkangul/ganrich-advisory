@@ -103,6 +103,10 @@ export const insightCategories: Record<Lang, InsightCategory[]> = {
 export const routeMap: Record<Lang, Record<string, string>> = {
   en: {
     expertise: "expertise",
+    serviceMarketEntry: "expertise/market-entry-decision-sprint",
+    serviceOperatingModel: "expertise/operating-model-review",
+    serviceAiValue: "expertise/ai-value-diagnostic",
+    howWeWork: "how-we-work",
     markets: "markets",
     insights: "insights",
     decisionLab: "decision-lab",
@@ -140,6 +144,10 @@ export const routeMap: Record<Lang, Record<string, string>> = {
   },
   tr: {
     expertise: "uzmanlik",
+    serviceMarketEntry: "uzmanlik/pazara-giris-karar-sprinti",
+    serviceOperatingModel: "uzmanlik/isletim-modeli-incelemesi",
+    serviceAiValue: "uzmanlik/yapay-zeka-deger-teshisi",
+    howWeWork: "calisma-bicimimiz",
     markets: "cografyalar",
     insights: "icgoruler",
     decisionLab: "karar-laboratuvari",

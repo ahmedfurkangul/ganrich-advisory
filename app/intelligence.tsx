@@ -1,23 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { expertise, insightArticles, insightHref, insights, Lang, markets, routeMap } from "./content";
+import { insightArticles, insightHref, Lang, markets, routeMap } from "./content";
+import { engagementSummary as engagementByKey, EngagementKey } from "./practice-core";
 import { optionalPreferencesEnabled } from "./privacy-center";
 
 type BriefItem = { id: string; title: string; type: string; href: string };
 
-function moveTab(event: React.KeyboardEvent<HTMLButtonElement>, current: number, count: number, select: (index: number) => void) {
-  let next = current;
-  if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (current + 1) % count;
-  else if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (current - 1 + count) % count;
-  else if (event.key === "Home") next = 0;
-  else if (event.key === "End") next = count - 1;
-  else return;
-  event.preventDefault();
-  select(next);
-  const tabs = event.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
-  window.requestAnimationFrame(() => tabs?.[next]?.focus());
-}
+/*
+ * Decision Lab privacy model
+ * - Tools run entirely in the browser; nothing is sent to Ganrich unless the visitor submits the contact form.
+ * - Free-text business information is never written to the URL.
+ * - Drafts persist in localStorage only after the visitor opts in, and can be deleted at any time.
+ * - Hand-offs to the contact form or the Board Brief Builder use sessionStorage (this tab only).
+ */
+
+const HANDOFF_KEY = "ganrich-inquiry-handoff";
+const BOARD_HANDOFF_KEY = "ganrich-board-handoff";
 
 function keepModalFocus(event: KeyboardEvent, container: HTMLElement | null) {
   if (event.key !== "Tab" || !container) return;
@@ -38,11 +37,64 @@ function emitSave(item: BriefItem) {
   window.dispatchEvent(new CustomEvent("ganrich-save", { detail: item }));
 }
 
-function contextualContactHref(lang: Lang, tool: string, decision: string, context = "", interest = "") {
-  const params = new URLSearchParams({ tool, decision });
-  if (context) params.set("context", context);
-  if (interest) params.set("interest", interest);
-  return `/${lang}/${routeMap[lang].contact}?${params.toString()}`;
+function readJson<T>(storage: Storage | undefined, key: string): T | null {
+  try {
+    const raw = storage?.getItem(key);
+    return raw ? JSON.parse(raw) as T : null;
+  } catch {
+    return null;
+  }
+}
+
+/* Sends a tool summary to the contact form through this tab's sessionStorage; the URL carries only a topic key. */
+function handoffToContact(lang: Lang, tool: string, summary: string, topic?: EngagementKey) {
+  try { sessionStorage.setItem(HANDOFF_KEY, JSON.stringify({ tool, summary: summary.slice(0, 1800) })); } catch { /* storage unavailable: continue without context */ }
+  window.location.assign(`/${lang}/${routeMap[lang].contact}${topic ? `?topic=${topic}` : ""}`);
+}
+
+type Draft<T> = { value: T; savedAt: string };
+
+/* Draft recovery with explicit visitor control. Nothing is stored until "keep" is switched on. */
+function useToolDraft<T>(key: string, initial: T) {
+  const storageKey = `ganrich-draft-${key}`;
+  const [value, setValue] = useState<T>(initial);
+  const [keep, setKeep] = useState(false);
+  const [restoredAt, setRestoredAt] = useState("");
+  useEffect(() => {
+    const stored = readJson<Draft<T>>(typeof window === "undefined" ? undefined : window.localStorage, storageKey);
+    if (stored?.value) queueMicrotask(() => { setValue(stored.value); setKeep(true); setRestoredAt(stored.savedAt); });
+  }, [storageKey]);
+  useEffect(() => {
+    if (!keep) return;
+    try { localStorage.setItem(storageKey, JSON.stringify({ value, savedAt: new Date().toISOString() })); } catch { /* storage unavailable */ }
+  }, [keep, storageKey, value]);
+  const changeKeep = (next: boolean) => {
+    setKeep(next);
+    if (!next) { try { localStorage.removeItem(storageKey); } catch { /* storage unavailable */ } setRestoredAt(""); }
+  };
+  const clear = () => { changeKeep(false); setValue(initial); };
+  return { value, setValue, keep, setKeep: changeKeep, restoredAt, clear };
+}
+
+function DraftControl({ lang, keep, setKeep, restoredAt, clear }: { lang: Lang; keep: boolean; setKeep: (next: boolean) => void; restoredAt: string; clear: () => void }) {
+  const isEn = lang === "en";
+  const when = restoredAt ? new Date(restoredAt).toLocaleString(isEn ? "en-GB" : "tr-TR", { dateStyle: "medium", timeStyle: "short" }) : "";
+  return <div className="lab-draft">
+    {restoredAt && <p role="status">{isEn ? `Restored your draft saved on this device (${when}).` : `Bu cihazda kayıtlı taslağınız geri yüklendi (${when}).`}</p>}
+    <label className="lab-check"><input type="checkbox" checked={keep} onChange={(event) => setKeep(event.target.checked)}/><span>{isEn ? "Keep a draft on this device" : "Taslağı bu cihazda sakla"}</span></label>
+    <small>{isEn ? "Off by default. When on, your entries are saved in this browser only and never sent to Ganrich. Switching it off deletes the draft." : "Varsayılan olarak kapalıdır. Açıkken girdileriniz yalnızca bu tarayıcıda saklanır, Ganrich’e gönderilmez. Kapattığınızda taslak silinir."}</small>
+    <button type="button" className="lab-text-button" onClick={clear}>{isEn ? "Clear all entries" : "Tüm girdileri temizle"}</button>
+  </div>;
+}
+
+function CopySummary({ lang, text }: { lang: Lang; text: string }) {
+  const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
+  const isEn = lang === "en";
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(text); setState("copied"); } catch { setState("failed"); }
+    window.setTimeout(() => setState("idle"), 2400);
+  };
+  return <button type="button" onClick={copy}>{state === "copied" ? (isEn ? "Copied to clipboard" : "Panoya kopyalandı") : state === "failed" ? (isEn ? "Copy failed: select and copy the text" : "Kopyalanamadı: metni seçip kopyalayın") : (isEn ? "Copy summary" : "Özeti kopyala")}</button>;
 }
 
 function ToolScopeNote({ lang }: { lang: Lang }) {
@@ -68,262 +120,114 @@ export function SaveControl({ lang, item }: { lang: Lang; item: BriefItem }) {
   );
 }
 
-export function BriefingTray({ lang }: { lang: Lang }) {
-  const [items, setItems] = useState<BriefItem[]>([]);
-  const [open, setOpen] = useState(false);
-  const [note, setNote] = useState("");
-  const trigger = useRef<HTMLButtonElement>(null);
-  const closeButton = useRef<HTMLButtonElement>(null);
+type ToolMeta = { key: string; name: string; who: string; time: string; output: string; engagement?: EngagementKey };
+
+function toolMeta(lang: Lang): ToolMeta[] {
   const isEn = lang === "en";
-
-  useEffect(() => {
-    if (!optionalPreferencesEnabled()) return;
-    const stored = localStorage.getItem("ganrich-briefing-tray");
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        queueMicrotask(() => setItems(parsed));
-      } catch {
-        localStorage.removeItem("ganrich-briefing-tray");
-      }
-    }
-    const onSave = (event: Event) => {
-      const item = (event as CustomEvent<BriefItem>).detail;
-      setItems((current) => {
-        const next = current.some((x) => x.id === item.id) ? current : [...current, item];
-        if (optionalPreferencesEnabled()) localStorage.setItem("ganrich-briefing-tray", JSON.stringify(next));
-        return next;
-      });
-    };
-    window.addEventListener("ganrich-save", onSave);
-    return () => window.removeEventListener("ganrich-save", onSave);
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
-    closeButton.current?.focus();
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-        window.setTimeout(() => trigger.current?.focus(), 0);
-      }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open]);
-
-  if (!items.length) return null;
-
-  const closeTray = () => {
-    setOpen(false);
-    window.setTimeout(() => trigger.current?.focus(), 0);
-  };
-
-  const remove = (id: string) => {
-    const next = items.filter((item) => item.id !== id);
-    setItems(next);
-    if (optionalPreferencesEnabled()) localStorage.setItem("ganrich-briefing-tray", JSON.stringify(next));
-    if (!next.length) setOpen(false);
-  };
-
-  return (
-    <>
-      <button ref={trigger} className="tray-trigger" type="button" onClick={() => setOpen(true)} aria-expanded={open} aria-controls="briefing-tray">
-        <span>{isEn ? "Briefing Tray" : "Brifing Alanı"}</span>
-        <strong>{items.length}</strong>
-      </button>
-      {open && (
-        <div className="tray-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && closeTray()}>
-          <aside id="briefing-tray" className="tray-drawer" role="dialog" aria-modal="true" aria-labelledby="briefing-tray-title">
-            <div className="tray-head">
-              <div>
-                <span className="eyebrow">{isEn ? "PRIVATE WORKSPACE · GUEST MODE" : "ÖZEL ÇALIŞMA ALANI · MİSAFİR MODU"}</span>
-                <h2 id="briefing-tray-title">{isEn ? "Briefing Tray" : "Brifing Alanı"}</h2>
-              </div>
-              <button ref={closeButton} type="button" onClick={closeTray} aria-label={isEn ? "Close tray" : "Alanı kapat"}>×</button>
-            </div>
-            <p className="tray-intro">
-              {isEn
-                ? "Saved locally on this device. No account or hidden profiling."
-                : "Bu cihazda yerel olarak saklanır. Hesap veya gizli profilleme kullanılmaz."}
-            </p>
-            <ol className="tray-list">
-              {items.map((item, i) => (
-                <li key={item.id}>
-                  <span>0{i + 1}</span>
-                  <div><small>{item.type}</small><a href={item.href}>{item.title}</a></div>
-                  <button type="button" onClick={() => remove(item.id)} aria-label={`${item.title} — ${isEn ? "remove" : "kaldır"}`}>−</button>
-                </li>
-              ))}
-            </ol>
-            <label className="tray-note">
-              {isEn ? "Working note" : "Çalışma notu"}
-              <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder={isEn ? "Questions, tensions, or evidence to revisit…" : "Yeniden ele alınacak sorular, gerilimler veya kanıtlar…"}/>
-            </label>
-            <div className="tray-actions">
-              <button className="button" type="button" onClick={() => window.print()}>{isEn ? "Export brief" : "Brifingi dışa aktar"}</button>
-              <a href={`mailto:?subject=${encodeURIComponent(isEn ? "My Ganrich briefing" : "Ganrich brifingim")}&body=${encodeURIComponent(`${items.map((item, index) => `${index + 1}. ${item.title} — ${item.href}`).join("\n")}${note ? `\n\n${isEn ? "Working note" : "Çalışma notu"}:\n${note}` : ""}`)}`}>{isEn ? "Email this to me" : "Bunu e-posta ile gönder"}</a>
-              <a href={`/${lang}/${routeMap[lang].privateBriefing}`}>{isEn ? "Request a private briefing" : "Özel brifing talep edin"} <span aria-hidden="true">↗</span></a>
-            </div>
-          </aside>
-        </div>
-      )}
-    </>
-  );
-}
-
-export function HeaderExplore({ lang }: { lang: Lang }) {
-  const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const input = useRef<HTMLInputElement>(null);
-  const trigger = useRef<HTMLButtonElement>(null);
-  const isEn = lang === "en";
-  const m = routeMap[lang];
-  const links = [
-    { group: isEn ? "Pages" : "Sayfalar", title: isEn ? "Ganrich Advisory" : "Ganrich Advisory", hint: isEn ? "Strategy, transformation, and applied AI" : "Strateji, dönüşüm ve uygulamalı yapay zekâ", href: `/${lang}` },
-    { group: isEn ? "Pages" : "Sayfalar", title: isEn ? "Expertise" : "Uzmanlık", hint: isEn ? "Six connected decision capabilities" : "Birbiriyle bağlantılı altı karar yetkinliği", href: `/${lang}/${m.expertise}` },
-    ...expertise[lang].map((area) => ({ group: isEn ? "Expertise" : "Uzmanlık", title: area[0], hint: area[2], href: `/${lang}/${m.expertise}` })),
-    { group: isEn ? "Decision tools" : "Karar araçları", title: isEn ? "Decision Atlas" : "Karar Atlası", hint: isEn ? "Explore by the decision on your agenda" : "Gündeminizdeki karara göre keşfedin", href: `/${lang}/${m.decisionAtlas}` },
-    { group: isEn ? "Decision tools" : "Karar araçları", title: isEn ? "Decision Framer" : "Karar Çerçeveleyici", hint: isEn ? "Turn a broad issue into a structured brief" : "Geniş bir konuyu yapılandırılmış karar özetine dönüştürün", href: `/${lang}/${m.decisionFramer}` },
-    { group: isEn ? "Decision tools" : "Karar araçları", title: isEn ? "Market Entry Compass" : "Pazara Giriş Pusulası", hint: isEn ? "Compare opportunity and readiness" : "Fırsat ve hazırlığı karşılaştırın", href: `/${lang}/${m.marketCompass}` },
-    { group: isEn ? "Decision tools" : "Karar araçları", title: isEn ? "Board Brief Builder" : "Yönetim Kurulu Brifingi Oluşturucu", hint: isEn ? "Turn a decision into a one-page board memo" : "Bir kararı tek sayfalık yönetim kurulu notuna dönüştürün", href: `/${lang}/${m.boardBriefBuilder}` },
-    { group: isEn ? "Decision tools" : "Karar araçları", title: isEn ? "AI Value Lens" : "Yapay Zekâ Değer Merceği", hint: isEn ? "Assess value, readiness, and responsible adoption" : "Değer, hazırlık ve sorumlu benimsemeyi değerlendirin", href: `/${lang}/${m.aiValueLens}` },
-    ...insights[lang].map((insight, index) => ({ group: isEn ? "Insights" : "İçgörüler", title: insight[0], hint: insight[1], href: insightHref(lang, index) })),
-    { group: isEn ? "Markets" : "Coğrafyalar", title: isEn ? "Regional perspective" : "Bölgesel bakış", hint: isEn ? "Türkiye, MENA, Europe, and Africa" : "Türkiye, MENA, Avrupa ve Afrika", href: `/${lang}/${m.markets}` },
-    { group: isEn ? "Pages" : "Sayfalar", title: isEn ? "About" : "Hakkımızda", hint: isEn ? "Founder, principles, and working model" : "Kurucu, ilkeler ve çalışma modeli", href: `/${lang}/${m.about}` },
-    { group: isEn ? "Pages" : "Sayfalar", title: isEn ? "Contact" : "İletişim", hint: isEn ? "Start a prepared conversation" : "Hazırlıklı bir görüşme başlatın", href: `/${lang}/${m.contact}` },
-    { group: isEn ? "Trust" : "Güven", title: isEn ? "Privacy + Trust" : "Gizlilik + Güven", hint: isEn ? "Privacy choices, data rights, and AI transparency" : "Gizlilik tercihleri, ilgili kişi hakları ve yapay zekâ şeffaflığı", href: `/${lang}/${m.privacyCenter}` },
+  return [
+    { key: "marketCompass", name: isEn ? "Market Entry Compass" : "Pazara Giriş Pusulası", who: isEn ? "For leadership teams comparing two candidate markets before committing to either." : "Herhangi birine taahhüt vermeden önce iki aday pazarı karşılaştıran yönetim ekipleri için.", time: isEn ? "About 5 minutes" : "Yaklaşık 5 dakika", output: isEn ? "A weighted opportunity–readiness comparison, the scoring shown line by line, and the evidence gaps to close." : "Ağırlıklı bir fırsat–hazırlık karşılaştırması, satır satır gösterilen puanlama ve kapatılması gereken kanıt açıkları.", engagement: "serviceMarketEntry" },
+    { key: "aiValueLens", name: isEn ? "AI Value Lens" : "Yapay Zekâ Değer Merceği", who: isEn ? "For managers deciding whether one AI use case deserves a controlled test." : "Bir yapay zekâ kullanım alanının kontrollü bir testi hak edip etmediğine karar veren yöneticiler için.", time: isEn ? "About 4 minutes" : "Yaklaşık 4 dakika", output: isEn ? "A value–readiness profile, a directional reading and the evidence to build before any scale decision." : "Bir değer–hazırlık profili, yön gösterici bir okuma ve ölçek kararından önce oluşturulacak kanıt.", engagement: "serviceAiValue" },
+    { key: "decisionFramer", name: isEn ? "Decision Framer" : "Karar Çerçeveleyici", who: isEn ? "For an owner or executive who needs to turn a broad concern into a decision others can work on." : "Geniş bir kaygıyı başkalarının üzerinde çalışabileceği bir karara dönüştürmesi gereken şirket sahibi ya da yönetici için.", time: isEn ? "8–10 minutes" : "8–10 dakika", output: isEn ? "A one-page decision brief: statement, outcome, alternatives, assumptions, stakeholders, cost of delay and evidence gaps." : "Tek sayfalık bir karar özeti: karar ifadesi, sonuç, alternatifler, varsayımlar, paydaşlar, gecikmenin maliyeti ve kanıt açıkları.", engagement: "serviceOperatingModel" },
+    { key: "boardBriefBuilder", name: isEn ? "Board Brief Builder" : "Yönetim Kurulu Brifingi Oluşturucu", who: isEn ? "For whoever has to put a recommendation in front of a board or owners' meeting." : "Bir öneriyi yönetim kurulu ya da ortaklar toplantısının önüne koyması gereken kişi için.", time: isEn ? "10–15 minutes" : "10–15 dakika", output: isEn ? "A printable one-page memo separating recommendation, evidence, uncertainty, risk and the approval required." : "Öneriyi, kanıtı, belirsizliği, riski ve gereken onayı birbirinden ayıran, yazdırılabilir tek sayfalık bir not." },
+    { key: "decisionAtlas", name: isEn ? "Decision Atlas" : "Karar Atlası", who: isEn ? "For a first visit: start from the question on your agenda and find the relevant work, reading and tool." : "İlk ziyaret için: gündeminizdeki sorudan başlayıp ilgili çalışmayı, okumayı ve aracı bulun.", time: isEn ? "1 minute" : "1 dakika", output: isEn ? "A short pathway to the relevant engagement, perspective and tool." : "İlgili çalışma biçimine, bakışa ve araca giden kısa bir yol." },
   ];
-  const results = links.filter((item) => `${item.title} ${item.hint} ${item.group}`.toLocaleLowerCase(lang === "tr" ? "tr-TR" : "en").includes(query.toLocaleLowerCase(lang === "tr" ? "tr-TR" : "en")));
-
-  useEffect(() => {
-    const key = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        setOpen(true);
-      }
-      if (event.key === "Escape" && open) {
-        setOpen(false);
-        window.setTimeout(() => trigger.current?.focus(), 0);
-      }
-    };
-    window.addEventListener("keydown", key);
-    return () => window.removeEventListener("keydown", key);
-  }, [open]);
-  useEffect(() => { if (open) window.setTimeout(() => input.current?.focus(), 20); }, [open]);
-
-  const closeSearch = () => {
-    setOpen(false);
-    window.setTimeout(() => trigger.current?.focus(), 0);
-  };
-
-  return (
-    <>
-      <button ref={trigger} className="explore-trigger" type="button" onClick={() => setOpen(true)} aria-expanded={open} aria-controls="ganrich-command">
-        {isEn ? "Explore" : "Keşfet"} <kbd>⌘K</kbd>
-      </button>
-      {open && (
-        <div className="command-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && closeSearch()}>
-          <section id="ganrich-command" className="command-bar" role="dialog" aria-modal="true" aria-label={isEn ? "Strategic command bar" : "Stratejik komut alanı"}>
-            <div className="command-input">
-              <span aria-hidden="true">⌕</span>
-              <label className="sr-only" htmlFor="command-search">{isEn ? "Search Ganrich" : "Ganrich içinde ara"}</label>
-              <input ref={input} id="command-search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder={isEn ? "Search insights, decisions, markets, or tools…" : "İçgörü, karar, pazar veya araç arayın…"} />
-              <button type="button" onClick={closeSearch} aria-label={isEn ? "Close search" : "Aramayı kapat"}>ESC</button>
-            </div>
-            <div className="command-results">
-              {results.length ? results.map((item) => (
-                <a href={item.href} key={`${item.href}-${item.title}`}>
-                  <small>{item.group}</small><strong>{item.title}</strong><span>{item.hint}</span><i aria-hidden="true">↗</i>
-                </a>
-              )) : <p>{isEn ? "No matching published content. Try a decision, region, or tool." : "Eşleşen yayımlanmış içerik bulunamadı. Bir karar, coğrafya veya araç deneyin."}</p>}
-            </div>
-            <footer>{isEn ? "Try: “Help me frame a market-entry decision”" : "Örnek: “Bir pazara giriş kararını çerçevelememe yardımcı ol”"}</footer>
-          </section>
-        </div>
-      )}
-    </>
-  );
 }
 
-export function HomeIntelligenceModules({ lang }: { lang: Lang }) {
+function ToolIntro({ lang, toolKey, children }: { lang: Lang; toolKey: string; children?: React.ReactNode }) {
   const isEn = lang === "en";
-  const m = routeMap[lang];
-  const decisions = isEn
-    ? ["Where should we grow?", "Which markets should we enter?", "Where can AI create measurable value?", "Why is transformation not delivering?"]
-    : ["Nerede büyümeliyiz?", "Hangi pazarlara girmeliyiz?", "Yapay zekâ nerede ölçülebilir değer yaratabilir?", "Dönüşüm neden beklenen sonucu üretmiyor?"];
-  return (
-    <>
-      <section className="decision-entry section">
-        <div className="decision-entry-head">
-          <span className="eyebrow">{isEn ? "WHAT LEADERS ARE DECIDING NOW" : "LİDERLERİN ŞİMDİ KARAR VERDİĞİ KONULAR"}</span>
-          <h2>{isEn ? "Explore Ganrich through the choice on your agenda." : "Ganrich’i gündeminizdeki tercih üzerinden keşfedin."}</h2>
-          <p>{isEn ? "SIGNAL → INTERPRETATION → CHOICE → ACTION" : "SİNYAL → YORUM → TERCİH → UYGULAMA"}</p>
-        </div>
-        <ol>
-          {decisions.map((decision, i) => (
-            <li key={decision}>
-              <a href={`/${lang}/${m.decisionAtlas}?decision=${i}`}>
-                <span>0{i + 1}</span><strong>{decision}</strong><i aria-hidden="true">→</i>
-              </a>
-            </li>
-          ))}
-        </ol>
-        <a className="button outline" href={`/${lang}/${m.decisionAtlas}`}>{isEn ? "Explore by decision" : "Karara göre keşfedin"}</a>
-      </section>
-      <section className="evidence-action section">
-        <span className="eyebrow">{isEn ? "FROM EVIDENCE TO ACTION" : "KANITTAN UYGULAMAYA"}</span>
-        <ol>
-          {(isEn ? ["Evidence", "Interpretation", "Choice", "Mobilization", "Value"] : ["Kanıt", "Yorum", "Tercih", "Mobilizasyon", "Değer"]).map((step, i) => <li key={step}><span>0{i + 1}</span><strong>{step}</strong></li>)}
-        </ol>
-      </section>
-    </>
-  );
+  const meta = toolMeta(lang).find((item) => item.key === toolKey)!;
+  return <aside className="lab-intro" aria-label={isEn ? "About this tool" : "Bu araç hakkında"}>
+    <dl>
+      <div><dt>{isEn ? "Who it helps" : "Kime yardımcı olur"}</dt><dd>{meta.who}</dd></div>
+      <div><dt>{isEn ? "Time" : "Süre"}</dt><dd>{meta.time}</dd></div>
+      <div><dt>{isEn ? "You get" : "Ne elde edersiniz"}</dt><dd>{meta.output}</dd></div>
+      <div><dt>{isEn ? "Your data" : "Verileriniz"}</dt><dd>{isEn ? "Runs in your browser. Nothing is sent to Ganrich or written into the page address." : "Tarayıcınızda çalışır. Hiçbir şey Ganrich’e gönderilmez ya da sayfa adresine yazılmaz."}</dd></div>
+    </dl>
+    {children}
+  </aside>;
+}
+
+function ExampleButton({ lang, onClick }: { lang: Lang; onClick: () => void }) {
+  return <button type="button" className="lab-example" onClick={onClick}>{lang === "en" ? "Try a worked example" : "Örnekle deneyin"}<small>{lang === "en" ? "Fictional, non-confidential inputs" : "Kurgusal, gizli olmayan girdiler"}</small></button>;
+}
+
+function NextActions({ lang, engagement }: { lang: Lang; engagement?: EngagementKey }) {
+  const isEn = lang === "en";
+  const item = engagement ? engagementByKey(lang, engagement) : null;
+  if (!item) return null;
+  return <section className="lab-next"><span className="eyebrow">{isEn ? "If the decision matters" : "Karar önemliyse"}</span><p>{isEn ? `A tool gives you structure, not an answer. If you would like an independent review of this decision, the ${item.name} is designed for it.` : `Bir araç size yapı sağlar, yanıt değil. Bu karar için bağımsız bir değerlendirme isterseniz ${item.name} tam bunun için tasarlandı.`}</p><a className="text-link" href={`/${lang}/${routeMap[lang][item.key]}`}>{item.name}<span aria-hidden="true" className="arrow">→</span></a></section>;
 }
 
 const decisionThemes = {
   en: [
-    ["Where should we grow?", "Growth and Portfolio Strategy", "Decision Framer"],
-    ["Which markets should we enter?", "Market Entry and Regional Expansion", "Market Entry Compass"],
-    ["What should we prioritize?", "Strategic Execution", "Portfolio Prioritizer"],
-    ["How should our operating model change?", "Operating Model and Transformation", "Operating Model Lens"],
-    ["Where can AI create measurable value?", "AI, Data and Digital Strategy", "AI Value Lens"],
-    ["Why is our transformation not delivering?", "Operating Model and Transformation", "Transformation Pulse"],
-    ["How should we prepare for uncertainty?", "Growth and Portfolio Strategy", "Scenario Studio"],
+    ["Which markets should we enter?", "serviceMarketEntry", "marketCompass", "articleMarketEntry"],
+    ["Should we use a distributor, a partner or our own entity?", "serviceMarketEntry", "marketCompass", "articleCorridor"],
+    ["Which decisions should stay with the founder?", "serviceOperatingModel", "decisionFramer", "articleFamilyHoldings"],
+    ["Why is our transformation not delivering?", "serviceOperatingModel", "decisionFramer", "articleTransformation"],
+    ["Where can AI create measurable value?", "serviceAiValue", "aiValueLens", "articleIndustrialAi"],
+    ["How do we put this decision to the board?", "", "boardBriefBuilder", "article"],
   ],
   tr: [
-    ["Nerede büyümeliyiz?", "Büyüme ve Portföy Stratejisi", "Karar Çerçeveleyici"],
-    ["Hangi pazarlara girmeliyiz?", "Pazara Giriş ve Bölgesel Büyüme", "Pazara Giriş Pusulası"],
-    ["Neleri önceliklendirmeliyiz?", "Stratejik Uygulama", "Portföy Önceliklendirme Aracı"],
-    ["İşletim modelimiz nasıl değişmeli?", "İşletim Modeli ve Dönüşüm", "İşletim Modeli Merceği"],
-    ["Yapay zekâ nerede ölçülebilir değer yaratabilir?", "Yapay Zekâ, Veri ve Dijital Strateji", "Yapay Zekâ Değer Merceği"],
-    ["Dönüşümümüz neden beklenen sonucu üretmiyor?", "İşletim Modeli ve Dönüşüm", "Dönüşüm Nabzı"],
-    ["Belirsizliğe nasıl hazırlanmalıyız?", "Büyüme ve Portföy Stratejisi", "Senaryo Stüdyosu"],
+    ["Hangi pazarlara girmeliyiz?", "serviceMarketEntry", "marketCompass", "articleMarketEntry"],
+    ["Distribütör mü, ortak mı, kendi şirketimiz mi?", "serviceMarketEntry", "marketCompass", "articleCorridor"],
+    ["Hangi kararlar kurucuda kalmalı?", "serviceOperatingModel", "decisionFramer", "articleFamilyHoldings"],
+    ["Dönüşümümüz neden beklenen sonucu üretmiyor?", "serviceOperatingModel", "decisionFramer", "articleTransformation"],
+    ["Yapay zekâ nerede ölçülebilir değer yaratabilir?", "serviceAiValue", "aiValueLens", "articleIndustrialAi"],
+    ["Bu kararı yönetim kuruluna nasıl sunarız?", "", "boardBriefBuilder", "article"],
   ],
 } as const;
 
+const articleEngagements: EngagementKey[] = ["serviceAiValue", "serviceOperatingModel", "serviceMarketEntry", "serviceMarketEntry", "serviceOperatingModel", "serviceAiValue"];
+
+const articleOrder = ["article", "articleTransformation", "articleMarketEntry", "articleCorridor", "articleFamilyHoldings", "articleIndustrialAi"];
+
 function IntelligenceHero({ label, title, intro }: { label: string; title: string; intro: string }) {
-  return <section className="intelligence-hero"><span className="eyebrow">{label}</span><h1>{title}</h1><p>{intro}</p><div className="signal-sequence"><span>SIGNAL</span><i/><span>INTERPRETATION</span><i/><span>CHOICE</span><i/><span>ACTION</span></div></section>;
+  return <section className="intelligence-hero lab-hero"><span className="eyebrow">{label}</span><h1>{title}</h1><p>{intro}</p></section>;
+}
+
+function toolName(lang: Lang, key: string) {
+  return toolMeta(lang).find((item) => item.key === key)?.name ?? key;
 }
 
 export function DecisionLabPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
-  const active = [
-    [isEn ? "Decision Atlas" : "Karar Atlası", isEn ? "Begin with the decision and reveal the most relevant expertise, evidence, and tools." : "Karardan başlayın; ilgili uzmanlığı, kanıtı ve araçları görünür kılın.", m.decisionAtlas],
-    [isEn ? "Decision Framer" : "Karar Çerçeveleyici", isEn ? "Convert an imprecise priority into a structured, editable decision brief." : "Belirsiz bir önceliği yapılandırılmış ve düzenlenebilir karar özetine dönüştürün.", m.decisionFramer],
-    [isEn ? "Market Entry Compass" : "Pazara Giriş Pusulası", isEn ? "Compare opportunity and readiness using assumptions you control." : "Kendi varsayımlarınızla fırsat ve hazırlığı karşılaştırın.", m.marketCompass],
-    [isEn ? "Board Brief Builder" : "Yönetim Kurulu Brifingi Oluşturucu", isEn ? "Turn a framed decision into a disciplined one-page board memo." : "Çerçevelenmiş bir kararı disiplinli, tek sayfalık yönetim kurulu notuna dönüştürün.", m.boardBriefBuilder],
-    [isEn ? "AI Value Lens" : "Yapay Zekâ Değer Merceği", isEn ? "Assess a use case across value, repeatability, readiness, adoption, and risk control." : "Bir kullanım alanını değer, tekrarlanabilirlik, hazırlık, benimseme ve risk kontrolü üzerinden değerlendirin.", m.aiValueLens],
-  ];
+  const tools = toolMeta(lang);
   return (
     <>
-      <IntelligenceHero label={isEn ? "DECISION LAB" : "KARAR LABORATUVARI"} title={isEn ? "Work on the decision before the engagement begins." : "Danışmanlık çalışması başlamadan önce karar üzerinde çalışın."} intro={isEn ? "A focused environment for framing choices, testing assumptions, comparing alternatives, and preparing a better leadership discussion." : "Tercihleri çerçevelemek, varsayımları sınamak, alternatifleri karşılaştırmak ve daha nitelikli bir liderlik görüşmesine hazırlanmak için odaklı bir ortam."}/>
-      <section className="available-tools section">
-        <div className="section-head-compact"><span className="eyebrow">{isEn ? "AVAILABLE NOW" : "ŞİMDİ KULLANILABİLİR"}</span><h2>{isEn ? "Five instruments. One decision standard." : "Beş araç. Tek karar standardı."}</h2></div>
-        <div className="tool-cards">{active.map((tool, i) => <article key={tool[0]}><span>0{i + 1}</span><h3>{tool[0]}</h3><p>{tool[1]}</p><a href={`/${lang}/${tool[2]}`}>{isEn ? "Open the tool" : "Aracı açın"} <i aria-hidden="true">↗</i></a></article>)}</div>
-        <a className="lab-changelog-link" href={`/${lang}/${m.decisionLabChangelog}`}><span>{isEn ? "DECISION LAB CHANGELOG" : "KARAR LABORATUVARI DEĞİŞİKLİK GÜNLÜĞÜ"}</span><strong>{isEn ? "See what is live, what changed, and what remains under evaluation." : "Nelerin yayında, nelerin değiştiğini ve hangi araçların değerlendirmede olduğunu görün."}</strong><i aria-hidden="true">↗</i></a>
+      <IntelligenceHero label={isEn ? "Decision Lab" : "Karar Laboratuvarı"} title={isEn ? "Free tools to structure a decision before you discuss it." : "Bir kararı konuşmadan önce yapılandırmak için ücretsiz araçlar."} intro={isEn ? "Five short tools, built from the same questions Ganrich asks in an engagement. They run in your browser, need no account or email, and produce a result you can print or keep." : "Ganrich’in çalışmalarda sorduğu sorulardan üretilmiş beş kısa araç. Tarayıcınızda çalışır, hesap ya da e-posta gerektirmez ve yazdırabileceğiniz ya da saklayabileceğiniz bir sonuç üretir."}/>
+      <section className="lab-tools section" aria-label={isEn ? "Tools" : "Araçlar"}>
+        {tools.map((tool, index) => <article key={tool.key} className="lab-tool">
+          <span className="p-index">0{index + 1}</span>
+          <div>
+            <h2><a href={`/${lang}/${m[tool.key]}`} data-analytics-event="decision_tool_started">{tool.name}</a></h2>
+            <p>{tool.who}</p>
+          </div>
+          <dl>
+            <div><dt>{isEn ? "Time" : "Süre"}</dt><dd>{tool.time}</dd></div>
+            <div><dt>{isEn ? "Output" : "Çıktı"}</dt><dd>{tool.output}</dd></div>
+          </dl>
+          <a className="text-link" href={`/${lang}/${m[tool.key]}`}>{isEn ? "Open the tool" : "Aracı açın"}<span aria-hidden="true" className="arrow">→</span></a>
+        </article>)}
       </section>
-      <section className="limitations-band"><strong>{isEn ? "What these tools do not do" : "Bu araçların yapmadığı şeyler"}</strong><p>{isEn ? "They structure exploration. They do not replace professional judgment, verified evidence, legal review, investment advice, or a decision owner." : "Keşif sürecini yapılandırırlar. Profesyonel muhakemenin, doğrulanmış kanıtın, hukuk incelemesinin, yatırım tavsiyesinin veya karar sahibinin yerine geçmezler."}</p></section>
+      <section className="lab-preview section" aria-labelledby="lab-preview-title">
+        <div><span className="eyebrow">{isEn ? "Output preview" : "Çıktı önizlemesi"}</span><h2 id="lab-preview-title">{isEn ? "What a result looks like." : "Bir sonuç neye benzer."}</h2><p>{isEn ? "Each tool ends with a structured page you can print to PDF. This preview uses the fictional worked example from the AI Value Lens." : "Her araç, PDF olarak yazdırabileceğiniz yapılandırılmış bir sayfayla biter. Bu önizleme, Yapay Zekâ Değer Merceği’ndeki kurgusal örneği kullanır."}</p></div>
+        <figure className="lab-preview-card" aria-label={isEn ? "Example result" : "Örnek sonuç"}>
+          <span className="p-tag">{isEn ? "Fictional example" : "Kurgusal örnek"}</span>
+          <strong>{isEn ? "Quote pricing for repeat customers" : "Tekrar eden müşteriler için teklif fiyatlama"}</strong>
+          <output>69 <small>/ 100</small></output>
+          <p>{isEn ? "Validate the value case: potential is visible, but data readiness should be strengthened before committing to scale." : "Değer gerekçesini doğrulayın: potansiyel görünür, ancak ölçek kararından önce veri hazırlığı güçlendirilmeli."}</p>
+        </figure>
+      </section>
+      <section className="lab-privacy section" aria-labelledby="lab-privacy-title">
+        <h2 id="lab-privacy-title">{isEn ? "How your entries are handled" : "Girdileriniz nasıl ele alınır"}</h2>
+        <ul>
+          <li><strong>{isEn ? "In your browser" : "Tarayıcınızda"}</strong>{isEn ? "Calculations happen on your device. Nothing you type is sent to Ganrich." : "Hesaplamalar cihazınızda yapılır. Yazdığınız hiçbir şey Ganrich’e gönderilmez."}</li>
+          <li><strong>{isEn ? "Not in the address bar" : "Adres çubuğunda değil"}</strong>{isEn ? "Business text is never written into the page URL, so it cannot leak through shared links or browser history." : "İşle ilgili metinler sayfa adresine yazılmaz; paylaşılan bağlantılar ya da tarayıcı geçmişi yoluyla sızmaz."}</li>
+          <li><strong>{isEn ? "Drafts only if you ask" : "Taslak yalnızca isterseniz"}</strong>{isEn ? "Tick “Keep a draft on this device” to resume later. Untick it, or clear entries, to delete the draft." : "Daha sonra devam etmek için “Taslağı bu cihazda sakla” seçeneğini işaretleyin. İşareti kaldırdığınızda ya da girdileri temizlediğinizde taslak silinir."}</li>
+          <li><strong>{isEn ? "Sharing is deliberate" : "Paylaşım bilinçli yapılır"}</strong>{isEn ? "You can print, copy a summary or, if you choose, carry it into the contact form, where you see exactly what will be sent." : "Yazdırabilir, özeti kopyalayabilir ya da isterseniz iletişim formuna taşıyabilirsiniz; orada neyin gönderileceğini tam olarak görürsünüz."}</li>
+        </ul>
+      </section>
+      <section className="limitations-band"><strong>{isEn ? "What these tools do not do" : "Bu araçların yapmadığı şeyler"}</strong><p>{isEn ? "They structure your own thinking. The scores are simple, transparent formulas, not validated diagnostics, and they include no external market data. They do not replace professional judgment, legal review, investment advice or a decision owner." : "Kendi düşüncenizi yapılandırırlar. Puanlar doğrulanmış teşhis araçları değil, basit ve şeffaf formüllerdir; dış pazar verisi içermez. Profesyonel muhakemenin, hukuk incelemesinin, yatırım tavsiyesinin ya da karar sahibinin yerine geçmezler."}</p><a className="text-link" href={`/${lang}/${m.decisionLabChangelog}`}>{isEn ? "Changelog" : "Değişiklik günlüğü"}<span aria-hidden="true" className="arrow">→</span></a></section>
     </>
   );
 }
@@ -331,60 +235,44 @@ export function DecisionLabPage({ lang }: { lang: Lang }) {
 export function DecisionAtlasPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
   const [decision, setDecision] = useState(0);
-  const [region, setRegion] = useState(0);
-  const [urgency, setUrgency] = useState("important");
-  const [maturity, setMaturity] = useState("developing");
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const decisionValue = Number(params.get("decision"));
-    const regionValue = Number(params.get("region"));
+    const value = Number(new URLSearchParams(window.location.search).get("decision"));
     queueMicrotask(() => {
-      if (Number.isInteger(decisionValue) && decisionValue >= 0 && decisionValue < decisionThemes[lang].length) setDecision(decisionValue);
-      if (Number.isInteger(regionValue) && regionValue >= 0 && regionValue < markets[lang].length) setRegion(regionValue);
-      if (["important", "urgent", "exploratory"].includes(params.get("urgency") ?? "")) setUrgency(params.get("urgency")!);
-      if (["developing", "established", "reset"].includes(params.get("maturity") ?? "")) setMaturity(params.get("maturity")!);
+      if (Number.isInteger(value) && value >= 0 && value < decisionThemes[lang].length) setDecision(value);
       setHydrated(true);
     });
   }, [lang]);
   useEffect(() => {
     if (!hydrated) return;
-    const params = new URLSearchParams();
-    params.set("decision", String(decision)); params.set("region", String(region)); params.set("urgency", urgency); params.set("maturity", maturity);
-    window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
-  }, [decision, region, urgency, maturity, hydrated]);
-  const selected = decisionThemes[lang][decision];
-  const toolHref = decision === 1 ? m.marketCompass : decision === 4 ? m.aiValueLens : m.decisionFramer;
+    // Only the index of a predefined question is kept in the URL; it contains no visitor text.
+    window.history.replaceState(null, "", `${window.location.pathname}?decision=${decision}`);
+  }, [decision, hydrated]);
+  const [question, engagementKey, toolKey, articleKey] = decisionThemes[lang][decision];
+  const engagement = engagementKey ? engagementByKey(lang, engagementKey) : null;
+  const articleIndex = articleOrder.indexOf(articleKey);
+  const article = insightArticles[lang][articleIndex];
   return (
     <>
-      <IntelligenceHero label={isEn ? "DECISION ATLAS" : "KARAR ATLASI"} title={isEn ? "Begin with the decision." : "Karardan başlayın."} intro={isEn ? "Strategies, transformations, and investments become clearer when the underlying decision is framed precisely. Explore Ganrich Advisory through the choices currently on your agenda." : "Stratejiler, dönüşümler ve yatırımlar, temeldeki karar doğru biçimde çerçevelendiğinde netleşir. Ganrich Advisory’i gündeminizdeki tercihler üzerinden keşfedin."}/>
+      <IntelligenceHero label={isEn ? "Decision Atlas" : "Karar Atlası"} title={isEn ? "Begin with the decision." : "Karardan başlayın."} intro={isEn ? "Pick the question closest to what is on your agenda. The Atlas points you to the relevant engagement, the most useful reading and a tool to start with." : "Gündeminize en yakın soruyu seçin. Atlas sizi ilgili çalışma biçimine, en faydalı okumaya ve başlamak için bir araca yönlendirir."}/>
       <section className="atlas section">
         <div className="atlas-controls">
-          <fieldset><legend>{isEn ? "1. Select a decision" : "1. Bir karar seçin"}</legend>{decisionThemes[lang].map((item, i) => <label key={item[0]} className={decision === i ? "selected" : ""}><input type="radio" name="decision" checked={decision === i} onChange={() => setDecision(i)}/><span>0{i + 1}</span>{item[0]}</label>)}</fieldset>
-          <div className="atlas-context">
-            <label>{isEn ? "2. Region" : "2. Coğrafya"}<select value={region} onChange={(e) => setRegion(Number(e.target.value))}>{markets[lang].map((market, i) => <option key={market[0]} value={i}>{market[0]}</option>)}</select></label>
-            <label>{isEn ? "3. Strategic urgency" : "3. Stratejik aciliyet"}<select value={urgency} onChange={(e) => setUrgency(e.target.value)}><option value="important">{isEn ? "Important, not immediate" : "Önemli, acil değil"}</option><option value="urgent">{isEn ? "Decision required soon" : "Yakında karar gerekli"}</option><option value="exploratory">{isEn ? "Exploratory" : "Keşif aşamasında"}</option></select></label>
-            <label>{isEn ? "4. Organizational maturity" : "4. Kurumsal olgunluk"}<select value={maturity} onChange={(e) => setMaturity(e.target.value)}><option value="developing">{isEn ? "Developing" : "Gelişiyor"}</option><option value="established">{isEn ? "Established" : "Yerleşik"}</option><option value="reset">{isEn ? "Requires reset" : "Yeniden odaklanmalı"}</option></select></label>
-          </div>
+          <fieldset><legend>{isEn ? "Which question is closest to yours?" : "Hangi soru sizinkine en yakın?"}</legend>{decisionThemes[lang].map((item, i) => <label key={item[0]} className={decision === i ? "selected" : ""}><input type="radio" name="decision" checked={decision === i} onChange={() => setDecision(i)}/><span>0{i + 1}</span>{item[0]}</label>)}</fieldset>
         </div>
         <div className="atlas-result" aria-live="polite">
-          <div className="atlas-network" aria-hidden="true"><span className="node primary">DECISION</span><span className="node expertise">EXPERTISE</span><span className="node evidence">EVIDENCE</span><span className="node tool">TOOL</span><i/><i/><i/></div>
-          <span className="eyebrow">{isEn ? "YOUR DECISION PATHWAY" : "KARAR YOLUNUZ"}</span>
-          <h2>{selected[0]}</h2>
+          <span className="eyebrow">{isEn ? "Your pathway" : "Yolunuz"}</span>
+          <h2>{question}</h2>
           <dl>
-            <div><dt>{isEn ? "Relevant expertise" : "İlgili uzmanlık"}</dt><dd>{selected[1]}</dd></div>
-            <div><dt>{isEn ? "Regional lens" : "Bölgesel mercek"}</dt><dd>{markets[lang][region][0]}</dd></div>
-            <div><dt>{isEn ? "Recommended tool" : "Önerilen araç"}</dt><dd>{selected[2]}</dd></div>
-            <div><dt>{isEn ? "Question to resolve next" : "Sonraki adımda yanıtlanacak soru"}</dt><dd>{isEn ? "What evidence would cause leadership to choose a different path?" : "Hangi kanıt liderliğin farklı bir yol seçmesine neden olur?"}</dd></div>
+            <div><dt>{isEn ? "Start with this tool" : "Bu araçla başlayın"}</dt><dd><a href={`/${lang}/${m[toolKey]}`}>{toolName(lang, toolKey)} <span aria-hidden="true">→</span></a></dd></div>
+            <div><dt>{isEn ? "Read" : "Okuyun"}</dt><dd><a href={insightHref(lang, articleIndex)}>{article.title} <span aria-hidden="true">→</span></a></dd></div>
+            <div><dt>{isEn ? "Related engagement" : "İlgili çalışma biçimi"}</dt><dd>{engagement ? <a href={`/${lang}/${m[engagement.key]}`}>{engagement.name} <span aria-hidden="true">→</span></a> : (isEn ? "Usually part of any engagement" : "Genellikle her çalışmanın parçasıdır")}</dd></div>
+            <div><dt>{isEn ? "A question to answer next" : "Sonra yanıtlanacak soru"}</dt><dd>{isEn ? "What evidence would make leadership choose a different path?" : "Hangi kanıt yönetimin farklı bir yol seçmesine neden olur?"}</dd></div>
           </dl>
           <div className="atlas-actions">
-            <a className="button" href={`/${lang}/${toolHref}`}>{isEn ? "Continue analysis" : "Analize devam et"}</a>
-            <SaveControl lang={lang} item={{ id: `atlas-${decision}-${region}`, title: selected[0], type: isEn ? "Decision pathway" : "Karar yolu", href: `/${lang}/${m.decisionAtlas}?decision=${decision}&region=${region}` }}/>
-            <button type="button" onClick={() => window.print()}>{isEn ? "Export / print" : "Dışa aktar / yazdır"}</button>
-            <a href={contextualContactHref(lang, isEn ? "Decision Atlas" : "Karar Atlası", selected[0], `${markets[lang][region][0]} · ${urgency} · ${maturity}`)}>{isEn ? "Discuss this decision" : "Bu kararı görüşün"}</a>
+            <a className="button" href={`/${lang}/${m[toolKey]}`} data-analytics-event="decision_tool_started">{isEn ? "Open the tool" : "Aracı açın"}</a>
+            <SaveControl lang={lang} item={{ id: `atlas-${decision}`, title: question, type: isEn ? "Decision pathway" : "Karar yolu", href: `/${lang}/${m.decisionAtlas}?decision=${decision}` }}/>
           </div>
-          <small>{isEn ? "Shareable pathway · selections only · no confidential data" : "Paylaşılabilir yol · yalnızca seçimler · gizli veri içermez"}</small>
-          <ToolScopeNote lang={lang}/>
+          <small>{isEn ? "The page address keeps only the number of the question you picked, so it is safe to share." : "Sayfa adresi yalnızca seçtiğiniz sorunun numarasını tutar; paylaşmak güvenlidir."}</small>
         </div>
       </section>
     </>
@@ -393,89 +281,100 @@ export function DecisionAtlasPage({ lang }: { lang: Lang }) {
 
 const framerQuestions = {
   en: [
-    ["What decision needs to be made?", "Why does it matter now?"],
-    ["What outcome matters most?", "What alternatives are currently being considered?"],
-    ["What constraints are non-negotiable?", "What assumptions are shaping the discussion?"],
-    ["Where is the greatest uncertainty?", "Who must support or execute the decision?"],
-    ["What is the cost of delay?", "What evidence is currently missing?"],
+    [["What decision needs to be made?", "Write it as a choice, e.g. “Whether to open our own entity in the UAE in 2027”."], ["Why does it matter now?", "What has changed, or what happens if nothing is decided?"]],
+    [["What outcome matters most?", "The result you would use to judge the decision in two years."], ["What alternatives are being considered?", "Include “do nothing” or “wait” if they are real options."]],
+    [["What constraints are non-negotiable?", "Capital, people, timing, ownership or reputation limits."], ["What assumptions are shaping the discussion?", "Things people believe but have not tested."]],
+    [["Where is the greatest uncertainty?", "The unknown that would most change the answer."], ["Who must support or execute the decision?", "Roles, not names, if you prefer."]],
+    [["What is the cost of delay?", "Money, market position, people or momentum lost by waiting."], ["What evidence is missing?", "What you would want to know before committing."]],
   ],
   tr: [
-    ["Hangi kararın verilmesi gerekiyor?", "Bu karar neden şimdi önem taşıyor?"],
-    ["En önemli sonuç nedir?", "Şu anda hangi alternatifler değerlendiriliyor?"],
-    ["Hangi kısıtlar tartışmaya açık değil?", "Görüşmeyi hangi varsayımlar şekillendiriyor?"],
-    ["En büyük belirsizlik nerede?", "Kararı kimlerin desteklemesi veya uygulaması gerekiyor?"],
-    ["Gecikmenin maliyeti nedir?", "Şu anda hangi kanıt eksik?"],
+    [["Hangi kararın verilmesi gerekiyor?", "Bir tercih olarak yazın, ör. “2027’de BAE’de kendi şirketimizi kurup kurmamak”."], ["Bu karar neden şimdi önemli?", "Ne değişti ya da hiçbir karar verilmezse ne olur?"]],
+    [["En önemli sonuç nedir?", "İki yıl sonra kararı değerlendirmek için kullanacağınız sonuç."], ["Hangi alternatifler değerlendiriliyor?", "Gerçek seçeneklerse “hiçbir şey yapmamak” ya da “beklemek” de dâhil."]],
+    [["Hangi kısıtlar tartışmaya açık değil?", "Sermaye, insan, zamanlama, sahiplik ya da itibar sınırları."], ["Görüşmeyi hangi varsayımlar şekillendiriyor?", "İnsanların inandığı ama sınanmamış şeyler."]],
+    [["En büyük belirsizlik nerede?", "Yanıtı en çok değiştirecek bilinmeyen."], ["Kararı kimlerin desteklemesi veya uygulaması gerekiyor?", "İsterseniz isim yerine rol yazın."]],
+    [["Gecikmenin maliyeti nedir?", "Beklemekle kaybedilen para, pazar konumu, insan ya da ivme."], ["Hangi kanıt eksik?", "Taahhüt vermeden önce bilmek isteyeceğiniz şey."]],
   ],
 } as const;
+
+const framerExample = {
+  en: ["Whether to replace our UAE distributor with our own sales entity in 2027", "The distributor contract renews in nine months and sales have plateaued", "Profitable growth in the Gulf without losing key project customers", "Renew with new terms; add a second distributor; open our own entity", "Owner approval needed for any entity; no more than two expatriate hires", "Customers buy because of our product, not the distributor's relationships", "Whether project contractors would follow us to a new entity", "Owners, export director, finance director, the current distributor", "Another three-year contract locks in current terms and margins", "Customer-level sales data and the distributor's share of specifications"],
+  tr: ["2027’de BAE distribütörümüzü kendi satış şirketimizle değiştirip değiştirmemek", "Distribütör sözleşmesi dokuz ay sonra yenileniyor ve satışlar duraksadı", "Kilit proje müşterilerini kaybetmeden Körfez’de kârlı büyüme", "Yeni koşullarla yenilemek; ikinci bir distribütör eklemek; kendi şirketimizi kurmak", "Her şirket kuruluşu için ortak onayı gerekli; en fazla iki yurt dışı istihdam", "Müşteriler distribütörün ilişkileri için değil, ürünümüz için alıyor", "Proje yüklenicilerinin bizi yeni şirkete takip edip etmeyeceği", "Ortaklar, ihracat direktörü, finans direktörü, mevcut distribütör", "Üç yıllık yeni bir sözleşme mevcut koşulları ve marjları kilitler", "Müşteri bazında satış verisi ve distribütörün şartnamelerdeki payı"],
+};
 
 export function DecisionFramerPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<string[]>(Array(10).fill(""));
+  const draft = useToolDraft<string[]>(`framer-${lang}`, Array(10).fill(""));
+  const answers = draft.value;
   const [done, setDone] = useState(false);
   const [statement, setStatement] = useState("");
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    let initial = Array(10).fill("") as string[];
-    if (optionalPreferencesEnabled()) {
-      const stored = localStorage.getItem(`ganrich-framer-${lang}`);
-      if (stored) try { initial = JSON.parse(stored); } catch { /* ignore invalid local draft */ }
-    }
-    initial = initial.map((answer, index) => (params.get(`a${index}`) ?? answer).slice(0, 700));
-    queueMicrotask(() => { setAnswers(initial); setHydrated(true); });
-  }, [lang]);
-  useEffect(() => {
-    if (!hydrated) return;
-    const params = new URLSearchParams();
-    answers.forEach((answer, index) => { if (answer.trim()) params.set(`a${index}`, answer.trim()); });
-    window.history.replaceState(null, "", `${window.location.pathname}${params.size ? `?${params.toString()}` : ""}`);
-  }, [answers, hydrated]);
-  const update = (index: number, value: string) => {
-    const next = answers.map((answer, i) => i === index ? value : answer);
-    setAnswers(next); if (optionalPreferencesEnabled()) localStorage.setItem(`ganrich-framer-${lang}`, JSON.stringify(next));
-  };
+  const [error, setError] = useState("");
+  const result = useRef<HTMLDivElement>(null);
+  const update = (index: number, value: string) => draft.setValue(answers.map((answer, i) => i === index ? value : answer));
+  const filled = answers.filter((answer) => answer.trim()).length;
   const complete = () => {
-    setStatement(isEn ? `Leadership must decide ${answers[0] || "[decision]"} in order to achieve ${answers[2] || "[desired outcome]"}, while testing the assumptions and evidence that could change the choice.` : `Liderliğin, ${answers[2] || "[istenen sonuç]"} sonucuna ulaşmak için ${answers[0] || "[karar]"} konusunda tercih yapması; bu tercihi değiştirebilecek varsayım ve kanıtları sınaması gerekiyor.`);
+    if (answers[0].trim().length < 8) { setStep(0); setError(isEn ? "Describe the decision in at least a few words before creating the brief." : "Özeti oluşturmadan önce kararı en az birkaç kelimeyle tanımlayın."); return; }
+    setError("");
+    setStatement(isEn ? `Leadership must decide ${answers[0].trim().replace(/^whether/i, "whether")}${answers[2].trim() ? `, with the aim of ${answers[2].trim().replace(/\.$/, "")}` : ""}, while testing the assumptions and evidence that could change the choice.` : `Yönetimin, ${answers[2].trim() ? `${answers[2].trim().replace(/\.$/, "")} hedefiyle ` : ""}şu konuda karar vermesi gerekiyor: ${answers[0].trim().replace(/\.$/, "")}. Bu tercihi değiştirebilecek varsayımlar ve kanıtlar sınanmalı.`);
     setDone(true);
+    window.setTimeout(() => result.current?.focus(), 40);
   };
+  const summary = () => [
+    `${isEn ? "Decision" : "Karar"}: ${statement}`,
+    ...[[2, isEn ? "Desired outcome" : "İstenen sonuç"], [3, isEn ? "Alternatives" : "Alternatifler"], [5, isEn ? "Critical assumptions" : "Kritik varsayımlar"], [7, isEn ? "Stakeholders" : "Paydaşlar"], [8, isEn ? "Cost of delay" : "Gecikmenin maliyeti"], [9, isEn ? "Missing evidence" : "Eksik kanıt"]].map(([index, label]) => `${label}: ${answers[index as number] || "—"}`),
+  ].join("\n");
+  const toBoard = () => {
+    try { sessionStorage.setItem(BOARD_HANDOFF_KEY, JSON.stringify({ decision: statement, alternatives: answers[3], evidence: [answers[5] && `${isEn ? "Assumptions" : "Varsayımlar"}: ${answers[5]}`, answers[9] && `${isEn ? "Missing evidence" : "Eksik kanıt"}: ${answers[9]}`].filter(Boolean).join("\n"), rationale: [answers[1], answers[8]].filter(Boolean).join(" ") })); } catch { /* storage unavailable */ }
+    window.location.assign(`/${lang}/${m.boardBriefBuilder}`);
+  };
+  const steps = isEn ? ["Decision", "Outcome", "Boundaries", "Alignment", "Evidence"] : ["Karar", "Sonuç", "Sınırlar", "Uyum", "Kanıt"];
   return (
     <>
-      <IntelligenceHero label={isEn ? "DECISION FRAMER" : "KARAR ÇERÇEVELEYİCİ"} title={isEn ? "A better answer begins with a better-framed decision." : "Daha iyi bir yanıt, daha doğru çerçevelenmiş bir kararla başlar."} intro={isEn ? "Create a meaningful on-screen result before deciding whether to export, share, or request a Ganrich review." : "Dışa aktarma, paylaşma veya Ganrich değerlendirmesi talep etmeden önce ekranda anlamlı bir sonuç oluşturun."}/>
+      <IntelligenceHero label={isEn ? "Decision Framer" : "Karar Çerçeveleyici"} title={isEn ? "Turn a broad concern into a decision others can work on." : "Geniş bir kaygıyı başkalarının üzerinde çalışabileceği bir karara dönüştürün."} intro={isEn ? "Ten short questions in five steps. Only the first is required; the rest make the brief stronger. The result is a one-page brief you can print, copy or carry into a board memo." : "Beş adımda on kısa soru. Yalnızca ilki zorunludur; diğerleri özeti güçlendirir. Sonuç; yazdırabileceğiniz, kopyalayabileceğiniz ya da yönetim kurulu notuna taşıyabileceğiniz tek sayfalık bir özettir."}/>
       <section className="framer section">
+        <ToolIntro lang={lang} toolKey="decisionFramer"><ExampleButton lang={lang} onClick={() => { draft.setValue([...framerExample[lang]]); setStep(0); setDone(false); setError(""); }}/></ToolIntro>
         {!done ? (
           <div className="framer-workspace">
-            <aside><span className="eyebrow">{isEn ? "PROGRESS" : "İLERLEME"}</span><strong>{step + 1} / 5</strong><ol>{framerQuestions[lang].map((_, i) => <li key={i} className={i === step ? "active" : i < step ? "complete" : ""}><button type="button" onClick={() => setStep(i)}><span>{i < step ? "✓" : `0${i + 1}`}</span>{isEn ? ["Decision", "Outcome", "Boundaries", "Alignment", "Evidence"][i] : ["Karar", "Sonuç", "Sınırlar", "Uyum", "Kanıt"][i]}</button></li>)}</ol><small>{isEn ? "Saved on this device only when functional preferences are enabled." : "Yalnızca işlevsel tercihler etkinse bu cihazda kaydedilir."}</small></aside>
-            <form onSubmit={(e) => { e.preventDefault(); if (step < 4) setStep(step + 1); else complete(); }}>
-              <span className="eyebrow">{isEn ? `STEP ${step + 1}` : `${step + 1}. ADIM`}</span>
-              {framerQuestions[lang][step].map((question, offset) => {
+            <aside>
+              <span className="eyebrow">{isEn ? "Progress" : "İlerleme"}</span>
+              <strong>{isEn ? `Step ${step + 1} of 5` : `5 adımdan ${step + 1}.`}</strong>
+              <div className="lab-progress" role="progressbar" aria-valuemin={0} aria-valuemax={10} aria-valuenow={filled} aria-label={isEn ? "Questions answered" : "Yanıtlanan sorular"}><span style={{ width: `${filled * 10}%` }}/></div>
+              <small>{isEn ? `${filled} of 10 answered` : `10 sorudan ${filled} tanesi yanıtlandı`}</small>
+              <ol>{steps.map((label, i) => <li key={label} className={i === step ? "active" : i < step ? "complete" : ""}><button type="button" aria-current={i === step ? "step" : undefined} onClick={() => setStep(i)}><span>{i < step ? "✓" : `0${i + 1}`}</span>{label}</button></li>)}</ol>
+              <DraftControl lang={lang} keep={draft.keep} setKeep={draft.setKeep} restoredAt={draft.restoredAt} clear={() => { draft.clear(); setStep(0); }}/>
+            </aside>
+            <form onSubmit={(e) => { e.preventDefault(); if (step < 4) setStep(step + 1); else complete(); }} aria-describedby={error ? "framer-error" : undefined}>
+              <span className="eyebrow">{isEn ? `Step ${step + 1} · ${steps[step]}` : `${step + 1}. adım · ${steps[step]}`}</span>
+              {framerQuestions[lang][step].map(([question, hint], offset) => {
                 const index = step * 2 + offset;
-                return <label key={question}>{question}<textarea required minLength={8} maxLength={700} value={answers[index]} onChange={(e) => update(index, e.target.value)} placeholder={isEn ? "Use concise, non-confidential language…" : "Kısa ve gizli bilgi içermeyen bir ifade kullanın…"}/></label>;
+                return <label key={question}>{question}{index === 0 ? " *" : ""}<small className="lab-hint" id={`framer-hint-${index}`}>{hint}</small><textarea required={index === 0} minLength={index === 0 ? 8 : undefined} maxLength={700} value={answers[index]} aria-describedby={`framer-hint-${index}`} onChange={(e) => update(index, e.target.value)} placeholder={isEn ? "Concise, non-confidential language…" : "Kısa ve gizli bilgi içermeyen bir ifade…"}/></label>;
               })}
-              <div className="step-actions"><button type="button" disabled={!step} onClick={() => setStep(step - 1)}>{isEn ? "Back" : "Geri"}</button><button className="button" type="submit">{step < 4 ? (isEn ? "Continue analysis" : "Analize devam et") : (isEn ? "Create decision brief" : "Karar özeti oluştur")}</button></div>
+              {error && <p className="form-error" id="framer-error" role="alert">{error}</p>}
+              <div className="step-actions"><button type="button" disabled={!step} onClick={() => setStep(step - 1)}>{isEn ? "Back" : "Geri"}</button>{step < 4 && <button type="button" className="lab-text-button" onClick={complete}>{isEn ? "Create the brief now" : "Özeti şimdi oluştur"}</button>}<button className="button" type="submit">{step < 4 ? (isEn ? "Next step" : "Sonraki adım") : (isEn ? "Create decision brief" : "Karar özeti oluştur")}</button></div>
             </form>
           </div>
         ) : (
-          <div className="framer-result" aria-live="polite">
-            <header><span className="eyebrow">{isEn ? "PRELIMINARY · DIRECTIONAL · REQUIRES VALIDATION" : "ÖN DEĞERLENDİRME · YÖN GÖSTERİCİ · DOĞRULAMA GEREKLİ"}</span><h2>{isEn ? "Decision Brief" : "Karar Özeti"}</h2></header>
-            <label>{isEn ? "Refined decision statement" : "Netleştirilmiş karar ifadesi"}<textarea value={statement} onChange={(e) => setStatement(e.target.value)}/></label>
+          <div className="framer-result" aria-live="polite" tabIndex={-1} ref={result}>
+            <header><span className="eyebrow">{isEn ? "Preliminary · your inputs · requires validation" : "Ön değerlendirme · sizin girdileriniz · doğrulama gerekli"}</span><h2>{isEn ? "Decision brief" : "Karar özeti"}</h2></header>
+            <label>{isEn ? "Decision statement (editable)" : "Karar ifadesi (düzenlenebilir)"}<textarea value={statement} onChange={(e) => setStatement(e.target.value)}/></label>
             <div className="brief-grid">
-              <section><span>{isEn ? "DESIRED OUTCOME" : "İSTENEN SONUÇ"}</span><p>{answers[2] || (isEn ? "Requires definition." : "Tanımlanması gerekiyor.")}</p></section>
-              <section><span>{isEn ? "STRATEGIC ALTERNATIVES" : "STRATEJİK ALTERNATİFLER"}</span><p>{answers[3] || (isEn ? "Requires definition." : "Tanımlanması gerekiyor.")}</p></section>
-              <section><span>{isEn ? "CRITICAL ASSUMPTIONS" : "KRİTİK VARSAYIMLAR"}</span><p>{answers[5] || (isEn ? "Requires validation." : "Doğrulanması gerekiyor.")}</p></section>
-              <section><span>{isEn ? "REQUIRED EVIDENCE" : "GEREKLİ KANIT"}</span><p>{answers[9] || (isEn ? "Evidence gap not yet stated." : "Kanıt açığı henüz belirtilmedi.")}</p></section>
-              <section><span>{isEn ? "STAKEHOLDERS" : "PAYDAŞLAR"}</span><p>{answers[7] || (isEn ? "Requires identification." : "Belirlenmesi gerekiyor.")}</p></section>
-              <section><span>{isEn ? "RISK OF DELAY" : "GECİKME RİSKİ"}</span><p>{answers[8] || (isEn ? "Requires assessment." : "Değerlendirilmesi gerekiyor.")}</p></section>
+              <section><span>{isEn ? "Desired outcome" : "İstenen sonuç"}</span><p>{answers[2] || (isEn ? "Not yet defined." : "Henüz tanımlanmadı.")}</p></section>
+              <section><span>{isEn ? "Alternatives" : "Alternatifler"}</span><p>{answers[3] || (isEn ? "Not yet defined." : "Henüz tanımlanmadı.")}</p></section>
+              <section><span>{isEn ? "Critical assumptions" : "Kritik varsayımlar"}</span><p>{answers[5] || (isEn ? "Not yet stated." : "Henüz belirtilmedi.")}</p></section>
+              <section><span>{isEn ? "Missing evidence" : "Eksik kanıt"}</span><p>{answers[9] || (isEn ? "Not yet stated." : "Henüz belirtilmedi.")}</p></section>
+              <section><span>{isEn ? "Stakeholders" : "Paydaşlar"}</span><p>{answers[7] || (isEn ? "Not yet identified." : "Henüz belirlenmedi.")}</p></section>
+              <section><span>{isEn ? "Cost of delay" : "Gecikmenin maliyeti"}</span><p>{answers[8] || (isEn ? "Not yet assessed." : "Henüz değerlendirilmedi.")}</p></section>
             </div>
-            <div className="classification"><span>{isEn ? "Classification" : "Sınıflandırma"}</span><strong>{isEn ? "Strategic · evidence-constrained · reversibility to be assessed" : "Stratejik · kanıtla kısıtlı · geri döndürülebilirlik değerlendirilmeli"}</strong></div>
+            <div className="classification"><span>{isEn ? "Before you rely on this" : "Buna dayanmadan önce"}</span><strong>{answers[5] || answers[9] ? (isEn ? "Test the assumptions and close the evidence gaps above before committing." : "Taahhüt vermeden önce yukarıdaki varsayımları sınayın ve kanıt açıklarını kapatın.") : (isEn ? "Name the assumptions and missing evidence; a brief without them is hard to challenge." : "Varsayımları ve eksik kanıtı belirtin; bunlar olmadan özete itiraz etmek zordur.")}</strong></div>
             <div className="result-actions">
-              <SaveControl lang={lang} item={{ id: "decision-framer-result", title: statement, type: isEn ? "Decision brief" : "Karar özeti", href: `/${lang}/${m.decisionFramer}` }}/>
-              <button type="button" onClick={() => window.print()}>{isEn ? "Export brief" : "Brifingi dışa aktar"}</button>
-              <a href={`mailto:?subject=${encodeURIComponent(isEn ? "My preliminary decision brief" : "Ön karar özetim")}&body=${encodeURIComponent(statement)}`}>{isEn ? "Email to myself" : "Kendime e-posta gönder"}</a>
-              <a href={`/${lang}/${m.boardBriefBuilder}?decision=${encodeURIComponent(statement)}&recommendation=${encodeURIComponent(answers[3])}&evidence=${encodeURIComponent(answers[9])}`}>{isEn ? "Build a board brief" : "Yönetim kurulu brifingi oluştur"}</a>
-              <a href={contextualContactHref(lang, isEn ? "Decision Framer" : "Karar Çerçeveleyici", statement, answers[9])}>{isEn ? "Discuss this decision" : "Bu kararı görüşün"}</a>
-              <button type="button" onClick={() => { setDone(false); setStep(0); }}>{isEn ? "Start again" : "Yeniden başla"}</button>
+              <button type="button" className="button" onClick={() => window.print()}>{isEn ? "Print / save as PDF" : "Yazdır / PDF olarak kaydet"}</button>
+              <CopySummary lang={lang} text={summary()}/>
+              <button type="button" onClick={toBoard}>{isEn ? "Continue in Board Brief Builder" : "Yönetim Kurulu Brifingi’nde devam et"}</button>
+              <button type="button" onClick={() => handoffToContact(lang, isEn ? "Decision Framer" : "Karar Çerçeveleyici", summary())}>{isEn ? "Discuss this decision" : "Bu kararı konuşalım"}</button>
+              <SaveControl lang={lang} item={{ id: "decision-framer-result", title: statement.slice(0, 120), type: isEn ? "Decision brief" : "Karar özeti", href: `/${lang}/${m.decisionFramer}` }}/>
+              <button type="button" onClick={() => { setDone(false); setStep(0); }}>{isEn ? "Edit answers" : "Yanıtları düzenle"}</button>
             </div>
+            <NextActions lang={lang} engagement="serviceOperatingModel"/>
             <ToolScopeNote lang={lang}/>
           </div>
         )}
@@ -485,56 +384,57 @@ export function DecisionFramerPage({ lang }: { lang: Lang }) {
 }
 
 type MarketScore = { name: string; scores: number[] };
+type CompassState = { markets: MarketScore[]; weights: number[] };
+const compassInitial: CompassState = { markets: [{ name: "", scores: [50, 50, 50, 50] }, { name: "", scores: [50, 50, 50, 50] }], weights: [25, 25, 25, 25] };
 
 export function MarketCompassPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
-  const dimensions = isEn ? ["Market attractiveness", "Strategic fit", "Capability readiness", "Execution risk"] : ["Pazar cazibesi", "Stratejik uyum", "Yetkinlik hazırlığı", "Uygulama riski"];
-  const [marketsInput, setMarketsInput] = useState<MarketScore[]>([{ name: "", scores: [50, 50, 50, 50] }, { name: "", scores: [50, 50, 50, 50] }]);
-  const [weights, setWeights] = useState([25, 25, 25, 25]);
+  const dimensions = isEn
+    ? [["Market attractiveness", "Size, growth and margins you could realistically reach"], ["Strategic fit", "How well the market suits your products and ambitions"], ["Capability readiness", "Your people, partners and processes for this market"], ["Execution risk", "Regulatory, partner and delivery risk (higher = riskier)"]]
+    : [["Pazar cazibesi", "Gerçekçi olarak ulaşabileceğiniz büyüklük, büyüme ve marjlar"], ["Stratejik uyum", "Pazarın ürünlerinize ve hedeflerinize ne kadar uyduğu"], ["Yetkinlik hazırlığı", "Bu pazar için insanlarınız, ortaklarınız ve süreçleriniz"], ["Uygulama riski", "Mevzuat, ortak ve teslimat riski (yüksek = daha riskli)"]];
+  const draft = useToolDraft<CompassState>("market-compass", compassInitial);
+  const { markets: marketsInput, weights } = draft.value;
   const [result, setResult] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
+  const setMarkets = (next: MarketScore[]) => draft.setValue({ ...draft.value, markets: next });
+  const setWeights = (next: number[]) => draft.setValue({ ...draft.value, weights: next });
   const weightTotal = weights.reduce((a, b) => a + b, 0);
-  const score = (market: MarketScore) => weightTotal ? Math.round(market.scores.reduce((sum, value, i) => sum + (i === 3 ? 100 - value : value) * weights[i], 0) / weightTotal) : 0;
-  const updateScore = (marketIndex: number, dimension: number, value: number) => setMarketsInput(marketsInput.map((market, i) => i === marketIndex ? { ...market, scores: market.scores.map((scoreValue, j) => j === dimension ? value : scoreValue) } : market));
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const parseScores = (key: string) => (params.get(key) ?? "").split(",").map(Number).filter((value) => Number.isFinite(value) && value >= 0 && value <= 100);
-    const parsedWeights = parseScores("w");
-    const nextMarkets = [0, 1].map((index) => {
-      const scores = parseScores(`s${index}`);
-      return { name: (params.get(`m${index}`) ?? "").slice(0, 80), scores: scores.length === 4 ? scores : [50, 50, 50, 50] };
-    });
-    queueMicrotask(() => {
-      setMarketsInput(nextMarkets);
-      if (parsedWeights.length === 4) setWeights(parsedWeights);
-      setHydrated(true);
-    });
-  }, []);
-  useEffect(() => {
-    if (!hydrated) return;
-    const params = new URLSearchParams();
-    marketsInput.forEach((market, index) => {
-      if (market.name.trim()) params.set(`m${index}`, market.name.trim());
-      params.set(`s${index}`, market.scores.join(","));
-    });
-    params.set("w", weights.join(","));
-    window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
-  }, [marketsInput, weights, hydrated]);
+  const contribution = (market: MarketScore, i: number) => weightTotal ? ((i === 3 ? 100 - market.scores[i] : market.scores[i]) * weights[i]) / weightTotal : 0;
+  const score = (market: MarketScore) => Math.round(market.scores.reduce((sum, _value, i) => sum + contribution(market, i), 0));
+  const updateScore = (marketIndex: number, dimension: number, value: number) => setMarkets(marketsInput.map((market, i) => i === marketIndex ? { ...market, scores: market.scores.map((scoreValue, j) => j === dimension ? value : scoreValue) } : market));
+  const namesReady = marketsInput.every((market) => market.name.trim().length >= 2);
+  const sameName = namesReady && marketsInput[0].name.trim().toLocaleLowerCase() === marketsInput[1].name.trim().toLocaleLowerCase();
+  const scores = marketsInput.map(score);
+  const gap = Math.abs(scores[0] - scores[1]);
+  const leader = scores[0] === scores[1] ? null : scores[0] > scores[1] ? 0 : 1;
+  const summary = [`${isEn ? "Market Entry Compass" : "Pazara Giriş Pusulası"} · ${marketsInput.map((market) => market.name).join(" / ")}`, ...dimensions.map(([label], i) => `${label} (${isEn ? "weight" : "ağırlık"} ${weights[i]}): ${marketsInput[0].scores[i]} / ${marketsInput[1].scores[i]}`), `${isEn ? "Weighted score" : "Ağırlıklı puan"}: ${scores[0]} / ${scores[1]}`].join("\n");
+  const compare = () => { setResult(true); window.setTimeout(() => resultRef.current?.focus(), 40); };
   return (
     <>
-      <IntelligenceHero label={isEn ? "MARKET ENTRY COMPASS" : "PAZARA GİRİŞ PUSULASI"} title={isEn ? "Market attractiveness is only one part of the decision." : "Pazarın cazibesi, kararın yalnızca bir boyutudur."} intro={isEn ? "Compare opportunity and organisational readiness using assumptions you control. No unsupported country data is inserted." : "Fırsat ve kurumsal hazırlığı, kontrol ettiğiniz varsayımlarla karşılaştırın. Desteklenmeyen ülke verileri eklenmez."}/>
+      <IntelligenceHero label={isEn ? "Market Entry Compass" : "Pazara Giriş Pusulası"} title={isEn ? "Market attractiveness is only one part of the decision." : "Pazarın cazibesi, kararın yalnızca bir boyutudur."} intro={isEn ? "Compare two candidate markets on four dimensions, using weights and scores you set. No country data is inserted: every number is your assumption, and the arithmetic is shown." : "İki aday pazarı, ağırlıklarını ve puanlarını sizin belirlediğiniz dört boyutta karşılaştırın. Hiçbir ülke verisi eklenmez: her sayı sizin varsayımınızdır ve hesaplama açıkça gösterilir."}/>
       <section className="compass section">
-        <div className="source-key"><span><i className="user"/> {isEn ? "User-entered assumption" : "Kullanıcı varsayımı"}</span><span><i className="ganrich"/> {isEn ? "Ganrich research: not included" : "Ganrich araştırması: dâhil değil"}</span><span><i className="external"/> {isEn ? "External data: not included" : "Haricî veri: dâhil değil"}</span></div>
+        <ToolIntro lang={lang} toolKey="marketCompass"><ExampleButton lang={lang} onClick={() => { draft.setValue({ markets: [{ name: isEn ? "Example market A" : "Örnek pazar A", scores: [72, 64, 45, 55] }, { name: isEn ? "Example market B" : "Örnek pazar B", scores: [58, 70, 68, 35] }], weights: [30, 25, 25, 20] }); setResult(false); }}/></ToolIntro>
+        <div className="source-key"><span><i className="user"/> {isEn ? "All inputs are your assumptions" : "Tüm girdiler sizin varsayımınızdır"}</span><span><i className="external"/> {isEn ? "No external or Ganrich data included" : "Dış veri ya da Ganrich verisi eklenmez"}</span></div>
         <div className="weight-editor">
-          <header><div><span className="eyebrow">{isEn ? "EDITABLE WEIGHTS" : "DÜZENLENEBİLİR AĞIRLIKLAR"}</span><h2>{isEn ? "Define what matters for this decision." : "Bu karar için neyin önemli olduğunu tanımlayın."}</h2></div><p>{isEn ? "The starting weights are editable working assumptions—not a universal methodology." : "Başlangıç ağırlıkları düzenlenebilir çalışma varsayımlarıdır; evrensel bir yöntem değildir."}</p></header>
-          <div>{dimensions.map((dimension, i) => <label key={dimension}><span>{dimension}</span><input type="range" min="0" max="100" value={weights[i]} onChange={(e) => setWeights(weights.map((w, j) => j === i ? Number(e.target.value) : w))}/><output>{weights[i]}</output></label>)}</div>
+          <header><div><span className="eyebrow">{isEn ? "Step 1 · Weights" : "1. adım · Ağırlıklar"}</span><h2>{isEn ? "Decide what matters for this decision." : "Bu karar için neyin önemli olduğuna karar verin."}</h2></div><p>{isEn ? "Weights are relative; they do not need to add up to 100. The starting values are a neutral default, not a methodology." : "Ağırlıklar görelidir; toplamlarının 100 olması gerekmez. Başlangıç değerleri bir yöntem değil, nötr bir varsayılandır."}</p></header>
+          <div>{dimensions.map(([dimension, hint], i) => <label key={dimension}><span>{dimension}</span><small className="lab-hint">{hint}</small><input type="range" min="0" max="100" value={weights[i]} aria-valuetext={`${weights[i]}`} onChange={(e) => setWeights(weights.map((w, j) => j === i ? Number(e.target.value) : w))}/><output>{weights[i]}</output></label>)}</div>
         </div>
         <div className="market-inputs">
-          {marketsInput.map((market, marketIndex) => <section key={marketIndex}><label className="market-name">{isEn ? `Market ${marketIndex + 1}` : `Pazar ${marketIndex + 1}`}<input required minLength={2} maxLength={80} value={market.name} onChange={(e) => setMarketsInput(marketsInput.map((item, i) => i === marketIndex ? { ...item, name: e.target.value } : item))} placeholder={isEn ? "Enter a country or market" : "Ülke veya pazar girin"}/></label>{dimensions.map((dimension, dimensionIndex) => <label key={dimension}><span>{dimension}</span><input type="range" min="0" max="100" value={market.scores[dimensionIndex]} onChange={(e) => updateScore(marketIndex, dimensionIndex, Number(e.target.value))}/><output>{market.scores[dimensionIndex]}</output></label>)}</section>)}
+          {marketsInput.map((market, marketIndex) => <section key={marketIndex} aria-label={isEn ? `Market ${marketIndex + 1}` : `Pazar ${marketIndex + 1}`}><span className="eyebrow">{isEn ? `Step ${marketIndex + 2} · Market ${marketIndex + 1}` : `${marketIndex + 2}. adım · Pazar ${marketIndex + 1}`}</span><label className="market-name">{isEn ? "Name *" : "Ad *"}<input required minLength={2} maxLength={80} value={market.name} onChange={(e) => setMarkets(marketsInput.map((item, i) => i === marketIndex ? { ...item, name: e.target.value } : item))} placeholder={isEn ? "A country, city or segment" : "Bir ülke, şehir ya da segment"}/></label>{dimensions.map(([dimension], dimensionIndex) => <label key={dimension}><span>{dimension}</span><input type="range" min="0" max="100" value={market.scores[dimensionIndex]} onChange={(e) => updateScore(marketIndex, dimensionIndex, Number(e.target.value))}/><output>{market.scores[dimensionIndex]}</output></label>)}</section>)}
         </div>
-        {!weightTotal && <p className="form-error" role="alert">{isEn ? "At least one weighting must be greater than zero." : "En az bir ağırlık sıfırdan büyük olmalıdır."}</p>}
-        <button className="button" type="button" disabled={!weightTotal || marketsInput.some((market) => market.name.trim().length < 2)} onClick={() => setResult(true)}>{isEn ? "Compare markets" : "Pazarları karşılaştır"}</button>
-        {result && <div className="compass-result" aria-live="polite"><header><span className="eyebrow">{isEn ? "DIRECTIONAL · USER-ENTERED ASSUMPTIONS" : "YÖN GÖSTERİCİ · KULLANICI VARSAYIMLARI"}</span><h2>{isEn ? "Opportunity–readiness comparison" : "Fırsat–hazırlık karşılaştırması"}</h2></header><div className="score-bars">{marketsInput.map((market) => <div key={market.name}><strong>{market.name}</strong><i><span style={{ width: `${score(market)}%` }}/></i><output>{score(market)} / 100</output></div>)}</div><table><caption className="sr-only">{isEn ? "Market comparison scores" : "Pazar karşılaştırma puanları"}</caption><thead><tr><th>{isEn ? "Dimension" : "Boyut"}</th>{marketsInput.map((market) => <th key={market.name}>{market.name}</th>)}</tr></thead><tbody>{dimensions.map((dimension, i) => <tr key={dimension}><th>{dimension}</th>{marketsInput.map((market) => <td key={market.name}>{market.scores[i]}</td>)}</tr>)}</tbody></table><div className="compass-interpretation"><section><span>{isEn ? "WHAT THIS SUGGESTS" : "SONUCUN GÖSTERDİĞİ"}</span><p>{isEn ? "The current assumptions create a relative comparison. They do not establish market attractiveness or readiness as fact." : "Mevcut varsayımlar göreli bir karşılaştırma oluşturur. Pazar cazibesini veya hazırlığı gerçek olarak ortaya koymaz."}</p></section><section><span>{isEn ? "EVIDENCE GAP" : "KANIT AÇIĞI"}</span><p>{isEn ? "Validate each input with dated, market-specific research and internal capability evidence." : "Her girdiyi tarihli, pazara özgü araştırma ve iç yetkinlik kanıtıyla doğrulayın."}</p></section></div><div className="result-actions"><SaveControl lang={lang} item={{ id: "market-compass-result", title: `${marketsInput[0].name} / ${marketsInput[1].name}`, type: isEn ? "Market comparison" : "Pazar karşılaştırması", href: `/${lang}/${m.marketCompass}` }}/><button type="button" onClick={() => window.print()}>{isEn ? "Export / print" : "Dışa aktar / yazdır"}</button><a href={contextualContactHref(lang, isEn ? "Market Entry Compass" : "Pazara Giriş Pusulası", `${marketsInput[0].name} / ${marketsInput[1].name}`, `${dimensions.map((dimension, index) => `${dimension}: ${marketsInput[0].scores[index]} / ${marketsInput[1].scores[index]}`).join("; ")}`, expertise[lang][1][0])}>{isEn ? "Discuss this decision" : "Bu kararı görüşün"}</a></div><ToolScopeNote lang={lang}/></div>}
+        <DraftControl lang={lang} keep={draft.keep} setKeep={draft.setKeep} restoredAt={draft.restoredAt} clear={() => { draft.clear(); setResult(false); }}/>
+        {!weightTotal && <p className="form-error" role="alert">{isEn ? "At least one weight must be greater than zero." : "En az bir ağırlık sıfırdan büyük olmalıdır."}</p>}
+        {sameName && <p className="form-error" role="alert">{isEn ? "Give the two markets different names." : "İki pazara farklı adlar verin."}</p>}
+        {!namesReady && <p className="lab-hint" role="status">{isEn ? "Name both markets to compare them." : "Karşılaştırmak için iki pazara da ad verin."}</p>}
+        <button className="button" type="button" disabled={!weightTotal || !namesReady || sameName} onClick={compare}>{isEn ? "Compare markets" : "Pazarları karşılaştır"}</button>
+        {result && namesReady && <div className="compass-result" aria-live="polite" tabIndex={-1} ref={resultRef}><header><span className="eyebrow">{isEn ? "Directional · your assumptions" : "Yön gösterici · sizin varsayımlarınız"}</span><h2>{isEn ? "Opportunity–readiness comparison" : "Fırsat–hazırlık karşılaştırması"}</h2></header>
+          <div className="score-bars">{marketsInput.map((market, i) => <div key={i}><strong>{market.name}</strong><i><span style={{ width: `${scores[i]}%` }}/></i><output>{scores[i]} / 100</output></div>)}</div>
+          <div className="p-table-wrap" tabIndex={0} role="region" aria-label={isEn ? "Score breakdown" : "Puan dökümü"}><table><caption>{isEn ? "How each score is built: input × weight ÷ total weight (risk is inverted)" : "Her puan nasıl oluşur: girdi × ağırlık ÷ toplam ağırlık (risk tersine çevrilir)"}</caption><thead><tr><th scope="col">{isEn ? "Dimension" : "Boyut"}</th><th scope="col">{isEn ? "Weight" : "Ağırlık"}</th>{marketsInput.map((market, i) => <th scope="col" key={i}>{market.name}</th>)}</tr></thead><tbody>{dimensions.map(([dimension], i) => <tr key={dimension}><th scope="row">{dimension}</th><td>{weights[i]}</td>{marketsInput.map((market, j) => <td key={j}>{market.scores[i]}{i === 3 ? ` → ${100 - market.scores[i]}` : ""} · <strong>{contribution(market, i).toFixed(1)}</strong></td>)}</tr>)}<tr><th scope="row">{isEn ? "Total" : "Toplam"}</th><td>{weightTotal}</td>{scores.map((value, i) => <td key={i}><strong>{value}</strong></td>)}</tr></tbody></table></div>
+          <div className="compass-interpretation"><section><span>{isEn ? "What this suggests" : "Sonucun gösterdiği"}</span><p>{leader === null || gap < 5 ? (isEn ? "On your current assumptions the two markets are effectively tied. The decision will turn on evidence you do not yet have, not on the scores." : "Mevcut varsayımlarınızla iki pazar fiilen eşit. Karar puanlara değil, henüz sahip olmadığınız kanıta bağlı olacak.") : (isEn ? `${marketsInput[leader].name} leads by ${gap} points on your assumptions. Check which single input, if wrong, would reverse that.` : `Varsayımlarınıza göre ${marketsInput[leader].name} ${gap} puan önde. Hangi tek girdinin yanlış olması durumunda sıralamanın tersine döneceğini kontrol edin.`)}</p></section><section><span>{isEn ? "Evidence gap" : "Kanıt açığı"}</span><p>{isEn ? "Validate the highest-weighted inputs first, with dated market research and an honest view of your own capabilities." : "Önce en yüksek ağırlıklı girdileri, tarihli pazar araştırması ve kendi yetkinliklerinize dair dürüst bir değerlendirmeyle doğrulayın."}</p></section></div>
+          <div className="result-actions"><button type="button" className="button" onClick={() => window.print()}>{isEn ? "Print / save as PDF" : "Yazdır / PDF olarak kaydet"}</button><CopySummary lang={lang} text={summary}/><button type="button" onClick={() => handoffToContact(lang, isEn ? "Market Entry Compass" : "Pazara Giriş Pusulası", summary, "serviceMarketEntry")}>{isEn ? "Discuss this decision" : "Bu kararı konuşalım"}</button><SaveControl lang={lang} item={{ id: "market-compass-result", title: marketsInput.map((market) => market.name).join(" / "), type: isEn ? "Market comparison" : "Pazar karşılaştırması", href: `/${lang}/${m.marketCompass}` }}/></div>
+          <NextActions lang={lang} engagement="serviceMarketEntry"/>
+          <ToolScopeNote lang={lang}/>
+        </div>}
       </section>
     </>
   );
@@ -552,12 +452,20 @@ type BoardBrief = {
 };
 
 const emptyBoardBrief: BoardBrief = { decision: "", recommendation: "", rationale: "", alternatives: "", evidence: "", risks: "", action: "", owner: "" };
+const requiredBoardFields: Array<keyof BoardBrief> = ["decision", "recommendation", "evidence", "action"];
+
+const boardExample: Record<Lang, BoardBrief> = {
+  en: { decision: "Approve a staged entry into the UAE for the industrial valve line.", recommendation: "Appoint a distributor with quarterly performance gates now; defer any own-entity decision to the next annual review.", rationale: "Two contractors have asked for local stock; the current agent agreement expires in nine months.", alternatives: "Own entity now (higher control, higher fixed cost); continue with the agent (lowest cost, no learning).", evidence: "Established: certification route confirmed. Assumed: contractor demand. Unknown: distributor margin expectations.", risks: "Distributor under-performs: quarterly gate with exit clause. Price pressure: floor price in contract.", action: "Approve budget for distributor onboarding and one technical sales visit per quarter.", owner: "Export director · review at the next annual planning meeting." },
+  tr: { decision: "Endüstriyel vana grubu için BAE’ye aşamalı girişi onaylamak.", recommendation: "Şimdi üç aylık performans kapılı bir distribütör atamak; kendi şirketini kurma kararını bir sonraki yıllık değerlendirmeye bırakmak.", rationale: "İki yüklenici yerel stok talep etti; mevcut acente sözleşmesi dokuz ay sonra bitiyor.", alternatives: "Hemen kendi şirketi (daha yüksek kontrol, daha yüksek sabit maliyet); acenteyle devam (en düşük maliyet, öğrenme yok).", evidence: "Kanıtlı: sertifikasyon yolu doğrulandı. Varsayım: yüklenici talebi. Bilinmeyen: distribütörün marj beklentisi.", risks: "Distribütörün düşük performansı: çıkış hükümlü üç aylık kapı. Fiyat baskısı: sözleşmede taban fiyat.", action: "Distribütör sürecine ve üç ayda bir teknik satış ziyaretine bütçe onayı.", owner: "İhracat direktörü · bir sonraki yıllık planlama toplantısında değerlendirme." },
+};
 
 export function BoardBriefBuilderPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
-  const [brief, setBrief] = useState<BoardBrief>(emptyBoardBrief);
+  const draft = useToolDraft<BoardBrief>(`board-brief-${lang}`, emptyBoardBrief);
+  const brief = draft.value;
   const [generated, setGenerated] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
+  const [carried, setCarried] = useState(false);
+  const memo = useRef<HTMLElement>(null);
   const labels: Array<[keyof BoardBrief, string, string]> = isEn ? [
     ["decision", "Decision required", "State the choice the board is being asked to make."],
     ["recommendation", "Management recommendation", "State the recommended path in one direct sentence."],
@@ -579,43 +487,46 @@ export function BoardBriefBuilderPage({ lang }: { lang: Lang }) {
   ];
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const next = { ...emptyBoardBrief };
-    (Object.keys(next) as Array<keyof BoardBrief>).forEach((key) => { next[key] = (params.get(key) ?? "").slice(0, 1200); });
-    queueMicrotask(() => { setBrief(next); setHydrated(true); });
+    const carriedBrief = readJson<Partial<BoardBrief>>(typeof window === "undefined" ? undefined : window.sessionStorage, BOARD_HANDOFF_KEY);
+    if (!carriedBrief) return;
+    try { sessionStorage.removeItem(BOARD_HANDOFF_KEY); } catch { /* storage unavailable */ }
+    queueMicrotask(() => {
+      draft.setValue({ ...emptyBoardBrief, ...Object.fromEntries(Object.entries(carriedBrief).map(([key, value]) => [key, String(value ?? "").slice(0, 1200)])) });
+      setCarried(true);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  useEffect(() => {
-    if (!hydrated) return;
-    const params = new URLSearchParams();
-    (Object.keys(brief) as Array<keyof BoardBrief>).forEach((key) => { if (brief[key].trim()) params.set(key, brief[key].trim()); });
-    window.history.replaceState(null, "", `${window.location.pathname}${params.size ? `?${params.toString()}` : ""}`);
-  }, [brief, hydrated]);
 
-  const update = (key: keyof BoardBrief, value: string) => setBrief((current) => ({ ...current, [key]: value }));
-  const complete = generated || [brief.decision, brief.recommendation, brief.evidence, brief.action].every((value) => value.trim().length >= 10);
+  const update = (key: keyof BoardBrief, value: string) => draft.setValue({ ...brief, [key]: value });
+  const missing = requiredBoardFields.filter((key) => brief[key].trim().length < 10);
+  const filled = labels.filter(([key]) => brief[key].trim()).length;
   const emailBody = labels.map(([key, label]) => `${label.toUpperCase()}\n${brief[key] || "—"}`).join("\n\n");
 
   return <>
-    <IntelligenceHero label={isEn ? "BOARD BRIEF BUILDER" : "YÖNETİM KURULU BRİFİNGİ OLUŞTURUCU"} title={isEn ? "Make the decision visible on one page." : "Kararı tek sayfada görünür kılın."} intro={isEn ? "Convert a framed choice into a concise board memo that distinguishes recommendation, evidence, uncertainty, risk, and required action." : "Çerçevelenmiş bir tercihi; öneri, kanıt, belirsizlik, risk ve gerekli eylemi birbirinden ayıran özlü bir yönetim kurulu notuna dönüştürün."}/>
+    <IntelligenceHero label={isEn ? "Board Brief Builder" : "Yönetim Kurulu Brifingi Oluşturucu"} title={isEn ? "Make the decision visible on one page." : "Kararı tek sayfada görünür kılın."} intro={isEn ? "Eight fields, four of them required. The result is a one-page memo that separates recommendation, evidence, uncertainty, risk and the approval you need." : "Dördü zorunlu sekiz alan. Sonuç; öneriyi, kanıtı, belirsizliği, riski ve ihtiyaç duyduğunuz onayı birbirinden ayıran tek sayfalık bir nottur."}/>
     <section className="board-builder section">
-      {!generated ? <form className="board-form" onSubmit={(event) => { event.preventDefault(); setGenerated(true); }}>
-        <header><span className="eyebrow">{isEn ? "ONE-PAGE INPUT DISCIPLINE" : "TEK SAYFALIK GİRDİ DİSİPLİNİ"}</span><h2>{isEn ? "Write for the decision, not the archive." : "Arşiv için değil, karar için yazın."}</h2><p>{isEn ? "Use concise, non-confidential language. Four core fields are required; the remainder make the board discussion stronger." : "Kısa ve gizli bilgi içermeyen bir dil kullanın. Dört temel alan zorunludur; diğer alanlar yönetim kurulu görüşmesini güçlendirir."}</p></header>
-        <div>{labels.map(([key, label, hint], index) => <label key={key}><span>0{index + 1} · {label}</span><small>{hint}</small><textarea value={brief[key]} onChange={(event) => update(key, event.target.value)} minLength={["decision", "recommendation", "evidence", "action"].includes(key) ? 10 : undefined} maxLength={1200} required={["decision", "recommendation", "evidence", "action"].includes(key)}/></label>)}</div>
-        <button className="button" type="submit">{isEn ? "Build the board brief" : "Yönetim kurulu brifingini oluştur"}</button>
+      <ToolIntro lang={lang} toolKey="boardBriefBuilder"><ExampleButton lang={lang} onClick={() => { draft.setValue({ ...boardExample[lang] }); setGenerated(false); }}/></ToolIntro>
+      {!generated ? <form className="board-form" onSubmit={(event) => { event.preventDefault(); if (missing.length) return; setGenerated(true); window.setTimeout(() => memo.current?.focus(), 40); }}>
+        <header><span className="eyebrow">{isEn ? "One-page discipline" : "Tek sayfa disiplini"}</span><h2>{isEn ? "Write for the decision, not the archive." : "Arşiv için değil, karar için yazın."}</h2><p>{isEn ? `Use concise, non-confidential language. Fields marked * are required. ${filled} of 8 completed.` : `Kısa ve gizli bilgi içermeyen bir dil kullanın. * işaretli alanlar zorunludur. 8 alandan ${filled} tanesi dolduruldu.`}</p></header>
+        {carried && <p className="lab-draft" role="status">{isEn ? "Carried over from the Decision Framer. Review and edit before you build the memo." : "Karar Çerçeveleyici’den aktarıldı. Notu oluşturmadan önce gözden geçirip düzenleyin."}</p>}
+        <div>{labels.map(([key, label, hint], index) => { const required = requiredBoardFields.includes(key); return <label key={key}><span>0{index + 1} · {label}{required ? " *" : ""}</span><small id={`board-hint-${key}`}>{hint}</small><textarea value={brief[key]} aria-describedby={`board-hint-${key}`} onChange={(event) => update(key, event.target.value)} minLength={required ? 10 : undefined} maxLength={1200} required={required}/></label>; })}</div>
+        <DraftControl lang={lang} keep={draft.keep} setKeep={draft.setKeep} restoredAt={draft.restoredAt} clear={draft.clear}/>
+        <button className="button" type="submit">{isEn ? "Build the board memo" : "Yönetim kurulu notunu oluştur"}</button>
         <ToolScopeNote lang={lang}/>
-      </form> : <article className="board-memo" aria-live="polite">
-        <header><div><span className="eyebrow">{isEn ? "PRELIMINARY BOARD MEMO · USER-ENTERED" : "ÖN YÖNETİM KURULU NOTU · KULLANICI GİRDİSİ"}</span><h2>{isEn ? "Decision memorandum" : "Karar notu"}</h2></div><small>{isEn ? "Prepared for structured discussion" : "Yapılandırılmış görüşme için hazırlandı"}</small></header>
-        <section className="board-decision"><span>{isEn ? "DECISION REQUIRED" : "GEREKLİ KARAR"}</span><h3>{brief.decision}</h3></section>
-        <section className="board-recommendation"><span>{isEn ? "MANAGEMENT RECOMMENDATION" : "YÖNETİM ÖNERİSİ"}</span><p>{brief.recommendation}</p></section>
+      </form> : <article className="board-memo" aria-live="polite" tabIndex={-1} ref={memo}>
+        <header><div><span className="eyebrow">{isEn ? "Preliminary board memo · your inputs" : "Ön yönetim kurulu notu · sizin girdileriniz"}</span><h2>{isEn ? "Decision memorandum" : "Karar notu"}</h2></div><small>{new Date().toLocaleDateString(isEn ? "en-GB" : "tr-TR", { dateStyle: "long" })}</small></header>
+        <section className="board-decision"><span>{isEn ? "Decision required" : "Gerekli karar"}</span><h3>{brief.decision}</h3></section>
+        <section className="board-recommendation"><span>{isEn ? "Management recommendation" : "Yönetim önerisi"}</span><p>{brief.recommendation}</p></section>
         <div className="board-memo-grid">{labels.slice(2).map(([key, label]) => <section key={key}><span>{label}</span><p>{brief[key] || (isEn ? "Not yet stated." : "Henüz belirtilmedi.")}</p></section>)}</div>
         <div className="result-actions">
-          <SaveControl lang={lang} item={{ id: "board-brief-result", title: brief.decision, type: isEn ? "Board brief" : "Yönetim kurulu brifingi", href: `/${lang}/${m.boardBriefBuilder}` }}/>
-          <button type="button" onClick={() => window.print()}>{isEn ? "Export / print PDF" : "Dışa aktar / PDF yazdır"}</button>
-          <a href={`mailto:?subject=${encodeURIComponent(isEn ? "Preliminary board decision memo" : "Ön yönetim kurulu karar notu")}&body=${encodeURIComponent(emailBody)}`}>{isEn ? "Email to myself" : "Kendime e-posta gönder"}</a>
-          <a href={contextualContactHref(lang, isEn ? "Board Brief Builder" : "Yönetim Kurulu Brifingi Oluşturucu", brief.decision, `${brief.recommendation}\n${brief.evidence}`)}>{isEn ? "Discuss this decision" : "Bu kararı görüşün"}</a>
+          <button type="button" className="button" onClick={() => window.print()}>{isEn ? "Export / print PDF" : "Dışa aktar / PDF yazdır"}</button>
+          <CopySummary lang={lang} text={emailBody}/>
+          <a href={`mailto:?subject=${encodeURIComponent(isEn ? "Preliminary board decision memo" : "Ön yönetim kurulu karar notu")}&body=${encodeURIComponent(emailBody)}`}>{isEn ? "Email this to me" : "Bunu bana e-posta ile gönder"}</a>
+          <button type="button" onClick={() => handoffToContact(lang, isEn ? "Board Brief Builder" : "Yönetim Kurulu Brifingi", emailBody)}>{isEn ? "Discuss this decision" : "Bu kararı konuşalım"}</button>
+          <SaveControl lang={lang} item={{ id: "board-brief-result", title: brief.decision.slice(0, 120), type: isEn ? "Board brief" : "Yönetim kurulu brifingi", href: `/${lang}/${m.boardBriefBuilder}` }}/>
           <button type="button" onClick={() => setGenerated(false)}>{isEn ? "Edit inputs" : "Girdileri düzenle"}</button>
         </div>
-        {complete && <ToolScopeNote lang={lang}/>}
+        <ToolScopeNote lang={lang}/>
       </article>}
     </section>
   </>;
@@ -624,65 +535,59 @@ export function BoardBriefBuilderPage({ lang }: { lang: Lang }) {
 export function AIValueLensPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
   const dimensions = isEn ? [
-    ["Decision value", "How materially could a better decision or workflow improve performance?"],
-    ["Repeatability", "How frequently does this decision or workflow recur?"],
-    ["Data readiness", "How usable, governed, and representative is the required data?"],
-    ["Adoption readiness", "How ready are process owners and users to change the work?"],
-    ["Risk controllability", "How well can error, bias, security, and accountability risks be controlled?"],
+    ["Decision value", "How much would a better decision or workflow improve margin, cash, quality or service?"],
+    ["Repeatability", "How often does this decision or workflow recur? Daily scores high; once a year scores low."],
+    ["Data readiness", "Is the data needed available, reasonably clean, governed and representative?"],
+    ["Adoption readiness", "Are the people who do this work ready, and able, to change how they do it?"],
+    ["Risk controllability", "Can error, bias, security and accountability risks be controlled and monitored?"],
   ] : [
-    ["Karar değeri", "Daha iyi bir karar veya iş akışı performansı ne ölçüde geliştirebilir?"],
-    ["Tekrarlanabilirlik", "Bu karar veya iş akışı ne sıklıkta tekrar ediyor?"],
-    ["Veri hazırlığı", "Gerekli veri ne ölçüde kullanılabilir, yönetişim altında ve temsil edici?"],
-    ["Benimseme hazırlığı", "Süreç sahipleri ve kullanıcılar çalışma biçimini değiştirmeye ne kadar hazır?"],
-    ["Risk kontrolü", "Hata, önyargı, güvenlik ve hesap verebilirlik riskleri ne ölçüde kontrol edilebilir?"],
+    ["Karar değeri", "Daha iyi bir karar ya da iş akışı marjı, nakdi, kaliteyi veya hizmeti ne kadar iyileştirir?"],
+    ["Tekrarlanabilirlik", "Bu karar ya da iş akışı ne sıklıkta tekrarlanıyor? Günlük yüksek, yılda bir düşük puan alır."],
+    ["Veri hazırlığı", "Gerekli veri mevcut, makul ölçüde temiz, yönetişim altında ve temsil edici mi?"],
+    ["Benimseme hazırlığı", "Bu işi yapan kişiler çalışma biçimini değiştirmeye hazır ve muktedir mi?"],
+    ["Risk kontrolü", "Hata, önyargı, güvenlik ve hesap verebilirlik riskleri kontrol edilip izlenebilir mi?"],
   ];
-  const [useCase, setUseCase] = useState("");
-  const [scores, setScores] = useState([50, 50, 50, 50, 50]);
+  const draft = useToolDraft<{ useCase: string; scores: number[] }>("ai-value-lens", { useCase: "", scores: [50, 50, 50, 50, 50] });
+  const { useCase, scores } = draft.value;
   const [result, setResult] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
   const weights = [30, 20, 20, 15, 15];
   const total = Math.round(scores.reduce((sum, value, index) => sum + value * weights[index], 0) / 100);
+  const weakest = scores.indexOf(Math.min(...scores));
   const interpretation = total >= 70
-    ? (isEn ? ["PRIORITIZE A CONTROLLED TEST", "The assumptions indicate a credible candidate for a bounded test with an explicit baseline, decision owner, and stopping rule."] : ["KONTROLLÜ TESTİ ÖNCELİKLENDİRİN", "Varsayımlar; açık bir başlangıç ölçümü, karar sahibi ve durdurma kuralıyla sınırlı bir test için güvenilir bir aday olduğunu gösteriyor."])
+    ? (isEn ? ["Prioritise a controlled test", "Your assumptions point to a credible candidate for a bounded test with a baseline, a decision owner and a stopping rule."] : ["Kontrollü bir testi önceliklendirin", "Varsayımlarınız; başlangıç ölçümü, karar sahibi ve durma kuralı olan sınırlı bir test için güvenilir bir aday olduğunu gösteriyor."])
     : total >= 50
-      ? (isEn ? ["VALIDATE THE VALUE CASE", "Potential is visible, but one or more readiness conditions should be strengthened before committing to scale."] : ["DEĞER VAKASINI DOĞRULAYIN", "Potansiyel görünür durumda; ancak ölçek kararından önce bir veya daha fazla hazırlık koşulu güçlendirilmeli."])
-      : (isEn ? ["STRENGTHEN THE FOUNDATIONS", "The current assumptions do not yet support prioritization. Clarify the decision, data, operating change, or risk controls first."] : ["TEMELLERİ GÜÇLENDİRİN", "Mevcut varsayımlar henüz önceliklendirmeyi desteklemiyor. Önce kararı, veriyi, işletim değişikliğini veya risk kontrollerini netleştirin."]);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const parsed = (params.get("scores") ?? "").split(",").map(Number).filter((value) => Number.isFinite(value) && value >= 0 && value <= 100);
-    queueMicrotask(() => {
-      setUseCase((params.get("useCase") ?? "").slice(0, 160));
-      if (parsed.length === 5) setScores(parsed);
-      setHydrated(true);
-    });
-  }, []);
-  useEffect(() => {
-    if (!hydrated) return;
-    const params = new URLSearchParams({ scores: scores.join(",") });
-    if (useCase.trim()) params.set("useCase", useCase.trim());
-    window.history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
-  }, [useCase, scores, hydrated]);
+      ? (isEn ? ["Validate the value case", "Potential is visible, but one or more readiness conditions should be strengthened before committing to scale."] : ["Değer gerekçesini doğrulayın", "Potansiyel görünür durumda; ancak ölçek kararından önce bir veya daha fazla hazırlık koşulu güçlendirilmeli."])
+      : (isEn ? ["Strengthen the foundations", "Your assumptions do not yet support prioritisation. Clarify the decision, data, operating change or risk controls first."] : ["Temelleri güçlendirin", "Varsayımlarınız henüz önceliklendirmeyi desteklemiyor. Önce kararı, veriyi, işletim değişikliğini veya risk kontrollerini netleştirin."]);
+  const summary = [`${isEn ? "AI Value Lens" : "Yapay Zekâ Değer Merceği"} · ${useCase}`, ...dimensions.map(([label], i) => `${label} (${isEn ? "weight" : "ağırlık"} ${weights[i]}%): ${scores[i]}`), `${isEn ? "Weighted total" : "Ağırlıklı toplam"}: ${total}/100 · ${interpretation[0]}`].join("\n");
+  const assess = () => { setResult(true); window.setTimeout(() => resultRef.current?.focus(), 40); };
 
   return <>
-    <IntelligenceHero label={isEn ? "AI VALUE LENS" : "YAPAY ZEKÂ DEĞER MERCEĞİ"} title={isEn ? "Begin with value. Test readiness. Keep judgment accountable." : "Değerle başlayın. Hazırlığı sınayın. Muhakemeyi sorumlu tutun."} intro={isEn ? "Assess one use case as an operating decision—not as a technology demonstration. The result is directional and based only on your assumptions." : "Bir kullanım alanını teknoloji gösterisi olarak değil, işletim kararı olarak değerlendirin. Sonuç yön göstericidir ve yalnızca sizin varsayımlarınıza dayanır."}/>
+    <IntelligenceHero label={isEn ? "AI Value Lens" : "Yapay Zekâ Değer Merceği"} title={isEn ? "Begin with value. Test readiness. Keep judgment accountable." : "Değerle başlayın. Hazırlığı sınayın. Muhakemeyi sorumlu tutun."} intro={isEn ? "Assess one use case as an operating decision, not a technology demonstration. You rate five dimensions; the weighting and thresholds are shown so you can disagree with them." : "Bir kullanım alanını teknoloji gösterisi olarak değil, işletim kararı olarak değerlendirin. Beş boyutu siz puanlarsınız; itiraz edebilmeniz için ağırlıklar ve eşikler açıkça gösterilir."}/>
     <section className="ai-lens section">
+      <ToolIntro lang={lang} toolKey="aiValueLens"><ExampleButton lang={lang} onClick={() => { draft.setValue({ useCase: isEn ? "Quote pricing for repeat customers (fictional distributor)" : "Tekrar eden müşteriler için teklif fiyatlama (kurgusal distribütör)", scores: [80, 85, 45, 60, 65] }); setResult(false); }}/></ToolIntro>
       <div className="ai-lens-input">
-        <header><span className="eyebrow">{isEn ? "USE-CASE ASSESSMENT" : "KULLANIM ALANI DEĞERLENDİRMESİ"}</span><h2>{isEn ? "Make the value logic explicit." : "Değer mantığını görünür kılın."}</h2></header>
-        <label className="use-case-name">{isEn ? "Decision or workflow to assess" : "Değerlendirilecek karar veya iş akışı"}<input value={useCase} onChange={(event) => setUseCase(event.target.value)} minLength={3} maxLength={160} placeholder={isEn ? "e.g. production scheduling exception decisions" : "ör. üretim planlaması istisna kararları"}/></label>
-        <div className="lens-dimensions">{dimensions.map(([label, hint], index) => <label key={label}><span>{label}</span><small>{hint}</small><input type="range" min="0" max="100" value={scores[index]} onChange={(event) => setScores(scores.map((score, scoreIndex) => scoreIndex === index ? Number(event.target.value) : score))}/><output>{scores[index]}</output></label>)}</div>
-        <button className="button" type="button" disabled={useCase.trim().length < 3} onClick={() => setResult(true)}>{isEn ? "Assess the use case" : "Kullanım alanını değerlendir"}</button>
+        <header><span className="eyebrow">{isEn ? "Use-case assessment" : "Kullanım alanı değerlendirmesi"}</span><h2>{isEn ? "Make the value logic explicit." : "Değer mantığını görünür kılın."}</h2></header>
+        <label className="use-case-name">{isEn ? "Decision or workflow to assess *" : "Değerlendirilecek karar veya iş akışı *"}<input value={useCase} onChange={(event) => draft.setValue({ ...draft.value, useCase: event.target.value })} minLength={3} maxLength={160} placeholder={isEn ? "e.g. production scheduling exception decisions" : "ör. üretim planlaması istisna kararları"}/></label>
+        <div className="lens-dimensions">{dimensions.map(([label, hint], index) => <label key={label}><span>{label} <small>· {isEn ? "weight" : "ağırlık"} {weights[index]}%</small></span><small>{hint}</small><input type="range" min="0" max="100" value={scores[index]} onChange={(event) => draft.setValue({ ...draft.value, scores: scores.map((score, scoreIndex) => scoreIndex === index ? Number(event.target.value) : score) })}/><output>{scores[index]}</output></label>)}</div>
+        <DraftControl lang={lang} keep={draft.keep} setKeep={draft.setKeep} restoredAt={draft.restoredAt} clear={() => { draft.clear(); setResult(false); }}/>
+        {useCase.trim().length < 3 && <p className="lab-hint" role="status">{isEn ? "Name the decision or workflow to enable the assessment." : "Değerlendirmeyi etkinleştirmek için karar ya da iş akışını adlandırın."}</p>}
+        <button className="button" type="button" disabled={useCase.trim().length < 3} onClick={assess}>{isEn ? "Assess the use case" : "Kullanım alanını değerlendir"}</button>
       </div>
-      {result && <div className="ai-lens-result" aria-live="polite">
-        <header><div><span className="eyebrow">{isEn ? "DIRECTIONAL · USER-ENTERED ASSUMPTIONS" : "YÖN GÖSTERİCİ · KULLANICI VARSAYIMLARI"}</span><h2>{useCase}</h2></div><output>{total}<small>/ 100</small></output></header>
+      {!(result && useCase.trim().length >= 3) && <aside className="lab-placeholder" aria-label={isEn ? "Result preview" : "Sonuç önizlemesi"}><span className="eyebrow">{isEn ? "Your result appears here" : "Sonucunuz burada görünür"}</span><p>{isEn ? "A score out of 100, a directional reading (prioritise a test, validate the value case, or strengthen the foundations), your weakest dimension and how the score was calculated." : "100 üzerinden bir puan, yön gösterici bir okuma (testi önceliklendirin, değer gerekçesini doğrulayın ya da temelleri güçlendirin), en zayıf boyutunuz ve puanın nasıl hesaplandığı."}</p></aside>}
+      {result && useCase.trim().length >= 3 && <div className="ai-lens-result" aria-live="polite" tabIndex={-1} ref={resultRef}>
+        <header><div><span className="eyebrow">{isEn ? "Directional · your assumptions" : "Yön gösterici · sizin varsayımlarınız"}</span><h2>{useCase}</h2></div><output>{total}<small>/ 100</small></output></header>
         <section className="lens-interpretation"><span>{interpretation[0]}</span><p>{interpretation[1]}</p></section>
-        <div className="lens-profile">{dimensions.map(([label], index) => <div key={label}><strong>{label}</strong><i><span style={{ width: `${scores[index]}%` }}/></i><output>{scores[index]}</output></div>)}</div>
-        <section className="lens-next"><span>{isEn ? "NEXT EVIDENCE TO BUILD" : "OLUŞTURULACAK SONRAKİ KANIT"}</span><p>{isEn ? "Define the baseline, denominator, decision owner, affected workflow, adoption requirement, risk controls, and a stopping rule before any scale decision." : "Herhangi bir ölçek kararından önce başlangıç ölçümünü, paydayı, karar sahibini, etkilenen iş akışını, benimseme gereksinimini, risk kontrollerini ve durdurma kuralını tanımlayın."}</p></section>
+        <div className="lens-profile">{dimensions.map(([label], index) => <div key={label} className={index === weakest ? "weakest" : ""}><strong>{label}</strong><i><span style={{ width: `${scores[index]}%` }}/></i><output>{scores[index]}</output></div>)}</div>
+        <section className="lens-next"><span>{isEn ? "Weakest dimension" : "En zayıf boyut"}</span><p>{isEn ? `${dimensions[weakest][0]} is your lowest rating. Before any scale decision, define the baseline, decision owner, affected workflow, adoption requirement, risk controls and a stopping rule.` : `En düşük puanınız ${dimensions[weakest][0]}. Herhangi bir ölçek kararından önce başlangıç ölçümünü, karar sahibini, etkilenen iş akışını, benimseme gereksinimini, risk kontrollerini ve durma kuralını tanımlayın.`}</p></section>
+        <details className="lab-method"><summary>{isEn ? "How the score is calculated" : "Puan nasıl hesaplanır"}<span className="p-plus" aria-hidden="true">+</span></summary><p>{isEn ? "Weighted average of your five ratings: decision value 30%, repeatability 20%, data readiness 20%, adoption readiness 15%, risk controllability 15%. 70 or more reads as “prioritise a controlled test”, 50–69 as “validate the value case”, below 50 as “strengthen the foundations”. These weights and thresholds are Ganrich working assumptions, not a validated diagnostic." : "Beş puanınızın ağırlıklı ortalaması: karar değeri %30, tekrarlanabilirlik %20, veri hazırlığı %20, benimseme hazırlığı %15, risk kontrolü %15. 70 ve üzeri “kontrollü bir testi önceliklendirin”, 50–69 “değer gerekçesini doğrulayın”, 50’nin altı “temelleri güçlendirin” olarak okunur. Bu ağırlıklar ve eşikler doğrulanmış bir teşhis aracı değil, Ganrich’in çalışma varsayımlarıdır."}</p></details>
         <div className="result-actions">
-          <SaveControl lang={lang} item={{ id: "ai-value-lens-result", title: useCase, type: isEn ? "AI value assessment" : "Yapay zekâ değer değerlendirmesi", href: `/${lang}/${m.aiValueLens}` }}/>
-          <button type="button" onClick={() => window.print()}>{isEn ? "Export / print" : "Dışa aktar / yazdır"}</button>
-          <a href={contextualContactHref(lang, isEn ? "AI Value Lens" : "Yapay Zekâ Değer Merceği", useCase, `${interpretation[0]} · ${total}/100`, expertise[lang][3][0])}>{isEn ? "Discuss this decision" : "Bu kararı görüşün"}</a>
+          <button type="button" className="button" onClick={() => window.print()}>{isEn ? "Print / save as PDF" : "Yazdır / PDF olarak kaydet"}</button>
+          <CopySummary lang={lang} text={summary}/>
+          <button type="button" onClick={() => handoffToContact(lang, isEn ? "AI Value Lens" : "Yapay Zekâ Değer Merceği", summary, "serviceAiValue")}>{isEn ? "Discuss this decision" : "Bu kararı konuşalım"}</button>
+          <SaveControl lang={lang} item={{ id: "ai-value-lens-result", title: useCase.slice(0, 120), type: isEn ? "AI value assessment" : "Yapay zekâ değer değerlendirmesi", href: `/${lang}/${m.aiValueLens}` }}/>
         </div>
+        <NextActions lang={lang} engagement="serviceAiValue"/>
         <ToolScopeNote lang={lang}/>
       </div>}
     </section>
@@ -691,26 +596,20 @@ export function AIValueLensPage({ lang }: { lang: Lang }) {
 
 export function DecisionLabChangelogPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
-  const live = isEn ? [
-    ["Decision Atlas", "URL-persistent decision, region, urgency, and maturity pathway."],
-    ["Decision Framer", "Validated five-step framing, shareable state, print export, and board-brief handoff."],
-    ["Market Entry Compass", "Validated weights, shareable assumptions, comparison export, and contextual handoff."],
-    ["Board Brief Builder", "One-page decision memorandum with export, save, and email actions."],
-    ["AI Value Lens", "Directional value-readiness profile with an explicit evidence-building next step."],
+  const releases = isEn ? [
+    ["22 October 2026", ["Worked examples with fictional inputs in every tool.", "Visitor-entered text is no longer written to page addresses; hand-offs use this browser tab only.", "Drafts are saved only when the visitor opts in, with a visible delete control.", "Scoring formulas and thresholds shown in the Market Entry Compass and AI Value Lens.", "Each tool links to the related Ganrich engagement."]],
+    ["24 July 2026", ["Decision Atlas, Decision Framer, Market Entry Compass, Board Brief Builder and AI Value Lens released."]],
   ] : [
-    ["Karar Atlası", "URL üzerinden kalıcı karar, coğrafya, aciliyet ve olgunluk yolu."],
-    ["Karar Çerçeveleyici", "Doğrulamalı beş adım, paylaşılabilir durum, yazdırma ve yönetim kurulu brifingi aktarımı."],
-    ["Pazara Giriş Pusulası", "Doğrulamalı ağırlıklar, paylaşılabilir varsayımlar, karşılaştırma çıktısı ve bağlamsal aktarım."],
-    ["Yönetim Kurulu Brifingi Oluşturucu", "Dışa aktarma, kaydetme ve e-posta eylemleriyle tek sayfalık karar notu."],
-    ["Yapay Zekâ Değer Merceği", "Açık kanıt oluşturma adımıyla yön gösterici değer-hazırlık profili."],
+    ["22 Ekim 2026", ["Her araçta kurgusal girdilerle örnek kullanım.", "Ziyaretçinin girdiği metinler artık sayfa adresine yazılmıyor; aktarımlar yalnızca bu tarayıcı sekmesini kullanıyor.", "Taslaklar yalnızca ziyaretçi isterse ve görünür bir silme kontrolüyle saklanıyor.", "Pazara Giriş Pusulası ve Yapay Zekâ Değer Merceği’nde puanlama formülleri ve eşikler gösteriliyor.", "Her araç ilgili Ganrich çalışma biçimine bağlanıyor."]],
+    ["24 Temmuz 2026", ["Karar Atlası, Karar Çerçeveleyici, Pazara Giriş Pusulası, Yönetim Kurulu Brifingi Oluşturucu ve Yapay Zekâ Değer Merceği yayımlandı."]],
   ];
   const evaluating = isEn ? ["Scenario Studio", "Transformation Pulse", "Operating Model Lens", "Portfolio Prioritizer"] : ["Senaryo Stüdyosu", "Dönüşüm Nabzı", "İşletim Modeli Merceği", "Portföy Önceliklendirme Aracı"];
   return <>
-    <IntelligenceHero label={isEn ? "DECISION LAB CHANGELOG" : "KARAR LABORATUVARI DEĞİŞİKLİK GÜNLÜĞÜ"} title={isEn ? "What is live. What changed. What remains under evaluation." : "Neler yayında. Neler değişti. Neler değerlendirmede."} intro={isEn ? "A plain record of the Decision Lab’s current capabilities and limits." : "Karar Laboratuvarının mevcut yetkinlikleri ve sınırlarına ilişkin açık kayıt."}/>
+    <IntelligenceHero label={isEn ? "Decision Lab Changelog" : "Karar Laboratuvarı Değişiklik Günlüğü"} title={isEn ? "What is live. What changed. What remains under evaluation." : "Neler yayında. Neler değişti. Neler değerlendirmede."} intro={isEn ? "A plain record of the Decision Lab’s current capabilities and limits." : "Karar Laboratuvarının mevcut yetkinlikleri ve sınırlarına ilişkin açık kayıt."}/>
     <section className="lab-changelog section">
-      <header><span className="eyebrow">{isEn ? "CURRENT RELEASE · 24 JULY 2026" : "MEVCUT SÜRÜM · 24 TEMMUZ 2026"}</span><h2>{isEn ? "Five live tools, connected to one decision pathway." : "Tek karar yoluna bağlı beş canlı araç."}</h2></header>
-      <ol>{live.map(([title, body], index) => <li key={title}><span>0{index + 1}</span><h3>{title}</h3><p>{body}</p></li>)}</ol>
-      <div className="roadmap-record"><span className="eyebrow">{isEn ? "UNDER EVALUATION · NO COMMITTED RELEASE DATE" : "DEĞERLENDİRMEDE · TAAHHÜT EDİLMİŞ TARİH YOK"}</span>{evaluating.map((item) => <p key={item}>{item}<small>{isEn ? "Scope and evidence standard under review" : "Kapsam ve kanıt standardı inceleniyor"}</small></p>)}</div>
+      <header><span className="eyebrow">{isEn ? "Releases" : "Sürümler"}</span><h2>{isEn ? "Five live tools, connected to one decision pathway." : "Tek karar yoluna bağlı beş canlı araç."}</h2></header>
+      <ol>{releases.map(([date, items]) => <li key={date as string}><span>{date as string}</span><ul>{(items as string[]).map((item) => <li key={item}>{item}</li>)}</ul></li>)}</ol>
+      <div className="roadmap-record"><span className="eyebrow">{isEn ? "Under evaluation · no committed release date" : "Değerlendirmede · taahhüt edilmiş tarih yok"}</span>{evaluating.map((item) => <p key={item}>{item}<small>{isEn ? "Scope and evidence standard under review" : "Kapsam ve kanıt standardı inceleniyor"}</small></p>)}</div>
       <a className="button outline" href={`/${lang}/${m.decisionLab}`}>{isEn ? "Return to Decision Lab" : "Karar Laboratuvarına dön"}</a>
     </section>
   </>;
@@ -721,9 +620,9 @@ export function InsightExperiencePage({ lang, index = 0 }: { lang: Lang; index?:
   const article = insightArticles[lang][index] ?? insightArticles[lang][0];
   const href = insightHref(lang, index);
   const m = routeMap[lang];
+  const engagement = engagementByKey(lang, articleEngagements[index] ?? "serviceOperatingModel");
   const [mode, setMode] = useState("executive");
   const [challenge, setChallenge] = useState(false);
-  const [region, setRegion] = useState(0);
   const [sources, setSources] = useState(false);
   const sourceDrawer = useRef<HTMLElement>(null);
   const sourceCloseButton = useRef<HTMLButtonElement>(null);
@@ -763,13 +662,13 @@ export function InsightExperiencePage({ lang, index = 0 }: { lang: Lang; index?:
         {(mode === "full" || mode === "evidence") && <figure className="evidence-chart"><figcaption><strong>{article.frameworkTitle}</strong><span>{isEn ? "Illustrative framework · no external data" : "Açıklayıcı çerçeve · haricî veri içermez"}</span></figcaption><div>{article.framework.map((step, stepIndex) => <span key={step}>0{stepIndex + 1} {step}</span>)}</div><button type="button" className="source-link" onClick={openSources}>{isEn ? "Sources and methodology" : "Kaynaklar ve yöntem"}</button><SaveControl lang={lang} item={{ id: `framework-${article.slug}`, title: article.frameworkTitle, type: isEn ? "Framework" : "Çerçeve", href: `${href}#method` }}/></figure>}
         {(mode === "full" || mode === "evidence") && <section id="analysis" className="article-sections"><span className="eyebrow">{isEn ? "FULL ANALYSIS" : "TAM ANALİZ"}</span>{article.sections.map((section, sectionIndex) => <section key={section.title}><span>0{sectionIndex + 1}</span><div><h2>{section.title}</h2>{section.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</div></section>)}</section>}
         <section id="leaders" className="leader-meaning"><span className="eyebrow">{isEn ? "QUESTIONS THIS RAISES FOR YOUR BOARD" : "YÖNETİM KURULUNUZ İÇİN ORTAYA ÇIKAN SORULAR"}</span><h2>{isEn ? "Make the next leadership choice explicit." : "Bir sonraki liderlik tercihini açık hâle getirin."}</h2><ul>{article.boardQuestions.map((item) => <li key={item}>{item}</li>)}</ul></section>
-        <section className="related-tool"><span className="eyebrow">{isEn ? "RELATED DECISION TOOL" : "İLGİLİ KARAR ARACI"}</span><h2>{article.relatedToolLabel}.</h2><a href={`/${lang}/${m[article.relatedTool]}`}>{isEn ? "Open the tool" : "Aracı açın"} <span aria-hidden="true">↗</span></a></section>
+        <section className="related-engagement"><span className="eyebrow">{isEn ? "RELATED ENGAGEMENT" : "İLGİLİ ÇALIŞMA BİÇİMİ"}</span>{engagement && <><h2>{engagement.name}</h2><p>{engagement.short}</p><a className="text-link" href={`/${lang}/${m[engagement.key]}`}>{isEn ? "How this engagement works" : "Bu çalışma nasıl yürür"}<span aria-hidden="true" className="arrow">→</span></a></>}</section>
+        <section className="related-tool"><span className="eyebrow">{isEn ? "RELATED DECISION TOOL" : "İLGİLİ KARAR ARACI"}</span><h2>{article.relatedToolLabel}.</h2><a href={`/${lang}/${m[article.relatedTool]}`}>{isEn ? "Open the tool" : "Aracı açın"} <span aria-hidden="true" className="arrow">→</span></a></section>
         <section className="critical-review"><button type="button" onClick={() => setChallenge(!challenge)} aria-expanded={challenge}><span>{isEn ? "CRITICAL REVIEW" : "ELEŞTİREL İNCELEME"}</span><strong>{isEn ? "Challenge this view" : "Bu görüşü sorgula"}</strong><i>{challenge ? "−" : "+"}</i></button>{challenge && <div><section><span>{isEn ? "STRONGEST COUNTERARGUMENT" : "EN GÜÇLÜ KARŞI GÖRÜŞ"}</span><p>{article.counterargument}</p></section><section><span>{isEn ? "EVIDENCE THAT WOULD WEAKEN THE THESIS" : "TEZİ ZAYIFLATACAK KANIT"}</span><p>{article.weakeningEvidence}</p></section></div>}</section>
-        <section className="region-lens"><span className="eyebrow">{isEn ? "VIEW IMPLICATIONS BY REGION" : "BÖLGESEL ÇIKARIMLARI GÖRÜNTÜLEYİN"}</span><div role="tablist" aria-label={isEn ? "Regional implications" : "Bölgesel çıkarımlar"}>{markets[lang].map((market, i) => <button id={`article-region-tab-${i}`} role="tab" aria-selected={region === i} aria-controls="article-region-panel" tabIndex={region === i ? 0 : -1} onKeyDown={(event) => moveTab(event, i, markets[lang].length, setRegion)} onClick={() => setRegion(i)} key={market[0]}>{market[0]}</button>)}</div><div id="article-region-panel" role="tabpanel" aria-labelledby={`article-region-tab-${region}`} tabIndex={0}><p>{isEn ? "The relevant operating context, institutional constraints, data availability, and adoption capacity may differ. No region-specific conclusion is asserted without approved supporting content." : "İlgili işletim bağlamı, kurumsal kısıtlar, veri kullanılabilirliği ve benimseme kapasitesi farklılaşabilir. Onaylı destekleyici içerik olmadan bölgeye özgü sonuç ileri sürülmez."}</p><strong>{isEn ? "Question for local validation" : "Yerel doğrulama sorusu"}</strong><p>{isEn ? `Which assumptions about decision rights and data readiness do not transfer cleanly to ${markets[lang][region][0]}?` : `Karar hakları ve veri hazırlığına ilişkin hangi varsayımlar ${markets[lang][region][0]} bağlamına doğrudan taşınamaz?`}</p></div></section>
         <section id="method" className="method"><strong>{isEn ? "Method and content status" : "Yöntem ve içerik durumu"}</strong><p>{article.methodology}</p><button className="source-link" type="button" onClick={openSources}>{isEn ? "Sources and methodology" : "Kaynaklar ve yöntem"}</button></section>
       </div></div>
       {sources && <div className="provenance-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && closeSources()}><aside ref={sourceDrawer} className="provenance-drawer" role="dialog" aria-modal="true" aria-labelledby="provenance-title"><button ref={sourceCloseButton} type="button" onClick={closeSources} aria-label={isEn ? "Close sources" : "Kaynakları kapat"}>×</button><span className="eyebrow">{isEn ? "SOURCES AND METHODOLOGY" : "KAYNAKLAR VE YÖNTEM"}</span><h2 id="provenance-title">{isEn ? "Provenance record" : "Kaynak kaydı"}</h2><dl><div><dt>{isEn ? "Source basis" : "Kaynak temeli"}</dt><dd>{article.source}</dd></div>{article.sources.map((source) => <div key={source.label}><dt>{source.label}</dt><dd>{source.url ? <a href={source.url} target="_blank" rel="noreferrer">{source.note} <span aria-hidden="true">↗</span></a> : source.note}</dd></div>)}<div><dt>{isEn ? "Data period" : "Veri dönemi"}</dt><dd>{article.dataPeriod}</dd></div><div><dt>{isEn ? "Definition" : "Tanım"}</dt><dd>{article.frameworkTitle}</dd></div><div><dt>{isEn ? "Method" : "Yöntem"}</dt><dd>{article.methodology}</dd></div><div><dt>{isEn ? "Confidence" : "Güven düzeyi"}</dt><dd>{article.confidence}</dd></div><div><dt>{isEn ? "Last review" : "Son inceleme"}</dt><dd>{article.dateLabel}</dd></div></dl></aside></div>}
-      <section className="cta-band compact-band"><h2>{isEn ? "Move from this perspective to your specific decision." : "Bu perspektiften kurumunuza özgü karara geçin."}</h2><p>{isEn ? "A prepared conversation grounded in the issue, evidence, and choice on your agenda." : "Gündeminizdeki konuya, kanıta ve tercihe dayalı hazırlıklı bir görüşme."}</p><a className="button light" href={`/${lang}/${m.privateBriefing}`}>{isEn ? "Request a private briefing" : "Özel brifing talep edin"}</a></section>
+      <section className="cta-band compact-band"><h2>{isEn ? "Move from this perspective to your specific decision." : "Bu perspektiften kurumunuza özgü karara geçin."}</h2><p>{isEn ? "Describe the decision in a few sentences. Ahmed Furkan Gul reads every message and replies personally." : "Kararı birkaç cümleyle anlatın. Ahmed Furkan Gul her mesajı okur ve kişisel olarak yanıtlar."}</p><a className="button light" href={`/${lang}/${m.contact}${engagement ? `?topic=${engagement.key}` : ""}`}>{isEn ? "Discuss your decision" : "Kararınızı konuşalım"}</a></section>
     </article>
   );
 }
@@ -804,7 +703,7 @@ export function PrivateBriefingPage({ lang }: { lang: Lang }) {
       <IntelligenceHero label={isEn ? "PRIVATE EXECUTIVE BRIEFING" : "ÖZEL YÖNETİCİ BRİFİNGİ"} title={isEn ? "Move from a published perspective to your specific decision." : "Yayımlanmış bir perspektiften kurumunuza özgü karara geçin."} intro={isEn ? "A serious, prepared executive discussion—not a promotional consultation." : "Promosyon amaçlı bir danışmanlık görüşmesi değil; ciddi ve hazırlıklı bir yönetici görüşmesi."}/>
       <section className="briefing-request">
         <div><span className="eyebrow">{isEn ? "HOW THE CONVERSATION BEGINS" : "GÖRÜŞME NASIL BAŞLAR"}</span><h2>{isEn ? "Bring the decision, the evidence, and the tension." : "Kararı, kanıtı ve gerilimi birlikte ele alalım."}</h2><ol><li><span>01</span>{isEn ? "You share the context without restricted material." : "Kısıtlı materyal paylaşmadan bağlamı aktarırsınız."}</li><li><span>02</span>{isEn ? "Ganrich reviews the decision and prepares the relevant questions." : "Ganrich kararı inceler ve ilgili sorulara hazırlanır."}</li><li><span>03</span>{isEn ? "The discussion focuses on choices, evidence, and next action." : "Görüşme tercihlere, kanıta ve sonraki uygulamaya odaklanır."}</li></ol></div>
-        {status === "sent" ? <div className="form-success" role="status"><span>✓</span><h2>{isEn ? "Your briefing request has been received." : "Brifing talebiniz alındı."}</h2><p>{isEn ? "We will review the decision context before responding. Please do not send confidential material by email at this stage." : "Yanıt vermeden önce karar bağlamını inceleyeceğiz. Bu aşamada e-posta ile gizli materyal göndermeyin."}</p></div> : <form onSubmit={submit}><label>{isEn ? "What decision is being considered?" : "Hangi karar değerlendiriliyor?"}<textarea name="decision" minLength={15} required/></label><label>{isEn ? "Why is it on the agenda now?" : "Bu karar neden şimdi gündemde?"}<textarea name="context" minLength={30} required/></label><label>{isEn ? "Organization" : "Kurum"}<input name="organization" autoComplete="organization" required/></label><label>{isEn ? "Region" : "Coğrafya"}<select name="region" defaultValue="" required><option value="" disabled>{isEn ? "Select a region" : "Bir coğrafya seçin"}</option>{markets[lang].map((market) => <option key={market[0]}>{market[0]}</option>)}</select></label><label>{isEn ? "Preferred discussion format" : "Tercih edilen görüşme biçimi"}<select name="interest" defaultValue="" required><option value="" disabled>{isEn ? "Select a format" : "Bir format seçin"}</option>{formats.map((format) => <option key={format}>{format}</option>)}</select></label><label>{isEn ? "Which stakeholders are involved?" : "Hangi paydaşlar sürece dahil?"}<input name="role"/></label><label>{isEn ? "Name" : "Ad Soyad"}<input name="name" autoComplete="name" minLength={2} required/></label><label>{isEn ? "Work email" : "İş e-postası"}<input name="email" type="email" autoComplete="email" required/></label><label className="sr-only" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off"/></label><label className="marketing-choice"><input name="privacyAcknowledged" type="checkbox" value="yes" required/><span>{isEn ? "I have read the privacy notice and understand how this request will be handled." : "Gizlilik bildirimini okudum ve bu talebin nasıl işleneceğini anladım."}</span></label><p className="jit-notice">{isEn ? "Your details are stored securely to review and respond to this request. Do not include confidential, restricted, or sensitive data." : "Bilgileriniz bu talebi incelemek ve yanıtlamak amacıyla güvenli biçimde saklanır. Gizli, kısıtlı veya hassas bilgi eklemeyin."} <a href={`/${lang}/${routeMap[lang].privacy}`}>{isEn ? "Privacy notice" : "Gizlilik bildirimi"}</a></p>{status === "error" && <p className="form-error" role="alert">{message} <a href="mailto:furkangul@gmail.com">{isEn ? "Use direct email." : "Doğrudan e-posta kullanın."}</a></p>}<button className="button" type="submit" disabled={status === "sending"}>{status === "sending" ? (isEn ? "Sending…" : "Gönderiliyor…") : (isEn ? "Request the briefing" : "Brifing talep edin")}</button></form>}
+        {status === "sent" ? <div className="form-success" role="status"><span>✓</span><h2>{isEn ? "Your briefing request has been received." : "Brifing talebiniz alındı."}</h2><p>{isEn ? "We will review the decision context before responding. Please do not send confidential material by email at this stage." : "Yanıt vermeden önce karar bağlamını inceleyeceğiz. Bu aşamada e-posta ile gizli materyal göndermeyin."}</p></div> : <form onSubmit={submit}><label>{isEn ? "What decision is being considered?" : "Hangi karar değerlendiriliyor?"}<textarea name="decision" minLength={15} required/></label><label>{isEn ? "Why is it on the agenda now?" : "Bu karar neden şimdi gündemde?"}<textarea name="context" minLength={30} required/></label><label>{isEn ? "Organization" : "Kurum"}<input name="organization" autoComplete="organization" required/></label><label>{isEn ? "Region" : "Coğrafya"}<select name="region" defaultValue="" required><option value="" disabled>{isEn ? "Select a region" : "Bir coğrafya seçin"}</option>{markets[lang].map((market) => <option key={market[0]}>{market[0]}</option>)}</select></label><label>{isEn ? "Preferred discussion format" : "Tercih edilen görüşme biçimi"}<select name="interest" defaultValue="" required><option value="" disabled>{isEn ? "Select a format" : "Bir format seçin"}</option>{formats.map((format) => <option key={format}>{format}</option>)}</select></label><label>{isEn ? "Which stakeholders are involved?" : "Hangi paydaşlar sürece dahil?"}<input name="role"/></label><label>{isEn ? "Name" : "Ad Soyad"}<input name="name" autoComplete="name" minLength={2} required/></label><label>{isEn ? "Work email" : "İş e-postası"}<input name="email" type="email" autoComplete="email" required/></label><label className="sr-only" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off"/></label><label className="marketing-choice"><input name="privacyAcknowledged" type="checkbox" value="yes" required/><span>{isEn ? "I have read the privacy notice and understand how this request will be handled." : "Gizlilik bildirimini okudum ve bu talebin nasıl işleneceğini anladım."}</span></label><p className="jit-notice">{isEn ? "Your details are stored securely to review and respond to this request. Do not include confidential, restricted, or sensitive data." : "Bilgileriniz bu talebi incelemek ve yanıtlamak amacıyla güvenli biçimde saklanır. Gizli, kısıtlı veya hassas bilgi eklemeyin."} <a href={`/${lang}/${routeMap[lang].privacy}`}>{isEn ? "Privacy notice" : "Gizlilik bildirimi"}</a></p>{status === "error" && <p className="form-error" role="alert">{message} <a href="mailto:furkangul@ganrichadvisory.com">{isEn ? "Use direct email." : "Doğrudan e-posta kullanın."}</a></p>}<button className="button" type="submit" disabled={status === "sending"}>{status === "sending" ? (isEn ? "Sending…" : "Gönderiliyor…") : (isEn ? "Request the briefing" : "Brifing talep edin")}</button></form>}
       </section>
     </>
   );

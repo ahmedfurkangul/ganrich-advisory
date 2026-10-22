@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import "./globals.css";
+import "./practice.css";
 
 export const metadata: Metadata = {
   title: "Ganrich Advisory",
   description:
-    "Strategic judgment, regional fluency, and applied AI for consequential decisions.",
+    "Founder-led strategy advice for owners and leadership teams of established Turkish companies.",
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",

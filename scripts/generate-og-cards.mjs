@@ -12,11 +12,15 @@ const bronze = "#765f4d";
 
 const cards = {
   en: [
-    ["home", "STRATEGIC ADVISORY", "Clarity for consequential decisions."],
-    ["expertise", "EXPERTISE", "The decision comes first."],
-    ["markets", "MARKETS", "Context changes the answer."],
+    ["home", "INDEPENDENT STRATEGY ADVICE", "For the next stage of growth."],
+    ["serviceMarketEntry", "MARKET ENTRY DECISION SPRINT", "Where to expand, how, and how much to commit."],
+    ["serviceOperatingModel", "OPERATING MODEL REVIEW", "Who decides what, as the business outgrows its founding."],
+    ["serviceAiValue", "AI VALUE DIAGNOSTIC", "Where AI creates measurable value, and what must be true first."],
+    ["howWeWork", "HOW WE WORK", "Senior attention, explicit evidence, a written result."],
+    ["expertise", "EXPERTISE", "Three engagements, each built around one decision."],
+    ["markets", "TÜRKİYE → GULF", "What has changed, and what it does not settle."],
     ["insights", "INSIGHTS", "Ideas made for use."],
-    ["decisionLab", "DECISION LAB", "Work on the decision."],
+    ["decisionLab", "DECISION LAB", "Structure a decision before you discuss it."],
     ["decisionAtlas", "DECISION ATLAS", "Begin with the decision."],
     ["decisionFramer", "DECISION FRAMER", "Turn ambiguity into a decision brief."],
     ["marketCompass", "MARKET ENTRY COMPASS", "Compare opportunity with readiness."],
@@ -24,8 +28,8 @@ const cards = {
     ["aiValueLens", "AI VALUE LENS", "Begin with value. Keep judgment accountable."],
     ["decisionLabChangelog", "DECISION LAB CHANGELOG", "What is live. What changed. What comes next."],
     ["privateBriefing", "PRIVATE EXECUTIVE BRIEFING", "Move from perspective to a prepared discussion."],
-    ["about", "ABOUT", "Independent thinking for decisions that do not fit a template."],
-    ["contact", "CONTACT", "Share the context. We will come prepared."],
+    ["about", "ABOUT", "A founder-led practice, small by design."],
+    ["contact", "CONTACT", "Describe the decision in a few sentences."],
     ["trust", "PRIVACY + TRUST", "Trust should be designed into the experience."],
     ["legal", "LEGAL", "Clear terms for a professional relationship."],
     ["article-decision-quality-applied-ai", "APPLIED AI · DECISION QUALITY", "Decision quality in the age of applied AI"],
@@ -41,11 +45,15 @@ const cards = {
     ["categoryOperatingModel", "INSIGHTS · OPERATING MODEL", "Operating model."],
   ],
   tr: [
-    ["home", "STRATEJİK DANIŞMANLIK", "Kritik kararlar için netlik."],
-    ["expertise", "UZMANLIK", "Önce karar gelir."],
-    ["markets", "COĞRAFYALAR", "Bağlam, yanıtı değiştirir."],
+    ["home", "BAĞIMSIZ STRATEJİ DANIŞMANLIĞI", "Büyümenin bir sonraki aşaması için."],
+    ["serviceMarketEntry", "PAZARA GİRİŞ KARAR SPRİNTİ", "Nereye, nasıl ve ne kadar taahhütle açılmalı?"],
+    ["serviceOperatingModel", "İŞLETİM MODELİ İNCELEMESİ", "Şirket büyürken hangi kararı kim verir?"],
+    ["serviceAiValue", "YAPAY ZEKÂ DEĞER TEŞHİSİ", "Yapay zekâ nerede ölçülebilir değer yaratır?"],
+    ["howWeWork", "ÇALIŞMA BİÇİMİMİZ", "Kıdemli ilgi, açık kanıt, yazılı sonuç."],
+    ["expertise", "UZMANLIK", "Her biri tek bir karar etrafında kurulu üç çalışma."],
+    ["markets", "TÜRKİYE → KÖRFEZ", "Neler değişti, neleri çözmedi?"],
     ["insights", "İÇGÖRÜLER", "Kullanılmak için geliştirilen fikirler."],
-    ["decisionLab", "KARAR LABORATUVARI", "Karar üzerinde çalışın."],
+    ["decisionLab", "KARAR LABORATUVARI", "Bir kararı konuşmadan önce yapılandırın."],
     ["decisionAtlas", "KARAR ATLASI", "Karardan başlayın."],
     ["decisionFramer", "KARAR ÇERÇEVELEYİCİ", "Belirsizliği karar özetine dönüştürün."],
     ["marketCompass", "PAZARA GİRİŞ PUSULASI", "Fırsatı hazırlıkla karşılaştırın."],
@@ -53,8 +61,8 @@ const cards = {
     ["aiValueLens", "YAPAY ZEKÂ DEĞER MERCEĞİ", "Değerle başlayın. Muhakemeyi sorumlu tutun."],
     ["decisionLabChangelog", "KARAR LABORATUVARI", "Neler yayında. Neler değişti. Sırada ne var."],
     ["privateBriefing", "ÖZEL YÖNETİCİ BRİFİNGİ", "Bakıştan hazırlıklı görüşmeye geçin."],
-    ["about", "HAKKIMIZDA", "Bir şablona sığmayan kararlar için bağımsız düşünce."],
-    ["contact", "İLETİŞİM", "Bağlamı paylaşın. Biz hazırlıklı gelelim."],
+    ["about", "HAKKIMIZDA", "Kurucu liderliğinde, bilinçli olarak küçük."],
+    ["contact", "İLETİŞİM", "Kararı birkaç cümleyle anlatın."],
     ["trust", "GİZLİLİK + GÜVEN", "Güven, deneyimin içine tasarlanmalıdır."],
     ["legal", "HUKUKİ BİLGİLENDİRME", "Profesyonel ilişki için açık koşullar."],
     ["article-uygulamali-yapay-zeka-karar-kalitesi", "UYGULAMALI YAPAY ZEKÂ · KARAR KALİTESİ", "Uygulamalı yapay zekâ çağında karar kalitesi"],
@@ -95,7 +103,7 @@ function wrap(value, max = 31) {
 }
 
 function overlay(eyebrow, title, lang) {
-  const lines = wrap(title, title.length > 67 ? 29 : 33);
+  const lines = wrap(title, title.length > 67 ? 26 : 22);
   const size = lines.length > 3 ? 45 : lines.length > 2 ? 50 : 56;
   const lineHeight = Math.round(size * 1.02);
   const firstY = lines.length > 3 ? 229 : 248;
