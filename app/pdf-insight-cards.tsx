@@ -15,7 +15,7 @@ export function PdfInsightHubCards({ lang }: { lang: Lang }) {
   useEffect(() => {
     const languageFilter = lang === "tr" ? "&language=tr" : "";
     fetch(`/api/pdf-insights?status=published${languageFilter}`)
-      .then((response) => response.ok ? response.json() : { insights: [] })
+      .then(async (response) => response.ok ? await response.json() as { insights?: PdfInsight[] } : { insights: [] })
       .then((data) => setItems(data.insights ?? []))
       .catch(() => setItems([]));
   }, [lang]);

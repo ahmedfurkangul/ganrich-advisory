@@ -32,7 +32,7 @@ function ExpertiseMatrix({ lang, limit }: { lang: Lang; limit?: number }) {
   return <div className="expertise-grid">{rows.map((item, index) => <ExpertiseRow key={item[0]} lang={lang} item={item} index={index}/>)}</div>;
 }
 
-function PageHero({ eyebrow, title, intro, aside }: { eyebrow: string; title: string; intro: string; aside?: string }) {
+export function PageHero({ eyebrow, title, intro, aside }: { eyebrow: string; title: string; intro: string; aside?: string }) {
   return <section className="page-hero"><div><span className="eyebrow">{eyebrow}</span><h1>{title}</h1></div><div><p>{intro}</p>{aside && <small>{aside}</small>}</div><div className="threshold-glyph" aria-hidden="true"><i/><span/><b/></div></section>;
 }
 

@@ -1,0 +1,52 @@
+// Cloudflare Workers configuration for Ganrich Advisory.
+//
+// The top level is the local development and test setup (placeholder D1 id,
+// local R2), matching what the Sites starter simulated. Real deployments pick
+// a named environment at build time:
+//
+//   CLOUDFLARE_ENV=preview npm run build && npx wrangler deploy
+//
+// scripts/deploy.sh wraps those steps. Resource ids here are identifiers, not
+// secrets; secrets go in `wrangler secret put` (see .env.example).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ganrich-advisory",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "site-creator-d1",
+      "database_id": "00000000-0000-4000-8000-000000000000",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "r2_buckets": [{ "binding": "DOCUMENTS", "bucket_name": "site-creator-r2" }],
+  "env": {
+    // Temporary review address on workers.dev. Its own D1/R2, never production data.
+    "preview": {
+      "name": "ganrich-preview",
+      "workers_dev": true,
+      "preview_urls": false,
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "ganrich-preview-db",
+          "database_id": "0503dacb-b558-441f-ad6f-c3510b90efe5",
+          "migrations_dir": "drizzle"
+        }
+      ],
+      "r2_buckets": [{ "binding": "DOCUMENTS", "bucket_name": "ganrich-preview-docs" }],
+      "vars": {
+        "NEXT_PUBLIC_SITE_URL": "https://ganrichadvisory.com",
+        "EDITOR_AUTH": "access",
+        "ACCESS_TEAM_DOMAIN": "fse2-planlar-pages.cloudflareaccess.com",
+        "ACCESS_AUD": "",
+        "EDITOR_EMAILS": "furkangul@ganrichadvisory.com,ahmedfurkangul@gmail.com"
+      }
+    }
+    // A "production" environment is added only when the domain cutover is
+    // approved; see DEPLOYMENT.md.
+  }
+}
