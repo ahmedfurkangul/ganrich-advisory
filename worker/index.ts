@@ -6,6 +6,7 @@ interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
   DOCUMENTS: R2Bucket;
+  EDITOR_AUTH?: string;
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -26,6 +27,22 @@ interface ExecutionContext {
 // dangerouslyAllowSVG: true in next.config.js and uncomment below:
 // const imageConfig: ImageConfig = { dangerouslyAllowSVG: true };
 
+// Identity headers that only ChatGPT Sites hosting may set. Anywhere else a
+// client could send them, so they are dropped before the app sees the request.
+const SITES_IDENTITY_HEADERS = [
+  "oai-authenticated-user-email",
+  "oai-authenticated-user-full-name",
+  "oai-authenticated-user-full-name-encoding",
+];
+
+function withoutUntrustedIdentity(request: Request, env: Env): Request {
+  if (env.EDITOR_AUTH === "sites") return request;
+  if (!SITES_IDENTITY_HEADERS.some(name => request.headers.has(name))) return request;
+  const headers = new Headers(request.headers);
+  for (const name of SITES_IDENTITY_HEADERS) headers.delete(name);
+  return new Request(request, { headers });
+}
+
 const worker = {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
@@ -41,7 +58,7 @@ const worker = {
       }, allowedWidths);
     }
 
-    return handler.fetch(request, env, ctx);
+    return handler.fetch(withoutUntrustedIdentity(request, env), env, ctx);
   },
 };
 
