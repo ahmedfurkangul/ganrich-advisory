@@ -21,7 +21,7 @@ export function normalizeTeamDomain(value: string): string {
   return value.trim().replace(/^https?:\/\//i, "").replace(/\/+$/, "").toLowerCase();
 }
 
-function base64UrlToBytes(value: string): Uint8Array {
+function base64UrlToBytes(value: string): Uint8Array<ArrayBuffer> {
   const base64 = value.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(value.length / 4) * 4, "=");
   const binary = atob(base64);
   const bytes = new Uint8Array(binary.length);

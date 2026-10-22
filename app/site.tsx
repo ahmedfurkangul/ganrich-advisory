@@ -10,6 +10,7 @@ const ExpertisePage = lazy(() => import("./marketing-pages").then(m => ({default
 const InsightsPage = lazy(() => import("./marketing-pages").then(m => ({default:m.InsightsPage})));
 const InsightCategoryPage = lazy(() => import("./marketing-pages").then(m => ({default:m.InsightCategoryPage})));
 const AboutPage = lazy(() => import("./marketing-pages").then(m => ({default:m.AboutPage})));
+const PageHero = lazy(() => import("./marketing-pages").then(m => ({default:m.PageHero})));
 const ContactExperience = lazy(() => import("./contact-experience").then(m => ({default:m.ContactExperience})));
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
 import { AnalyticsBridge } from "./analytics";

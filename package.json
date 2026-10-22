@@ -13,7 +13,10 @@
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "release:preflight": "node scripts/release-preflight.mjs",
     "og:generate": "node scripts/generate-og-cards.mjs",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "typecheck": "tsc --noEmit",
+    "cf-typegen": "wrangler types --config wrangler.jsonc",
+    "deploy:preview": "scripts/deploy.sh preview"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",
