@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { findPdfInsight } from "../db/pdf-insights";
-import { getChatGPTUser, requireChatGPTUser } from "./chatgpt-auth";
 import { routeMap, type Lang } from "./content";
+import { getEditor, requireEditor } from "./editor-auth";
 import { PdfInsightReport, PdfInsightStudio } from "./pdf-insights";
 import { SiteLayout } from "./site";
 import { absoluteUrl, SITE_NAME, SITE_ORIGIN } from "./site-config";
 
 export async function PdfStudioRoute({ lang }: { lang: Lang }) {
-  const returnTo = lang === "en" ? "/en/insights/pdf-studio" : "/tr/icgoruler/pdf-studyosu";
-  const user = await requireChatGPTUser(returnTo);
+  const user = await requireEditor();
   return <SiteLayout lang={lang} route={routeMap[lang].insights}><PdfInsightStudio lang={lang} editor={user.displayName}/></SiteLayout>;
 }
 
@@ -55,7 +54,7 @@ export async function PdfReportRoute({ lang, slug }: { lang: Lang; slug: string 
   if (!insight) notFound();
   const publicPage = insight.status === "published" && insight.gatingModel !== "private";
   if (!publicPage) {
-    const user = await getChatGPTUser();
+    const user = await getEditor();
     if (!user) notFound();
   }
   const path = lang === "en" ? `/en/insights/report/${insight.slug}` : `/tr/icgoruler/rapor/${insight.slug}`;

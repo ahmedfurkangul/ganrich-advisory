@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { editorFromRequest } from "../../../../editor-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,7 @@ export async function GET(request: Request, context: Context) {
     .first<{ pdf_key: string; original_filename: string; status: string; gating_model: string }>();
   if (!record) return NextResponse.json({ error: "Document not found." }, { status: 404 });
   const publicDocument = record.status === "published" && record.gating_model === "fully_ungated";
-  if (!publicDocument && !request.headers.get("oai-authenticated-user-email")) {
+  if (!publicDocument && !(await editorFromRequest(request))) {
     return NextResponse.json({ error: "An authenticated editor is required." }, { status: 401 });
   }
 

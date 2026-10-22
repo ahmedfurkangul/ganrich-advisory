@@ -75,7 +75,7 @@ export function PdfInsightStudio({ lang, editor }: { lang: Lang; editor: string 
 
   const refresh = async (select?: string) => {
     const response = await fetch("/api/pdf-insights", { cache: "no-store" });
-    const data = await response.json();
+    const data = await response.json() as { insights: PdfInsight[]; error?: string };
     if (!response.ok) throw new Error(data.error ?? "Unable to load PDF insights.");
     setItems(data.insights);
     const id = select ?? selectedId ?? data.insights[0]?.id;
@@ -125,7 +125,7 @@ export function PdfInsightStudio({ lang, editor }: { lang: Lang; editor: string 
     if (!draft) return;
     const body = { ...draft, status: publish ? "published" : "ready_for_preview" };
     const response = await fetch("/api/pdf-insights", { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
-    const data = await response.json();
+    const data = await response.json() as { insight?: PdfInsight; error?: string };
     if (!response.ok) {
       setNotice(data.error ?? (isEn ? "The insight could not be saved." : "İçgörü kaydedilemedi."));
       return;
