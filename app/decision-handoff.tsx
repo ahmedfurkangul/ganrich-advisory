@@ -1,0 +1,11 @@
+"use client";
+import { useState } from 'react';
+import { Lang, routeMap } from './content';
+export const HANDOFF_KEY='ganrich-decision-handoff';
+export function takeHandoff(target:string):Record<string,string>|null{
+ try{const raw=sessionStorage.getItem(HANDOFF_KEY);if(!raw)return null;sessionStorage.removeItem(HANDOFF_KEY);const item=JSON.parse(raw);if(item.target!==target||Date.now()-item.time>15*60*1000)return null;return item.data;}catch{return null;}
+}
+export function HandoffLink({lang,target='contact',data,children}:{lang:Lang;target?:string;data:Record<string,string>;children:React.ReactNode}){
+ const [failed,setFailed]=useState(false);return <><a href={'/'+lang+'/'+routeMap[lang][target]} onClick={event=>{try{sessionStorage.setItem(HANDOFF_KEY,JSON.stringify({target,time:Date.now(),data}));}catch{event.preventDefault();setFailed(true);}}}>{children}</a>{failed&&<span role="alert">{lang==='en'?'Browser storage is unavailable. Open Contact from the navigation and copy your summary manually.':'Tarayıcı depolaması kullanılamıyor. Menüden iletişimi açıp özetinizi elle kopyalayın.'}</span>}</>;
+}
+export function ToolIntro({lang,time,output,onExample,onClear}:{lang:Lang;time:string;output:string;onExample:()=>void;onClear:()=>void}){const [example,setExample]=useState(false);return <aside className="tool-onboarding"><div><p className="kicker">{lang==='en'?'Before you begin':'Başlamadan önce'}</p><p><strong>{time}</strong> · {output}</p><p>{lang==='en'?'Use your own non-confidential assumptions or load a fictional example. No email required. Inputs are not added to the page URL.':'Gizli bilgi içermeyen varsayımlarınızı kullanın veya kurgusal örneği yükleyin. E-posta gerekmez. Girdiler sayfa adresine eklenmez.'}</p></div><div className="tool-start-actions"><button className="button outline" type="button" onClick={()=>{onExample();setExample(true);}}>{lang==='en'?'Try a worked example':'Örnekle deneyin'}</button><button type="button" className="text-link" onClick={()=>{onClear();setExample(false);}}>{lang==='en'?'Clear inputs':'Girdileri temizle'}</button>{example&&<small role="status">{lang==='en'?'Fictional example loaded. Edit the inputs to explore.':'Kurgusal örnek yüklendi. Girdileri değiştirerek inceleyin.'}</small>}</div></aside>}

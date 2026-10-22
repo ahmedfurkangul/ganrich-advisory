@@ -12,7 +12,7 @@ const bronze = "#765f4d";
 
 const cards = {
   en: [
-    ["home", "STRATEGIC ADVISORY", "Clarity for consequential decisions."],
+    ["home", "STRATEGIC ADVISORY", "The next move. Thought through."],
     ["expertise", "EXPERTISE", "The decision comes first."],
     ["markets", "MARKETS", "Context changes the answer."],
     ["insights", "INSIGHTS", "Ideas made for use."],
@@ -41,7 +41,7 @@ const cards = {
     ["categoryOperatingModel", "INSIGHTS · OPERATING MODEL", "Operating model."],
   ],
   tr: [
-    ["home", "STRATEJİK DANIŞMANLIK", "Kritik kararlar için netlik."],
+    ["home", "STRATEJİK DANIŞMANLIK", "Sonraki adım. Sağlam bir kararla."],
     ["expertise", "UZMANLIK", "Önce karar gelir."],
     ["markets", "COĞRAFYALAR", "Bağlam, yanıtı değiştirir."],
     ["insights", "İÇGÖRÜLER", "Kullanılmak için geliştirilen fikirler."],

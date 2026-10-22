@@ -1,3 +1,4 @@
+import { notes } from './advisory-note-content';
 import { listPdfInsights } from "../db/pdf-insights";
 import { insightArticles, insightHref, Lang, routeMap } from "./content";
 import { absoluteUrl } from "./site-config";
@@ -59,7 +60,12 @@ export async function renderInsightFeed(lang: Lang) {
     </item>`,
     };
   });
-  const feedItems = [...articleItems, ...reportItems].sort((a, b) => (b.published?.getTime() ?? 0) - (a.published?.getTime() ?? 0));
+  const noteItems = notes[lang].map(note => {
+    const link = absoluteUrl(`/${lang}/${routeMap[lang][note.key]}`);
+    const published = validDate('2026-10-22');
+    return {published, xml: `<item><title>${escapeXml(note.title)}</title><link>${escapeXml(link)}</link><guid isPermaLink="true">${escapeXml(link)}</guid><description>${escapeXml(note.thesis)}</description><category>Decision notes</category><pubDate>${published!.toUTCString()}</pubDate></item>`};
+  });
+  const feedItems = [...noteItems, ...articleItems, ...reportItems].sort((a, b) => (b.published?.getTime() ?? 0) - (a.published?.getTime() ?? 0));
   const items = feedItems.map(item => item.xml).join("\n");
   const lastBuildDate = feedItems[0]?.published?.toUTCString() ?? new Date().toUTCString();
 

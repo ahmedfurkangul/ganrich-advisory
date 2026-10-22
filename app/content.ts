@@ -1,3 +1,4 @@
+import { advisoryRoutes } from './advisory-routes';
 import { phaseTwoInsightArticles, phaseTwoInsights } from "./phase-two-insights";
 
 export type Lang = "en" | "tr";
@@ -102,6 +103,7 @@ export const insightCategories: Record<Lang, InsightCategory[]> = {
 
 export const routeMap: Record<Lang, Record<string, string>> = {
   en: {
+    ...advisoryRoutes.en,
     expertise: "expertise",
     markets: "markets",
     insights: "insights",
@@ -139,6 +141,7 @@ export const routeMap: Record<Lang, Record<string, string>> = {
     categoryOperatingModel: "insights/category/operating-model",
   },
   tr: {
+    ...advisoryRoutes.tr,
     expertise: "uzmanlik",
     markets: "cografyalar",
     insights: "icgoruler",

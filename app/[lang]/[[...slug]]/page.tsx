@@ -1,3 +1,4 @@
+import { advisoryMeta } from "../../advisory-meta";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Site from "../../site";
@@ -8,7 +9,7 @@ type Props = { params: Promise<{ lang: string; slug?: string[] }> };
 
 const metaCopy = {
   en: {
-    home: ["Ganrich Advisory | Strategy, Transformation and Applied AI", "Ganrich Advisory is a boutique strategy and management consulting firm helping leaders shape growth, transformation, operating models, and applied AI across Türkiye, MENA, Europe, and Africa."],
+    home: ["Ganrich Advisory | Strategy, Transformation and Applied AI", "Independent advisory for businesses entering new markets, founders building stronger organizations, and industrial teams putting AI to work."],
     expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
     markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
     insights: ["Insights | Ganrich Advisory", "Strategic perspectives, executive briefings, reports, frameworks, and data notes designed to be used."],
@@ -29,7 +30,7 @@ const metaCopy = {
     trust: ["Privacy + Trust | Ganrich Advisory", "Privacy choices, current-site facts, AI transparency, and legal information at Ganrich Advisory."],
   },
   tr: {
-    home: ["Ganrich Advisory | Strateji, Dönüşüm ve Uygulamalı Yapay Zekâ", "Ganrich Advisory; Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika’da büyüme, dönüşüm, işletim modeli ve uygulamalı yapay zekâ gündemlerinde liderlere destek sunan butik bir strateji ve yönetim danışmanlığı firmasıdır."],
+    home: ["Ganrich Advisory | Strateji, Dönüşüm ve Uygulamalı Yapay Zekâ", "Yeni pazarlara açılan işletmeler, kurumlarını güçlendiren kurucular ve yapay zekâyı işe dönüştüren sanayi ekipleri için bağımsız danışmanlık."],
     expertise: ["Uzmanlık | Ganrich Advisory", "Strateji, büyüme, işletim modeli, yapay zekâ, organizasyon ve uygulama için karar odaklı uzmanlık."],
     markets: ["Coğrafyalar | Ganrich Advisory", "Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika için pazara özgü kanıtlara dayalı bölgesel bakışlar."],
     insights: ["İçgörüler | Ganrich Advisory", "Kullanılmak için geliştirilen stratejik bakışlar, yönetici bilgilendirmeleri, raporlar, çerçeveler ve veri notları."],
@@ -61,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? [`${article.title} | Ganrich Advisory`, article.thesis]
     : category
       ? [`${category.label} ${lang === "en" ? "Insights" : "İçgörüleri"} | Ganrich Advisory`, category.description]
-    : (metaCopy[lang][metaKind] ?? metaCopy[lang].home);
+    : (advisoryMeta(lang, kind) ?? metaCopy[lang][metaKind] ?? metaCopy[lang].home);
   const socialCard = article
     ? `/og/${lang}/article-${article.slug}.png`
     : `/og/${lang}/${category ? category.key : metaKind in metaCopy[lang] ? metaKind : "home"}.png`;
@@ -101,7 +102,7 @@ export default async function LocalizedPage({ params }: Props) {
   const currentUrl = absoluteUrl(`/${lang}${route ? `/${route}` : ""}`);
   const organizationId = absoluteUrl("/#organization");
   const personId = absoluteUrl(`/${lang}/${routeMap[lang].about}#ahmed-furkan-gul`);
-  const title = article?.title ?? category?.label ?? (metaCopy[lang][kind as keyof typeof metaCopy.en]?.[0]?.split("|")[0].trim() || SITE_NAME);
+  const title = article?.title ?? category?.label ?? advisoryMeta(lang, kind)?.[0]?.split("|")[0].trim() ?? (metaCopy[lang][kind as keyof typeof metaCopy.en]?.[0]?.split("|")[0].trim() || SITE_NAME);
   const parent = article || category
     ? { name: lang === "en" ? "Insights" : "İçgörüler", url: absoluteUrl(`/${lang}/${routeMap[lang].insights}`) }
     : kind.startsWith("decision") || ["marketCompass", "boardBriefBuilder", "aiValueLens"].includes(kind)
