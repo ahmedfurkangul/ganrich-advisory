@@ -14,6 +14,7 @@ const PageHero = lazy(() => import("./marketing-pages").then(m => ({default:m.Pa
 const ContactExperience = lazy(() => import("./contact-experience").then(m => ({default:m.ContactExperience})));
 const SolutionsHub = lazy(() => import("./solutions").then(m => ({default:m.SolutionsHub})));
 const SolutionPage = lazy(() => import("./solutions").then(m => ({default:m.SolutionPage})));
+const CbamReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.CbamReadinessCheck})));
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
@@ -121,6 +122,7 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "marketCompass") page = <MarketCompassPage lang={lang}/>;
   if (kind === "boardBriefBuilder") page = <BoardBriefBuilderPage lang={lang}/>;
   if (kind === "aiValueLens") page = <AIValueLensPage lang={lang}/>;
+  if (kind === "cbamCheck") page = <CbamReadinessCheck lang={lang}/>;
   if (kind === "decisionLabChangelog") page = <DecisionLabChangelogPage lang={lang}/>;
   if (kind === "privateBriefing") page = <PrivateBriefingPage lang={lang}/>;
   if (kind === "about") page = <AboutPage lang={lang}/>;

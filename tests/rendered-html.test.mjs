@@ -513,3 +513,15 @@ test("retired pages redirect to the simplified paths", async () => {
     assert.match(response.headers.get("location") ?? "", target, path);
   }
 });
+
+test("publishes the CBAM readiness check in both languages and links it from the CBAM programme", async () => {
+  for (const [path, title] of [["/en/decision-lab/cbam-readiness-check", /CBAM Readiness Check \| Ganrich Advisory/], ["/tr/karar-laboratuvari/cbam-hazirlik-testi", /CBAM Hazırlık Testi \| Ganrich Advisory/]]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, title);
+    assert.match(html, /rel="canonical"/);
+  }
+  assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/decision-lab\/cbam-readiness-check"/);
+  assert.match(await (await render("/tr/karar-laboratuvari")).text(), /CBAM Hazırlık Testi/);
+});
