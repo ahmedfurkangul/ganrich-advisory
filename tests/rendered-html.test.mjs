@@ -23,14 +23,14 @@ test("server-renders the English consultancy experience", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Ganrich Advisory \| Strategy, Transformation and Applied AI<\/title>/i);
-  assert.match(html, /The next move\. Thought through\./);
-  assert.match(html, /Market Entry Decision Sprint/);
-  assert.match(html, /industrial teams putting AI to work/);
-  assert.match(html, /Start a conversation/);
+  assert.match(html, /<title>Ganrich Advisory \| EU Readiness and Strategy for Turkish Industry<\/title>/i);
+  assert.match(html, /A clear next step on EU rules and growth decisions\./);
+  assert.match(html, /Turkish industry and exporters/);
+  assert.match(html, /CBAM definitive regime/);
+  assert.match(html, /Request a first review/);
   assert.match(html, /hrefLang="tr"/);
   assert.match(html, /\/og\/en\/home\.png/);
-  assert.match(html, /sample-memo/);
+  assert.match(html, /rule-timeline/);
   assert.doesNotMatch(html, /\[EMAIL\]|\[LINKEDIN\]/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
 });
@@ -39,10 +39,10 @@ test("server-renders localized Turkish content and metadata", async () => {
   const response = await render("/tr");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Ganrich Advisory \| Strateji, Dönüşüm ve Uygulamalı Yapay Zekâ/);
-  assert.match(html, /Sonraki adım\. Sağlam bir kararla\./);
-  assert.match(html, /İşletim Modeli İncelemesi/);
-  assert.match(html, /Görüşme başlatın/);
+  assert.match(html, /Ganrich Advisory \| Türk Sanayisi için AB Uyumu ve Strateji/);
+  assert.match(html, /AB kuralları ve büyüme kararları için net bir sonraki adım\./);
+  assert.match(html, /CBAM kesin rejimi/);
+  assert.match(html, /Ön görüşme isteyin/);
   assert.match(html, /hrefLang="en"/);
   assert.match(html, /\/og\/tr\/home\.png/);
   assert.match(html, /<html lang="tr"/);
@@ -74,7 +74,6 @@ test("server-renders the bilingual strategic intelligence routes", async () => {
     ["/en/decision-lab/board-brief-builder", /Board Brief Builder/, /Write for the decision, not the archive/],
     ["/tr/karar-laboratuvari/yapay-zeka-deger-mercegi", /Yapay Zekâ Değer Merceği/, /Değer mantığını görünür kılın/],
     ["/en/decision-lab/changelog", /Decision Lab Changelog/, /Five live tools/],
-    ["/en/private-executive-briefing", /Private Executive Briefing/, /Request the briefing/],
     ["/en/insights/decision-quality-applied-ai", /Decision quality in the age of applied AI/, /24 July 2026/],
     ["/en/insights/transformation-activity-to-value", /From transformation activity to transformation value/, /A transformation becomes executable/],
     ["/en/insights/market-entry-sequence-of-commitments", /Market entry is a sequence of commitments/, /strongest entry strategies/],
@@ -139,7 +138,7 @@ test("keeps core interactions keyboard-operable and marketing JavaScript within 
   const assetSources = await Promise.all(assets.map((asset) => readFile(new URL(`../dist/client${asset}`, import.meta.url))));
   const compressedBytes = assetSources.reduce((total, source) => total + gzipSync(source).byteLength, 0);
 
-  assert.match(html, /href="\/en\/expertise\/market-entry"/);
+  assert.match(html, /href="\/en\/solutions#strategy"/);
   assert.match(html, /aria-expanded="false"/);
 
 
@@ -222,7 +221,8 @@ test("keeps principal internal links inside the published route inventory", asyn
     const html = await response.text();
     const internalLinks = [...html.matchAll(/href="(\/[^"#]+)(?:#[^"]*)?"/g)]
       .map(match => match[1].replace(/&amp;/g, "&").split("?")[0])
-      .filter(path => !path.endsWith("/feed.xml") && !path.startsWith("/assets/"));
+      // Whitepaper pages come from D1 and are listed in reports-sitemap.xml, not the static sitemap.
+      .filter(path => !path.endsWith("/feed.xml") && !path.startsWith("/assets/") && !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(path));
     for (const path of internalLinks) {
       assert.ok(sitemapPaths.has(path), `Internal link ${path} is absent from the canonical route inventory`);
     }
@@ -315,12 +315,12 @@ test("keeps notice, optional consent, and secure inquiry handling separate", asy
     readFile(new URL("../drizzle/0001_lonely_sauron.sql", import.meta.url), "utf8"),
   ]);
   const contact = await contactResponse.text();
-  const briefing = await briefingResponse.text();
 
   assert.match(contact, /stored securely to review and respond/);
   assert.match(contact, /I have read the privacy notice/);
-  assert.match(briefing, /stored securely to review and respond/);
-  assert.match(briefing, /I have read the privacy notice/);
+  // The private briefing request now uses the one contact form, with the briefing topic preselected.
+  assert.ok([301, 307, 308].includes(briefingResponse.status), `briefing status ${briefingResponse.status}`);
+  assert.match(briefingResponse.headers.get("location") ?? "", /\/en\/contact\?service=briefing$/);
   assert.match(privacySource, /Accept optional/);
   assert.match(privacySource, /Essential only/);
   assert.match(privacySource, /Manage choices/);
@@ -487,4 +487,27 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   for (const bot of ["GPTBot", "OAI-SearchBot", "ClaudeBot", "PerplexityBot", "Google-Extended"]) assert.match(robots, new RegExp(`User-Agent: ${bot}`, "i"));
   assert.equal((robots.match(/Disallow: \/en\/insights\/pdf-studio/g) ?? []).length, 2);
   assert.match(sitemap, /<loc>https:\/\/ganrichadvisory\.com\/en\/solutions\/cbam-data-readiness<\/loc>[\s\S]*?<priority>0\.8<\/priority>/);
+});
+
+test("homepage whitepapers match the solutions catalogue", async () => {
+  // Read the sources as text: the homepage copy is duplicated to stay inside its JS budget.
+  const [home, catalogue] = await Promise.all([
+    readFile(new URL("../app/home-content.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/solutions-content.ts", import.meta.url), "utf8"),
+  ]);
+  const entries = [...home.matchAll(/key: "(\w+)", title: "([^"]+)", slug: "([^"]+)"/g)];
+  assert.equal(entries.length, 6);
+  for (const [, key, title, slug] of entries) {
+    const line = catalogue.split("\n").find(l => l.includes(`key: '${key}'`) && l.includes(`slug: '${slug}'`));
+    assert.ok(line, `${key} ${slug} is in solutions-content.ts`);
+    assert.ok(line.includes(`paper: { title: '${title}'`), `${slug} title matches`);
+  }
+});
+
+test("retired pages redirect to the simplified paths", async () => {
+  for (const [path, target] of [["/en/expertise", /\/en\/solutions#strategy$/], ["/tr/uzmanlik", /\/tr\/cozumler#strategy$/], ["/en/private-executive-briefing", /\/en\/contact\?service=briefing$/]]) {
+    const response = await render(path);
+    assert.ok([301, 307, 308].includes(response.status), `${path} status ${response.status}`);
+    assert.match(response.headers.get("location") ?? "", target, path);
+  }
 });

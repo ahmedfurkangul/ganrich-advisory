@@ -2,17 +2,21 @@
 import { useState } from 'react';
 import { Lang, routeMap } from './content';
 import { EditorialHero, Conversation } from './advisory';
+import { services } from './advisory-content';
 import { solutionByKey, solutions, solutionFilterTags, solutionTags, solutionThemes } from './solutions-content';
 const url=(l:Lang,k:string)=>'/'+l+'/'+routeMap[l][k];
 const paperHref=(l:Lang,slug:string)=>l==='en'?'/en/insights/report/'+slug:'/tr/icgoruler/rapor/'+slug;
 
 function TagList({lang,tags}:{lang:Lang;tags:string[]}){return <ul className="solution-tags" aria-label={lang==='en'?'Topics':'Konular'}>{tags.map(t=><li key={t}>{t}</li>)}</ul>}
 
+const strategyLabel=(l:Lang)=>l==='en'?'Strategy and growth decisions':'Strateji ve büyüme kararları';
+
 export function SolutionsHub({lang}:{lang:Lang}){const en=lang==='en',[tag,setTag]=useState('');const visible=(key:keyof typeof solutionTags.en)=>!tag||solutionTags[lang][key].includes(tag);return <>
  <EditorialHero label={en?'Solutions':'Çözümler'} title={en?'Focused programmes for decisions new rules and markets are forcing.':'Yeni kuralların ve pazarların dayattığı kararlar için odaklı programlar.'} intro={en?'Each programme starts small: one defined question and a first step that produces evidence. How we work in detail is shared once we understand your situation.':'Her program küçük başlar: tanımlı tek bir soru ve kanıt üreten bir ilk adım. Çalışma yönteminin ayrıntısını durumunuzu anladıktan sonra paylaşırız.'}/>
- <nav className="advisory-subnav" aria-label={en?'Themes':'Temalar'}>{solutionThemes[lang].map(t=><a key={t.key} href={'#'+t.key}>{t.label}</a>)}</nav>
+ <nav className="advisory-subnav" aria-label={en?'Themes':'Temalar'}>{solutionThemes[lang].map(t=><a key={t.key} href={'#'+t.key}>{t.label}</a>)}<a href="#strategy">{strategyLabel(lang)}</a></nav>
  <section className="advisory-section solution-filter"><p className="kicker" id="solution-filter-label">{en?'Filter by topic':'Konuya göre filtreleyin'}</p><div className="solution-filter-chips" role="group" aria-labelledby="solution-filter-label"><button type="button" aria-pressed={!tag} onClick={()=>setTag('')}>{en?'All':'Tümü'}</button>{solutionFilterTags(lang).map(t=><button key={t} type="button" aria-pressed={tag===t} onClick={()=>setTag(tag===t?'':t)}>{t}</button>)}</div></section>
  {solutionThemes[lang].filter(t=>solutions[lang].some(s=>s.theme===t.key&&visible(s.key))).map(t=><section key={t.key} id={t.key} className="advisory-section solution-theme"><div className="editorial-heading"><p className="kicker">{t.label}</p><p>{t.intro}</p></div><div className="solution-grid">{solutions[lang].filter(s=>s.theme===t.key&&visible(s.key)).map(s=><article key={s.key}><p className="kicker">{s.question}</p><h3><a href={url(lang,s.key)}>{s.title}</a></h3><p>{s.tagline}</p><TagList lang={lang} tags={solutionTags[lang][s.key]}/><a className="text-link" href={url(lang,s.key)}>{en?'See the programme':'Programı inceleyin'} <span aria-hidden="true">↗</span></a></article>)}</div></section>)}
+ {!tag&&<section id="strategy" className="advisory-section solution-theme"><div className="editorial-heading"><p className="kicker">{strategyLabel(lang)}</p><p>{en?'For leadership teams facing a growth decision: which market to enter, how the business should run as it grows, and which AI opportunity deserves a real test.':'Büyüme kararıyla karşı karşıya olan yönetim ekipleri için: hangi pazara girileceği, büyürken işin nasıl yönetileceği ve hangi yapay zekâ fırsatının gerçekten denenmeye değer olduğu.'}</p></div><div className="solution-grid">{services[lang].map(s=><article key={s.key}><p className="kicker">{s.question}</p><h3><a href={url(lang,s.key)}>{s.title}</a></h3><p>{s.intro}</p><a className="text-link" href={url(lang,s.key)}>{en?'See the engagement':'Çalışmayı inceleyin'} <span aria-hidden="true">↗</span></a></article>)}</div></section>}
  <section className="advisory-section solution-note"><p>{en?'Programmes are adapted to each business. Scope, timing and fees are agreed after a first conversation.':'Programlar her işletmeye göre uyarlanır. Kapsam, takvim ve ücret ilk görüşmenin ardından birlikte belirlenir.'}</p></section>
  <Conversation lang={lang}/>
 </>}
@@ -25,5 +29,5 @@ export function SolutionPage({lang,kind}:{lang:Lang;kind:string}){const en=lang=
  <section className="advisory-section service-process" id="outcomes"><h2>{en?'What you leave with':'Elde edecekleriniz'}</h2><ul className="deliverables solution-outcomes">{s.outcomes.map(x=><li key={x}>{x}</li>)}</ul><div className="editorial-pair" id="start"><div><h3>{en?'How we start':'Nasıl başlarız?'}</h3><p>{s.firstStep}</p></div><div><h3>{en?'Scope and boundaries':'Kapsam ve sınırlar'}</h3><p>{s.boundaries}</p></div></div></section>
  {s.paper&&<section className="advisory-section solution-paper"><p className="kicker">{en?'Whitepaper':'Teknik not'}</p><h3>{s.paper.title}</h3><a className="text-link" href={paperHref(lang,s.paper.slug)}>{en?'Read the whitepaper':'Teknik notu okuyun'} <span aria-hidden="true">↗</span></a></section>}
  {related.length>0&&<section className="advisory-section solution-related"><p className="kicker">{en?'Related programmes':'İlgili programlar'}</p><div className="solution-grid">{related.map(r=><article key={r.key}><h3><a href={url(lang,r.key)}>{r.title}</a></h3><p>{r.tagline}</p></article>)}</div></section>}
- <Conversation lang={lang} service={s.key}/>
+ <Conversation lang={lang} service={s.key} topic={s.title}/>
 </>}

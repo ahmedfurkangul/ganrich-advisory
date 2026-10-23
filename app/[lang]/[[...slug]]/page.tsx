@@ -1,6 +1,6 @@
 import { advisoryMeta } from "../../advisory-meta";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Site from "../../site";
 import { insightArticles, insightCategoryForKind, insightIndex, Lang, pageKind, routeMap } from "../../content";
 import { absoluteUrl, SITE_NAME, SITE_ORIGIN } from "../../site-config";
@@ -10,7 +10,7 @@ type Props = { params: Promise<{ lang: string; slug?: string[] }> };
 
 const metaCopy = {
   en: {
-    home: ["Ganrich Advisory | Strategy, Transformation and Applied AI", "Independent advisory for businesses entering new markets, founders building stronger organizations, and industrial teams putting AI to work."],
+    home: ["Ganrich Advisory | EU Readiness and Strategy for Turkish Industry", "Independent advisory for Turkish manufacturers and exporters facing CBAM, the Cyber Resilience Act and other EU rules, and for leadership teams deciding where to grow next."],
     expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
     markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
     insights: ["Insights | Ganrich Advisory", "Strategic perspectives, executive briefings, reports, frameworks, and data notes designed to be used."],
@@ -31,7 +31,7 @@ const metaCopy = {
     trust: ["Privacy + Trust | Ganrich Advisory", "Privacy choices, current-site facts, AI transparency, and legal information at Ganrich Advisory."],
   },
   tr: {
-    home: ["Ganrich Advisory | Strateji, Dönüşüm ve Uygulamalı Yapay Zekâ", "Yeni pazarlara açılan işletmeler, kurumlarını güçlendiren kurucular ve yapay zekâyı işe dönüştüren sanayi ekipleri için bağımsız danışmanlık."],
+    home: ["Ganrich Advisory | Türk Sanayisi için AB Uyumu ve Strateji", "CBAM, Siber Dayanıklılık Yasası ve diğer AB kurallarıyla karşı karşıya olan Türk üreticiler ve ihracatçılar ile bir sonraki büyüme adımını belirleyen yönetim ekipleri için bağımsız danışmanlık."],
     expertise: ["Uzmanlık | Ganrich Advisory", "Strateji, büyüme, işletim modeli, yapay zekâ, organizasyon ve uygulama için karar odaklı uzmanlık."],
     markets: ["Coğrafyalar | Ganrich Advisory", "Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika için pazara özgü kanıtlara dayalı bölgesel bakışlar."],
     insights: ["İçgörüler | Ganrich Advisory", "Kullanılmak için geliştirilen stratejik bakışlar, yönetici bilgilendirmeleri, raporlar, çerçeveler ve veri notları."],
@@ -110,6 +110,9 @@ export default async function LocalizedPage({ params }: Props) {
   const lang: Lang = p.lang === "tr" ? "tr" : "en"; const route = p.slug?.join("/") ?? "";
   const kind = pageKind(lang, route);
   if (kind === "notFound") notFound();
+  // Folded into simpler destinations; the old addresses keep working through a permanent redirect.
+  if (kind === "expertise") permanentRedirect(`/${lang}/${routeMap[lang].solutions}#strategy`);
+  if (kind === "privateBriefing") permanentRedirect(`/${lang}/${routeMap[lang].contact}?service=briefing`);
   const article = kind.startsWith("article") ? insightArticles[lang][insightIndex(kind)] : null;
   const category = kind.startsWith("category") ? insightCategoryForKind(lang, kind) : null;
   const currentUrl = absoluteUrl(`/${lang}${route ? `/${route}` : ""}`);

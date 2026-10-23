@@ -83,7 +83,9 @@ export async function POST(request: Request) {
 
   if (
     !kind || !source || name.length < 2 || !emailPattern.test(email)
-    || context.length < (kind === "contact" ? 15 : 30)
+    // A contact request names its company and topic; the context line is optional.
+    || (kind === "contact" && (!organization || !interest))
+    || (kind === "briefing" && context.length < 30)
     || (kind === "briefing" && (!organization || !region || !interest))
     || (kind === "briefing" && decision.length < 15) || !privacyAcknowledged
   ) {
