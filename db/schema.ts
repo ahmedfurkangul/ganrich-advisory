@@ -94,3 +94,39 @@ export const inquiries = sqliteTable("inquiries", {
   index("inquiries_status_idx").on(table.status),
   index("inquiries_fingerprint_idx").on(table.requestFingerprint),
 ]);
+
+// First-party, cookieless traffic log written by the Worker. No IP address, no cookie and no
+// full user agent is stored: a visitor is a hash of IP + user agent + a random salt that is
+// replaced every day, so the same person cannot be linked across days.
+export const pageViews = sqliteTable("page_views", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  ts: text("ts").notNull(),
+  day: text("day").notNull(),
+  path: text("path").notNull(),
+  lang: text("lang").notNull().default(""),
+  kind: text("kind").notNull().default("page"),
+  status: integer("status").notNull().default(200),
+  referrerHost: text("referrer_host").notNull().default(""),
+  utmSource: text("utm_source").notNull().default(""),
+  utmMedium: text("utm_medium").notNull().default(""),
+  utmCampaign: text("utm_campaign").notNull().default(""),
+  country: text("country").notNull().default(""),
+  city: text("city").notNull().default(""),
+  network: text("network").notNull().default(""),
+  device: text("device").notNull().default(""),
+  browser: text("browser").notNull().default(""),
+  os: text("os").notNull().default(""),
+  botName: text("bot_name").notNull().default(""),
+  botCategory: text("bot_category").notNull().default(""),
+  visitor: text("visitor").notNull().default(""),
+  durationMs: integer("duration_ms").notNull().default(0),
+}, (table) => [
+  index("page_views_day_idx").on(table.day),
+  index("page_views_day_bot_idx").on(table.day, table.botCategory),
+  index("page_views_path_idx").on(table.path),
+]);
+
+export const analyticsSalts = sqliteTable("analytics_salts", {
+  day: text("day").primaryKey(),
+  salt: text("salt").notNull(),
+});

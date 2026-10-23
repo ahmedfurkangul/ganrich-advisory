@@ -21,24 +21,24 @@ type PreferenceState = {
 const copy = {
   en: {
     bannerTitle: "Your privacy, without the theatre.",
-    bannerBody: "This site currently uses only essential technology and optional first-party preferences. No analytics, advertising cookies, or third-party media are active.",
+    bannerBody: "This site uses essential technology, optional first-party preferences, and a cookieless visit count that stores no IP address. No advertising cookies, cross-site tracking, or third-party media are active.",
     accept: "Accept optional", reject: "Essential only", manage: "Manage choices", dialogTitle: "Cookie preferences",
     dialogIntro: "Choose whether this site may remember optional interface settings. Your choice can be changed at any time.",
     save: "Save preferences", close: "Close", necessary: "Essential",
     necessaryBody: "Required for security, delivery, language choice, and remembering this consent decision. Always active.",
     functional: "Functional preferences", functionalBody: "Remembers saved reading tools, briefing items, and Decision Lab drafts on this device.",
-    unavailable: "Not currently in use", unavailableBody: "Analytics, advertising, and third-party embedded media are not enabled in the current build.",
+    unavailable: "Not currently in use", unavailableBody: "Analytics cookies, advertising, and third-party embedded media are not enabled in the current build.",
     saved: "Preferences saved", on: "On", off: "Off",
   },
   tr: {
     bannerTitle: "Gösterişsiz, açık gizlilik.",
-    bannerBody: "Bu site şu anda yalnızca zorunlu teknolojileri ve isteğe bağlı birinci taraf tercihlerini kullanır. Analitik, reklam çerezleri veya üçüncü taraf medya etkin değildir.",
+    bannerBody: "Bu site zorunlu teknolojileri, isteğe bağlı birinci taraf tercihlerini ve IP adresi saklamayan çerezsiz bir ziyaret sayımını kullanır. Reklam çerezleri, siteler arası izleme veya üçüncü taraf medya etkin değildir.",
     accept: "İsteğe bağlıları kabul et", reject: "Yalnızca zorunlu", manage: "Tercihleri yönet", dialogTitle: "Çerez tercihleri",
     dialogIntro: "Sitenin isteğe bağlı arayüz ayarlarını hatırlayıp hatırlamayacağını seçin. Tercihinizi dilediğiniz zaman değiştirebilirsiniz.",
     save: "Tercihleri kaydet", close: "Kapat", necessary: "Zorunlu",
     necessaryBody: "Güvenlik, sunum, dil seçimi ve bu tercih kararının hatırlanması için gereklidir. Her zaman etkindir.",
     functional: "İşlevsel tercihler", functionalBody: "Kaydedilen okuma araçlarını, brifing öğelerini ve Karar Laboratuvarı taslaklarını bu cihazda hatırlar.",
-    unavailable: "Şu anda kullanılmıyor", unavailableBody: "Analitik, reklam ve üçüncü taraf gömülü medya mevcut sürümde etkin değildir.",
+    unavailable: "Şu anda kullanılmıyor", unavailableBody: "Analitik çerezleri, reklam ve üçüncü taraf gömülü medya mevcut sürümde etkin değildir.",
     saved: "Tercihler kaydedildi", on: "Açık", off: "Kapalı",
   },
 } as const;

@@ -68,3 +68,10 @@ Ayrı ve açık onay gerektirir. Sıra:
 3. Sites verisinin dışa aktarılıp aktarılması ve sayıların, anahtarların, sağlama toplamlarının karşılaştırılması.
 4. GODADDY-DNS.md'deki plana göre DNS yönetiminin Cloudflare'e alınması ve Workers Custom Domain bağlanması.
 5. `scripts/deploy.sh production --confirm`.
+
+## Trafik analitiği
+
+- Worker her sayfa görüntülemesini yanıt gönderildikten sonra D1'deki `page_views` tablosuna yazar (`worker/traffic.ts`). Çerez yok, IP adresi saklanmaz; ziyaretçi kodu her gün değişen rastgele bir değerle (`analytics_salts`) üretilir. Kayıtlar 13 ay tutulur.
+- Panel: `/en/insights/pdf-studio/analytics` ve `/tr/icgoruler/pdf-studyosu/analitik`. PDF stüdyosuyla aynı Cloudflare Access uygulamasının kapsamındadır ve `requireEditor()` ile ayrıca korunur.
+- Yayın öncesi `drizzle/0002_dusty_micromacro.sql` migration'ı uygulanmalıdır: `npx wrangler d1 migrations apply DB --env production --remote`. Tablo yoksa kayıt sessizce atlanır, site çalışmaya devam eder.
+- Kaydı kapatmak için Worker değişkeni: `ANALYTICS_LOGGING=off`.
