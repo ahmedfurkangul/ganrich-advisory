@@ -1,20 +1,25 @@
 "use client";
+import { useState } from 'react';
 import { Lang, routeMap } from './content';
 import { EditorialHero, Conversation } from './advisory';
-import { solutionByKey, solutions, solutionThemes } from './solutions-content';
+import { solutionByKey, solutions, solutionFilterTags, solutionTags, solutionThemes } from './solutions-content';
 const url=(l:Lang,k:string)=>'/'+l+'/'+routeMap[l][k];
 const paperHref=(l:Lang,slug:string)=>l==='en'?'/en/insights/report/'+slug:'/tr/icgoruler/rapor/'+slug;
 
-export function SolutionsHub({lang}:{lang:Lang}){const en=lang==='en';return <>
+function TagList({lang,tags}:{lang:Lang;tags:string[]}){return <ul className="solution-tags" aria-label={lang==='en'?'Topics':'Konular'}>{tags.map(t=><li key={t}>{t}</li>)}</ul>}
+
+export function SolutionsHub({lang}:{lang:Lang}){const en=lang==='en',[tag,setTag]=useState('');const visible=(key:keyof typeof solutionTags.en)=>!tag||solutionTags[lang][key].includes(tag);return <>
  <EditorialHero label={en?'Solutions':'Çözümler'} title={en?'Focused programmes for decisions new rules and markets are forcing.':'Yeni kuralların ve pazarların dayattığı kararlar için odaklı programlar.'} intro={en?'Each programme starts small: one defined question and a first step that produces evidence. How we work in detail is shared once we understand your situation.':'Her program küçük başlar: tanımlı tek bir soru ve kanıt üreten bir ilk adım. Çalışma yönteminin ayrıntısını durumunuzu anladıktan sonra paylaşırız.'}/>
  <nav className="advisory-subnav" aria-label={en?'Themes':'Temalar'}>{solutionThemes[lang].map(t=><a key={t.key} href={'#'+t.key}>{t.label}</a>)}</nav>
- {solutionThemes[lang].map(t=><section key={t.key} id={t.key} className="advisory-section solution-theme"><div className="editorial-heading"><p className="kicker">{t.label}</p><p>{t.intro}</p></div><div className="solution-grid">{solutions[lang].filter(s=>s.theme===t.key).map(s=><article key={s.key}><p className="kicker">{s.question}</p><h3><a href={url(lang,s.key)}>{s.title}</a></h3><p>{s.tagline}</p><a className="text-link" href={url(lang,s.key)}>{en?'See the programme':'Programı inceleyin'} <span aria-hidden="true">↗</span></a></article>)}</div></section>)}
+ <section className="advisory-section solution-filter"><p className="kicker" id="solution-filter-label">{en?'Filter by topic':'Konuya göre filtreleyin'}</p><div className="solution-filter-chips" role="group" aria-labelledby="solution-filter-label"><button type="button" aria-pressed={!tag} onClick={()=>setTag('')}>{en?'All':'Tümü'}</button>{solutionFilterTags(lang).map(t=><button key={t} type="button" aria-pressed={tag===t} onClick={()=>setTag(tag===t?'':t)}>{t}</button>)}</div></section>
+ {solutionThemes[lang].filter(t=>solutions[lang].some(s=>s.theme===t.key&&visible(s.key))).map(t=><section key={t.key} id={t.key} className="advisory-section solution-theme"><div className="editorial-heading"><p className="kicker">{t.label}</p><p>{t.intro}</p></div><div className="solution-grid">{solutions[lang].filter(s=>s.theme===t.key&&visible(s.key)).map(s=><article key={s.key}><p className="kicker">{s.question}</p><h3><a href={url(lang,s.key)}>{s.title}</a></h3><p>{s.tagline}</p><TagList lang={lang} tags={solutionTags[lang][s.key]}/><a className="text-link" href={url(lang,s.key)}>{en?'See the programme':'Programı inceleyin'} <span aria-hidden="true">↗</span></a></article>)}</div></section>)}
  <section className="advisory-section solution-note"><p>{en?'Programmes are adapted to each business. Scope, timing and fees are agreed after a first conversation.':'Programlar her işletmeye göre uyarlanır. Kapsam, takvim ve ücret ilk görüşmenin ardından birlikte belirlenir.'}</p></section>
  <Conversation lang={lang}/>
 </>}
 
 export function SolutionPage({lang,kind}:{lang:Lang;kind:string}){const en=lang==='en',s=solutionByKey(lang,kind)!,theme=solutionThemes[lang].find(t=>t.key===s.theme)!,related=solutions[lang].filter(x=>x.theme===s.theme&&x.key!==s.key);return <>
  <EditorialHero label={theme.label} title={s.title} intro={s.tagline}/>
+ <div className="solution-hero-tags"><TagList lang={lang} tags={solutionTags[lang][s.key]}/></div>
  <nav className="advisory-subnav" aria-label={en?'On this page':'Bu sayfada'}>{[['why',en?'Why now':'Neden şimdi?'],['fit',en?'Is this for you?':'Size uygun mu?'],['outcomes',en?'What you leave with':'Elde edecekleriniz'],['start',en?'How we start':'Nasıl başlarız?']].map(([id,t])=><a key={id} href={'#'+id}>{t}</a>)}<a href={url(lang,'solutions')}>{en?'All solutions':'Tüm çözümler'} ↗</a></nav>
  <section className="advisory-section service-overview" id="why"><div><p className="kicker">{en?'Why now':'Neden şimdi?'}</p><h2>{s.question}</h2><p>{s.trigger}</p></div><div id="fit"><h2>{en?'Who it is for':'Kimler için?'}</h2><p>{s.audience}</p><h3>{en?'You may need this if':'Şu durumlar tanıdık geliyorsa'}</h3><ul className="deliverables">{s.signals.map(x=><li key={x}>{x}</li>)}</ul></div></section>
  <section className="advisory-section service-process" id="outcomes"><h2>{en?'What you leave with':'Elde edecekleriniz'}</h2><ul className="deliverables solution-outcomes">{s.outcomes.map(x=><li key={x}>{x}</li>)}</ul><div className="editorial-pair" id="start"><div><h3>{en?'How we start':'Nasıl başlarız?'}</h3><p>{s.firstStep}</p></div><div><h3>{en?'Scope and boundaries':'Kapsam ve sınırlar'}</h3><p>{s.boundaries}</p></div></div></section>

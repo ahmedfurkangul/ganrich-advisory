@@ -528,3 +528,12 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .solution-related { background: #eae8df; }
 @media (max-width: 820px) { .solution-outcomes { grid-template-columns: 1fr; } }
 .service-overview #fit h3 { margin-top: 40px; }
+.solution-filter { padding-bottom: 0; }
+.solution-filter-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.solution-filter-chips button { border: 1px solid var(--sand); background: transparent; color: var(--slate); padding: 8px 14px; border-radius: 999px; font: inherit; font-size: .82rem; min-height: 44px; cursor: pointer; }
+.solution-filter-chips button[aria-pressed="true"] { background: var(--forest); border-color: var(--forest); color: var(--ivory); }
+.solution-tags { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 20px; padding: 0; }
+.solution-tags li { font-size: .72rem; letter-spacing: .02em; color: var(--bronze); border: 1px solid var(--sand); border-radius: 999px; padding: 3px 10px; }
+.advisory-hero:has(+ .solution-hero-tags) { border-bottom: 0; padding-bottom: 8px; }
+.solution-hero-tags { padding: 0 var(--gutter) 36px; border-bottom: 1px solid var(--sand); }
+.solution-hero-tags .solution-tags { margin: 0; }

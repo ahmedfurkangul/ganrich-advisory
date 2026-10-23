@@ -52,6 +52,49 @@ export const solutions: Record<Lang, Solution[]> = {
  ],
 };
 
+// Topic tags: shown on pages, used for filtering, and emitted as keywords in structured data.
+export const solutionTags: Record<Lang, Record<SolutionKey, string[]>> = {
+ en: {
+  solutionCbam: ['CBAM', 'Carbon emissions', 'Steel and aluminium', 'EU regulation', 'Export'],
+  solutionCra: ['Cyber Resilience Act', 'Product security', 'Incident reporting', 'EU regulation', 'Manufacturing'],
+  solutionEudr: ['EUDR', 'Traceability', 'Wood and furniture', 'EU regulation', 'Supply chain'],
+  solutionPfas: ['PFAS', 'Chemicals', 'Textiles and packaging', 'EU regulation', 'Product compliance'],
+  solutionEexport: ['E-export', 'Product data', 'EU customs', 'E-commerce', 'Logistics'],
+  solutionAccessibility: ['European Accessibility Act', 'Accessibility', 'Software services', 'E-commerce', 'EU regulation'],
+  solutionEnergy: ['Energy efficiency', 'Industrial plants', 'Green finance', 'Measurement'],
+  solutionStorage: ['Solar', 'Battery storage', 'Energy', 'Industrial plants'],
+  solutionWater: ['Water efficiency', 'Industrial plants', 'Sustainability reporting', 'Measurement'],
+  solutionOrderDesk: ['Applied AI', 'Wholesale and distribution', 'ERP', 'WhatsApp orders', 'Automation'],
+  solutionMargin: ['E-commerce', 'Marketplaces', 'Profitability', 'Finance operations', 'Analytics'],
+ },
+ tr: {
+  solutionCbam: ['CBAM', 'Karbon emisyonu', 'Demir-çelik ve alüminyum', 'AB mevzuatı', 'İhracat'],
+  solutionCra: ['Siber Dayanıklılık Yasası', 'Ürün güvenliği', 'Olay bildirimi', 'AB mevzuatı', 'Üretim'],
+  solutionEudr: ['EUDR', 'İzlenebilirlik', 'Ahşap ve mobilya', 'AB mevzuatı', 'Tedarik zinciri'],
+  solutionPfas: ['PFAS', 'Kimyasallar', 'Tekstil ve ambalaj', 'AB mevzuatı', 'Ürün uyumu'],
+  solutionEexport: ['E-ihracat', 'Ürün verisi', 'AB gümrüğü', 'E-ticaret', 'Lojistik'],
+  solutionAccessibility: ['Avrupa Erişilebilirlik Yasası', 'Erişilebilirlik', 'Yazılım hizmetleri', 'E-ticaret', 'AB mevzuatı'],
+  solutionEnergy: ['Enerji verimliliği', 'Sanayi tesisleri', 'Yeşil finansman', 'Ölçüm'],
+  solutionStorage: ['Güneş enerjisi', 'Batarya depolama', 'Enerji', 'Sanayi tesisleri'],
+  solutionWater: ['Su verimliliği', 'Sanayi tesisleri', 'Sürdürülebilirlik raporlaması', 'Ölçüm'],
+  solutionOrderDesk: ['Uygulamalı yapay zekâ', 'Toptan ticaret ve dağıtım', 'ERP', 'WhatsApp siparişleri', 'Otomasyon'],
+  solutionMargin: ['E-ticaret', 'Pazaryerleri', 'Kârlılık', 'Finans operasyonları', 'Analitik'],
+ },
+};
+
+export function solutionTagList(lang: Lang) {
+ return [...new Set(solutions[lang].flatMap(solution => solutionTags[lang][solution.key]))].sort((a, b) => a.localeCompare(b, lang));
+}
+
+/** Hub filter: topics shared by several programmes first, then each programme's lead topic. */
+export function solutionFilterTags(lang: Lang) {
+ const counts = new Map<string, number>();
+ for (const solution of solutions[lang]) for (const tag of solutionTags[lang][solution.key]) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+ const shared = [...counts].filter(([, n]) => n > 1).sort((a, b) => b[1] - a[1]).map(([tag]) => tag);
+ const leads = solutions[lang].map(solution => solutionTags[lang][solution.key][0]).filter(tag => !shared.includes(tag));
+ return [...shared, ...leads];
+}
+
 export function solutionByKey(lang: Lang, key: string) {
  return solutions[lang].find(solution => solution.key === key);
 }
