@@ -435,3 +435,56 @@ test("hides the traffic dashboard from anyone who is not a verified editor", asy
     assert.doesNotMatch(await response.text(), /Traffic and analysis|Trafik ve analiz/);
   }
 });
+
+test("gives search engines and AI assistants tags, structured data, llms.txt and crawler rules", async () => {
+  const [solution, hub, service, home, llms, llmsFull, robots, sitemap] = await Promise.all([
+    render("/en/solutions/cbam-data-readiness").then(r => r.text()),
+    render("/tr/cozumler").then(r => r.text()),
+    render("/en/expertise/market-entry").then(r => r.text()),
+    render("/en").then(r => r.text()),
+    render("/llms.txt"),
+    render("/llms-full.txt"),
+    render("/robots.txt").then(r => r.text()),
+    render("/sitemap.xml").then(r => r.text()),
+  ]);
+  const graph = html => JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1].replace(/\\u003c/g, "<"))["@graph"];
+  const types = html => graph(html).map(node => [].concat(node["@type"]).join(","));
+
+  // Tags are visible on the page, in the keywords meta and in the hub filter.
+  assert.match(solution, /class="solution-tags"/);
+  assert.match(solution, /<li>CBAM<\/li>/);
+  assert.match(solution, /name="keywords" content="CBAM,/);
+  assert.match(hub, /Konuya göre filtreleyin/);
+  assert.match(hub, /aria-pressed="true"[^>]*>Tümü/);
+
+  // Structured data describes the organisation, the site, the page and the offer.
+  for (const type of ["Organization,ProfessionalService", "WebSite", "WebPage", "BreadcrumbList", "Service", "FAQPage"]) assert.ok(types(solution).includes(type), `solution page lacks ${type}`);
+  const org = graph(home).find(node => node["@id"] === "https://ganrichadvisory.com/#organization");
+  assert.equal(org.email, "furkangul@ganrichadvisory.com");
+  assert.ok(org.sameAs.includes("https://www.linkedin.com/company/135278307/"));
+  assert.equal(org.hasOfferCatalog.itemListElement.length, 14);
+  assert.ok(types(hub).includes("ItemList") && types(hub).includes("CollectionPage"));
+  assert.ok(types(service).includes("Service"));
+  const crumbs = graph(solution).find(node => node["@type"] === "BreadcrumbList").itemListElement.map(item => item.name);
+  assert.deepEqual(crumbs, ["Home", "Solutions", "CBAM Data Readiness"]);
+  assert.match(solution, /\/og\/en\/solutionCbam\.png/);
+  assert.doesNotMatch(JSON.stringify(graph(solution)), /"price"|priceCurrency/);
+
+  // llms.txt and llms-full.txt are plain Markdown maps of the public site.
+  assert.equal(llms.status, 200);
+  assert.match(llms.headers.get("content-type") ?? "", /^text\/plain/);
+  const llmsText = await llms.text();
+  assert.match(llmsText, /^# Ganrich Advisory\n\n> /);
+  assert.match(llmsText, /\[CBAM Data Readiness\]\(https:\/\/ganrichadvisory\.com\/en\/solutions\/cbam-data-readiness\)/);
+  assert.match(llmsText, /\[CBAM Veri Hazırlığı\]\(https:\/\/ganrichadvisory\.com\/tr\/cozumler\/cbam-veri-hazirligi\)/);
+  assert.doesNotMatch(llmsText, /pdf-studio|\/api\//);
+  const fullText = await llmsFull.text();
+  assert.equal(llmsFull.status, 200);
+  assert.match(fullText, /### CBAM Data Readiness/);
+  assert.match(fullText, /Scope and boundaries:/);
+
+  // AI search crawlers get explicit groups; private paths stay closed to everyone.
+  for (const bot of ["GPTBot", "OAI-SearchBot", "ClaudeBot", "PerplexityBot", "Google-Extended"]) assert.match(robots, new RegExp(`User-Agent: ${bot}`, "i"));
+  assert.equal((robots.match(/Disallow: \/en\/insights\/pdf-studio/g) ?? []).length, 2);
+  assert.match(sitemap, /<loc>https:\/\/ganrichadvisory\.com\/en\/solutions\/cbam-data-readiness<\/loc>[\s\S]*?<priority>0\.8<\/priority>/);
+});
