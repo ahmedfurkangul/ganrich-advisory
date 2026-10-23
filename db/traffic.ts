@@ -32,6 +32,10 @@ export type TrafficReport = {
   discovery: Row[];
   recent: Array<{ ts: string; path: string; referrer: string; country: string; city: string; device: string; browser: string }>;
   rising: Array<{ label: string; now: number; before: number }>;
+  funnel: { visitors: number; cta: number; formStart: number; formSubmit: number; inquiries: number };
+  funnelChannels: Array<{ channel: Channel; visitors: number; cta: number; submits: number }>;
+  ctaPages: Row[];
+  inquiryTopics: Row[];
   hasData: boolean;
 };
 
@@ -160,6 +164,42 @@ export async function trafficReport(days: number): Promise<TrafficReport> {
       `SELECT path AS label, COUNT(*) AS views FROM page_views WHERE day >= ? AND day <= ? AND ${HUMAN} AND status < 400 GROUP BY path`, prevFrom, prevTo),
   ]);
 
+  // Lead funnel: unique visitor-days reaching each step, and the channel of each visitor's first page that day.
+  const [steps, channelSteps, ctaPages, topicRows] = await Promise.all([
+    first<{ cta: number; fs: number; sub: number }>(db,
+      `SELECT COUNT(DISTINCT CASE WHEN kind = 'cta' THEN day || visitor END) AS cta,
+        COUNT(DISTINCT CASE WHEN kind = 'form_start' THEN day || visitor END) AS fs,
+        COUNT(DISTINCT CASE WHEN kind = 'form_submit' THEN day || visitor END) AS sub
+       FROM page_views WHERE day >= ? AND day <= ? AND kind IN ('cta', 'form_start', 'form_submit')`, from, to),
+    all<{ referrer_host: string; utm_source: string; utm_medium: string; visitors: number; cta: number; sub: number }>(db,
+      `WITH firsts AS (
+         SELECT day || visitor AS v, referrer_host, utm_source, utm_medium FROM page_views
+         WHERE id IN (SELECT MIN(id) FROM page_views WHERE day >= ? AND day <= ? AND ${HUMAN} GROUP BY day, visitor)),
+       steps AS (
+         SELECT day || visitor AS v, MAX(kind = 'cta') AS cta, MAX(kind = 'form_submit') AS sub FROM page_views
+         WHERE day >= ? AND day <= ? AND kind IN ('cta', 'form_submit') GROUP BY day, visitor)
+       SELECT f.referrer_host, f.utm_source, f.utm_medium, COUNT(*) AS visitors,
+         SUM(COALESCE(s.cta, 0)) AS cta, SUM(COALESCE(s.sub, 0)) AS sub
+       FROM firsts f LEFT JOIN steps s ON s.v = f.v GROUP BY f.referrer_host, f.utm_source, f.utm_medium`, from, to, from, to),
+    group(db, "path", from, to, 10, "kind = 'cta'"),
+    all<{ source: string; n: number }>(db,
+      `SELECT source, COUNT(*) AS n FROM inquiries WHERE substr(created_at, 1, 10) >= ? AND substr(created_at, 1, 10) <= ?
+       GROUP BY source ORDER BY n DESC`, from, to).catch(() => []),
+  ]);
+  const funnelMap = new Map<Channel, { visitors: number; cta: number; submits: number }>();
+  for (const r of channelSteps) {
+    const c = channelOf(r.referrer_host, r.utm_source, r.utm_medium);
+    const m = funnelMap.get(c) ?? { visitors: 0, cta: 0, submits: 0 };
+    m.visitors += r.visitors; m.cta += r.cta ?? 0; m.submits += r.sub ?? 0;
+    funnelMap.set(c, m);
+  }
+  // The contact form records its topic in the source as ?service=<key>.
+  const topicMap = new Map<string, number>();
+  for (const r of topicRows) {
+    const topic = /[?&]service=([\w-]*)/.exec(r.source ?? "")?.[1] || "(none)";
+    topicMap.set(topic, (topicMap.get(topic) ?? 0) + r.n);
+  }
+
   const dayMap = new Map(dailyRows.map(r => [r.day, r]));
   const daily = Array.from({ length: days }, (_, i) => {
     const day = isoDay(new Date(Date.parse(from) + i * 86_400_000));
@@ -198,6 +238,10 @@ export async function trafficReport(days: number): Promise<TrafficReport> {
     campaigns, countries, cities, networks, devices, browsers, systems, languages, hours,
     pdfs: pdfRows.map(r => ({ label: r.title || r.label, views: r.views, visitors: r.visitors })),
     notFound, bots, aiBotPaths, discovery, recent, rising,
+    funnel: { visitors, cta: steps.cta ?? 0, formStart: steps.fs ?? 0, formSubmit: steps.sub ?? 0, inquiries },
+    funnelChannels: [...funnelMap].map(([channel, m]) => ({ channel, ...m })).sort((a, b) => b.visitors - a.visitors),
+    ctaPages: ctaPages.map(r => ({ ...r, extra: undefined })),
+    inquiryTopics: [...topicMap].map(([label, views]) => ({ label, views })).sort((a, b) => b.views - a.views),
     hasData: views > 0 || (botTotals.bots ?? 0) > 0,
   };
 }

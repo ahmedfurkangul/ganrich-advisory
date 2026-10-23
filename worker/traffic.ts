@@ -146,3 +146,34 @@ export async function logTraffic(request: Request, response: Response, env: Traf
     device, browser, os, bot?.name ?? "", bot?.category ?? "", visitor, Math.max(0, Date.now() - startedAt),
   ).run();
 }
+
+// Steps toward a first contact, sent by the page as a beacon. Stored in the same log with the page
+// they happened on, so the dashboard can show a funnel. Nothing typed into a form is ever sent.
+export const LEAD_EVENTS = new Set(["cta", "form_start", "form_submit"]);
+
+export async function logLeadEvent(request: Request, env: TrafficEnv) {
+  if (!env?.DB || env.ANALYTICS_LOGGING === "off") return;
+  const userAgent = request.headers.get("user-agent") ?? "";
+  if (classifyBot(userAgent)) return;
+  const origin = request.headers.get("origin");
+  if (origin && origin !== new URL(request.url).origin) return;
+  let payload: { event?: unknown; path?: unknown };
+  try {
+    payload = JSON.parse((await request.text()).slice(0, 1000));
+  } catch {
+    return;
+  }
+  const event = typeof payload.event === "string" ? payload.event : "";
+  const path = typeof payload.path === "string" ? payload.path.slice(0, 300) : "";
+  if (!LEAD_EVENTS.has(event) || !/^\/(en|tr)(\/|$)/.test(path)) return;
+  const now = new Date();
+  const day = now.toISOString().slice(0, 10);
+  const ip = request.headers.get("cf-connecting-ip") ?? "";
+  const visitor = (await sha256(`${await dailySalt(env.DB, day)}|${ip}|${userAgent}`)).slice(0, 16);
+  const { device, browser, os } = deviceInfo(userAgent);
+  const cf = ((request as unknown as { cf?: CfProperties }).cf) ?? {};
+  await env.DB.prepare(`INSERT INTO page_views (ts, day, path, lang, kind, status, country, device, browser, os, visitor)
+    VALUES (?, ?, ?, ?, ?, 200, ?, ?, ?, ?, ?)`).bind(
+    now.toISOString(), day, path, path.slice(1, 3), event, cf.country ?? "", device, browser, os, visitor,
+  ).run();
+}

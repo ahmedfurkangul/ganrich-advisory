@@ -1,6 +1,8 @@
 import type { Row, TrafficReport } from "../db/traffic";
 import type { Lang } from "./content";
 import { channelLabel, trafficInsights } from "./traffic-insights";
+import { services } from "./advisory-content";
+import { solutions } from "./solutions-content";
 
 // Editor-only traffic dashboard. Server-rendered HTML and SVG: no client JavaScript, no third-party script.
 
@@ -87,6 +89,54 @@ function Columns({ lang, title, values, labels, unit }: { lang: Lang; title: str
   </figure>;
 }
 
+function Funnel({ lang, report }: { lang: Lang; report: TrafficReport }) {
+  const en = lang === "en";
+  const f = report.funnel;
+  const stages: Array<[string, number]> = [
+    [en ? "Visitors" : "Ziyaretçi", f.visitors],
+    [en ? "Clicked a contact button" : "İletişim düğmesine tıkladı", f.cta],
+    [en ? "Started the form" : "Formu doldurmaya başladı", f.formStart],
+    [en ? "Sent the form" : "Formu gönderdi", f.formSubmit],
+  ];
+  const max = Math.max(1, f.visitors);
+  return <section className="traffic-card">
+    <h3>{en ? "From visit to request" : "Ziyaretten talebe"}</h3>
+    <ol className="traffic-funnel">{stages.map(([label, value], i) => {
+      const prev = i ? stages[i - 1][1] : 0;
+      return <li key={label}>
+        <span>{label}</span>
+        <span className="traffic-bar" style={{ width: `${Math.max(value ? 1 : 0, value / max * 100)}%` }} aria-hidden="true"/>
+        <strong>{number(lang, value)}{i > 0 && prev > 0 && <small> · {Math.round(value / prev * 100)}%</small>}</strong>
+      </li>;
+    })}</ol>
+    <p className="traffic-note">{en
+      ? `Unique visitors per day at each step; the percentage compares with the step before. ${f.inquiries} requests reached the inbox in this period. Steps are counted from 23 October 2026.`
+      : `Her adımda günlük tekil ziyaretçi; yüzde bir önceki adıma göredir. Bu dönemde gelen kutusuna ${f.inquiries} talep düştü. Adımlar 23 Ekim 2026'dan itibaren sayılıyor.`}</p>
+  </section>;
+}
+
+function FunnelChannels({ lang, report }: { lang: Lang; report: TrafficReport }) {
+  const en = lang === "en";
+  return <section className="traffic-card">
+    <h3>{en ? "Requests by channel" : "Kanala göre talep"}</h3>
+    {report.funnelChannels.length === 0 ? <p className="traffic-empty">{en ? "Nothing recorded yet." : "Henüz kayıt yok."}</p> :
+      <table className="traffic-table">
+        <thead><tr><th scope="col">{en ? "Channel" : "Kanal"}</th><th scope="col">{en ? "Visitors" : "Ziyaretçi"}</th><th scope="col">{en ? "Contact clicks" : "Düğme tıklaması"}</th><th scope="col">{en ? "Forms sent" : "Gönderilen form"}</th></tr></thead>
+        <tbody>{report.funnelChannels.map(c => <tr key={c.channel}>
+          <th scope="row"><span className="traffic-label">{channelLabel[lang][c.channel]}</span></th>
+          <td>{number(lang, c.visitors)}</td><td>{number(lang, c.cta)}</td><td>{number(lang, c.submits)}</td>
+        </tr>)}</tbody>
+      </table>}
+    <p className="traffic-note">{en ? "A visitor's channel is where their first page of the day came from." : "Ziyaretçinin kanalı, o günkü ilk sayfasının geldiği yerdir."}</p>
+  </section>;
+}
+
+function topicTitle(lang: Lang, key: string) {
+  if (key === "briefing") return lang === "en" ? "Executive briefing" : "Yönetim brifingi";
+  if (key === "other") return lang === "en" ? "Something else" : "Başka bir konu";
+  return solutions[lang].find(s => s.key === key)?.title ?? services[lang].find(s => s.key === key)?.title ?? key;
+}
+
 export function TrafficDashboard({ lang, report, studioHref, selfHref }: { lang: Lang; report: TrafficReport; studioHref: string; selfHref: string }) {
   const en = lang === "en";
   const t = report.totals;
@@ -134,6 +184,14 @@ export function TrafficDashboard({ lang, report, studioHref, selfHref }: { lang:
         <ul className="traffic-channels">{report.channels.map(c => <li key={c.channel}><span>{channelLabel[lang][c.channel]}</span><span className="traffic-bar" style={{ width: `${c.visitors / channelTotal * 100}%` }} aria-hidden="true"/><strong>{number(lang, c.visitors)} · {Math.round(c.visitors / channelTotal * 100)}%</strong></li>)}</ul>}
       <p className="traffic-note">{en ? "AI assistants include ChatGPT, Perplexity, Claude, Gemini and Copilot, recognised by referrer or by utm_source." : "Yapay zekâ asistanları ChatGPT, Perplexity, Claude, Gemini ve Copilot'u kapsar; yönlendiren siteden veya utm_source'tan tanınır."}</p>
     </section>
+
+    <Funnel lang={lang} report={report}/>
+
+    <div className="traffic-grid">
+      <FunnelChannels lang={lang} report={report}/>
+      <BarTable lang={lang} title={en ? "Pages where contact buttons were clicked" : "İletişim düğmesine tıklanan sayfalar"} rows={report.ctaPages} valueLabel={en ? "Clicks" : "Tıklama"}/>
+      <BarTable lang={lang} title={en ? "Requests by topic" : "Konuya göre talepler"} rows={report.inquiryTopics.map(r => ({ ...r, label: topicTitle(lang, r.label) }))} showVisitors={false} valueLabel={en ? "Requests" : "Talep"}/>
+    </div>
 
     <div className="traffic-grid">
       <BarTable lang={lang} title={en ? "Top pages" : "En çok ziyaret edilen sayfalar"} rows={report.pages}/>

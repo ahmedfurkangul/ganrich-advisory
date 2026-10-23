@@ -26,7 +26,7 @@ type PreferenceState = {
 const copy = {
   en: {
     bannerTitle: "Your privacy, without the theatre.",
-    bannerBody: "This site uses essential technology, optional first-party preferences, and a cookieless visit count that stores no IP address. No advertising cookies, cross-site tracking, or third-party media are active.",
+    bannerBody: "This site uses essential technology, optional first-party preferences, and a cookieless count of visits and contact steps that stores no IP address. No advertising cookies, cross-site tracking, or third-party media are active.",
     accept: "Accept optional",
     reject: "Essential only",
     manage: "Manage choices",
@@ -49,7 +49,7 @@ const copy = {
   },
   tr: {
     bannerTitle: "Gösterişsiz, açık gizlilik.",
-    bannerBody: "Bu site zorunlu teknolojileri, isteğe bağlı birinci taraf tercihlerini ve IP adresi saklamayan çerezsiz bir ziyaret sayımını kullanır. Reklam çerezleri, siteler arası izleme veya üçüncü taraf medya etkin değildir.",
+    bannerBody: "Bu site zorunlu teknolojileri, isteğe bağlı birinci taraf tercihlerini ve IP adresi saklamayan çerezsiz bir ziyaret ve iletişim adımı sayımını kullanır. Reklam çerezleri, siteler arası izleme veya üçüncü taraf medya etkin değildir.",
     accept: "İsteğe bağlıları kabul et",
     reject: "Yalnızca zorunlu",
     manage: "Tercihleri yönet",
@@ -242,7 +242,7 @@ const pages: Record<Lang, Record<TrustKind, {
       sections: [
         ["What the public site handles", "Language choice, consent choice, and optional interface preferences may be stored locally on your device. Contact and briefing details are transmitted securely and stored to review and respond to your request."],
         ["Why these technologies exist", "Essential technologies support secure delivery and remember the choice you make in the privacy control. Optional first-party storage remembers reading tools and drafts only when you allow it."],
-        ["Cookieless visit statistics", "When a page is requested, the server records the page, the referring website, any campaign tags in the link, an approximate location derived from the network (country and city), the network operator, device type, browser, and operating system. No cookie is set and no IP address is stored. A pseudonymous code that changes every day lets us count unique visits per day without following anyone across days. These records are kept for 13 months and are used only to understand how the site is used."],
+        ["Cookieless visit statistics", "When a page is requested, the server records the page, the referring website, any campaign tags in the link, an approximate location derived from the network (country and city), the network operator, device type, browser, and operating system. No cookie is set and no IP address is stored. A pseudonymous code that changes every day lets us count unique visits per day without following anyone across days. The same log counts three steps toward contacting us: a click on a contact button, starting the contact form, and sending it. Only the step and the page are recorded, never what is typed. These records are kept for 13 months and are used only to understand how the site is used."],
         ["What is not active", "The current build does not set analytics or advertising cookies and does not run behavioural profiling, cross-site tracking, third-party media embeds, or external AI prompt processing."],
         ["Retention and recipients", "No public retention schedule, service-provider register, or transfer statement is asserted here until the underlying operational records and contracts are verified."],
         ["Your choices", "Use Cookie preferences at any time to withdraw optional local storage. Clearing browser storage also removes locally saved choices and drafts."],
@@ -346,7 +346,7 @@ const pages: Record<Lang, Record<TrustKind, {
       sections: [
         ["Kamuya açık sitede işlenenler", "Dil seçimi, gizlilik tercihi ve isteğe bağlı arayüz ayarları cihazınızda yerel olarak saklanabilir. İletişim ve brifing bilgileri, talebinizi incelemek ve yanıtlamak amacıyla güvenli biçimde iletilir ve saklanır."],
         ["Teknolojilerin amacı", "Zorunlu teknolojiler güvenli sunumu sağlar ve gizlilik kontrolündeki kararınızı hatırlar. İsteğe bağlı birinci taraf depolama, yalnızca izin verdiğinizde okuma araçlarını ve taslakları hatırlar."],
-        ["Çerezsiz ziyaret istatistikleri", "Bir sayfa istendiğinde sunucu; sayfayı, yönlendiren siteyi, bağlantıdaki kampanya etiketlerini, ağdan türetilen yaklaşık konumu (ülke ve şehir), ağ işletmecisini, cihaz türünü, tarayıcıyı ve işletim sistemini kaydeder. Çerez kullanılmaz ve IP adresi saklanmaz. Her gün değişen takma bir kod, kimseyi günler arasında izlemeden günlük tekil ziyaretleri saymamızı sağlar. Bu kayıtlar 13 ay saklanır ve yalnızca sitenin nasıl kullanıldığını anlamak için kullanılır."],
+        ["Çerezsiz ziyaret istatistikleri", "Bir sayfa istendiğinde sunucu; sayfayı, yönlendiren siteyi, bağlantıdaki kampanya etiketlerini, ağdan türetilen yaklaşık konumu (ülke ve şehir), ağ işletmecisini, cihaz türünü, tarayıcıyı ve işletim sistemini kaydeder. Çerez kullanılmaz ve IP adresi saklanmaz. Her gün değişen takma bir kod, kimseyi günler arasında izlemeden günlük tekil ziyaretleri saymamızı sağlar. Aynı kayıt, bize ulaşmaya giden üç adımı da sayar: bir iletişim düğmesine tıklama, iletişim formunu doldurmaya başlama ve formu gönderme. Yalnızca adım ve sayfa kaydedilir, yazılan hiçbir şey kaydedilmez. Bu kayıtlar 13 ay saklanır ve yalnızca sitenin nasıl kullanıldığını anlamak için kullanılır."],
         ["Etkin olmayanlar", "Mevcut sürüm analitik veya reklam çerezi kullanmaz; davranışsal profilleme, siteler arası izleme, üçüncü taraf medya gömme veya haricî yapay zekâ istem işleme faaliyeti yürütmez."],
         ["Saklama ve alıcılar", "Operasyonel kayıtlar ve sözleşmeler doğrulanana kadar burada bir saklama takvimi, hizmet sağlayıcı listesi veya aktarım beyanı ileri sürülmez."],
         ["Tercihleriniz", "İsteğe bağlı yerel depolama iznini dilediğiniz zaman Çerez tercihleri üzerinden geri çekebilirsiniz. Tarayıcı verilerini temizlemek de yerel tercih ve taslakları kaldırır."],

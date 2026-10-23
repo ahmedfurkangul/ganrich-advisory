@@ -44,3 +44,30 @@ export function AnalyticsBridge() {
   }, []);
   return null;
 }
+
+// Cookieless steps toward a first contact (button click, form started, form sent). Only the step name and
+// the page path are sent; the server counts them like page visits. Nothing typed into a form leaves the page.
+export function leadEvent(event: "cta" | "form_start" | "form_submit") {
+  try {
+    navigator.sendBeacon?.("/api/lead-event", new Blob([JSON.stringify({ event, path: location.pathname })], { type: "application/json" }));
+  } catch {}
+}
+
+const CONTACT = /^\/(en\/contact|tr\/iletisim)\/?$/;
+
+export function LeadSignals() {
+  useEffect(() => {
+    let started = false;
+    const onClick = (event: MouseEvent) => {
+      const link = event.target instanceof Element ? event.target.closest("a") : null;
+      if (link && link.origin === location.origin && CONTACT.test(link.pathname) && !CONTACT.test(location.pathname)) leadEvent("cta");
+    };
+    const onFocus = (event: FocusEvent) => {
+      if (!started && event.target instanceof Element && event.target.closest("form.contact-form")) { started = true; leadEvent("form_start"); }
+    };
+    document.addEventListener("click", onClick);
+    document.addEventListener("focusin", onFocus);
+    return () => { document.removeEventListener("click", onClick); document.removeEventListener("focusin", onFocus); };
+  }, []);
+  return null;
+}

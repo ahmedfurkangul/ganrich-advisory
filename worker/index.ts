@@ -1,7 +1,7 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
-import { logTraffic } from "./traffic";
+import { logLeadEvent, logTraffic } from "./traffic";
 
 interface Env {
   ASSETS: Fetcher;
@@ -58,6 +58,11 @@ const worker = {
           return result.response();
         },
       }, allowedWidths);
+    }
+
+    if (url.pathname === "/api/lead-event" && request.method === "POST") {
+      ctx.waitUntil(logLeadEvent(request, env).catch(() => undefined));
+      return new Response(null, { status: 204, headers: { "cache-control": "no-store" } });
     }
 
     const startedAt = Date.now();
