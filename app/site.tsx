@@ -36,9 +36,13 @@ const CookiePreferencesPage = lazy(() => import("./privacy-center").then((module
 const TrustContentPage = lazy(() => import("./privacy-center").then((module) => ({ default: module.TrustContentPage })));
 
 const ui = {
- en:{skip:"Skip to content",nav:["Expertise","Solutions","Sample work","Insights","Decision Lab","About"],cta:"Start a conversation",read:"Read the perspective",finalTitle:"What decision is on your agenda?",finalBody:"Share the context. We will come prepared with the questions that matter."},
- tr:{skip:"İçeriğe geç",nav:["Uzmanlık","Çözümler","Örnek çalışmalar","İçgörüler","Karar Laboratuvarı","Hakkımızda"],cta:"Görüşme başlatın",read:"Bakışı okuyun",finalTitle:"Gündeminizde hangi karar var?",finalBody:"Bağlamı paylaşın. Biz, önem taşıyan sorularla hazırlıklı gelelim."}
+ en:{skip:"Skip to content",nav:["Solutions","Insights","About","Contact"],cta:"Request a first review",read:"Read the perspective",finalTitle:"What decision is on your agenda?",finalBody:"Share the context. We will come prepared with the questions that matter."},
+ tr:{skip:"İçeriğe geç",nav:["Çözümler","İçgörüler","Hakkımızda","İletişim"],cta:"Ön görüşme isteyin",read:"Bakışı okuyun",finalTitle:"Gündeminizde hangi karar var?",finalBody:"Bağlamı paylaşın. Biz, önem taşıyan sorularla hazırlıklı gelelim."}
 } as const;
+
+// Four primary destinations. Decision Lab, sample work, markets and the expertise pages stay reachable
+// from the footer, the solutions catalogue and internal links, so nothing is lost for search engines.
+const navKeys = ["solutions", "insights", "about", "contact"] as const;
 
 function A({ href, children, className = "", dataEvent }: { href: string; children: React.ReactNode; className?: string; dataEvent?: string }) {
   return <a href={href} className={className} data-analytics-event={dataEvent}>{children}<span aria-hidden="true" className="arrow">↗</span></a>;
@@ -50,7 +54,7 @@ function Wordmark() {
 
 function Header({ lang, route }: SiteProps) {
   const [open, setOpen] = useState(false); const t = ui[lang]; const m = routeMap[lang];
-  const hrefs = [m.expertise, m.solutions, m.sampleWork, m.insights, m.decisionLab, m.about];
+  const hrefs = navKeys.map(k => m[k]);
   return <header className="header">
     <a className="brand" href={`/${lang}`} aria-label="Ganrich Advisory — Home"><Wordmark/></a>
     <button className="menu" aria-expanded={open} aria-controls="primary-nav" onClick={() => setOpen(!open)}>{open ? (lang === "en" ? "Close" : "Kapat") : (lang === "en" ? "Menu" : "Menü")}</button>
@@ -60,14 +64,14 @@ function Header({ lang, route }: SiteProps) {
     <div className="header-actions">
       <HeaderExplore lang={lang}/>
       <a className="language" data-analytics-event="language_switched" href={switchHref(lang, route)} onClick={() => localStorage.setItem("ganrich-language", lang === "en" ? "tr" : "en")} aria-label={lang === "en" ? "Türkçe sürüme geç" : "Switch to English"}><span className={lang === "en" ? "active" : ""}>EN</span><i>/</i><span className={lang === "tr" ? "active" : ""}>TR</span></a>
-      <a className="button compact" data-analytics-event="contact_started" href={`/${lang}/${m.contact}`}><span className="desktop-cta">{t.cta}</span><span className="mobile-cta">{lang === "en" ? "Contact" : "İletişim"}</span></a>
+      <a className="button compact" data-analytics-event="contact_started" href={`/${lang}/${m.contact}`}><span className="desktop-cta">{t.cta}</span><span className="mobile-cta">{lang === "en" ? "First review" : "Ön görüşme"}</span></a>
     </div>
   </header>;
 }
 
 function TopSectionNav({ lang }: { lang: Lang }) {
   const t = ui[lang]; const m = routeMap[lang];
-  const hrefs = [m.expertise, m.solutions, m.sampleWork, m.insights, m.decisionLab, m.about];
+  const hrefs = navKeys.map(k => m[k]);
   return <nav className="top-section-nav" aria-label={lang === "en" ? "Key sections" : "Ana bölümler"}>
     {t.nav.map((item, index) => <a key={item} href={`/${lang}/${hrefs[index]}`}>{item}</a>)}
   </nav>;
@@ -78,16 +82,13 @@ function Footer({ lang }: { lang: Lang }) {
   return <footer className="footer">
     <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Strategic judgment, regional fluency, and applied AI for consequential decisions." : "Kritik kararlar için stratejik muhakeme, bölgesel derinlik ve uygulamalı yapay zekâ."}</p></div>
     <div className="footer-links">
-      <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.expertise}`}>{t.nav[0]}</a><a href={`/${lang}/${m.solutions}`}>{t.nav[1]}</a><a href={`/${lang}/${m.sampleWork}`}>{t.nav[2]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[3]}</a><a href={`/${lang}/${m.decisionLab}`}>{t.nav[4]}</a><a href={`/${lang}/${m.about}`}>{t.nav[5]}</a><a href={`/${lang}/${m.markets}`}>{lang === "en" ? "Markets" : "Coğrafyalar"}</a></div>
+      <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.solutions}`}>{t.nav[0]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[1]}</a><a href={`/${lang}/${m.decisionLab}`}>{lang === "en" ? "Decision Lab tools" : "Karar Laboratuvarı araçları"}</a><a href={`/${lang}/${m.sampleWork}`}>{lang === "en" ? "Sample work" : "Örnek çalışmalar"}</a><a href={`/${lang}/${m.markets}`}>{lang === "en" ? "Markets" : "Coğrafyalar"}</a><a href={`/${lang}/${m.about}`}>{t.nav[2]}</a></div>
       <div><span>{lang === "en" ? "Contact" : "İletişim"}</span><a href={`/${lang}/${m.contact}`}>{t.cta}</a><a href="mailto:furkangul@ganrichadvisory.com">furkangul@ganrichadvisory.com</a><a href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
     </div>
     <nav className="footer-trust-links" aria-label={lang === "en" ? "Privacy and legal" : "Gizlilik ve hukuk"}>
-      <a href={`/${lang}/${m.privacyCenter}`}>{lang === "en" ? "Privacy center" : "Gizlilik merkezi"}</a>
-      <a href={`/${lang}/${m.privacy}`}>{lang === "en" ? "Privacy" : "Gizlilik"}</a>
+      <a href={`/${lang}/${m.privacyCenter}`}>{lang === "en" ? "Privacy and legal" : "Gizlilik ve hukuk"}</a>
       <a href={`/${lang}/${m.kvkk}`}>KVKK</a>
-      <a href={`/${lang}/${m.cookies}`}>{lang === "en" ? "Cookies" : "Çerezler"}</a>
       <button type="button" onClick={openCookiePreferences}>{lang === "en" ? "Cookie preferences" : "Çerez tercihleri"}</button>
-      <a href={`/${lang}/${m.dataRights}`}>{lang === "en" ? "Data rights" : "İlgili kişi hakları"}</a>
       <a href={`/${lang}/${m.legal}`}>{lang === "en" ? "Legal notice" : "Yasal bildirim"}</a>
       <a href={`/${lang}/feed.xml`}>RSS ↗</a>
     </nav>

@@ -4,7 +4,9 @@ import { absoluteUrl } from "./site-config";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const languages: Lang[] = ["en", "tr"];
-  const routeKeys = ["home", ...Object.keys(routeMap.en)];
+  // Redirected addresses stay out of the sitemap.
+  const redirected = new Set(["expertise", "privateBriefing"]);
+  const routeKeys = ["home", ...Object.keys(routeMap.en).filter(key => !redirected.has(key))];
   return routeKeys.flatMap((key) => languages.map((lang) => {
     const route = key === "home" ? "" : routeMap[lang][key];
     const path = `/${lang}${route ? `/${route}` : ""}`;
