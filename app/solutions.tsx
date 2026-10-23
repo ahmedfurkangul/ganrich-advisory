@@ -1,0 +1,24 @@
+"use client";
+import { Lang, routeMap } from './content';
+import { EditorialHero, Conversation } from './advisory';
+import { solutionByKey, solutions, solutionThemes } from './solutions-content';
+const url=(l:Lang,k:string)=>'/'+l+'/'+routeMap[l][k];
+const paperHref=(l:Lang,slug:string)=>l==='en'?'/en/insights/report/'+slug:'/tr/icgoruler/rapor/'+slug;
+
+export function SolutionsHub({lang}:{lang:Lang}){const en=lang==='en';return <>
+ <EditorialHero label={en?'Solutions':'Çözümler'} title={en?'Focused programmes for decisions new rules and markets are forcing.':'Yeni kuralların ve pazarların dayattığı kararlar için odaklı programlar.'} intro={en?'Each programme starts small: one defined question and a first step that produces evidence. How we work in detail is shared once we understand your situation.':'Her program küçük başlar: tanımlı tek bir soru ve kanıt üreten bir ilk adım. Çalışma yönteminin ayrıntısını durumunuzu anladıktan sonra paylaşırız.'}/>
+ <nav className="advisory-subnav" aria-label={en?'Themes':'Temalar'}>{solutionThemes[lang].map(t=><a key={t.key} href={'#'+t.key}>{t.label}</a>)}</nav>
+ {solutionThemes[lang].map(t=><section key={t.key} id={t.key} className="advisory-section solution-theme"><div className="editorial-heading"><p className="kicker">{t.label}</p><p>{t.intro}</p></div><div className="solution-grid">{solutions[lang].filter(s=>s.theme===t.key).map(s=><article key={s.key}><p className="kicker">{s.question}</p><h3><a href={url(lang,s.key)}>{s.title}</a></h3><p>{s.tagline}</p><a className="text-link" href={url(lang,s.key)}>{en?'See the programme':'Programı inceleyin'} <span aria-hidden="true">↗</span></a></article>)}</div></section>)}
+ <section className="advisory-section solution-note"><p>{en?'Programmes are adapted to each business. Scope, timing and fees are agreed after a first conversation.':'Programlar her işletmeye göre uyarlanır. Kapsam, takvim ve ücret ilk görüşmenin ardından birlikte belirlenir.'}</p></section>
+ <Conversation lang={lang}/>
+</>}
+
+export function SolutionPage({lang,kind}:{lang:Lang;kind:string}){const en=lang==='en',s=solutionByKey(lang,kind)!,theme=solutionThemes[lang].find(t=>t.key===s.theme)!,related=solutions[lang].filter(x=>x.theme===s.theme&&x.key!==s.key);return <>
+ <EditorialHero label={theme.label} title={s.title} intro={s.tagline}/>
+ <nav className="advisory-subnav" aria-label={en?'On this page':'Bu sayfada'}>{[['why',en?'Why now':'Neden şimdi?'],['fit',en?'Is this for you?':'Size uygun mu?'],['outcomes',en?'What you leave with':'Elde edecekleriniz'],['start',en?'How we start':'Nasıl başlarız?']].map(([id,t])=><a key={id} href={'#'+id}>{t}</a>)}<a href={url(lang,'solutions')}>{en?'All solutions':'Tüm çözümler'} ↗</a></nav>
+ <section className="advisory-section service-overview" id="why"><div><p className="kicker">{en?'Why now':'Neden şimdi?'}</p><h2>{s.question}</h2><p>{s.trigger}</p></div><div id="fit"><h2>{en?'Who it is for':'Kimler için?'}</h2><p>{s.audience}</p><h3>{en?'You may need this if':'Şu durumlar tanıdık geliyorsa'}</h3><ul className="deliverables">{s.signals.map(x=><li key={x}>{x}</li>)}</ul></div></section>
+ <section className="advisory-section service-process" id="outcomes"><h2>{en?'What you leave with':'Elde edecekleriniz'}</h2><ul className="deliverables solution-outcomes">{s.outcomes.map(x=><li key={x}>{x}</li>)}</ul><div className="editorial-pair" id="start"><div><h3>{en?'How we start':'Nasıl başlarız?'}</h3><p>{s.firstStep}</p></div><div><h3>{en?'Scope and boundaries':'Kapsam ve sınırlar'}</h3><p>{s.boundaries}</p></div></div></section>
+ {s.paper&&<section className="advisory-section solution-paper"><p className="kicker">{en?'Whitepaper':'Teknik not'}</p><h3>{s.paper.title}</h3><a className="text-link" href={paperHref(lang,s.paper.slug)}>{en?'Read the whitepaper':'Teknik notu okuyun'} <span aria-hidden="true">↗</span></a></section>}
+ {related.length>0&&<section className="advisory-section solution-related"><p className="kicker">{en?'Related programmes':'İlgili programlar'}</p><div className="solution-grid">{related.map(r=><article key={r.key}><h3><a href={url(lang,r.key)}>{r.title}</a></h3><p>{r.tagline}</p></article>)}</div></section>}
+ <Conversation lang={lang} service={s.key}/>
+</>}

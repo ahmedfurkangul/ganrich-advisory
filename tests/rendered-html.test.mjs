@@ -409,3 +409,21 @@ test("returns 404 for paths outside the /en and /tr trees", async () => {
   const english = await render("/en");
   assert.equal(english.status, 200);
 });
+
+test("publishes the solutions programmes in both languages without prices or durations", async () => {
+  const { routeMap } = await import("../app/content.ts").catch(() => ({ routeMap: null }));
+  const paths = ["/en/solutions", "/tr/cozumler", "/en/solutions/cbam-data-readiness", "/en/solutions/cra-incident-readiness", "/en/solutions/ai-order-desk-assistant", "/tr/cozumler/cbam-veri-hazirligi", "/tr/cozumler/sanayide-su-dengesi"];
+  for (const path of paths) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, /rel="canonical"/, path);
+    const text = html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
+    assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\d+\s?(weeks?|months?|hafta|ay)\b/i, `${path} must not show prices or durations`);
+  }
+  const hub = await (await render("/en/solutions")).text();
+  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "AI Order Desk Assistant", "Industrial Water Balance"]) assert.match(hub, new RegExp(title));
+  const home = await (await render("/en")).text();
+  assert.match(home, /href="\/en\/solutions"/);
+  if (routeMap) assert.equal(Object.keys(routeMap.en).filter(key => key.startsWith("solution")).length, Object.keys(routeMap.tr).filter(key => key.startsWith("solution")).length);
+});

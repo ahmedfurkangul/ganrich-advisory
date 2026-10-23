@@ -512,3 +512,19 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 @media print{.header,.top-section-nav,.footer,.advisory-conversation,.tool-onboarding,.sample-selector,.advisory-subnav,.privacy-banner,.cookie-banner,.tool-recommendation,.briefing-tray,.framer-workspace,.advisory-hero,.sample-gallery>.text-link{display:none!important}.sample-gallery{display:block;padding:0}.sample-memo{border:0;padding:16px}.sample-memo section,.memo-options p,.board-memo-grid section,.brief-grid section{break-inside:avoid}.sample-gallery a{display:none}.framer.section,.board-builder,.compass,.ai-lens{padding:16px!important}.framer-result,.board-memo,.compass-result,.ai-lens-result{border:0!important;padding:0!important}.intelligence-hero{padding:12px 16px!important}.intelligence-hero h1{font-size:24px!important}.board-memo h2{font-size:24px}.board-memo p{font-size:11px}.board-memo-grid{gap:12px}body{font-size:12px}h1,h2,h3{break-after:avoid}@page{margin:15mm}}
 
 @media(min-width:981px) and (max-width:1080px){.header{grid-template-columns:1fr auto auto}.header .menu{display:block;grid-column:2;grid-row:1;min-height:44px}.header-actions{grid-column:3}.nav{flex-direction:column;align-items:flex-start}.nav.open{display:flex}}
+
+/* Solutions */
+.solution-theme + .solution-theme { padding-top: 0; }
+.solution-theme .editorial-heading { margin-bottom: 32px; }
+.solution-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 0 40px; }
+.solution-grid > article { border-top: 1px solid var(--sand); padding: 28px 0 32px; display: flex; flex-direction: column; }
+.solution-grid h3 { font: 400 clamp(1.4rem,2vw,1.9rem)/1.2 var(--serif); margin: 0 0 12px; }
+.solution-grid .kicker { font-size: .8rem; margin-bottom: .8rem; }
+.solution-grid .text-link { margin-top: auto; }
+.solution-outcomes { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; margin: 24px 0 56px; }
+.solution-note { padding-top: 0; font-size: .9rem; }
+.solution-paper { border-top: 1px solid var(--sand); }
+.solution-paper h3 { max-width: 30ch; }
+.solution-related { background: #eae8df; }
+@media (max-width: 820px) { .solution-outcomes { grid-template-columns: 1fr; } }
+.service-overview #fit h3 { margin-top: 40px; }
