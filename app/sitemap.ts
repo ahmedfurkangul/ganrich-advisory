@@ -12,12 +12,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const otherRoute = key === "home" ? "" : routeMap[other][key];
     const isArticle = key.startsWith("article");
     const isCategory = key.startsWith("category");
+    const isOffering = key === "solutions" || key.startsWith("solution") || key.startsWith("service") || key === "expertise";
     const articleIndex = ["article", "articleTransformation", "articleMarketEntry", "articleCorridor", "articleFamilyHoldings", "articleIndustrialAi"].indexOf(key);
     return {
       url: absoluteUrl(path),
       lastModified: isArticle && articleIndex >= 0 ? insightArticles[lang][articleIndex].date : undefined,
-      changeFrequency: isArticle || isCategory || key === "insights" ? "weekly" as const : "monthly" as const,
-      priority: key === "home" ? 1 : isArticle ? .8 : isCategory || key === "insights" ? .75 : .7,
+      changeFrequency: isArticle || isCategory || key === "insights" || key === "solutions" ? "weekly" as const : "monthly" as const,
+      priority: key === "home" ? 1 : isOffering || isArticle ? .8 : isCategory || key === "insights" ? .75 : .7,
       alternates: {
         languages: {
           en: absoluteUrl(lang === "en" ? path : `/${other}${otherRoute ? `/${otherRoute}` : ""}`),

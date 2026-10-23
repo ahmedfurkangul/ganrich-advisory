@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Site from "../../site";
 import { insightArticles, insightCategoryForKind, insightIndex, Lang, pageKind, routeMap } from "../../content";
 import { absoluteUrl, SITE_NAME, SITE_ORIGIN } from "../../site-config";
+import { breadcrumbParent, FOUNDER_SAME_AS, ids, offeringNodes, organizationNode, pageKeywords, webPageNode, websiteNode } from "../../structured-data";
 
 type Props = { params: Promise<{ lang: string; slug?: string[] }> };
 
@@ -67,19 +68,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     : (advisoryMeta(lang, kind) ?? metaCopy[lang][metaKind] ?? metaCopy[lang].home);
   const socialCard = article
     ? `/og/${lang}/article-${article.slug}.png`
-    : `/og/${lang}/${category ? category.key : metaKind in metaCopy[lang] ? metaKind : "home"}.png`;
+    : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind === "sampleWork" ? kind : metaKind in metaCopy[lang] ? metaKind : "home"}.png`;
+  const keywords = pageKeywords(lang, kind);
   const metadataBase = new URL(SITE_ORIGIN);
   const current = `/${lang}${route ? `/${route}` : ""}`; const other: Lang = lang === "en" ? "tr" : "en"; const currentKind = pageKind(lang, route); const translated = currentKind === "home" || currentKind === "notFound" ? `/${other}` : `/${other}/${routeMap[other][currentKind]}`;
   return {
     metadataBase,
     title,
     description,
+    ...(keywords ? { keywords } : {}),
+    authors: [{ name: "Ahmed Furkan Gul", url: absoluteUrl(`/${lang}/${routeMap[lang].about}`) }],
+    creator: "Ahmed Furkan Gul",
+    publisher: SITE_NAME,
     alternates: {
       canonical: current,
       languages: { en: lang === "en" ? current : translated, tr: lang === "tr" ? current : translated, "x-default": "/en" },
       types: { "application/rss+xml": `/${lang}/feed.xml` },
     },
-    robots: kind === "cookiePreferences" ? { index: false, follow: true } : { index: true, follow: true },
+    robots: kind === "cookiePreferences"
+      ? { index: false, follow: true }
+      : { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
     openGraph: {
       title,
       description,
@@ -105,35 +113,31 @@ export default async function LocalizedPage({ params }: Props) {
   const article = kind.startsWith("article") ? insightArticles[lang][insightIndex(kind)] : null;
   const category = kind.startsWith("category") ? insightCategoryForKind(lang, kind) : null;
   const currentUrl = absoluteUrl(`/${lang}${route ? `/${route}` : ""}`);
-  const organizationId = absoluteUrl("/#organization");
-  const personId = absoluteUrl(`/${lang}/${routeMap[lang].about}#ahmed-furkan-gul`);
+  const organizationId = ids.organization;
+  const personId = ids.person(lang);
   const title = article?.title ?? category?.label ?? advisoryMeta(lang, kind)?.[0]?.split("|")[0].trim() ?? (metaCopy[lang][kind as keyof typeof metaCopy.en]?.[0]?.split("|")[0].trim() || SITE_NAME);
   const parent = article || category
     ? { name: lang === "en" ? "Insights" : "İçgörüler", url: absoluteUrl(`/${lang}/${routeMap[lang].insights}`) }
     : kind.startsWith("decision") || ["marketCompass", "boardBriefBuilder", "aiValueLens"].includes(kind)
       ? { name: lang === "en" ? "Decision Lab" : "Karar Laboratuvarı", url: absoluteUrl(`/${lang}/${routeMap[lang].decisionLab}`) }
-      : null;
+      : breadcrumbParent(lang, kind);
+  const description = article?.thesis ?? category?.description ?? (advisoryMeta(lang, kind) ?? metaCopy[lang][kind as keyof typeof metaCopy.en] ?? metaCopy[lang].home)[1];
+  const socialCard = absoluteUrl(article ? `/og/${lang}/article-${article.slug}.png` : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind === "sampleWork" ? kind : kind in metaCopy[lang] ? kind : "home"}.png`);
   const breadcrumbItems = [
     { "@type": "ListItem", position: 1, name: lang === "en" ? "Home" : "Ana sayfa", item: absoluteUrl(`/${lang}`) },
     ...(parent ? [{ "@type": "ListItem", position: 2, name: parent.name, item: parent.url }] : []),
     ...(kind === "home" ? [] : [{ "@type": "ListItem", position: parent ? 3 : 2, name: title, item: currentUrl }]),
   ];
   const graph: Record<string, unknown>[] = [
-    {
-      "@type": ["Organization", "ProfessionalService"],
-      "@id": organizationId,
-      name: SITE_NAME,
-      url: absoluteUrl("/"),
-      logo: { "@type": "ImageObject", url: absoluteUrl("/brand/ganrich-advisory-threshold.png") },
-      description: metaCopy[lang].home[1],
-      founder: { "@id": personId },
-      areaServed: ["Türkiye", "Middle East and North Africa", "Europe", "Africa"],
-    },
+    organizationNode(lang, metaCopy[lang].home[1]),
+    websiteNode(metaCopy[lang].home[1]),
+    webPageNode(lang, currentUrl, title, description, kind === "about" ? "AboutPage" : kind === "contact" ? "ContactPage" : kind === "solutions" || kind === "expertise" || kind === "insights" || category ? "CollectionPage" : "WebPage", { image: socialCard, ...(kind === "home" ? { mainEntity: { "@id": organizationId } } : {}) }),
     {
       "@type": "BreadcrumbList",
       "@id": `${currentUrl}#breadcrumb`,
       itemListElement: breadcrumbItems,
     },
+    ...offeringNodes(lang, kind, currentUrl),
   ];
   if (article) graph.push({
     "@type": "Article",
@@ -149,14 +153,14 @@ export default async function LocalizedPage({ params }: Props) {
     image: absoluteUrl(`/og/${lang}/article-${article.slug}.png`),
     mainEntityOfPage: currentUrl,
   });
-  if (kind === "about" || article) graph.push({
+  if (kind === "about" || article || kind.startsWith("note")) graph.push({
     "@type": "Person",
     "@id": personId,
     name: "Ahmed Furkan Gul",
     jobTitle: lang === "en" ? "Founder, Ganrich Advisory" : "Kurucu, Ganrich Advisory",
     worksFor: { "@id": organizationId },
     url: absoluteUrl(`/${lang}/${routeMap[lang].about}`),
-    sameAs: ["https://www.linkedin.com/in/furkangul/", "https://avesis.kent.edu.tr/ahmedfurkan.gul"],
+    sameAs: FOUNDER_SAME_AS,
   });
   const structuredData = { "@context": "https://schema.org", "@graph": graph };
   const serializedStructuredData = JSON.stringify(structuredData).replace(/</g, "\\u003c");
