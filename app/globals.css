@@ -564,6 +564,11 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .traffic-channels { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; }
 .traffic-channels li { display: grid; grid-template-columns: minmax(140px, 220px) 1fr auto; align-items: center; gap: 12px; font-size: .88rem; }
 .traffic-channels .traffic-bar { position: static; display: block; height: 14px; background: var(--forest); }
+.traffic-funnel { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 8px; }
+.traffic-funnel li { display: grid; grid-template-columns: minmax(160px, 240px) 1fr minmax(90px, auto); align-items: center; gap: 12px; font-size: .88rem; }
+.traffic-funnel .traffic-bar { position: static; display: block; height: 18px; background: var(--forest); }
+.traffic-funnel small { color: var(--stone); font-weight: 400; }
+@media (max-width: 640px) { .traffic-funnel li { grid-template-columns: 1fr auto; } .traffic-funnel .traffic-bar { grid-column: 1 / -1; grid-row: 2; } }
 .traffic-note { font-size: .78rem; color: var(--stone); margin: 0 0 10px; }
 .traffic-empty { color: var(--stone); font-size: .88rem; margin: 0; }
 .traffic-method { line-height: 1.6; max-width: 90ch; }

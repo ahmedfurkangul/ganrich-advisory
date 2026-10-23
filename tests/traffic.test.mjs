@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { classifyBot, deviceInfo, logTraffic, trafficKind } from "../worker/traffic.ts";
+import { classifyBot, deviceInfo, logLeadEvent, logTraffic, trafficKind } from "../worker/traffic.ts";
 import { channelOf } from "../db/traffic.ts";
 import { trafficInsights } from "../app/traffic-insights.ts";
 
@@ -97,6 +97,7 @@ test("writes a cautious analysis from the numbers", () => {
     rising: [{ label: "/en/solutions", now: 80, before: 20 }],
     devices: [{ label: "mobile", views: 100, visitors: 60 }, { label: "desktop", views: 300, visitors: 90 }],
     pdfs: [{ label: "CBAM: actual or default?", views: 9 }],
+    funnel: { visitors: 150, cta: 12, formStart: 6, formSubmit: 2, inquiries: 3 },
   };
   const en = trafficInsights("en", report).map(i => i.text).join("\n");
   assert.match(en, /Visitors rose 50% against the previous 30 days/);
@@ -105,6 +106,38 @@ test("writes a cautious analysis from the numbers", () => {
   assert.match(en, /40% of visitors use a phone/);
   assert.match(en, /3 inquiries came in, a conversion rate of 2\.0%/);
   assert.match(en, /4 visits hit a missing page/);
+  assert.match(en, /12 visitors clicked a contact button, 6 started the form and 2 sent it/);
+  assert.match(en, /More than half of the people who start the contact form leave/);
   const tr = trafficInsights("tr", report).map(i => i.text).join("\n");
   assert.match(tr, /Ziyaretçi sayısı önceki 30 güne göre %50 arttı/);
+});
+
+test("records contact steps with the page only, and ignores bots, other sites and unknown steps", async () => {
+  const statements = [];
+  const db = { prepare(sql) { return { bind(...params) { return {
+    run: async () => { statements.push({ sql, params }); return {}; },
+    first: async () => sql.startsWith("SELECT salt") ? { salt: "test-salt" } : null,
+  }; } }; } };
+  const person = "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1";
+  const beacon = (body, headers = {}) => new Request("https://ganrichadvisory.com/api/lead-event", {
+    method: "POST", body: JSON.stringify(body),
+    headers: { "user-agent": person, "cf-connecting-ip": "203.0.113.9", origin: "https://ganrichadvisory.com", ...headers },
+  });
+  const inserts = () => statements.filter(s => s.sql.includes("INSERT INTO page_views"));
+  await logLeadEvent(beacon({ event: "cta", path: "/tr/cozumler/cbam-veri-hazirligi" }), { DB: db });
+  assert.equal(inserts().length, 1);
+  const row = inserts()[0].params;
+  assert.equal(row[2], "/tr/cozumler/cbam-veri-hazirligi");
+  assert.equal(row[3], "tr");
+  assert.equal(row[4], "cta");
+  assert.ok(!row.includes("203.0.113.9"), "IP address must not be stored");
+  assert.match(row[9], /^[0-9a-f]{16}$/);
+  await logLeadEvent(beacon({ event: "form_submit", path: "/en/contact", name: "Jane" }), { DB: db });
+  assert.ok(!inserts()[1].params.includes("Jane"), "form content is never stored");
+  await logLeadEvent(beacon({ event: "purchase", path: "/en" }), { DB: db });
+  await logLeadEvent(beacon({ event: "cta", path: "https://evil.example/" }), { DB: db });
+  await logLeadEvent(beacon({ event: "cta", path: "/en" }, { origin: "https://evil.example" }), { DB: db });
+  await logLeadEvent(beacon({ event: "cta", path: "/en" }, { "user-agent": "curl/8.5.0" }), { DB: db });
+  await logLeadEvent(beacon({ event: "cta", path: "/en" }), { DB: db, ANALYTICS_LOGGING: "off" });
+  assert.equal(inserts().length, 2);
 });

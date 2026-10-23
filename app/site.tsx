@@ -15,7 +15,7 @@ const ContactExperience = lazy(() => import("./contact-experience").then(m => ({
 const SolutionsHub = lazy(() => import("./solutions").then(m => ({default:m.SolutionsHub})));
 const SolutionPage = lazy(() => import("./solutions").then(m => ({default:m.SolutionPage})));
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
-import { AnalyticsBridge } from "./analytics";
+import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
 import { BriefingTray, HeaderExplore } from "./intelligence-shell";
 import { openCookiePreferences, PrivacyControls } from "./privacy-controls";
@@ -98,7 +98,7 @@ function Footer({ lang }: { lang: Lang }) {
 
 export function SiteLayout({ lang, route, children }: SiteProps & { children: React.ReactNode }) {
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
-  return <><a className="skip" href="#content">{ui[lang].skip}</a><Header lang={lang} route={route}/><TopSectionNav lang={lang}/><main id="content">{children}</main><BriefingTray lang={lang}/><Footer lang={lang}/><PrivacyControls lang={lang}/><AnalyticsBridge/></>;
+  return <><a className="skip" href="#content">{ui[lang].skip}</a><Header lang={lang} route={route}/><TopSectionNav lang={lang}/><main id="content">{children}</main><BriefingTray lang={lang}/><Footer lang={lang}/><PrivacyControls lang={lang}/><AnalyticsBridge/><LeadSignals/></>;
 }
 
 

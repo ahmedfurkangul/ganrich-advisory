@@ -21,7 +21,7 @@ type PreferenceState = {
 const copy = {
   en: {
     bannerTitle: "Your privacy, without the theatre.",
-    bannerBody: "This site uses essential technology, optional first-party preferences, and a cookieless visit count that stores no IP address. No advertising cookies, cross-site tracking, or third-party media are active.",
+    bannerBody: "This site uses essential technology, optional first-party preferences, and a cookieless count of visits and contact steps that stores no IP address. No advertising cookies, cross-site tracking, or third-party media are active.",
     accept: "Accept optional", reject: "Essential only", manage: "Manage choices", dialogTitle: "Cookie preferences",
     dialogIntro: "Choose whether this site may remember optional interface settings. Your choice can be changed at any time.",
     save: "Save preferences", close: "Close", necessary: "Essential",
@@ -32,7 +32,7 @@ const copy = {
   },
   tr: {
     bannerTitle: "Gösterişsiz, açık gizlilik.",
-    bannerBody: "Bu site zorunlu teknolojileri, isteğe bağlı birinci taraf tercihlerini ve IP adresi saklamayan çerezsiz bir ziyaret sayımını kullanır. Reklam çerezleri, siteler arası izleme veya üçüncü taraf medya etkin değildir.",
+    bannerBody: "Bu site zorunlu teknolojileri, isteğe bağlı birinci taraf tercihlerini ve IP adresi saklamayan çerezsiz bir ziyaret ve iletişim adımı sayımını kullanır. Reklam çerezleri, siteler arası izleme veya üçüncü taraf medya etkin değildir.",
     accept: "İsteğe bağlıları kabul et", reject: "Yalnızca zorunlu", manage: "Tercihleri yönet", dialogTitle: "Çerez tercihleri",
     dialogIntro: "Sitenin isteğe bağlı arayüz ayarlarını hatırlayıp hatırlamayacağını seçin. Tercihinizi dilediğiniz zaman değiştirebilirsiniz.",
     save: "Tercihleri kaydet", close: "Kapat", necessary: "Zorunlu",

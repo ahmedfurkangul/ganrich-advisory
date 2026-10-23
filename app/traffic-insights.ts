@@ -89,6 +89,14 @@ export function trafficInsights(lang: Lang, r: TrafficReport): Insight[] {
     ? `${t.inquiries} inquiries came in, a conversion rate of ${(t.conversion * 100).toFixed(1)}% of visitors.`
     : `${t.inquiries} talep geldi; ziyaretçilere göre dönüşüm oranı %${(t.conversion * 100).toFixed(1)}.` });
 
+  const f = r.funnel;
+  if (f && f.cta > 0) out.push({ tone: f.formSubmit > 0 ? "good" : "info", text: en
+    ? `${f.cta} visitors clicked a contact button, ${f.formStart} started the form and ${f.formSubmit} sent it.`
+    : `${f.cta} ziyaretçi iletişim düğmesine tıkladı, ${f.formStart} kişi formu doldurmaya başladı ve ${f.formSubmit} kişi gönderdi.` });
+  if (f && f.formStart >= 3 && f.formSubmit / f.formStart < 0.5) out.push({ tone: "watch", text: en
+    ? `More than half of the people who start the contact form leave without sending it. Worth checking the form on a phone.`
+    : `İletişim formunu doldurmaya başlayanların yarısından fazlası göndermeden ayrılıyor. Formu telefonda denemekte fayda var.` });
+
   if (t.notFound >= 3) out.push({ tone: "watch", text: en
     ? `${t.notFound} visits hit a missing page. The list under "Missing pages" shows which links to fix or redirect.`
     : `${t.notFound} ziyaret bulunamayan bir sayfaya düştü. "Bulunamayan sayfalar" listesi hangi bağlantıların düzeltilmesi gerektiğini gösteriyor.` });
