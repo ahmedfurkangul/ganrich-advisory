@@ -36,7 +36,7 @@ const SITES_IDENTITY_HEADERS = [
 ];
 
 function withoutUntrustedIdentity(request: Request, env: Env): Request {
-  if (env.EDITOR_AUTH === "sites") return request;
+  if (env?.EDITOR_AUTH === "sites") return request;
   if (!SITES_IDENTITY_HEADERS.some(name => request.headers.has(name))) return request;
   const headers = new Headers(request.headers);
   for (const name of SITES_IDENTITY_HEADERS) headers.delete(name);
