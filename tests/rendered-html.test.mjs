@@ -149,7 +149,9 @@ test("keeps core interactions keyboard-operable and marketing JavaScript within 
   assert.match(controls, /event\.key === "Escape"/);
   assert.match(privacy, /Trust should be designed into the experience/);
   assert.match(css, /min-height: 44px/);
-  assert.ok(compressedBytes <= 150 * 1024, `Marketing JavaScript is ${compressedBytes} gzip bytes; budget is 153600`);
+  // 152 KB since the contact-step beacon (PR #14). Gzip output differs by a few hundred bytes between
+  // machines (153354 in the cloud container, 153737 on the Mac), so the budget keeps about 2 KB of headroom.
+  assert.ok(compressedBytes <= 152 * 1024, `Marketing JavaScript is ${compressedBytes} gzip bytes; budget is 155648`);
 });
 
 test("publishes production-safe bilingual SEO, taxonomy, feeds, and discovery files", async () => {
