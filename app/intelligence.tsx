@@ -310,6 +310,7 @@ export function DecisionLabPage({ lang }: { lang: Lang }) {
     [isEn ? "Market Entry Compass" : "Pazara Giriş Pusulası", isEn ? "Compare opportunity and readiness using assumptions you control." : "Kendi varsayımlarınızla fırsat ve hazırlığı karşılaştırın.", m.marketCompass],
     [isEn ? "Board Brief Builder" : "Yönetim Kurulu Brifingi Oluşturucu", isEn ? "Turn a framed decision into a disciplined one-page board memo." : "Çerçevelenmiş bir kararı disiplinli, tek sayfalık yönetim kurulu notuna dönüştürün.", m.boardBriefBuilder],
     [isEn ? "AI Value Lens" : "Yapay Zekâ Değer Merceği", isEn ? "Assess a use case across value, repeatability, readiness, adoption, and risk control." : "Bir kullanım alanını değer, tekrarlanabilirlik, hazırlık, benimseme ve risk kontrolü üzerinden değerlendirin.", m.aiValueLens],
+    [isEn ? "CBAM Readiness Check" : "CBAM Hazırlık Testi", isEn ? "Eight questions on whether your emissions data is ready for an EU buyer, with the gaps to close first." : "Emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; önce kapatılacak boşluklarla birlikte.", m.cbamCheck],
   ];
   return (
     <>
