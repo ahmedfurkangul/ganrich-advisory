@@ -26,7 +26,7 @@ type PreferenceState = {
 const copy = {
   en: {
     bannerTitle: "Your privacy, without the theatre.",
-    bannerBody: "This site currently uses only essential technology and optional first-party preferences. No analytics, advertising cookies, or third-party media are active.",
+    bannerBody: "This site uses essential technology, optional first-party preferences, and a cookieless visit count that stores no IP address. No advertising cookies, cross-site tracking, or third-party media are active.",
     accept: "Accept optional",
     reject: "Essential only",
     manage: "Manage choices",
@@ -39,7 +39,7 @@ const copy = {
     functional: "Functional preferences",
     functionalBody: "Remembers saved reading tools, briefing items, and Decision Lab drafts on this device.",
     unavailable: "Not currently in use",
-    unavailableBody: "Analytics, advertising, and third-party embedded media are not enabled in the current build.",
+    unavailableBody: "Analytics cookies, advertising, and third-party embedded media are not enabled in the current build.",
     current: "Current choice",
     saved: "Preferences saved",
     notSet: "No choice recorded",
@@ -49,7 +49,7 @@ const copy = {
   },
   tr: {
     bannerTitle: "Gösterişsiz, açık gizlilik.",
-    bannerBody: "Bu site şu anda yalnızca zorunlu teknolojileri ve isteğe bağlı birinci taraf tercihlerini kullanır. Analitik, reklam çerezleri veya üçüncü taraf medya etkin değildir.",
+    bannerBody: "Bu site zorunlu teknolojileri, isteğe bağlı birinci taraf tercihlerini ve IP adresi saklamayan çerezsiz bir ziyaret sayımını kullanır. Reklam çerezleri, siteler arası izleme veya üçüncü taraf medya etkin değildir.",
     accept: "İsteğe bağlıları kabul et",
     reject: "Yalnızca zorunlu",
     manage: "Tercihleri yönet",
@@ -62,7 +62,7 @@ const copy = {
     functional: "İşlevsel tercihler",
     functionalBody: "Kaydedilen okuma araçlarını, brifing öğelerini ve Karar Laboratuvarı taslaklarını bu cihazda hatırlar.",
     unavailable: "Şu anda kullanılmıyor",
-    unavailableBody: "Analitik, reklam ve üçüncü taraf gömülü medya mevcut sürümde etkin değildir.",
+    unavailableBody: "Analitik çerezleri, reklam ve üçüncü taraf gömülü medya mevcut sürümde etkin değildir.",
     current: "Mevcut tercih",
     saved: "Tercihler kaydedildi",
     notSet: "Kayıtlı tercih yok",
@@ -242,7 +242,8 @@ const pages: Record<Lang, Record<TrustKind, {
       sections: [
         ["What the public site handles", "Language choice, consent choice, and optional interface preferences may be stored locally on your device. Contact and briefing details are transmitted securely and stored to review and respond to your request."],
         ["Why these technologies exist", "Essential technologies support secure delivery and remember the choice you make in the privacy control. Optional first-party storage remembers reading tools and drafts only when you allow it."],
-        ["What is not active", "The current build does not activate analytics, advertising cookies, behavioural profiling, third-party media embeds, or external AI prompt processing."],
+        ["Cookieless visit statistics", "When a page is requested, the server records the page, the referring website, any campaign tags in the link, an approximate location derived from the network (country and city), the network operator, device type, browser, and operating system. No cookie is set and no IP address is stored. A pseudonymous code that changes every day lets us count unique visits per day without following anyone across days. These records are kept for 13 months and are used only to understand how the site is used."],
+        ["What is not active", "The current build does not set analytics or advertising cookies and does not run behavioural profiling, cross-site tracking, third-party media embeds, or external AI prompt processing."],
         ["Retention and recipients", "No public retention schedule, service-provider register, or transfer statement is asserted here until the underlying operational records and contracts are verified."],
         ["Your choices", "Use Cookie preferences at any time to withdraw optional local storage. Clearing browser storage also removes locally saved choices and drafts."],
       ],
@@ -262,11 +263,11 @@ const pages: Record<Lang, Record<TrustKind, {
     cookies: {
       label: "COOKIE NOTICE",
       title: "A deliberately small technology footprint.",
-      intro: "The site is designed to work without analytics or advertising technologies.",
+      intro: "The site is designed to work without analytics cookies or advertising technologies.",
       sections: [
         ["Essential", "Security and delivery technologies, the requested language choice, and the record of your privacy preference. These cannot be switched off through this interface."],
         ["Optional functional", "Saved briefing items, reading mode, and Decision Lab drafts stored in your browser. These are off unless you enable them."],
-        ["Not deployed", "Analytics, advertising, cross-site tracking, and third-party embedded media are not active in the current build."],
+        ["Not deployed", "Analytics cookies, advertising, cross-site tracking, and third-party embedded media are not active in the current build. Visit statistics are counted on the server without cookies, as described in the privacy notice."],
         ["How to change your mind", "Open Cookie preferences from the footer. Choosing Essential only removes the optional local preference keys used by this site."],
       ],
     },
@@ -345,7 +346,8 @@ const pages: Record<Lang, Record<TrustKind, {
       sections: [
         ["Kamuya açık sitede işlenenler", "Dil seçimi, gizlilik tercihi ve isteğe bağlı arayüz ayarları cihazınızda yerel olarak saklanabilir. İletişim ve brifing bilgileri, talebinizi incelemek ve yanıtlamak amacıyla güvenli biçimde iletilir ve saklanır."],
         ["Teknolojilerin amacı", "Zorunlu teknolojiler güvenli sunumu sağlar ve gizlilik kontrolündeki kararınızı hatırlar. İsteğe bağlı birinci taraf depolama, yalnızca izin verdiğinizde okuma araçlarını ve taslakları hatırlar."],
-        ["Etkin olmayanlar", "Mevcut sürüm analitik, reklam çerezleri, davranışsal profilleme, üçüncü taraf medya gömme veya haricî yapay zekâ istem işleme faaliyeti yürütmez."],
+        ["Çerezsiz ziyaret istatistikleri", "Bir sayfa istendiğinde sunucu; sayfayı, yönlendiren siteyi, bağlantıdaki kampanya etiketlerini, ağdan türetilen yaklaşık konumu (ülke ve şehir), ağ işletmecisini, cihaz türünü, tarayıcıyı ve işletim sistemini kaydeder. Çerez kullanılmaz ve IP adresi saklanmaz. Her gün değişen takma bir kod, kimseyi günler arasında izlemeden günlük tekil ziyaretleri saymamızı sağlar. Bu kayıtlar 13 ay saklanır ve yalnızca sitenin nasıl kullanıldığını anlamak için kullanılır."],
+        ["Etkin olmayanlar", "Mevcut sürüm analitik veya reklam çerezi kullanmaz; davranışsal profilleme, siteler arası izleme, üçüncü taraf medya gömme veya haricî yapay zekâ istem işleme faaliyeti yürütmez."],
         ["Saklama ve alıcılar", "Operasyonel kayıtlar ve sözleşmeler doğrulanana kadar burada bir saklama takvimi, hizmet sağlayıcı listesi veya aktarım beyanı ileri sürülmez."],
         ["Tercihleriniz", "İsteğe bağlı yerel depolama iznini dilediğiniz zaman Çerez tercihleri üzerinden geri çekebilirsiniz. Tarayıcı verilerini temizlemek de yerel tercih ve taslakları kaldırır."],
       ],
@@ -365,11 +367,11 @@ const pages: Record<Lang, Record<TrustKind, {
     cookies: {
       label: "ÇEREZ BİLDİRİMİ",
       title: "Bilinçli biçimde küçük bir teknoloji izi.",
-      intro: "Site, analitik veya reklam teknolojileri olmadan çalışacak şekilde tasarlanmıştır.",
+      intro: "Site, analitik çerezleri veya reklam teknolojileri olmadan çalışacak şekilde tasarlanmıştır.",
       sections: [
         ["Zorunlu", "Güvenlik ve sunum teknolojileri, talep edilen dil seçimi ve gizlilik tercihinizin kaydı. Bunlar bu arayüzden kapatılamaz."],
         ["İsteğe bağlı işlevsel", "Tarayıcınızda saklanan brifing öğeleri, okuma modu ve Karar Laboratuvarı taslakları. İzin vermediğiniz sürece kapalıdır."],
-        ["Kullanılmayanlar", "Analitik, reklam, siteler arası izleme ve üçüncü taraf gömülü medya mevcut sürümde etkin değildir."],
+        ["Kullanılmayanlar", "Analitik çerezleri, reklam, siteler arası izleme ve üçüncü taraf gömülü medya mevcut sürümde etkin değildir. Ziyaret istatistikleri, gizlilik bildiriminde açıklandığı gibi sunucuda çerezsiz olarak sayılır."],
         ["Tercih değişikliği", "Alt bilgiden Çerez tercihlerini açın. Yalnızca zorunlu seçimi, bu sitenin kullandığı isteğe bağlı yerel tercih anahtarlarını kaldırır."],
       ],
     },
@@ -482,7 +484,7 @@ export function PrivacyCenterPage({ lang }: { lang: Lang }) {
   return <TrustShell lang={lang} label={isEn ? "PRIVACY + TRUST" : "GİZLİLİK + GÜVEN"} title={isEn ? "Trust should be designed into the experience." : "Güven, deneyimin içine tasarlanmalıdır."} intro={isEn ? "A concise, bilingual centre for privacy choices, current-site facts, AI transparency, and legal information." : "Gizlilik tercihleri, mevcut site olguları, yapay zekâ şeffaflığı ve hukuki bilgiler için özlü, iki dilli merkez."}>
     <section className="trust-current">
       <span>{isEn ? "CURRENT SITE CONFIGURATION" : "MEVCUT SİTE YAPILANDIRMASI"}</span>
-      <div><strong>{isEn ? "No analytics or advertising trackers" : "Analitik veya reklam izleyicisi yok"}</strong><strong>{isEn ? "Optional preferences off by default" : "İsteğe bağlı tercihler varsayılan olarak kapalı"}</strong><strong>{isEn ? "Secure inquiry storage" : "Güvenli talep kaydı"}</strong></div>
+      <div><strong>{isEn ? "No analytics cookies or advertising trackers" : "Analitik çerezi veya reklam izleyicisi yok"}</strong><strong>{isEn ? "Optional preferences off by default" : "İsteğe bağlı tercihler varsayılan olarak kapalı"}</strong><strong>{isEn ? "Secure inquiry storage" : "Güvenli talep kaydı"}</strong></div>
     </section>
     <section className="trust-card-grid">{cards.map(([title, body, href], index) => <a key={href} href={`/${lang}/${href}`}><span>0{index + 1}</span><h2>{title}</h2><p>{body}</p><i aria-hidden="true">↗</i></a>)}</section>
     <section className="trust-utility">

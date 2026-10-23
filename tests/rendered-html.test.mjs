@@ -285,11 +285,11 @@ test("returns a true house-voice 404 and keeps analytics disabled by default", a
 
 test("publishes a restrained bilingual privacy and trust center", async () => {
   const routes = [
-    ["/en/privacy-center", /Trust should be designed into the experience\./, /No analytics or advertising trackers/],
+    ["/en/privacy-center", /Trust should be designed into the experience\./, /No analytics cookies or advertising trackers/],
     ["/tr/gizlilik-merkezi", /Güven, deneyimin içine tasarlanmalıdır\./, /İsteğe bağlı tercihler varsayılan olarak kapalı/],
     ["/en/privacy", /Privacy, explained in plain language\./, /transmitted securely and stored/],
     ["/tr/kvkk-aydinlatma-metni", /Türkiye veri koruma bilgilendirmesi\./, /Aydınlatma/],
-    ["/en/cookies", /deliberately small technology footprint/, /Analytics, advertising/],
+    ["/en/cookies", /deliberately small technology footprint/, /Analytics cookies, advertising/],
     ["/en/data-rights", /rights channel should be secure/, /Do not send identity documents/],
     ["/en/ai-transparency", /AI assists the work/, /Decision Lab tools run in the visitor’s browser/],
     ["/en/cookie-preferences", /Cookie preferences/, /Functional preferences/],
@@ -426,6 +426,14 @@ test("publishes the solutions programmes in both languages without prices or dur
   const home = await (await render("/en")).text();
   assert.match(home, /href="\/en\/solutions"/);
   if (routeMap) assert.equal(Object.keys(routeMap.en).filter(key => key.startsWith("solution")).length, Object.keys(routeMap.tr).filter(key => key.startsWith("solution")).length);
+});
+
+test("hides the traffic dashboard from anyone who is not a verified editor", async () => {
+  for (const path of ["/en/insights/pdf-studio/analytics", "/tr/icgoruler/pdf-studyosu/analitik"]) {
+    const response = await render(path);
+    assert.equal(response.status, 404, `${path} must not be public`);
+    assert.doesNotMatch(await response.text(), /Traffic and analysis|Trafik ve analiz/);
+  }
 });
 
 test("gives search engines and AI assistants tags, structured data, llms.txt and crawler rules", async () => {
