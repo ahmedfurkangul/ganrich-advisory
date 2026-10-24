@@ -68,7 +68,7 @@ function Header({ lang, route }: SiteProps) {
     </nav>
     <div className="header-actions">
       <HeaderExplore lang={lang}/>
-      <a className="language" data-analytics-event="language_switched" href={switchHref(lang, route)} onClick={() => localStorage.setItem("ganrich-language", lang === "en" ? "tr" : "en")} aria-label={lang === "en" ? "Türkçe sürüme geç" : "Switch to English"}><span className={lang === "en" ? "active" : ""}>EN</span><i>/</i><span className={lang === "tr" ? "active" : ""}>TR</span></a>
+      <a className="language" data-analytics-event="language_switched" href={switchHref(lang, route)} onClick={() => localStorage.setItem("ganrich-language", lang === "en" ? "tr" : "en")} ><span className={lang === "en" ? "active" : ""}>EN</span><i>/</i><span className={lang === "tr" ? "active" : ""}>TR</span><span className="sr-only">{lang === "en" ? "Türkçe sürüme geç" : "Switch to English"}</span></a>
       <a className="button compact" data-analytics-event="contact_started" href={`/${lang}/${m.contact}`}><span className="desktop-cta">{t.cta}</span><span className="mobile-cta">{lang === "en" ? "First review" : "Ön görüşme"}</span></a>
     </div>
   </header>;
