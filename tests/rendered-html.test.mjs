@@ -143,7 +143,7 @@ test("keeps core interactions keyboard-operable and marketing JavaScript within 
 
 
   assert.match(shell, /role="dialog" aria-modal="true" aria-labelledby="briefing-tray-title"/);
-  assert.match(shell, /aria-controls="ganrich-command"/);
+  assert.doesNotMatch(shell, /ganrich-command/); // the header search palette was removed in Wave 1
   assert.match(site, /lazy\(\(\) => import\("\.\/intelligence"\)/);
   assert.match(intelligence, /event\.key === "ArrowRight"/);
   assert.match(controls, /event\.key === "Escape"/);
@@ -644,4 +644,19 @@ test("leads the solutions hub with the four flagship programmes and lists the re
   for (const title of ["PFAS Substitution Programme", "Industrial Water Balance", "E-commerce Margin Clarity"]) assert.match(more, new RegExp(title));
   assert.doesNotMatch(more, /CBAM Data Readiness/);
   assert.doesNotMatch(hub, /aria-pressed/);
+});
+
+test("keeps the header to the menu, language switch and one call to action", async () => {
+  const html = await (await render("/tr")).text();
+  const header = html.slice(html.indexOf('<header class="header">'), html.indexOf("</header>"));
+  assert.doesNotMatch(header, /⌘K|Keşfet|explore-trigger/);
+  assert.match(header, /Ön görüşme isteyin/);
+});
+
+test("tells one positioning story in the footer, About page and structured data", async () => {
+  const [about, home, aboutTr] = await Promise.all(["/en/about", "/en", "/tr/hakkimizda"].map(path => render(path).then(response => response.text())));
+  assert.match(about, /Strategy and EU-readiness advisory for Turkish industry and exporters\./);
+  assert.match(about, /EU-readiness advisory for Turkish manufacturers and exporters/);
+  assert.match(aboutTr, /Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı\./);
+  for (const page of [about, home, aboutTr]) assert.doesNotMatch(page, /Middle East and North Africa|regional fluency|bölgesel derinlik/);
 });
