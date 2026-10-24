@@ -143,7 +143,7 @@ test("keeps core interactions keyboard-operable and marketing JavaScript within 
 
 
   assert.match(shell, /role="dialog" aria-modal="true" aria-labelledby="briefing-tray-title"/);
-  assert.match(shell, /aria-controls="ganrich-command"/);
+  assert.doesNotMatch(shell, /ganrich-command/); // the header search palette was removed in Wave 1
   assert.match(site, /lazy\(\(\) => import\("\.\/intelligence"\)/);
   assert.match(intelligence, /event\.key === "ArrowRight"/);
   assert.match(controls, /event\.key === "Escape"/);
@@ -632,4 +632,11 @@ test("names the data controller and states purposes, transfers, retention and ho
   assert.match(privacy, /24 months from receipt/);
   assert.match(vendors, /Cloudflare, Inc\./);
   assert.doesNotMatch(kvkk + privacy + rights + vendors, /Publication gate|Yayın kapısı|not yet published|henüz yayımlanmamaktadır/);
+});
+
+test("keeps the header to the menu, language switch and one call to action", async () => {
+  const html = await (await render("/tr")).text();
+  const header = html.slice(html.indexOf('<header class="header">'), html.indexOf("</header>"));
+  assert.doesNotMatch(header, /⌘K|Keşfet|explore-trigger/);
+  assert.match(header, /Ön görüşme isteyin/);
 });

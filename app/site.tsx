@@ -22,7 +22,7 @@ const EudrReadinessCheck = lazy(() => import("./readiness-check").then(m => ({de
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
-import { BriefingTray, HeaderExplore } from "./intelligence-shell";
+import { BriefingTray } from "./intelligence-shell";
 import { openCookiePreferences, PrivacyControls } from "./privacy-controls";
 
 type SiteProps = { lang: Lang; route: string };
@@ -67,7 +67,6 @@ function Header({ lang, route }: SiteProps) {
       {t.nav.map((item, i) => <a key={item} href={`/${lang}/${hrefs[i]}`} aria-current={route === hrefs[i] ? "page" : undefined}>{item}</a>)}
     </nav>
     <div className="header-actions">
-      <HeaderExplore lang={lang}/>
       <a className="language" data-analytics-event="language_switched" href={switchHref(lang, route)} onClick={() => localStorage.setItem("ganrich-language", lang === "en" ? "tr" : "en")} ><span className={lang === "en" ? "active" : ""}>EN</span><i>/</i><span className={lang === "tr" ? "active" : ""}>TR</span><span className="sr-only">{lang === "en" ? "Türkçe sürüme geç" : "Switch to English"}</span></a>
       <a className="button compact" data-analytics-event="contact_started" href={`/${lang}/${m.contact}`}><span className="desktop-cta">{t.cta}</span><span className="mobile-cta">{lang === "en" ? "First review" : "Ön görüşme"}</span></a>
     </div>
