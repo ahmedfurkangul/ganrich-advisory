@@ -130,3 +130,22 @@ export const analyticsSalts = sqliteTable("analytics_salts", {
   day: text("day").primaryKey(),
   salt: text("salt").notNull(),
 });
+
+// Regulation-update subscribers. Double opt-in: a row starts as 'pending' and becomes 'active' only
+// when the confirmation link is opened. The token confirms and unsubscribes; it is never shown publicly.
+export const subscribers = sqliteTable("subscribers", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull(),
+  language: text("language").notNull(),
+  source: text("source").notNull().default(""),
+  status: text("status").notNull().default("pending"),
+  token: text("token").notNull(),
+  requestFingerprint: text("request_fingerprint").notNull(),
+  createdAt: text("created_at").notNull(),
+  confirmedAt: text("confirmed_at"),
+  unsubscribedAt: text("unsubscribed_at"),
+}, (table) => [
+  uniqueIndex("subscribers_email_idx").on(table.email),
+  uniqueIndex("subscribers_token_idx").on(table.token),
+  index("subscribers_status_idx").on(table.status),
+]);
