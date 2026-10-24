@@ -696,3 +696,13 @@ test("tells one positioning story in the footer, About page and structured data"
   assert.match(aboutTr, /Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı\./);
   for (const page of [about, home, aboutTr]) assert.doesNotMatch(page, /Middle East and North Africa|regional fluency|bölgesel derinlik/);
 });
+
+test("answers common regulation questions on the flagship programme pages", async () => {
+  const cbam = await (await render("/en/solutions/cbam-data-readiness")).text();
+  assert.match(cbam, /Common questions/);
+  assert.match(cbam, /Which importers are covered\?/);
+  assert.match(cbam, /"@type":"Question","name":"Which importers are covered\?"/);
+  const craTr = await (await render("/tr/cozumler/cra-olay-hazirligi")).text();
+  assert.match(craTr, /Sık sorulan sorular/);
+  assert.match(craTr, /11 Aralık 2027/);
+});
