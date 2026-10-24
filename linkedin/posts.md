@@ -1,5 +1,5 @@
 # LinkedIn schedule, Nov–Dec 2026 (approved by Furkan 2026-10-24)
-Post on Furkan's personal LinkedIn profile, scheduled at 09:00 Europe/Istanbul. The link goes at the end of the text (LinkedIn cannot schedule a first comment). Paste each text exactly.
+Post on the Ganrich Advisory company page (linkedin.com/company/135278307/admin), NOT Furkan's personal profile. Texts use the company voice (we), scheduled at 09:00 Europe/Istanbul. The link goes at the end of the text (LinkedIn cannot schedule a first comment). Paste each text exactly.
 
 ---
 
@@ -10,9 +10,9 @@ Media: none (LinkedIn shows the link preview)
 ```text
 AB kuralları artık Türk ihracatçısının gündelik işi. CBAM, Siber Dayanıklılık Yasası, EUDR, ambalaj, batarya… Her birinin kendi takvimi var ve hepsi farklı bir ekibi ilgilendiriyor.
 
-Bu yüzden kısa bir mevzuat bülteni başlattım. Yalnızca bilinmeye değer bir gelişme olduğunda gelir: ne değişti, kimi etkiliyor, önce neye bakmalı. Mevzuat özeti değil, ihracatçı için ne anlama geldiği.
+Bu yüzden kısa bir mevzuat bülteni başlattık. Yalnızca bilinmeye değer bir gelişme olduğunda gelir: ne değişti, kimi etkiliyor, önce neye bakmalı. Mevzuat özeti değil, ihracatçı için ne anlama geldiği.
 
-Yalnızca e-posta adresinizi istiyorum; onay e-postasıyla katılıyorsunuz, istediğiniz zaman çıkabilirsiniz.
+Yalnızca e-posta adresinizi istiyoruz; onay e-postasıyla katılıyorsunuz, istediğiniz zaman çıkabilirsiniz.
 
 Bağlantı: https://ganrichadvisory.com/tr/icgoruler/mevzuat-bulteni?utm_source=linkedin&utm_medium=social&utm_campaign=bulten-lansman
 ```
@@ -28,7 +28,7 @@ CBAM'in kesin dönemi 1 Ocak 2026'da başladı. AB'deki alıcınız ürününüz
 
 Varsayılan değerler ihtiyatlı belirleniyor. Gerçek veriniz yoksa alıcı büyük olasılıkla daha yüksek bir rakamla hesap yapıyor ve bu fark fiyat görüşmesine yansıyor.
 
-Emisyon veriniz bir AB alıcısına verilmeye hazır mı? 8 soruluk, 2 dakikalık bir test hazırladım; sonuç hemen ekranda, kayıt yok.
+Emisyon veriniz bir AB alıcısına verilmeye hazır mı? 8 soruluk, 2 dakikalık bir test hazırladık; sonuç hemen ekranda, kayıt yok.
 
 Bağlantı: https://ganrichadvisory.com/tr/karar-laboratuvari/cbam-hazirlik-testi?utm_source=linkedin&utm_medium=social&utm_campaign=cbam-test
 ```
@@ -44,7 +44,7 @@ Cuma gecesi 23:00. Sahadaki bir cihazınızda aktif olarak istismar edilen bir a
 
 İlk soru teknik değil: bildirim kararını kim veriyor? Vekili kim? Hangi ürün ve sürümler etkileniyor, bunu bir günde söyleyebilir misiniz?
 
-Bu soruları 8 maddelik bir hazırlık testine çevirdim. 2 dakika sürüyor, sonunda önce kapatmanız gereken boşlukları görüyorsunuz.
+Bu soruları 8 maddelik bir hazırlık testine çevirdik. 2 dakika sürüyor, sonunda önce kapatmanız gereken boşlukları görüyorsunuz.
 
 Bağlantı: https://ganrichadvisory.com/tr/karar-laboratuvari/cra-hazirlik-testi?utm_source=linkedin&utm_medium=social&utm_campaign=cra-test
 ```
@@ -76,7 +76,7 @@ Media: none (LinkedIn shows the link preview)
 ```text
 AB Ambalaj ve Ambalaj Atıkları Tüzüğü (PPWR) 12 Ağustos 2026'dan beri uygulanıyor. AB'ye mal gönderen her ihracatçının bir ambalajı var; yani konu yalnızca ambalaj üreticilerini ilgilendirmiyor.
 
-Alıcıların ilk isteyeceği şey genellikle bir dosya: hangi ambalaj, hangi malzeme, hangi geri dönüşüm sınıfı, hangi beyanlar. Bu dosyayı nasıl kuracağınızı teknik notta anlattım.
+Alıcıların ilk isteyeceği şey genellikle bir dosya: hangi ambalaj, hangi malzeme, hangi geri dönüşüm sınıfı, hangi beyanlar. Bu dosyayı nasıl kuracağınızı teknik notta anlattık.
 
 Bağlantı: https://ganrichadvisory.com/tr/cozumler/ab-ambalaj-uyumu?utm_source=linkedin&utm_medium=social&utm_campaign=ppwr
 ```
@@ -116,9 +116,9 @@ Bağlantı / Link: https://ganrichadvisory.com/tr/cozumler/makine-tuzugune-gecis
 Media: image: public/og/tr/studio.png
 
 ```text
-Danışmanlık çalışmaları için geliştirdiğim beş aracı bir çatı altında topladım: Carbon Ledger (emisyon verisi), Order Pilot (sipariş masası), Signal Room (ürün olayları), Access Studio (erişilebilirlik) ve Border Atlas (ürün kataloğu).
+Danışmanlık çalışmaları için geliştirdiğimiz beş aracı bir çatı altında topladık: Carbon Ledger (emisyon verisi), Order Pilot (sipariş masası), Signal Room (ürün olayları), Access Studio (erişilebilirlik) ve Border Atlas (ürün kataloğu).
 
-Her araç tek bir iş sorusuna odaklanıyor; nasıl göründüklerini ve hangi soruya cevap verdiklerini vitrin sayfasında anlattım.
+Her araç tek bir iş sorusuna odaklanıyor; nasıl göründüklerini ve hangi soruya cevap verdiklerini vitrin sayfasında anlattık.
 
 Bağlantı: https://ganrichadvisory.com/tr/opportunity-studio?utm_source=linkedin&utm_medium=social&utm_campaign=studio
 ```
@@ -174,7 +174,7 @@ Bağlantı: https://ganrichadvisory.com/tr/cozumler/zorla-calistirma-tedarik-kan
 Media: document: linkedin/12-2027-ab-takvimi.pdf, title '2027: Türk ihracatçısını etkileyecek 4 AB tarihi'
 
 ```text
-2027'de Türk ihracatçısını etkileyecek AB tarihlerini tek sayfada topladım. Tarihler değiştikçe haber almak isterseniz mevzuat bültenine katılabilirsiniz.
+2027'de Türk ihracatçısını etkileyecek AB tarihlerini tek sayfada topladık. Tarihler değiştikçe haber almak isterseniz mevzuat bültenine katılabilirsiniz.
 
 EN: Four EU dates that will matter to Turkish exporters in 2027, on one page. Sign up for regulation updates to hear when they move.
 
