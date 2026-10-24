@@ -557,6 +557,19 @@ test("publishes the CRA readiness check in both languages and links it from the 
   assert.match(await (await render("/en/decision-lab")).text(), /CRA Readiness Check/);
 });
 
+test("publishes the EUDR readiness check in both languages and links it from the EUDR programme", async () => {
+  for (const [path, title] of [["/en/decision-lab/eudr-readiness-check", /EUDR Readiness Check \| Ganrich Advisory/], ["/tr/karar-laboratuvari/eudr-hazirlik-testi", /EUDR Hazırlık Testi \| Ganrich Advisory/]]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, title);
+    assert.match(html, /rel="canonical"/);
+  }
+  assert.match(await (await render("/en/solutions/eudr-traceability")).text(), /href="\/en\/decision-lab\/eudr-readiness-check"/);
+  assert.match(await (await render("/tr/cozumler/eudr-izlenebilirlik")).text(), /href="\/tr\/karar-laboratuvari\/eudr-hazirlik-testi"/);
+  assert.match(await (await render("/tr/karar-laboratuvari")).text(), /EUDR Hazırlık Testi/);
+});
+
 test("publishes the Opportunity Studio showcase in both languages without linking the private host", async () => {
   for (const [path, products] of [["/en/opportunity-studio", /Five working tools behind our programmes/], ["/tr/opportunity-studio", /Programlarımızın arkasındaki beş çalışma aracı/]]) {
     const response = await render(path);

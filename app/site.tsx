@@ -17,6 +17,7 @@ const StudioPage = lazy(() => import("./studio").then(m => ({default:m.StudioPag
 const SolutionPage = lazy(() => import("./solutions").then(m => ({default:m.SolutionPage})));
 const CbamReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.CbamReadinessCheck})));
 const CraReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.CraReadinessCheck})));
+const EudrReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.EudrReadinessCheck})));
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
@@ -127,6 +128,7 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "aiValueLens") page = <AIValueLensPage lang={lang}/>;
   if (kind === "cbamCheck") page = <CbamReadinessCheck lang={lang}/>;
   if (kind === "craCheck") page = <CraReadinessCheck lang={lang}/>;
+  if (kind === "eudrCheck") page = <EudrReadinessCheck lang={lang}/>;
   if (kind === "decisionLabChangelog") page = <DecisionLabChangelogPage lang={lang}/>;
   if (kind === "privateBriefing") page = <PrivateBriefingPage lang={lang}/>;
   if (kind === "about") page = <AboutPage lang={lang}/>;
