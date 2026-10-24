@@ -149,7 +149,10 @@ export async function logTraffic(request: Request, response: Response, env: Traf
 
 // Steps toward a first contact, sent by the page as a beacon. Stored in the same log with the page
 // they happened on, so the dashboard can show a funnel. Nothing typed into a form is ever sent.
-export const LEAD_EVENTS = new Set(["cta", "form_start", "form_submit"]);
+// "seen" is sent once per page load after the page's JavaScript runs. Most scanners and crawlers never
+// run it, so a visitor with a "seen" row that day is a browser-confirmed visitor.
+// "check_start" and "check_complete" follow the readiness checks.
+export const LEAD_EVENTS = new Set(["seen", "cta", "form_start", "form_submit", "check_start", "check_complete"]);
 
 export async function logLeadEvent(request: Request, env: TrafficEnv) {
   if (!env?.DB || env.ANALYTICS_LOGGING === "off") return;

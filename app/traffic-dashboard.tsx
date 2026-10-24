@@ -94,6 +94,7 @@ function Funnel({ lang, report }: { lang: Lang; report: TrafficReport }) {
   const f = report.funnel;
   const stages: Array<[string, number]> = [
     [en ? "Visitors" : "Ziyaretçi", f.visitors],
+    [en ? "Confirmed by a browser" : "Tarayıcıyla doğrulanan", f.confirmed],
     [en ? "Clicked a contact button" : "İletişim düğmesine tıkladı", f.cta],
     [en ? "Started the form" : "Formu doldurmaya başladı", f.formStart],
     [en ? "Sent the form" : "Formu gönderdi", f.formSubmit],
@@ -110,8 +111,25 @@ function Funnel({ lang, report }: { lang: Lang; report: TrafficReport }) {
       </li>;
     })}</ol>
     <p className="traffic-note">{en
-      ? `Unique visitors per day at each step; the percentage compares with the step before. ${f.inquiries} requests reached the inbox in this period. Steps are counted from 23 October 2026.`
-      : `Her adımda günlük tekil ziyaretçi; yüzde bir önceki adıma göredir. Bu dönemde gelen kutusuna ${f.inquiries} talep düştü. Adımlar 23 Ekim 2026'dan itibaren sayılıyor.`}</p>
+      ? `Unique visitors per day at each step; the percentage compares with the step before. "Confirmed by a browser" counts visitors whose browser ran the page; most scanners and crawlers that pass as people never do. ${f.inquiries} requests reached the inbox in this period. Contact steps are counted from 23 October 2026, browser confirmation from the deploy of this version.`
+      : `Her adımda günlük tekil ziyaretçi; yüzde bir önceki adıma göredir. "Tarayıcıyla doğrulanan", sayfayı gerçekten bir tarayıcıda çalıştıran ziyaretçileri sayar; insan gibi görünen tarayıcı botlarının çoğu bunu yapmaz. Bu dönemde gelen kutusuna ${f.inquiries} talep düştü. İletişim adımları 23 Ekim 2026'dan, tarayıcı doğrulaması bu sürümün yayına alınmasından itibaren sayılıyor.`}</p>
+  </section>;
+}
+
+function Checks({ lang, report }: { lang: Lang; report: TrafficReport }) {
+  const en = lang === "en";
+  const f = report.funnel;
+  return <section className="traffic-card">
+    <h3>{en ? "Readiness checks" : "Hazırlık testleri"}</h3>
+    <ol className="traffic-funnel">
+      <li><span>{en ? "Started a check" : "Teste başladı"}</span><span className="traffic-bar" style={{ width: f.checkStart ? "100%" : "0%" }} aria-hidden="true"/><strong>{number(lang, f.checkStart)}</strong></li>
+      <li><span>{en ? "Saw the result" : "Sonucu gördü"}</span><span className="traffic-bar" style={{ width: `${f.checkStart ? f.checkComplete / f.checkStart * 100 : 0}%` }} aria-hidden="true"/><strong>{number(lang, f.checkComplete)}{f.checkStart > 0 && <small> · {Math.round(f.checkComplete / f.checkStart * 100)}%</small>}</strong></li>
+    </ol>
+    {report.checkPages.length > 0 && <table className="traffic-table">
+      <thead><tr><th scope="col">{en ? "Check" : "Test"}</th><th scope="col">{en ? "Results seen" : "Görülen sonuç"}</th></tr></thead>
+      <tbody>{report.checkPages.map(r => <tr key={r.label}><th scope="row"><span className="traffic-label" title={r.label}>{r.label}</span></th><td>{number(lang, r.views)}</td></tr>)}</tbody>
+    </table>}
+    <p className="traffic-note">{en ? "Counted from the deploy of this version. Answers are never sent; only the step and the page." : "Bu sürümün yayına alınmasından itibaren sayılır. Cevaplar gönderilmez; yalnızca adım ve sayfa kaydedilir."}</p>
   </section>;
 }
 
@@ -189,6 +207,7 @@ export function TrafficDashboard({ lang, report, studioHref, selfHref }: { lang:
     <Funnel lang={lang} report={report}/>
 
     <div className="traffic-grid">
+      <Checks lang={lang} report={report}/>
       <FunnelChannels lang={lang} report={report}/>
       <BarTable lang={lang} title={en ? "Pages where contact buttons were clicked" : "İletişim düğmesine tıklanan sayfalar"} rows={report.ctaPages} valueLabel={en ? "Clicks" : "Tıklama"}/>
       <BarTable lang={lang} title={en ? "Requests by topic" : "Konuya göre talepler"} rows={report.inquiryTopics.map(r => ({ ...r, label: topicTitle(lang, r.label) }))} showVisitors={false} valueLabel={en ? "Requests" : "Talep"}/>

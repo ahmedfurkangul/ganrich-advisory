@@ -47,7 +47,7 @@ export function AnalyticsBridge() {
 
 // Cookieless steps toward a first contact (button click, form started, form sent). Only the step name and
 // the page path are sent; the server counts them like page visits. Nothing typed into a form leaves the page.
-export function leadEvent(event: "cta" | "form_start" | "form_submit") {
+export function leadEvent(event: "seen" | "cta" | "form_start" | "form_submit" | "check_start" | "check_complete") {
   try {
     navigator.sendBeacon?.("/api/lead-event", new Blob([JSON.stringify({ event, path: location.pathname })], { type: "application/json" }));
   } catch {}
@@ -57,6 +57,8 @@ const CONTACT = /^\/(en\/contact|tr\/iletisim)\/?$/;
 
 export function LeadSignals() {
   useEffect(() => {
+    // Once per page load: proves a real browser ran the page (see worker/traffic.ts).
+    leadEvent("seen");
     let started = false;
     const onClick = (event: MouseEvent) => {
       const link = event.target instanceof Element ? event.target.closest("a") : null;

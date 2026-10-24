@@ -296,13 +296,13 @@ function ReadinessCheck({ lang, config }: { lang: Lang; config: CheckConfig }) {
   return <>
     <EditorialHero label={c.label} title={c.title} intro={c.intro}/>
     <section className="advisory-section readiness-check">
-      {!done ? <form onSubmit={e => { e.preventDefault(); setDone(true); }}>
+      {!done ? <form onSubmit={e => { e.preventDefault(); leadEvent('check_complete'); setDone(true); }}>
         <ol className="readiness-questions">{c.questions.map((q, i) => <li key={i}>
           <fieldset>
             <legend>{q.q}</legend>
             <div className="readiness-options">{c.answers.map((label, j) => {
               const value = (2 - j) as Answer;
-              return <label key={j}><input type="radio" name={`q${i}`} checked={answers[i] === value} onChange={() => setAnswers(a => a.map((v, k) => k === i ? value : v))} required/><span>{label}</span></label>;
+              return <label key={j}><input type="radio" name={`q${i}`} checked={answers[i] === value} onChange={() => { if (answered === 0) leadEvent('check_start'); setAnswers(a => a.map((v, k) => k === i ? value : v)); }} required/><span>{label}</span></label>;
             })}</div>
           </fieldset>
         </li>)}</ol>

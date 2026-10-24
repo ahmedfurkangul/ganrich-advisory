@@ -32,7 +32,8 @@ export type TrafficReport = {
   discovery: Row[];
   recent: Array<{ ts: string; path: string; referrer: string; country: string; city: string; device: string; browser: string }>;
   rising: Array<{ label: string; now: number; before: number }>;
-  funnel: { visitors: number; cta: number; formStart: number; formSubmit: number; inquiries: number };
+  funnel: { visitors: number; confirmed: number; cta: number; formStart: number; formSubmit: number; inquiries: number; checkStart: number; checkComplete: number };
+  checkPages: Row[];
   funnelChannels: Array<{ channel: Channel; visitors: number; cta: number; submits: number }>;
   ctaPages: Row[];
   inquiryTopics: Row[];
@@ -165,12 +166,15 @@ export async function trafficReport(days: number): Promise<TrafficReport> {
   ]);
 
   // Lead funnel: unique visitor-days reaching each step, and the channel of each visitor's first page that day.
-  const [steps, channelSteps, ctaPages, topicRows] = await Promise.all([
-    first<{ cta: number; fs: number; sub: number }>(db,
-      `SELECT COUNT(DISTINCT CASE WHEN kind = 'cta' THEN day || visitor END) AS cta,
+  const [steps, channelSteps, ctaPages, topicRows, checkPages] = await Promise.all([
+    first<{ seen: number; cta: number; fs: number; sub: number; cs: number; cc: number }>(db,
+      `SELECT COUNT(DISTINCT CASE WHEN kind = 'seen' THEN day || visitor END) AS seen,
+        COUNT(DISTINCT CASE WHEN kind = 'cta' THEN day || visitor END) AS cta,
         COUNT(DISTINCT CASE WHEN kind = 'form_start' THEN day || visitor END) AS fs,
-        COUNT(DISTINCT CASE WHEN kind = 'form_submit' THEN day || visitor END) AS sub
-       FROM page_views WHERE day >= ? AND day <= ? AND kind IN ('cta', 'form_start', 'form_submit')`, from, to),
+        COUNT(DISTINCT CASE WHEN kind = 'form_submit' THEN day || visitor END) AS sub,
+        COUNT(DISTINCT CASE WHEN kind = 'check_start' THEN day || visitor || path END) AS cs,
+        COUNT(DISTINCT CASE WHEN kind = 'check_complete' THEN day || visitor || path END) AS cc
+       FROM page_views WHERE day >= ? AND day <= ? AND kind IN ('seen', 'cta', 'form_start', 'form_submit', 'check_start', 'check_complete')`, from, to),
     all<{ referrer_host: string; utm_source: string; utm_medium: string; visitors: number; cta: number; sub: number }>(db,
       `WITH firsts AS (
          SELECT day || visitor AS v, referrer_host, utm_source, utm_medium FROM page_views
@@ -185,6 +189,8 @@ export async function trafficReport(days: number): Promise<TrafficReport> {
     all<{ source: string; n: number }>(db,
       `SELECT source, COUNT(*) AS n FROM inquiries WHERE substr(created_at, 1, 10) >= ? AND substr(created_at, 1, 10) <= ?
        GROUP BY source ORDER BY n DESC`, from, to).catch(() => []),
+    // Completed readiness checks per check page.
+    group(db, "path", from, to, 10, "kind = 'check_complete'"),
   ]);
   const funnelMap = new Map<Channel, { visitors: number; cta: number; submits: number }>();
   for (const r of channelSteps) {
@@ -238,7 +244,8 @@ export async function trafficReport(days: number): Promise<TrafficReport> {
     campaigns, countries, cities, networks, devices, browsers, systems, languages, hours,
     pdfs: pdfRows.map(r => ({ label: r.title || r.label, views: r.views, visitors: r.visitors })),
     notFound, bots, aiBotPaths, discovery, recent, rising,
-    funnel: { visitors, cta: steps.cta ?? 0, formStart: steps.fs ?? 0, formSubmit: steps.sub ?? 0, inquiries },
+    funnel: { visitors, confirmed: steps.seen ?? 0, cta: steps.cta ?? 0, formStart: steps.fs ?? 0, formSubmit: steps.sub ?? 0, inquiries, checkStart: steps.cs ?? 0, checkComplete: steps.cc ?? 0 },
+    checkPages: checkPages.map(r => ({ ...r, extra: undefined })),
     funnelChannels: [...funnelMap].map(([channel, m]) => ({ channel, ...m })).sort((a, b) => b.visitors - a.visitors),
     ctaPages: ctaPages.map(r => ({ ...r, extra: undefined })),
     inquiryTopics: [...topicMap].map(([label, views]) => ({ label, views })).sort((a, b) => b.views - a.views),
