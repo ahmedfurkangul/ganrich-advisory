@@ -2,6 +2,7 @@
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 import { logLeadEvent, logTraffic } from "./traffic";
+import { servePage } from "./edge-cache";
 
 interface Env {
   ASSETS: Fetcher;
@@ -9,6 +10,7 @@ interface Env {
   DOCUMENTS: R2Bucket;
   EDITOR_AUTH?: string;
   ANALYTICS_LOGGING?: string;
+  CF_VERSION_METADATA?: { id: string };
   IMAGES: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
@@ -66,7 +68,9 @@ const worker = {
     }
 
     const startedAt = Date.now();
-    const response = await handler.fetch(withoutUntrustedIdentity(request, env), env, ctx);
+    const edgeCache = (globalThis as unknown as { caches?: { default?: Parameters<typeof servePage>[2] } }).caches?.default;
+    const response = await servePage(request, env.CF_VERSION_METADATA?.id, edgeCache,
+      () => handler.fetch(withoutUntrustedIdentity(request, env), env, ctx), promise => ctx.waitUntil(promise));
     ctx.waitUntil(logTraffic(request, response, env, startedAt).catch(() => undefined));
     return response;
   },
