@@ -696,3 +696,9 @@ test("tells one positioning story in the footer, About page and structured data"
   assert.match(aboutTr, /Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı\./);
   for (const page of [about, home, aboutTr]) assert.doesNotMatch(page, /Middle East and North Africa|regional fluency|bölgesel derinlik/);
 });
+
+test("keeps the header call to action sized to its label", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  for (const rule of css.match(/[^{}]+\{[^}]*\bwidth:\s*44px[^}]*\}/g) ?? []) assert.doesNotMatch(rule, /\.button\.compact/);
+  assert.match(css, /\.button\.compact, \.save-control, \.reading-modes button, \.command-input button \{ min-height: 44px; \}/);
+});
