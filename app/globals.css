@@ -690,3 +690,17 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 /* Homepage readiness checks */
 .home-checks .editorial-heading > p:last-child { max-width: 60ch; margin-top: 16px; }
 .home-checks > .text-link { display: inline-block; margin-top: 36px; }
+/* EU regulation calendar */
+.rule-timeline > .text-link { display: inline-block; margin-top: 16px; font-size: .85rem; }
+.regulation-calendar { max-width: 880px; }
+.regulation-calendar h2 { font: 400 1.6rem/1.2 var(--serif); margin: 40px 0 8px; }
+.regulation-calendar ol { list-style: none; margin: 0; padding: 0; }
+.calendar-checked { color: var(--stone); font-size: .9rem; line-height: 1.6; max-width: 70ch; }
+.calendar-item { display: grid; grid-template-columns: 9.5em 1fr; gap: 6px 24px; padding: 22px 0; border-top: 1px solid var(--sand); scroll-margin-top: 96px; }
+.calendar-item > time { color: var(--bronze); font-size: .9rem; padding-top: 3px; }
+.calendar-item h3 { font: 400 1.2rem/1.3 var(--serif); margin: 0 0 6px; }
+.calendar-item p { margin: 0 0 8px; line-height: 1.55; }
+.calendar-rule { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--stone); }
+.calendar-links { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: .88rem; }
+.calendar-links a { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 720px) { .calendar-item { grid-template-columns: 1fr; } }
