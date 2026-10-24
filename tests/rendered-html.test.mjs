@@ -704,3 +704,9 @@ test("links the three readiness checks from the homepage", async () => {
   assert.match(tr, /Nerede durduğunuzu iki dakikada görün\./);
   assert.ok(tr.includes('href="/tr/karar-laboratuvari/cbam-hazirlik-testi"'));
 });
+
+test("keeps the header call to action sized to its label", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  for (const rule of css.match(/[^{}]+\{[^}]*\bwidth:\s*44px[^}]*\}/g) ?? []) assert.doesNotMatch(rule, /\.button\.compact/);
+  assert.match(css, /\.button\.compact, \.save-control, \.reading-modes button, \.command-input button \{ min-height: 44px; \}/);
+});
