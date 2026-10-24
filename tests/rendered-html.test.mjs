@@ -640,3 +640,11 @@ test("keeps the header to the menu, language switch and one call to action", asy
   assert.doesNotMatch(header, /⌘K|Keşfet|explore-trigger/);
   assert.match(header, /Ön görüşme isteyin/);
 });
+
+test("tells one positioning story in the footer, About page and structured data", async () => {
+  const [about, home, aboutTr] = await Promise.all(["/en/about", "/en", "/tr/hakkimizda"].map(path => render(path).then(response => response.text())));
+  assert.match(about, /Strategy and EU-readiness advisory for Turkish industry and exporters\./);
+  assert.match(about, /EU-readiness advisory for Turkish manufacturers and exporters/);
+  assert.match(aboutTr, /Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı\./);
+  for (const page of [about, home, aboutTr]) assert.doesNotMatch(page, /Middle East and North Africa|regional fluency|bölgesel derinlik/);
+});
