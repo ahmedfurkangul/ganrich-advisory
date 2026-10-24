@@ -60,7 +60,8 @@ test("publishes the verified bilingual founder profile", async () => {
 
   const turkish = await render("/tr/hakkimizda");
   const turkishHtml = await turkish.text();
-  assert.match(turkishHtml, /Ahmed Furkan Gul/);
+  assert.match(turkishHtml, /Ahmed Furkan Gül/);
+  assert.doesNotMatch(turkishHtml, /Furkan Gul\b/);
   assert.match(turkishHtml, /Kurucu, Ganrich Advisory/);
   assert.match(turkishHtml, /İstanbul Kent Üniversitesinde Dr\. Öğr\. Üyesi/);
 });
@@ -632,4 +633,15 @@ test("names the data controller and states purposes, transfers, retention and ho
   assert.match(privacy, /24 months from receipt/);
   assert.match(vendors, /Cloudflare, Inc\./);
   assert.doesNotMatch(kvkk + privacy + rights + vendors, /Publication gate|Yayın kapısı|not yet published|henüz yayımlanmamaktadır/);
+});
+
+test("Turkish pages spell the founder's name Gül and English pages keep Gul", async () => {
+  const about = await readFile(new URL("../app/marketing-pages.tsx", import.meta.url), "utf8");
+  assert.match(about, /isEn \? "Ahmed Furkan Gul" : "Ahmed Furkan Gül"/);
+  const data = await readFile(new URL("../app/structured-data.ts", import.meta.url), "utf8");
+  assert.match(data, /lang === "tr" \? "Ahmed Furkan Gül" : "Ahmed Furkan Gul"/);
+  const insights = await readFile(new URL("../app/phase-two-insights.ts", import.meta.url), "utf8");
+  assert.match(insights, /author: "Ahmed Furkan Gül"/);
+  const banner = await readFile(new URL("../app/privacy-controls.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(banner, /Gösterişsiz/);
 });

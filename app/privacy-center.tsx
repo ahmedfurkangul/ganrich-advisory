@@ -48,7 +48,7 @@ const copy = {
     updated: "Last updated",
   },
   tr: {
-    bannerTitle: "Gösterişsiz, açık gizlilik.",
+    bannerTitle: "Gizliliğiniz için sade ve açık kurallar.",
     bannerBody: "Bu site zorunlu teknolojileri, isteğe bağlı birinci taraf tercihlerini ve IP adresi saklamayan çerezsiz bir ziyaret ve iletişim adımı sayımını kullanır. Reklam çerezleri, siteler arası izleme veya üçüncü taraf medya etkin değildir.",
     accept: "İsteğe bağlıları kabul et",
     reject: "Yalnızca zorunlu",

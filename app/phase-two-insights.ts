@@ -981,7 +981,7 @@ const trSupplements: Array<{ title: string; paragraphs: string[] }> = [
 
 tr.forEach((article, index) => article.sections.push(trSupplements[index]));
 
-export const phaseTwoInsightArticles: Record<Lang, InsightArticle[]> = { en, tr };
+export const phaseTwoInsightArticles: Record<Lang, InsightArticle[]> = { en, tr: tr.map((article) => ({ ...article, author: "Ahmed Furkan Gül" })) };
 
 export const phaseTwoInsights: Record<Lang, InsightCard[]> = {
   en: en.map((article) => [article.title, article.thesis, article.topic, article.region, article.type]),
