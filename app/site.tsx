@@ -13,6 +13,7 @@ const AboutPage = lazy(() => import("./marketing-pages").then(m => ({default:m.A
 const PageHero = lazy(() => import("./marketing-pages").then(m => ({default:m.PageHero})));
 const ContactExperience = lazy(() => import("./contact-experience").then(m => ({default:m.ContactExperience})));
 const SolutionsHub = lazy(() => import("./solutions").then(m => ({default:m.SolutionsHub})));
+const StudioPage = lazy(() => import("./studio").then(m => ({default:m.StudioPage})));
 const SolutionPage = lazy(() => import("./solutions").then(m => ({default:m.SolutionPage})));
 const CbamReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.CbamReadinessCheck})));
 const CraReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.CraReadinessCheck})));
@@ -109,6 +110,7 @@ export default function Site({ lang, route }: SiteProps) {
   let page: React.ReactNode = <BoutiqueHome lang={lang}/>;
   if (kind.startsWith("service")) page = <ServicePage lang={lang} kind={kind}/>;
   if (kind === "solutions") page = <SolutionsHub lang={lang}/>;
+  if (kind === "studio") page = <StudioPage lang={lang}/>;
   if (kind.startsWith("solution") && kind !== "solutions") page = <SolutionPage lang={lang} kind={kind}/>;
   if (kind === "sampleWork") page = <SampleWorkPage lang={lang}/>;
   if (kind.startsWith("note")) page = <NotePage lang={lang} kind={kind}/>;

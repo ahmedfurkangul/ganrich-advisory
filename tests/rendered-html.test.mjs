@@ -556,3 +556,20 @@ test("publishes the CRA readiness check in both languages and links it from the 
   assert.match(await (await render("/tr/cozumler/cra-olay-hazirligi")).text(), /href="\/tr\/karar-laboratuvari\/cra-hazirlik-testi"/);
   assert.match(await (await render("/en/decision-lab")).text(), /CRA Readiness Check/);
 });
+
+test("publishes the Opportunity Studio showcase in both languages without linking the private host", async () => {
+  for (const [path, products] of [["/en/opportunity-studio", /Five working tools behind our programmes/], ["/tr/opportunity-studio", /Programlarımızın arkasındaki beş çalışma aracı/]]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, /Opportunity Studio \| Ganrich Advisory/);
+    assert.match(html, products);
+    for (const name of ["Carbon Ledger", "Order Pilot", "Signal Room", "Access Studio", "Border Atlas"]) assert.match(html, new RegExp(name));
+    assert.match(html, /\?service=studio/);
+    assert.doesNotMatch(html, /studio\.ganrichadvisory\.com/);
+  }
+  assert.match(await (await render("/en/solutions")).text(), /href="\/en\/opportunity-studio"/);
+  assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/opportunity-studio#carbon"/);
+  assert.match(await (await render("/tr/cozumler/yapay-zeka-siparis-masasi")).text(), /href="\/tr\/opportunity-studio#orders"/);
+  await access(new URL("../public/studio/carbon-en.webp", import.meta.url));
+});
