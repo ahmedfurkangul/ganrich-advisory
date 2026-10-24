@@ -93,7 +93,7 @@ export const insightCategories: Record<Lang, InsightCategory[]> = {
     { key: "categoryOperatingModel", label: "Operating model", description: "Perspectives on decision rights, governance, accountability, and organizational transition.", topic: "Operating model" },
   ],
   tr: [
-    { key: "categoryAppliedAi", label: "Uygulamalı Yapay Zekâ", description: "Yapay zekâ değeri, kanıt, kurumsal hazırlık ve sorumlu benimseme üzerine karar odaklı bakışlar.", topic: "Uygulamalı Yapay Zekâ" },
+    { key: "categoryAppliedAi", label: "Uygulamalı yapay zekâ", description: "Yapay zekâ değeri, kanıt, kurumsal hazırlık ve sorumlu benimseme üzerine karar odaklı bakışlar.", topic: "Uygulamalı Yapay Zekâ" },
     { key: "categoryTransformation", label: "Dönüşüm", description: "Dönüşümü raporlanan faaliyetten yönetilen ve ölçülebilir değere taşıyan bakışlar.", topic: "Dönüşüm" },
     { key: "categoryGrowth", label: "Büyüme", description: "Büyüme tercihleri, taahhüt sıralaması, sermaye yoğunlaşması ve stratejik öğrenme çerçeveleri.", topic: "Büyüme" },
     { key: "categoryRegionalExpansion", label: "Bölgesel büyüme", description: "Sınır ötesi büyüme, pazara giriş ve bölgesel ekonomik koridorlara ilişkin bağlama özgü bakışlar.", topic: "Bölgesel büyüme" },

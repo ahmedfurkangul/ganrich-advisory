@@ -31,7 +31,7 @@ const copy = {
     saved: "Preferences saved", on: "On", off: "Off",
   },
   tr: {
-    bannerTitle: "Gösterişsiz, açık gizlilik.",
+    bannerTitle: "Gizliliğiniz için sade ve açık kurallar.",
     bannerBody: "Bu site zorunlu teknolojileri, isteğe bağlı birinci taraf tercihlerini ve IP adresi saklamayan çerezsiz bir ziyaret ve iletişim adımı sayımını kullanır. Reklam çerezleri, siteler arası izleme veya üçüncü taraf medya etkin değildir.",
     accept: "İsteğe bağlıları kabul et", reject: "Yalnızca zorunlu", manage: "Tercihleri yönet", dialogTitle: "Çerez tercihleri",
     dialogIntro: "Sitenin isteğe bağlı arayüz ayarlarını hatırlayıp hatırlamayacağını seçin. Tercihinizi dilediğiniz zaman değiştirebilirsiniz.",

@@ -11,6 +11,8 @@ import { absoluteUrl, SITE_NAME } from "./site-config";
 export const CONTACT_EMAIL = "furkangul@ganrichadvisory.com";
 export const COMPANY_LINKEDIN = "https://www.linkedin.com/company/135278307/";
 export const FOUNDER_SAME_AS = ["https://www.linkedin.com/in/furkangul/", "https://avesis.kent.edu.tr/ahmedfurkan.gul"];
+/** The founder's name: Turkish pages use the Turkish spelling, English pages the ASCII form. */
+export const founderName = (lang: "en" | "tr") => (lang === "tr" ? "Ahmed Furkan Gül" : "Ahmed Furkan Gul");
 
 const inLanguage = (lang: Lang) => lang === "en" ? "en-GB" : "tr-TR";
 const pageUrl = (lang: Lang, key: string) => absoluteUrl(`/${lang}/${routeMap[lang][key]}`);

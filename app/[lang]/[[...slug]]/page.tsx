@@ -4,7 +4,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import Site from "../../site";
 import { insightArticles, insightCategoryForKind, insightIndex, Lang, pageKind, routeMap } from "../../content";
 import { absoluteUrl, SITE_NAME, SITE_ORIGIN } from "../../site-config";
-import { breadcrumbParent, FOUNDER_SAME_AS, ids, offeringNodes, organizationNode, pageKeywords, webPageNode, websiteNode } from "../../structured-data";
+import { breadcrumbParent, FOUNDER_SAME_AS, founderName, ids, offeringNodes, organizationNode, pageKeywords, webPageNode, websiteNode } from "../../structured-data";
 
 type Props = { params: Promise<{ lang: string; slug?: string[] }> };
 
@@ -56,7 +56,7 @@ const metaCopy = {
     cbamCheck: ["CBAM Hazırlık Testi | Ganrich Advisory", "CBAM emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
     decisionLabChangelog: ["Karar Laboratuvarı Değişiklik Günlüğü | Ganrich Advisory", "Ganrich Karar Laboratuvarında nelerin yayında, nelerin değiştiğini ve hangi araçların değerlendirmede olduğunu görün."],
     privateBriefing: ["Özel Yönetici Brifingi | Ganrich Advisory", "Yayımlanmış bir perspektif, sinyal veya araçtan kurumunuza özgü karar hakkında hazırlıklı bir görüşmeye geçin."],
-    about: ["Hakkımızda | Ganrich Advisory", "Ganrich Advisory, Türk üretici ve ihracatçılar için strateji ve AB uyum danışmanlığıdır; İstanbul'da Ahmed Furkan Gul liderliğinde çalışır."],
+    about: ["Hakkımızda | Ganrich Advisory", "Ganrich Advisory, Türk üretici ve ihracatçılar için strateji ve AB uyum danışmanlığıdır; İstanbul'da Ahmed Furkan Gül liderliğinde çalışır."],
     contact: ["İletişim | Ganrich Advisory", "Gündeminizdeki stratejik karar hakkında kıdemli bir görüşme başlatın."],
     legal: ["Hukuki Bilgilendirme | Ganrich Advisory", "Ganrich Advisory internet sitesi hukuki bilgileri."],
     trust: ["Gizlilik + Güven | Ganrich Advisory", "Ganrich Advisory gizlilik tercihleri, mevcut site olguları, yapay zekâ şeffaflığı ve hukuki bilgileri."],
@@ -109,7 +109,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const [title, description] = article
     ? [withBrand(article.title), article.thesis]
     : category
-      ? [`${category.label} ${lang === "en" ? "Insights" : "İçgörüleri"} | Ganrich Advisory`, category.description]
+      ? [`${lang === "en" ? `${category.label} Insights` : `${category.label} üzerine içgörüler`} | Ganrich Advisory`, category.description]
     : (trust ?? advisoryMeta(lang, kind) ?? metaCopy[lang][metaKind] ?? metaCopy[lang].home);
   const socialCard = article
     ? `/og/${lang}/article-${article.slug}.png`
@@ -122,8 +122,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     ...(keywords ? { keywords } : {}),
-    authors: [{ name: "Ahmed Furkan Gul", url: absoluteUrl(`/${lang}/${routeMap[lang].about}`) }],
-    creator: "Ahmed Furkan Gul",
+    authors: [{ name: founderName(lang), url: absoluteUrl(`/${lang}/${routeMap[lang].about}`) }],
+    creator: founderName(lang),
     publisher: SITE_NAME,
     alternates: {
       canonical: current,
@@ -207,7 +207,7 @@ export default async function LocalizedPage({ params }: Props) {
   if (kind === "about" || article || kind.startsWith("note")) graph.push({
     "@type": "Person",
     "@id": personId,
-    name: "Ahmed Furkan Gul",
+    name: founderName(lang),
     jobTitle: lang === "en" ? "Founder, Ganrich Advisory" : "Kurucu, Ganrich Advisory",
     worksFor: { "@id": organizationId },
     url: absoluteUrl(`/${lang}/${routeMap[lang].about}`),
