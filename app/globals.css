@@ -668,6 +668,16 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 @media (max-width: 760px) { .solution-more-group ul { grid-template-columns: 1fr; } }
 .solution-flagship .solution-grid { grid-template-columns: repeat(auto-fill,minmax(min(100%,420px),1fr)); gap: 0 6vw; }
 
+/* Readiness check result: one-page print / Save as PDF */
+.print-only { display: none; }
+@media print {
+  .readiness-ask, .readiness-links, .privacy-banner, .cookie-banner, .skip-link { display: none !important; }
+  .readiness-check { padding: 0 !important; }
+  .readiness-result { display: block !important; }
+  .readiness-result > * { break-inside: avoid; }
+  .print-only { display: block; margin: 0 0 16px; font-size: 11px; letter-spacing: .04em; color: #6f6a60; }
+  .readiness-gaps li { margin-bottom: 4px; }
+}
 /* Flagship programme FAQ */
 .solution-faq h2 { margin: 16px 0 32px; }
 .solution-faq details { border-top: 1px solid var(--sand); }

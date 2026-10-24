@@ -697,6 +697,14 @@ test("tells one positioning story in the footer, About page and structured data"
   for (const page of [about, home, aboutTr]) assert.doesNotMatch(page, /Middle East and North Africa|regional fluency|bölgesel derinlik/);
 });
 
+test("offers an emailed copy and a PDF of the readiness check result", async () => {
+  const source = await readFile(new URL("../app/readiness-check.tsx", import.meta.url), "utf8");
+  assert.match(source, /name="resultCopy" value="yes" defaultChecked/);
+  assert.match(source, /window\.print\(\)/);
+  const route = await readFile(new URL("../app/api/inquiries/route.ts", import.meta.url), "utf8");
+  assert.match(route, /input\.answers\.every\(a => a === 0 \|\| a === 1 \|\| a === 2\)/);
+});
+
 test("answers common regulation questions on the flagship programme pages", async () => {
   const cbam = await (await render("/en/solutions/cbam-data-readiness")).text();
   assert.match(cbam, /Common questions/);
