@@ -27,12 +27,13 @@ function statusLabel(status: string, lang: Lang) {
   return labels[status]?.[lang === "en" ? 0 : 1] ?? status;
 }
 
-export function PdfReader({ insight, lang, editorial = false }: { insight: PdfInsight; lang: Lang; editorial?: boolean }) {
+export function PdfReader({ insight, lang, editorial = false, access = "" }: { insight: PdfInsight; lang: Lang; editorial?: boolean; access?: string }) {
   const initial = typeof window !== "undefined" ? Number(new URLSearchParams(window.location.search).get("report-page")) || 1 : 1;
   const [page, setPage] = useState(initial);
   const [loaded, setLoaded] = useState(editorial);
   const sectionRef = useRef<HTMLElement>(null);
   const fileUrl = `/api/pdf-insights/${insight.id}/document`;
+  const docHref = (query = "") => fileUrl + ([access && `access=${access}`, query].filter(Boolean).join("&").replace(/^./, c => `?${c}`));
   const max = insight.pageCount ?? 999;
 
   const go = (next: number) => {
@@ -53,10 +54,10 @@ export function PdfReader({ insight, lang, editorial = false }: { insight: PdfIn
       <label>{lang === "en" ? "Page" : "Sayfa"} <input type="number" min="1" max={max} value={page} onChange={e => go(Number(e.target.value))}/>{insight.pageCount ? <span>/ {insight.pageCount}</span> : null}</label>
       <button type="button" onClick={() => go(page + 1)} disabled={Boolean(insight.pageCount && page >= insight.pageCount)} aria-label={lang === "en" ? "Next page" : "Sonraki sayfa"}>→</button>
       <span className="pdf-toolbar-spacer"/>
-      <a href={`${fileUrl}#page=${page}&zoom=page-width`} target="_blank" rel="noreferrer">{lang === "en" ? "Open full PDF" : "Tam PDF’yi aç"} ↗</a>
-      <a href={`${fileUrl}?download=1`}>{lang === "en" ? "Download" : "İndir"} ↓</a>
+      <a href={`${docHref()}#page=${page}&zoom=page-width`} target="_blank" rel="noreferrer">{lang === "en" ? "Open full PDF" : "Tam PDF’yi aç"} ↗</a>
+      <a href={docHref("download=1")}>{lang === "en" ? "Download" : "İndir"} ↓</a>
     </div>
-    {loaded ? <iframe title={`${insight.title} - ${lang === "en" ? "original PDF" : "özgün PDF"}`} src={`${fileUrl}#page=${page}&zoom=page-width`}/> : <div className="pdf-reader-poster"><div className="report-cover-art" aria-hidden="true"><span>PDF</span><i/><i/><i/></div><div><strong>{insight.title}</strong><p>{lang === "en" ? "The reader loads only when requested so the editorial page remains fast." : "Editoryal sayfanın hızlı kalması için okuyucu yalnızca istendiğinde yüklenir."}</p><button className="button" type="button" onClick={() => setLoaded(true)}>{lang === "en" ? "Open embedded reader" : "Gömülü okuyucuyu aç"}</button></div></div>}
+    {loaded ? <iframe title={`${insight.title} - ${lang === "en" ? "original PDF" : "özgün PDF"}`} src={`${docHref()}#page=${page}&zoom=page-width`}/> : <div className="pdf-reader-poster"><div className="report-cover-art" aria-hidden="true"><span>PDF</span><i/><i/><i/></div><div><strong>{insight.title}</strong><p>{lang === "en" ? "The reader loads only when requested so the editorial page remains fast." : "Editoryal sayfanın hızlı kalması için okuyucu yalnızca istendiğinde yüklenir."}</p><button className="button" type="button" onClick={() => setLoaded(true)}>{lang === "en" ? "Open embedded reader" : "Gömülü okuyucuyu aç"}</button></div></div>}
     <noscript>{lang === "en" ? "The embedded document could not be displayed. Open or download the original PDF." : "Gömülü belge görüntülenemedi. Özgün PDF’yi açın veya indirin."}</noscript>
   </section>;
 }
@@ -170,7 +171,7 @@ export function PdfInsightStudio({ lang, editor }: { lang: Lang; editor: string 
             <label className="wide">{isEn ? "What this means for leaders" : "Liderler için anlamı"}<textarea value={implicationsText} onChange={e => update("leadershipImplications", e.target.value.split("\n").filter(Boolean))}/><small>{isEn ? "Optional editor-approved interpretation · one implication per line" : "İsteğe bağlı, editör onaylı yorum · her satırda bir çıkarım"}</small></label>
             <label className="wide">{isEn ? "Methodology and source notes" : "Yöntem ve kaynak notları"}<textarea value={draft.methodology} onChange={e => update("methodology", e.target.value)}/></label>
             <label className="wide">{isEn ? "Limitations" : "Sınırlılıklar"}<textarea value={draft.limitations} onChange={e => update("limitations", e.target.value)}/></label>
-            <label>{isEn ? "Access model" : "Erişim modeli"}<select value={draft.gatingModel} onChange={e => update("gatingModel", e.target.value)}><option value="fully_ungated">{isEn ? "Fully ungated" : "Tamamen açık"}</option><option value="pdf_gated">{isEn ? "Web summary open, PDF gated" : "Web özeti açık, PDF kısıtlı"}</option><option value="briefing_by_request">{isEn ? "Public summary, briefing by request" : "Açık özet, talep üzerine brifing"}</option><option value="private">{isEn ? "Private / invitation only" : "Özel / davetli"}</option></select></label>
+            <label>{isEn ? "Access model" : "Erişim modeli"}<select value={draft.gatingModel} onChange={e => update("gatingModel", e.target.value)}><option value="fully_ungated">{isEn ? "Fully ungated" : "Tamamen açık"}</option><option value="email_gated">{isEn ? "Web summary open, PDF after email" : "Web özeti açık, PDF e-postayla"}</option><option value="pdf_gated">{isEn ? "Web summary open, PDF gated" : "Web özeti açık, PDF kısıtlı"}</option><option value="briefing_by_request">{isEn ? "Public summary, briefing by request" : "Açık özet, talep üzerine brifing"}</option><option value="private">{isEn ? "Private / invitation only" : "Özel / davetli"}</option></select></label>
           </div>
           <fieldset className="governance"><legend>{isEn ? "Rights, privacy, and publication controls" : "Haklar, gizlilik ve yayın kontrolleri"}</legend>{governance.map(([key, label]) => <label key={key}><input type="checkbox" checked={Boolean(draft[key])} onChange={e => update(key, e.target.checked as never)}/><span>{label}</span></label>)}</fieldset>
           <div className="studio-actions"><button className="button" type="submit">{isEn ? "Save for preview" : "Önizleme için kaydet"}</button><a className="text-link" href={reportHref(lang, draft)} target="_blank" rel="noreferrer">{isEn ? "Open web preview" : "Web önizlemesini aç"} ↗</a><button className="publish-control" type="button" onClick={() => save(true)}>{isEn ? "Publish approved insight" : "Onaylı içgörüyü yayımla"}</button></div>
@@ -200,7 +201,46 @@ export function PdfInsightReport({ lang, insight }: { lang: Lang; insight: PdfIn
     {insight.keyFindings.length > 0 && <section className="report-findings section"><header><span className="eyebrow">{isEn ? "KEY FINDINGS" : "TEMEL BULGULAR"}</span><h2>{isEn ? "What the source supports." : "Kaynağın desteklediği bulgular."}</h2></header><ol>{insight.keyFindings.map((finding, index) => <li key={`${finding.title}-${index}`}><span>{String(index + 1).padStart(2, "0")}</span><div><h3>{finding.title}</h3><p>{finding.explanation}</p>{finding.page && <button type="button" onClick={() => goToPage(finding.page)}>{isEn ? `View in original report - page ${finding.page}` : `Özgün raporda görüntüle - sayfa ${finding.page}`} ↓</button>}</div></li>)}</ol></section>}
     {insight.leadershipImplications.length > 0 && <section className="report-implications section"><span className="eyebrow">{isEn ? "EDITOR-APPROVED INTERPRETATION" : "EDİTÖR ONAYLI YORUM"}</span><h2>{isEn ? "What this means for leaders" : "Liderler için anlamı"}</h2><ul>{insight.leadershipImplications.map(item => <li key={item}>{item}</li>)}</ul></section>}
     {(insight.methodology || insight.limitations) && <details className="report-provenance section"><summary><span>{isEn ? "Sources and methodology" : "Kaynaklar ve yöntem"}</span><i>+</i></summary><div><dl><div><dt>{isEn ? "Original document" : "Özgün belge"}</dt><dd>{insight.title}, v{insight.version}</dd></div>{insight.dataPeriod && <div><dt>{isEn ? "Data period" : "Veri dönemi"}</dt><dd>{insight.dataPeriod}</dd></div>}{insight.methodology && <div><dt>{isEn ? "Methodology" : "Yöntem"}</dt><dd>{insight.methodology}</dd></div>}{insight.limitations && <div><dt>{isEn ? "Limitations" : "Sınırlılıklar"}</dt><dd>{insight.limitations}</dd></div>}<div><dt>{isEn ? "Last editorial review" : "Son editoryal inceleme"}</dt><dd>{insight.updatedAt.slice(0, 10)}</dd></div></dl></div></details>}
-    {insight.gatingModel === "fully_ungated" ? <PdfReader insight={insight} lang={lang}/> : <section className="report-access section"><span className="eyebrow">{isEn ? "DOCUMENT ACCESS" : "BELGE ERİŞİMİ"}</span><h2>{insight.gatingModel === "pdf_gated" ? (isEn ? "The editorial analysis is open. The source document is shared on request." : "Editoryal analiz açıktır. Kaynak belge talep üzerine paylaşılır.") : (isEn ? "Continue through a prepared briefing." : "Hazırlıklı bir brifing ile devam edin.")}</h2><p>{isEn ? "Share the decision context. Ganrich will confirm the appropriate access path without exposing restricted material." : "Karar bağlamını paylaşın. Ganrich, kısıtlı materyali açığa çıkarmadan uygun erişim yolunu teyit edecektir."}</p><a className="button outline" href={`/${lang}/${routeMap[lang].contact}?service=briefing`}>{isEn ? "Request access" : "Erişim talep edin"} ↗</a></section>}
+    {insight.gatingModel === "fully_ungated" ? <PdfReader insight={insight} lang={lang}/> : insight.gatingModel === "email_gated" ? <EmailGate insight={insight} lang={lang}/> : <section className="report-access section"><span className="eyebrow">{isEn ? "DOCUMENT ACCESS" : "BELGE ERİŞİMİ"}</span><h2>{insight.gatingModel === "pdf_gated" ? (isEn ? "The editorial analysis is open. The source document is shared on request." : "Editoryal analiz açıktır. Kaynak belge talep üzerine paylaşılır.") : (isEn ? "Continue through a prepared briefing." : "Hazırlıklı bir brifing ile devam edin.")}</h2><p>{isEn ? "Share the decision context. Ganrich will confirm the appropriate access path without exposing restricted material." : "Karar bağlamını paylaşın. Ganrich, kısıtlı materyali açığa çıkarmadan uygun erişim yolunu teyit edecektir."}</p><a className="button outline" href={`/${lang}/${routeMap[lang].contact}?service=briefing`}>{isEn ? "Request access" : "Erişim talep edin"} ↗</a></section>}
     <section className="report-related section"><div><span className="eyebrow">{isEn ? "CONTINUE THE DECISION" : "KARARA DEVAM EDİN"}</span><h2>{isEn ? "From evidence to action." : "Kanıttan eyleme."}</h2></div><div><a href={`/${lang}/${routeMap[lang].decisionFramer}`}>{isEn ? "Frame the decision" : "Kararı çerçeveleyin"} ↗</a><a href={`/${lang}/${routeMap[lang].contact}?service=briefing`}>{isEn ? "Request a private briefing" : "Özel brifing talep edin"} ↗</a><a href={`/${lang}/${routeMap[lang].insights}`}>{isEn ? "Related perspectives" : "İlgili perspektifler"} ↗</a></div></section>
   </article>;
+}
+
+// For the "email_gated" access model: a short form, then the normal reader with a 24-hour access link.
+function EmailGate({ insight, lang }: { insight: PdfInsight; lang: Lang }) {
+  const isEn = lang === "en";
+  const [access, setAccess] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
+  const [message, setMessage] = useState("");
+  if (access) return <PdfReader insight={insight} lang={lang} access={access}/>;
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus("sending");
+    const data = Object.fromEntries(new FormData(e.currentTarget).entries());
+    try {
+      const response = await fetch(`/api/pdf-insights/${insight.id}/access`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ...data, language: lang }) });
+      const result = await response.json() as { ok?: boolean; url?: string; message?: string };
+      const token = result.url ? new URL(result.url, window.location.origin).searchParams.get("access") : "";
+      if (!response.ok || !result.ok || !token) throw new Error(result.message);
+      setAccess(token);
+    } catch (caught) {
+      setMessage(caught instanceof Error && caught.message ? caught.message : isEn ? "The request could not be sent. Please try again." : "Talep gönderilemedi. Lütfen tekrar deneyin.");
+      setStatus("error");
+    }
+  };
+  return <section className="report-access section email-gate">
+    <span className="eyebrow">{isEn ? "DOWNLOAD THE PDF" : "PDF’Yİ İNDİRİN"}</span>
+    <h2>{isEn ? "The summary above is open. Leave your details to read the full whitepaper." : "Yukarıdaki özet açık. Teknik notun tamamı için bilgilerinizi bırakın."}</h2>
+    <p>{isEn ? "The PDF opens straight away. We may follow up once by email about the topic." : "PDF hemen açılır. Konuyla ilgili bir kez e-postayla dönüş yapabiliriz."}</p>
+    <form className="contact-form simplified-contact" onSubmit={submit}>
+      <label>{isEn ? "Name" : "Ad soyad"}<input name="name" autoComplete="name" minLength={2} maxLength={120} required/></label>
+      <label>{isEn ? "Work email" : "İş e-postası"}<input name="email" type="email" autoComplete="email" maxLength={254} required/></label>
+      <label>{isEn ? "Company" : "Şirket"}<input name="organization" autoComplete="organization" maxLength={180} required/></label>
+      <label className="sr-only" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off"/></label>
+      <label className="marketing-choice full"><input type="checkbox" name="privacyAcknowledged" value="yes" required/><span>{isEn ? "I have read the privacy notice and understand how my details will be handled." : "Gizlilik bildirimini okudum ve bilgilerimin nasıl işleneceğini anladım."} <a href={`/${lang}/${routeMap[lang].privacy}`}>{isEn ? "Privacy notice" : "Gizlilik bildirimi"}</a></span></label>
+      <label className="marketing-choice full"><input type="checkbox" name="newsletter" value="yes"/><span>{isEn ? "Also send me regulation updates by email (optional; you will be asked to confirm)." : "Bana mevzuat bültenini de e-postayla gönderin (isteğe bağlı; onayınız istenecek)."}</span></label>
+      {status === "error" && <p role="alert" className="form-error full">{message}</p>}
+      <button className="button" disabled={status === "sending"}>{status === "sending" ? (isEn ? "Sending…" : "Gönderiliyor…") : (isEn ? "Open the PDF" : "PDF’yi açın")}</button>
+    </form>
+  </section>;
 }

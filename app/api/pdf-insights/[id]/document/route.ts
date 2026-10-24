@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { validGrant } from "../../../../download-grants";
 import { editorFromRequest } from "../../../../editor-auth";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +14,9 @@ export async function GET(request: Request, context: Context) {
     .first<{ pdf_key: string; original_filename: string; status: string; gating_model: string }>();
   if (!record) return NextResponse.json({ error: "Document not found." }, { status: 404 });
   const publicDocument = record.status === "published" && record.gating_model === "fully_ungated";
-  if (!publicDocument && !(await editorFromRequest(request))) {
+  const granted = !publicDocument && record.status === "published" && record.gating_model === "email_gated"
+    && await validGrant(env.DB, id, new URL(request.url).searchParams.get("access"));
+  if (!publicDocument && !granted && !(await editorFromRequest(request))) {
     return NextResponse.json({ error: "An authenticated editor is required." }, { status: 401 });
   }
 

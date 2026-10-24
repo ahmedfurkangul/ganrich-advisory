@@ -149,3 +149,13 @@ export const subscribers = sqliteTable("subscribers", {
   uniqueIndex("subscribers_token_idx").on(table.token),
   index("subscribers_status_idx").on(table.status),
 ]);
+
+// Short-lived access to an email-gated PDF, issued after the visitor leaves their details.
+export const downloadGrants = sqliteTable("download_grants", {
+  token: text("token").primaryKey(),
+  insightId: text("insight_id").notNull(),
+  expiresAt: text("expires_at").notNull(),
+  createdAt: text("created_at").notNull(),
+}, (table) => [
+  index("download_grants_expires_idx").on(table.expiresAt),
+]);

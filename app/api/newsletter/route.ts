@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { isToken, newToken, normaliseEmail, sendConfirmation, subscribersTableSql } from "../../newsletter-core";
+import { isToken, normaliseEmail, subscribersTableSql } from "../../newsletter-core";
+import { subscribe } from "../../newsletter-server";
 
 export const runtime = "edge";
 
@@ -56,19 +57,7 @@ export async function POST(request: Request) {
     }
 
     const source = typeof input.source === "string" ? input.source.trim().slice(0, 100) : "";
-    const existing = await env.DB.prepare("SELECT status FROM subscribers WHERE email = ?").bind(email).first<{ status: string }>();
-    // The same answer is given whether or not the address is already on the list.
-    if (existing?.status !== "active") {
-      const token = newToken();
-      if (existing) {
-        await env.DB.prepare("UPDATE subscribers SET status = 'pending', token = ?, language = ?, source = ?, request_fingerprint = ?, created_at = ?, unsubscribed_at = NULL WHERE email = ?")
-          .bind(token, language, source, requestFingerprint, now, email).run();
-      } else {
-        await env.DB.prepare("INSERT INTO subscribers (id, email, language, source, status, token, request_fingerprint, created_at) VALUES (?, ?, ?, ?, 'pending', ?, ?, ?)")
-          .bind(crypto.randomUUID(), email, language, source, token, requestFingerprint, now).run();
-      }
-      await sendConfirmation(env, email, language, new URL(request.url).origin, token);
-    }
+    await subscribe(env, { email, language, source, requestFingerprint, origin: new URL(request.url).origin });
     return reply(language, 200, "Almost done: check your inbox and open the confirmation link.", "Neredeyse tamam: e-postanızı kontrol edin ve onay bağlantısını açın.");
   } catch (caught) {
     console.error("Newsletter sign-up failed", caught instanceof Error ? caught.name : "unknown");
