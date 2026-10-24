@@ -164,16 +164,95 @@ const craCopy = {
   },
 };
 
+const eudrCopy = {
+  en: {
+    label: 'EUDR readiness check',
+    title: 'Could your EU importer file its due-diligence statement with your data?',
+    intro: 'Eight questions, about two minutes, on the origin, geolocation and legality data the EU Deforestation Regulation asks for. It is scheduled to apply from 30 December 2026 for large and medium operators. You see the result straight away. Nothing is stored unless you ask for a review.',
+    answers: ['Yes', 'Partly', 'No or not sure'] as const,
+    progress: (n: number, total: number) => `${n} of ${total} answered`,
+    see: 'See the result',
+    score: 'Readiness score',
+    bands: [
+      ['Early stage', 'Start with scope and origin: which of your products fall under the regulation, and who supplies the raw material for each. Until then, your importer cannot complete its due diligence with your data.'],
+      ['Partly ready', 'Some of the data exists, but it is not yet tied to shipments. The next step is to link supplier, origin and geolocation to each batch for one product line and test the package with one importer.'],
+      ['Well advanced', 'The basics are in place. The question now is whether the data holds up shipment by shipment, including when material comes through traders or is mixed in production.'],
+    ] as const,
+    gaps: 'Gaps to close first',
+    noGaps: 'No major gaps in these eight areas.',
+    disclaimer: 'This is an indicative self-assessment, not a legal opinion or a deforestation-free certification.',
+    ask: 'Ask for an EUDR traceability review',
+    askIntro: 'Send the result and we will reply by email with what we would look at first, for one product line.',
+    name: 'Name', email: 'Work email', company: 'Company',
+    privacy: 'I have read the privacy notice and understand how my request will be handled.', privacyLink: 'Privacy notice',
+    send: 'Send the result', sending: 'Sending…',
+    sent: 'Thank you. Your result has reached Ganrich Advisory and we will reply by email.',
+    error: 'Unable to send. Please try again or write to furkangul@ganrichadvisory.com.',
+    paper: '',
+    programme: 'See the EUDR Traceability File programme',
+    restart: 'Start again',
+    questions: [
+      { q: 'Do you know which of the products you sell into the EU fall under the regulation, by customs (HS) code, after the 2026 scope update?', gap: 'Map each EU product line to the in-scope customs codes and record which ones fall outside.' },
+      { q: 'For each shipment, can you name the supplier and the country where the wood or other commodity was produced?', gap: 'Build a supplier and origin map for your main EU product line, including material bought through traders.' },
+      { q: 'Can you obtain the geolocation of the plots or forest areas where the raw material was harvested?', gap: 'Ask suppliers for plot coordinates or boundaries and note where the chain breaks.' },
+      { q: 'Can you show that the raw material does not come from land deforested or degraded after 31 December 2020?', gap: 'Collect evidence for the 2020 cut-off date for each origin, such as forest management records or certification data.' },
+      { q: 'Can you show that the raw material was harvested legally in the country of production, with permits and transport documents?', gap: 'Gather the harvesting permits and legality documents for each origin and keep them with the batch.' },
+      { q: 'Do you keep in-scope material with known origin separate from material of unknown origin through storage and production?', gap: 'Set up batch traceability so material of unknown origin cannot enter EU-bound products unnoticed.' },
+      { q: 'Do you know what data, in what format, your EU importer needs from you for its due-diligence statement, and who in your company provides it?', gap: 'Agree a data template with your main importer and name who prepares and sends it for each shipment.' },
+      { q: 'Do you keep this information for at least five years, ready to show to a buyer or an authority?', gap: 'Store origin, geolocation and legality records by shipment for at least five years.' },
+    ] as Question[],
+  },
+  tr: {
+    label: 'EUDR hazırlık testi',
+    title: 'AB ithalatçınız durum tespiti beyanını sizin verinizle verebilir mi?',
+    intro: 'AB Ormansızlaşma Yönetmeliğinin istediği menşe, coğrafi konum ve yasallık verisi üzerine sekiz soru, yaklaşık iki dakika. Yönetmeliğin büyük ve orta işletmeler için 30 Aralık 2026’dan itibaren uygulanması planlanıyor. Sonucu hemen görürsünüz. Değerlendirme istemediğiniz sürece hiçbir şey kaydedilmez.',
+    answers: ['Evet', 'Kısmen', 'Hayır veya emin değilim'] as const,
+    progress: (n: number, total: number) => `${total} sorudan ${n} tanesi yanıtlandı`,
+    see: 'Sonucu görün',
+    score: 'Hazırlık puanı',
+    bands: [
+      ['Başlangıç aşaması', 'Kapsam ve menşeyle başlayın: ürünlerinizden hangilerinin yönetmelik kapsamına girdiği ve her birinin hammaddesini kimin sağladığı. Bunlar netleşmeden ithalatçınız durum tespitini sizin verinizle tamamlayamaz.'],
+      ['Kısmen hazır', 'Verinin bir kısmı var ama henüz sevkiyatlara bağlı değil. Sonraki adım; tek bir ürün hattında tedarikçi, menşe ve coğrafi konumu her partiye bağlamak ve paketi bir ithalatçıyla sınamak.'],
+      ['İleri aşama', 'Temeller yerinde. Artık soru, verinin sevkiyat bazında, malzeme tüccarlar üzerinden geldiğinde veya üretimde karıştığında da dayanıp dayanmadığı.'],
+    ] as const,
+    gaps: 'Önce kapatılması gereken boşluklar',
+    noGaps: 'Bu sekiz alanda belirgin bir boşluk yok.',
+    disclaimer: 'Bu, yol gösterici bir öz değerlendirmedir; hukuki görüş veya ormansızlaşmadan arî olma belgesi değildir.',
+    ask: 'EUDR izlenebilirlik değerlendirmesi isteyin',
+    askIntro: 'Sonucu gönderin; tek bir ürün hattı için önce neye bakacağımızı e-postayla yazalım.',
+    name: 'Ad soyad', email: 'İş e-postası', company: 'Şirket',
+    privacy: 'Gizlilik bildirimini okudum ve talebimin nasıl işleneceğini anladım.', privacyLink: 'Gizlilik bildirimi',
+    send: 'Sonucu gönderin', sending: 'Gönderiliyor…',
+    sent: 'Teşekkürler. Sonucunuz Ganrich Advisory’ye ulaştı; e-postayla dönüş yapacağız.',
+    error: 'Gönderilemedi. Lütfen tekrar deneyin veya furkangul@ganrichadvisory.com adresine yazın.',
+    paper: '',
+    programme: 'EUDR İzlenebilirlik Dosyası programını inceleyin',
+    restart: 'Baştan başlayın',
+    questions: [
+      { q: 'AB’ye sattığınız ürünlerden hangilerinin, 2026 kapsam güncellemesinden sonra, gümrük (GTİP) koduna göre yönetmelik kapsamına girdiğini biliyor musunuz?', gap: 'Her AB ürün hattını kapsamdaki gümrük kodlarıyla eşleştirin ve kapsam dışında kalanları kayda geçirin.' },
+      { q: 'Her sevkiyat için tedarikçiyi ve ahşabın veya diğer hammaddenin üretildiği ülkeyi söyleyebilir misiniz?', gap: 'Tüccarlar üzerinden alınan malzeme dahil, ana AB ürün hattınız için tedarikçi ve menşe haritası çıkarın.' },
+      { q: 'Hammaddenin hasat edildiği arazi veya orman alanlarının coğrafi konumunu temin edebilir misiniz?', gap: 'Tedarikçilerden parsel koordinatlarını veya sınırlarını isteyin ve zincirin nerede koptuğunu not edin.' },
+      { q: 'Hammaddenin 31 Aralık 2020’den sonra ormansızlaşan veya bozulan arazilerden gelmediğini gösterebilir misiniz?', gap: 'Her menşe için 2020 kesim tarihine dair kanıt toplayın; örneğin orman işletme kayıtları veya sertifika verisi.' },
+      { q: 'Hammaddenin üretim ülkesinde, izin ve nakliye belgeleriyle yasal olarak hasat edildiğini gösterebilir misiniz?', gap: 'Her menşe için hasat izinlerini ve yasallık belgelerini toplayın ve partiyle birlikte saklayın.' },
+      { q: 'Menşei bilinen kapsam içi malzemeyi, depolama ve üretim boyunca menşei bilinmeyen malzemeden ayrı tutuyor musunuz?', gap: 'Menşei bilinmeyen malzemenin fark edilmeden AB’ye giden ürünlere karışmaması için parti izlenebilirliği kurun.' },
+      { q: 'AB ithalatçınızın durum tespiti beyanı için sizden hangi veriyi, hangi biçimde istediğini ve şirketinizde bunu kimin sağlayacağını biliyor musunuz?', gap: 'Ana ithalatçınızla bir veri şablonu üzerinde anlaşın ve her sevkiyat için bunu kimin hazırlayıp göndereceğini belirleyin.' },
+      { q: 'Bu bilgileri en az beş yıl boyunca, bir alıcıya veya yetkili makama gösterilmeye hazır şekilde saklıyor musunuz?', gap: 'Menşe, coğrafi konum ve yasallık kayıtlarını sevkiyat bazında en az beş yıl saklayın.' },
+    ] as Question[],
+  },
+};
+
 type CheckCopy = Omit<typeof cbamCopy.en, 'bands' | 'answers'> & { answers: readonly string[]; bands: readonly (readonly [string, string])[] };
-type CheckConfig = { copy: Record<Lang, CheckCopy>; route: 'cbamCheck' | 'craCheck'; solution: 'solutionCbam' | 'solutionCra'; paper: Record<Lang, string> };
+type CheckConfig = { copy: Record<Lang, CheckCopy>; route: 'cbamCheck' | 'craCheck' | 'eudrCheck'; solution: 'solutionCbam' | 'solutionCra' | 'solutionEudr'; paper?: Record<Lang, string> };
 
 const checks = {
   cbam: { copy: cbamCopy, route: 'cbamCheck', solution: 'solutionCbam', paper: { en: '/en/insights/report/cbam-actual-or-default-e9f664d8', tr: '/tr/icgoruler/rapor/cbam-gercek-mi-varsayilan-mi-ef31215c' } },
   cra: { copy: craCopy, route: 'craCheck', solution: 'solutionCra', paper: { en: '/en/insights/report/cra-the-24-hour-test-96989394', tr: '/tr/icgoruler/rapor/cra-24-saat-testi-37aca9ad' } },
+  eudr: { copy: eudrCopy, route: 'eudrCheck', solution: 'solutionEudr' },
 } satisfies Record<string, CheckConfig>;
 
 export function CbamReadinessCheck({ lang }: { lang: Lang }) { return <ReadinessCheck lang={lang} config={checks.cbam}/>; }
 export function CraReadinessCheck({ lang }: { lang: Lang }) { return <ReadinessCheck lang={lang} config={checks.cra}/>; }
+export function EudrReadinessCheck({ lang }: { lang: Lang }) { return <ReadinessCheck lang={lang} config={checks.eudr}/>; }
 
 function ReadinessCheck({ lang, config }: { lang: Lang; config: CheckConfig }) {
   const c = config.copy[lang];
@@ -187,7 +266,7 @@ function ReadinessCheck({ lang, config }: { lang: Lang; config: CheckConfig }) {
   const band = score <= 6 ? 0 : score <= 11 ? 1 : 2;
   const gaps = c.questions.filter((_, i) => (answers[i] ?? 0) < 2);
   const solutionHref = `/${lang}/${routeMap[lang][config.solution]}`;
-  const paperHref = config.paper[lang];
+  const paperHref = config.paper?.[lang];
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -241,7 +320,7 @@ function ReadinessCheck({ lang, config }: { lang: Lang; config: CheckConfig }) {
         <div>
           <h3>{c.gaps}</h3>
           {gaps.length ? <ul className="readiness-gaps">{gaps.map(g => <li key={g.q}>{g.gap}</li>)}</ul> : <p>{c.noGaps}</p>}
-          <p className="readiness-links"><a className="text-link" href={paperHref}>{c.paper} ↗</a><a className="text-link" href={solutionHref}>{c.programme} ↗</a><button type="button" className="text-link" onClick={() => { setDone(false); setStatus('idle'); }}>{c.restart}</button></p>
+          <p className="readiness-links">{paperHref && <a className="text-link" href={paperHref}>{c.paper} ↗</a>}<a className="text-link" href={solutionHref}>{c.programme} ↗</a><button type="button" className="text-link" onClick={() => { setDone(false); setStatus('idle'); }}>{c.restart}</button></p>
         </div>
         <section className="readiness-ask">
           <h3>{c.ask}</h3>
