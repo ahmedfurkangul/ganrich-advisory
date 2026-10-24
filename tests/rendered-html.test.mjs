@@ -477,12 +477,12 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   const graph = html => JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1].replace(/\\u003c/g, "<"))["@graph"];
   const types = html => graph(html).map(node => [].concat(node["@type"]).join(","));
 
-  // Tags are visible on the page, in the keywords meta and in the hub filter.
+  // Tags are visible on the page, in the keywords meta and on the hub's flagship cards.
   assert.match(solution, /class="solution-tags"/);
   assert.match(solution, /<li>CBAM<\/li>/);
   assert.match(solution, /name="keywords" content="CBAM,/);
-  assert.match(hub, /Konuya göre filtreleyin/);
-  assert.match(hub, /aria-pressed="true"[^>]*>Tümü/);
+  assert.match(hub, /Çoğu müşterinin başladığı yer/);
+  assert.match(hub, /class="solution-tags"/);
 
   // Structured data describes the organisation, the site, the page and the offer.
   for (const type of ["Organization,ProfessionalService", "WebSite", "WebPage", "BreadcrumbList", "Service", "FAQPage"]) assert.ok(types(solution).includes(type), `solution page lacks ${type}`);
@@ -632,6 +632,18 @@ test("names the data controller and states purposes, transfers, retention and ho
   assert.match(privacy, /24 months from receipt/);
   assert.match(vendors, /Cloudflare, Inc\./);
   assert.doesNotMatch(kvkk + privacy + rights + vendors, /Publication gate|Yayın kapısı|not yet published|henüz yayımlanmamaktadır/);
+});
+
+test("leads the solutions hub with the four flagship programmes and lists the rest below", async () => {
+  const hub = await (await render("/en/solutions")).text();
+  const flagship = hub.slice(hub.indexOf('id="flagship"'), hub.indexOf('id="more"'));
+  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "EUDR Traceability File", "AI Order Desk Assistant"]) assert.match(flagship, new RegExp(title));
+  assert.doesNotMatch(flagship, /Industrial Water Balance|PFAS Substitution/);
+  assert.equal((flagship.match(/Take the 2-minute check/g) ?? []).length, 3);
+  const more = hub.slice(hub.indexOf('id="more"'), hub.indexOf('id="strategy"'));
+  for (const title of ["PFAS Substitution Programme", "Industrial Water Balance", "E-commerce Margin Clarity"]) assert.match(more, new RegExp(title));
+  assert.doesNotMatch(more, /CBAM Data Readiness/);
+  assert.doesNotMatch(hub, /aria-pressed/);
 });
 
 test("keeps the header to the menu, language switch and one call to action", async () => {
