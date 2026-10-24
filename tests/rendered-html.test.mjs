@@ -704,3 +704,27 @@ test("offers an emailed copy and a PDF of the readiness check result", async () 
   const route = await readFile(new URL("../app/api/inquiries/route.ts", import.meta.url), "utf8");
   assert.match(route, /input\.answers\.every\(a => a === 0 \|\| a === 1 \|\| a === 2\)/);
 });
+
+test("answers common regulation questions on the flagship programme pages", async () => {
+  const cbam = await (await render("/en/solutions/cbam-data-readiness")).text();
+  assert.match(cbam, /Common questions/);
+  assert.match(cbam, /Which importers are covered\?/);
+  assert.match(cbam, /"@type":"Question","name":"Which importers are covered\?"/);
+  const craTr = await (await render("/tr/cozumler/cra-olay-hazirligi")).text();
+  assert.match(craTr, /Sık sorulan sorular/);
+  assert.match(craTr, /11 Aralık 2027/);
+});
+
+test("links the three readiness checks from the homepage", async () => {
+  const [en, tr] = await Promise.all(["/en", "/tr"].map(path => render(path).then(response => response.text())));
+  assert.match(en, /See where you stand in two minutes\./);
+  for (const path of ["/en/decision-lab/cbam-readiness-check", "/en/decision-lab/cra-readiness-check", "/en/decision-lab/eudr-readiness-check"]) assert.ok(en.includes(`href="${path}"`), path);
+  assert.match(tr, /Nerede durduğunuzu iki dakikada görün\./);
+  assert.ok(tr.includes('href="/tr/karar-laboratuvari/cbam-hazirlik-testi"'));
+});
+
+test("keeps the header call to action sized to its label", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  for (const rule of css.match(/[^{}]+\{[^}]*\bwidth:\s*44px[^}]*\}/g) ?? []) assert.doesNotMatch(rule, /\.button\.compact/);
+  assert.match(css, /\.button\.compact, \.save-control, \.reading-modes button, \.command-input button \{ min-height: 44px; \}/);
+});

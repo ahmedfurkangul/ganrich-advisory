@@ -4,6 +4,7 @@ import { services } from "./advisory-content";
 import { notes } from "./advisory-note-content";
 import { solutionByKey, solutions, solutionTagList, solutionTags, solutionThemes } from "./solutions-content";
 import { absoluteUrl, SITE_NAME } from "./site-config";
+import { faqFor } from "./solution-faq";
 
 // Schema.org nodes shared by every page. Everything here repeats facts that are visible on the site,
 // so search engines and LLM crawlers get the same story as human readers.
@@ -112,6 +113,7 @@ export function offeringNodes(lang: Lang, kind: string, url: string) {
       [en ? "Who is this programme for?" : "Bu program kimler için?", solution.audience],
       [en ? "How does the programme start?" : "Program nasıl başlar?", solution.firstStep],
       [en ? "What is outside the scope?" : "Kapsamın dışında neler var?", solution.boundaries],
+      ...(faqFor(lang, solution.key) ?? []),
     ];
     return [
       {
