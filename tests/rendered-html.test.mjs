@@ -299,7 +299,7 @@ test("publishes a restrained bilingual privacy and trust center", async () => {
     ["/en/privacy", /Privacy, explained in plain language\./, /transmitted securely and stored/],
     ["/tr/kvkk-aydinlatma-metni", /Türkiye veri koruma bilgilendirmesi\./, /Aydınlatma/],
     ["/en/cookies", /deliberately small technology footprint/, /Analytics cookies, advertising/],
-    ["/en/data-rights", /rights channel should be secure/, /Do not send identity documents/],
+    ["/en/data-rights", /Your data rights, through a secure channel\./, /Do not send identity documents/],
     ["/en/ai-transparency", /AI assists the work/, /Decision Lab tools run in the visitor’s browser/],
     ["/en/cookie-preferences", /Cookie preferences/, /Functional preferences/],
   ];
@@ -618,4 +618,18 @@ test("gives each trust page its own title and keeps the offer catalogue to home 
   assert.match(home, /"OfferCatalog"/);
   assert.doesNotMatch(about, /"OfferCatalog"/);
   assert.doesNotMatch(home, /name="keywords"/);
+});
+
+test("names the data controller and states purposes, transfers, retention and how to apply", async () => {
+  const [kvkk, privacy, rights, vendors] = await Promise.all(["/tr/kvkk-aydinlatma-metni", "/en/privacy", "/tr/ilgili-kisi-basvurusu", "/en/vendors"].map(path => render(path).then(response => response.text())));
+  for (const page of [kvkk, privacy, rights]) {
+    assert.match(page, /Ahmed Furkan Gül/);
+    assert.match(page, /furkangul@ganrichadvisory\.com/);
+  }
+  assert.match(kvkk, /m\. 5\/2-c/);
+  assert.match(kvkk, /yurt dışına aktarılmaktadır/);
+  assert.match(kvkk, /30 gün içinde/);
+  assert.match(privacy, /24 months from receipt/);
+  assert.match(vendors, /Cloudflare, Inc\./);
+  assert.doesNotMatch(kvkk + privacy + rights + vendors, /Publication gate|Yayın kapısı|not yet published|henüz yayımlanmamaktadır/);
 });
