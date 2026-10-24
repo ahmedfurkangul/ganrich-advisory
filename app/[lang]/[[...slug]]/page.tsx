@@ -56,7 +56,7 @@ const metaCopy = {
     cbamCheck: ["CBAM Hazırlık Testi | Ganrich Advisory", "CBAM emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
     decisionLabChangelog: ["Karar Laboratuvarı Değişiklik Günlüğü | Ganrich Advisory", "Ganrich Karar Laboratuvarında nelerin yayında, nelerin değiştiğini ve hangi araçların değerlendirmede olduğunu görün."],
     privateBriefing: ["Özel Yönetici Brifingi | Ganrich Advisory", "Yayımlanmış bir perspektif, sinyal veya araçtan kurumunuza özgü karar hakkında hazırlıklı bir görüşmeye geçin."],
-    about: ["Hakkımızda | Ganrich Advisory", "Ganrich Advisory, Türk üretici ve ihracatçılar için strateji ve AB uyum danışmanlığıdır; İstanbul'da Ahmed Furkan Gul liderliğinde çalışır."],
+    about: ["Hakkımızda | Ganrich Advisory", "Ganrich Advisory, Türk üretici ve ihracatçılar için strateji ve AB uyum danışmanlığıdır; İstanbul'da Ahmed Furkan Gül liderliğinde çalışır."],
     contact: ["İletişim | Ganrich Advisory", "Gündeminizdeki stratejik karar hakkında kıdemli bir görüşme başlatın."],
     legal: ["Hukuki Bilgilendirme | Ganrich Advisory", "Ganrich Advisory internet sitesi hukuki bilgileri."],
     trust: ["Gizlilik + Güven | Ganrich Advisory", "Ganrich Advisory gizlilik tercihleri, mevcut site olguları, yapay zekâ şeffaflığı ve hukuki bilgileri."],
