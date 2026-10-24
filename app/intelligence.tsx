@@ -311,6 +311,7 @@ export function DecisionLabPage({ lang }: { lang: Lang }) {
     [isEn ? "Board Brief Builder" : "Yönetim Kurulu Brifingi Oluşturucu", isEn ? "Turn a framed decision into a disciplined one-page board memo." : "Çerçevelenmiş bir kararı disiplinli, tek sayfalık yönetim kurulu notuna dönüştürün.", m.boardBriefBuilder],
     [isEn ? "AI Value Lens" : "Yapay Zekâ Değer Merceği", isEn ? "Assess a use case across value, repeatability, readiness, adoption, and risk control." : "Bir kullanım alanını değer, tekrarlanabilirlik, hazırlık, benimseme ve risk kontrolü üzerinden değerlendirin.", m.aiValueLens],
     [isEn ? "CBAM Readiness Check" : "CBAM Hazırlık Testi", isEn ? "Eight questions on whether your emissions data is ready for an EU buyer, with the gaps to close first." : "Emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; önce kapatılacak boşluklarla birlikte.", m.cbamCheck],
+    [isEn ? "CRA Readiness Check" : "CRA Hazırlık Testi", isEn ? "Eight questions on whether you could report an exploited vulnerability within 24 hours under the Cyber Resilience Act." : "Siber Dayanıklılık Yasası kapsamında istismar edilen bir açığı 24 saat içinde bildirip bildiremeyeceğinizi sekiz soruda görün.", m.craCheck],
   ];
   return (
     <>

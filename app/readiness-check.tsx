@@ -10,7 +10,7 @@ import { leadEvent } from './analytics';
 type Answer = 2 | 1 | 0;
 type Question = { q: string; gap: string };
 
-const copy = {
+const cbamCopy = {
   en: {
     label: 'CBAM readiness check',
     title: 'How ready is your CBAM data for an EU buyer?',
@@ -87,8 +87,96 @@ const copy = {
   },
 };
 
-export function CbamReadinessCheck({ lang }: { lang: Lang }) {
-  const c = copy[lang];
+const craCopy = {
+  en: {
+    label: 'CRA readiness check',
+    title: 'Could you report an exploited vulnerability within 24 hours?',
+    intro: 'Eight questions, about two minutes, on the Cyber Resilience Act reporting duties that have applied since 11 September 2026. You see the result straight away. Nothing is stored unless you ask for a review.',
+    answers: ['Yes', 'Partly', 'No or not sure'] as const,
+    progress: (n: number, total: number) => `${n} of ${total} answered`,
+    see: 'See the result',
+    score: 'Readiness score',
+    bands: [
+      ['Early stage', 'Start with scope and ownership: which products with digital elements you sell in the EU, and who decides when something must be reported. Without that, the 24-hour clock cannot be met.'],
+      ['Partly ready', 'The pieces exist but are not yet joined up. The next step is to connect intake, decision, reporting and fixing into one routine, and to test it on a realistic scenario.'],
+      ['Well advanced', 'You have the basics in place. The question now is whether the routine holds under pressure, which a timed exercise with the people involved will show.'],
+    ] as const,
+    gaps: 'Gaps to close first',
+    noGaps: 'No major gaps in these eight areas.',
+    disclaimer: 'This is an indicative self-assessment, not a legal opinion or a security audit.',
+    ask: 'Ask for a CRA incident readiness review',
+    askIntro: 'Send the result and we will reply by email with what we would look at first, for one product line.',
+    name: 'Name', email: 'Work email', company: 'Company',
+    privacy: 'I have read the privacy notice and understand how my request will be handled.', privacyLink: 'Privacy notice',
+    send: 'Send the result', sending: 'Sending…',
+    sent: 'Thank you. Your result has reached Ganrich Advisory and we will reply by email.',
+    error: 'Unable to send. Please try again or write to furkangul@ganrichadvisory.com.',
+    paper: 'Read the whitepaper: The 24-hour test',
+    programme: 'See the CRA Incident Readiness programme',
+    restart: 'Start again',
+    questions: [
+      { q: 'Do you know which of your products sold in the EU contain software or connect to a network, and so count as products with digital elements under the CRA?', gap: 'List the products with digital elements you sell in the EU, including older models still on the market.' },
+      { q: 'Is a named person or small team authorised to decide, within hours, whether a vulnerability is actively exploited and must be reported?', gap: 'Name who decides on reporting, with a deputy, and write down what they may decide alone.' },
+      { q: 'Can customers and security researchers report a vulnerability to you through a published contact or disclosure policy?', gap: 'Publish a security contact and a short vulnerability disclosure policy.' },
+      { q: 'Do you know which software components, including open-source libraries, are in each product and version?', gap: 'Build a software bill of materials for your main product lines.' },
+      { q: 'Could you tell, within a day, which products, versions and customers a new vulnerability affects?', gap: 'Link components to products, versions and customers so impact can be assessed quickly.' },
+      { q: 'Do you know how an early warning is submitted through ENISA’s single reporting platform, and who in your company submits it?', gap: 'Prepare the reporting route: account, templates and who submits the 24-hour early warning and 72-hour notification.' },
+      { q: 'Can you ship a security update for affected products and tell users how to apply it?', gap: 'Set up a way to deliver security updates and notify users, including for products in the field.' },
+      { q: 'Have you rehearsed the 24-hour and 72-hour sequence in an exercise within the last year?', gap: 'Run a timed exercise on a realistic vulnerability scenario with the people who would be involved.' },
+    ] as Question[],
+  },
+  tr: {
+    label: 'CRA hazırlık testi',
+    title: 'İstismar edilen bir açığı 24 saat içinde bildirebilir misiniz?',
+    intro: 'Siber Dayanıklılık Yasasının 11 Eylül 2026’dan beri geçerli bildirim yükümlülükleri üzerine sekiz soru, yaklaşık iki dakika. Sonucu hemen görürsünüz. Değerlendirme istemediğiniz sürece hiçbir şey kaydedilmez.',
+    answers: ['Evet', 'Kısmen', 'Hayır veya emin değilim'] as const,
+    progress: (n: number, total: number) => `${total} sorudan ${n} tanesi yanıtlandı`,
+    see: 'Sonucu görün',
+    score: 'Hazırlık puanı',
+    bands: [
+      ['Başlangıç aşaması', 'Kapsam ve sorumlulukla başlayın: AB’de hangi dijital unsurlu ürünleri sattığınız ve bir durumun bildirilmesi gerektiğine kimin karar verdiği. Bunlar olmadan 24 saatlik süre karşılanamaz.'],
+      ['Kısmen hazır', 'Parçalar var ama henüz birbirine bağlı değil. Sonraki adım; bildirim alma, karar, raporlama ve düzeltmeyi tek bir düzende birleştirmek ve gerçekçi bir senaryoyla sınamak.'],
+      ['İleri aşama', 'Temeller yerinde. Artık soru, düzenin baskı altında dayanıp dayanmadığı; bunu ilgili kişilerle yapılacak süreli bir tatbikat gösterir.'],
+    ] as const,
+    gaps: 'Önce kapatılması gereken boşluklar',
+    noGaps: 'Bu sekiz alanda belirgin bir boşluk yok.',
+    disclaimer: 'Bu, yol gösterici bir öz değerlendirmedir; hukuki görüş veya güvenlik denetimi değildir.',
+    ask: 'CRA olay hazırlığı değerlendirmesi isteyin',
+    askIntro: 'Sonucu gönderin; tek bir ürün hattı için önce neye bakacağımızı e-postayla yazalım.',
+    name: 'Ad soyad', email: 'İş e-postası', company: 'Şirket',
+    privacy: 'Gizlilik bildirimini okudum ve talebimin nasıl işleneceğini anladım.', privacyLink: 'Gizlilik bildirimi',
+    send: 'Sonucu gönderin', sending: 'Gönderiliyor…',
+    sent: 'Teşekkürler. Sonucunuz Ganrich Advisory’ye ulaştı; e-postayla dönüş yapacağız.',
+    error: 'Gönderilemedi. Lütfen tekrar deneyin veya furkangul@ganrichadvisory.com adresine yazın.',
+    paper: 'Teknik notu okuyun: 24 saat testi',
+    programme: 'CRA Olay Hazırlığı programını inceleyin',
+    restart: 'Baştan başlayın',
+    questions: [
+      { q: 'AB’de sattığınız ürünlerden hangilerinin yazılım içerdiğini veya bir ağa bağlandığını, yani CRA kapsamında dijital unsurlu ürün sayıldığını biliyor musunuz?', gap: 'Piyasada hâlâ bulunan eski modeller dahil, AB’de sattığınız dijital unsurlu ürünleri listeleyin.' },
+      { q: 'Bir açığın aktif olarak istismar edilip edilmediğine ve bildirilmesi gerekip gerekmediğine saatler içinde karar verebilecek, adı belli bir kişi veya küçük bir ekip var mı?', gap: 'Bildirim kararını kimin vereceğini ve vekilini belirleyin; tek başına neye karar verebileceklerini yazın.' },
+      { q: 'Müşteriler ve güvenlik araştırmacıları size yayımlanmış bir iletişim adresi veya açık bildirme politikası üzerinden açık bildirebiliyor mu?', gap: 'Bir güvenlik iletişim adresi ve kısa bir açık bildirme politikası yayımlayın.' },
+      { q: 'Her ürün ve sürümde, açık kaynak kütüphaneler dahil hangi yazılım bileşenlerinin bulunduğunu biliyor musunuz?', gap: 'Ana ürün hatlarınız için yazılım malzeme listesi (SBOM) oluşturun.' },
+      { q: 'Yeni bir açığın hangi ürünleri, sürümleri ve müşterileri etkilediğini bir gün içinde söyleyebilir misiniz?', gap: 'Etki hızlı değerlendirilebilsin diye bileşenleri ürünler, sürümler ve müşterilerle ilişkilendirin.' },
+      { q: 'ENISA’nın tek bildirim platformu üzerinden erken uyarının nasıl gönderildiğini ve şirketinizde bunu kimin göndereceğini biliyor musunuz?', gap: 'Bildirim yolunu hazırlayın: hesap, şablonlar ve 24 saatlik erken uyarı ile 72 saatlik bildirimi kimin göndereceği.' },
+      { q: 'Etkilenen ürünler için güvenlik güncellemesi yayımlayıp kullanıcılara nasıl uygulayacaklarını anlatabilir misiniz?', gap: 'Sahadaki ürünler dahil, güvenlik güncellemesi dağıtma ve kullanıcıları bilgilendirme yolu kurun.' },
+      { q: 'Son bir yıl içinde 24 saat ve 72 saat adımlarını bir tatbikatta prova ettiniz mi?', gap: 'Sürece dahil olacak kişilerle, gerçekçi bir açık senaryosu üzerinde süreli bir tatbikat yapın.' },
+    ] as Question[],
+  },
+};
+
+type CheckCopy = Omit<typeof cbamCopy.en, 'bands' | 'answers'> & { answers: readonly string[]; bands: readonly (readonly [string, string])[] };
+type CheckConfig = { copy: Record<Lang, CheckCopy>; route: 'cbamCheck' | 'craCheck'; solution: 'solutionCbam' | 'solutionCra'; paper: Record<Lang, string> };
+
+const checks = {
+  cbam: { copy: cbamCopy, route: 'cbamCheck', solution: 'solutionCbam', paper: { en: '/en/insights/report/cbam-actual-or-default-e9f664d8', tr: '/tr/icgoruler/rapor/cbam-gercek-mi-varsayilan-mi-ef31215c' } },
+  cra: { copy: craCopy, route: 'craCheck', solution: 'solutionCra', paper: { en: '/en/insights/report/cra-the-24-hour-test-96989394', tr: '/tr/icgoruler/rapor/cra-24-saat-testi-37aca9ad' } },
+} satisfies Record<string, CheckConfig>;
+
+export function CbamReadinessCheck({ lang }: { lang: Lang }) { return <ReadinessCheck lang={lang} config={checks.cbam}/>; }
+export function CraReadinessCheck({ lang }: { lang: Lang }) { return <ReadinessCheck lang={lang} config={checks.cra}/>; }
+
+function ReadinessCheck({ lang, config }: { lang: Lang; config: CheckConfig }) {
+  const c = config.copy[lang];
   const total = c.questions.length;
   const [answers, setAnswers] = useState<(Answer | undefined)[]>(() => Array(total).fill(undefined));
   const [done, setDone] = useState(false);
@@ -98,8 +186,8 @@ export function CbamReadinessCheck({ lang }: { lang: Lang }) {
   const max = total * 2;
   const band = score <= 6 ? 0 : score <= 11 ? 1 : 2;
   const gaps = c.questions.filter((_, i) => (answers[i] ?? 0) < 2);
-  const solutionHref = `/${lang}/${routeMap[lang].solutionCbam}`;
-  const paperHref = lang === 'en' ? '/en/insights/report/cbam-actual-or-default-e9f664d8' : '/tr/icgoruler/rapor/cbam-gercek-mi-varsayilan-mi-ef31215c';
+  const solutionHref = `/${lang}/${routeMap[lang][config.solution]}`;
+  const paperHref = config.paper[lang];
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -114,7 +202,7 @@ export function CbamReadinessCheck({ lang }: { lang: Lang }) {
           ...data, kind: 'contact', language: lang,
           interest: `${c.label}: ${score}/${max}`,
           context: `${c.score}: ${score}/${max} (${c.bands[band][0]})\n\n${summary}`,
-          source: `/${lang}/${routeMap[lang].cbamCheck}?service=solutionCbam`.slice(0, 100),
+          source: `/${lang}/${routeMap[lang][config.route]}?service=${config.solution}`.slice(0, 100),
         }),
       });
       const result = await response.json() as { ok?: boolean };
