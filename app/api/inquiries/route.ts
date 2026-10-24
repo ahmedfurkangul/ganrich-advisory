@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 import { sendInquiryAlert } from "../../inquiry-notify";
+import { sendCheckResult } from "../../check-result-email";
+import { routeMap } from "../../content";
+import { checks, isCheckId, type Answer, type CheckConfig } from "../../readiness-check-content";
+import { absoluteUrl } from "../../site-config";
 
 export const runtime = "edge";
 
@@ -19,6 +23,9 @@ type InquiryInput = {
   privacyAcknowledged?: unknown;
   marketing?: unknown;
   website?: unknown;
+  check?: unknown;
+  answers?: unknown;
+  resultCopy?: unknown;
 };
 
 const limits = {
@@ -170,7 +177,23 @@ export async function POST(request: Request) {
       kind, language, source, name, email, organization, role, region, interest, context, decision, contactMethod,
     });
 
-    return NextResponse.json({ ok: true });
+    // A readiness-check request can ask for a copy of the result. It is rebuilt from the canonical check copy.
+    let resultCopy: "sent" | "skipped" | "failed" | undefined;
+    if (input.resultCopy === "yes" && isCheckId(input.check)) {
+      const config: CheckConfig = checks[input.check];
+      const copy = config.copy[language];
+      const answers = Array.isArray(input.answers) && input.answers.length === copy.questions.length && input.answers.every(a => a === 0 || a === 1 || a === 2)
+        ? input.answers as Answer[] : null;
+      if (answers) {
+        const page = (key: string) => absoluteUrl(`/${language}/${routeMap[language][key]}`);
+        resultCopy = await sendCheckResult(env, email, {
+          lang: language, copy, answers,
+          links: { check: page(config.route), programme: page(config.solution), paper: config.paper ? absoluteUrl(config.paper[language]) : undefined, contact: `${page("contact")}?service=${config.solution}` },
+        });
+      }
+    }
+
+    return NextResponse.json({ ok: true, ...(resultCopy ? { resultCopy } : {}) });
   } catch (caught) {
     console.error("Inquiry persistence failed", caught instanceof Error ? caught.name : "unknown");
     return error(language, 500, "The inquiry could not be stored securely. Please use the direct email address.", "Talep güvenli şekilde kaydedilemedi. Lütfen doğrudan e-posta adresini kullanın.");
