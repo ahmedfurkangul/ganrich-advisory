@@ -24,8 +24,8 @@ export const ids = {
 };
 
 const expertiseTopics: Record<Lang, string[]> = {
-  en: ["Corporate strategy", "Market entry", "Operating model design", "Business transformation", "Applied artificial intelligence", "Decision quality", "Türkiye", "Middle East and North Africa"],
-  tr: ["Kurumsal strateji", "Pazara giriş", "İşletim modeli tasarımı", "İş dönüşümü", "Uygulamalı yapay zekâ", "Karar kalitesi", "Türkiye", "Orta Doğu ve Kuzey Afrika"],
+  en: ["EU regulatory readiness", "Corporate strategy", "Market entry", "Operating model design", "Applied artificial intelligence", "Decision quality", "Türkiye", "European Union"],
+  tr: ["AB mevzuatına uyum", "Kurumsal strateji", "Pazara giriş", "İşletim modeli tasarımı", "Uygulamalı yapay zekâ", "Karar kalitesi", "Türkiye", "Avrupa Birliği"],
 };
 
 export function organizationNode(lang: Lang, description: string, { catalog = true }: { catalog?: boolean } = {}) {
@@ -41,7 +41,7 @@ export function organizationNode(lang: Lang, description: string, { catalog = tr
     email: CONTACT_EMAIL,
     founder: { "@id": ids.person(lang) },
     sameAs: [COMPANY_LINKEDIN],
-    areaServed: ["Türkiye", "Middle East and North Africa", "Europe", "Africa"],
+    areaServed: ["Türkiye", "European Union"],
     knowsLanguage: ["en", "tr"],
     knowsAbout: [...new Set([...expertiseTopics[lang], ...solutionTagList(lang)])],
     contactPoint: {
@@ -154,7 +154,7 @@ export function offeringNodes(lang: Lang, kind: string, url: string) {
     description: service.intro,
     serviceType: en ? "Management consulting" : "Yönetim danışmanlığı",
     provider,
-    areaServed: ["Türkiye", "Middle East and North Africa", "Europe", "Africa"],
+    areaServed: ["Türkiye", "European Union"],
     audience: { "@type": "BusinessAudience", audienceType: service.when },
     availableLanguage: ["English", "Turkish"],
     url,

@@ -5,7 +5,6 @@ import Image from "next/image";
 import { BoutiqueHome } from "./advisory";
 const ServicePage = lazy(() => import("./advisory-details").then(m => ({default:m.ServicePage})));
 const SampleWorkPage = lazy(() => import("./advisory-details").then(m => ({default:m.SampleWorkPage})));
-const RegionalPage = lazy(() => import("./advisory-details").then(m => ({default:m.RegionalPage})));
 const ExpertisePage = lazy(() => import("./marketing-pages").then(m => ({default:m.ExpertisePage})));
 const InsightsPage = lazy(() => import("./marketing-pages").then(m => ({default:m.InsightsPage})));
 const InsightCategoryPage = lazy(() => import("./marketing-pages").then(m => ({default:m.InsightCategoryPage})));
@@ -22,7 +21,7 @@ const EudrReadinessCheck = lazy(() => import("./readiness-check").then(m => ({de
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
-import { BriefingTray, HeaderExplore } from "./intelligence-shell";
+import { BriefingTray } from "./intelligence-shell";
 import { openCookiePreferences, PrivacyControls } from "./privacy-controls";
 
 type SiteProps = { lang: Lang; route: string };
@@ -36,7 +35,6 @@ const AIValueLensPage = lazy(() => import("./intelligence").then((module) => ({ 
 const DecisionLabChangelogPage = lazy(() => import("./intelligence").then((module) => ({ default: module.DecisionLabChangelogPage })));
 const InsightExperiencePage = lazy(() => import("./intelligence").then((module) => ({ default: module.InsightExperiencePage })));
 const PrivateBriefingPage = lazy(() => import("./intelligence").then((module) => ({ default: module.PrivateBriefingPage })));
-const PrivacyCenterPage = lazy(() => import("./privacy-center").then((module) => ({ default: module.PrivacyCenterPage })));
 const CookiePreferencesPage = lazy(() => import("./privacy-center").then((module) => ({ default: module.CookiePreferencesPage })));
 const TrustContentPage = lazy(() => import("./privacy-center").then((module) => ({ default: module.TrustContentPage })));
 
@@ -67,7 +65,6 @@ function Header({ lang, route }: SiteProps) {
       {t.nav.map((item, i) => <a key={item} href={`/${lang}/${hrefs[i]}`} aria-current={route === hrefs[i] ? "page" : undefined}>{item}</a>)}
     </nav>
     <div className="header-actions">
-      <HeaderExplore lang={lang}/>
       <a className="language" data-analytics-event="language_switched" href={switchHref(lang, route)} onClick={() => localStorage.setItem("ganrich-language", lang === "en" ? "tr" : "en")} ><span className={lang === "en" ? "active" : ""}>EN</span><i>/</i><span className={lang === "tr" ? "active" : ""}>TR</span><span className="sr-only">{lang === "en" ? "Türkçe sürüme geç" : "Switch to English"}</span></a>
       <a className="button compact" data-analytics-event="contact_started" href={`/${lang}/${m.contact}`}><span className="desktop-cta">{t.cta}</span><span className="mobile-cta">{lang === "en" ? "First review" : "Ön görüşme"}</span></a>
     </div>
@@ -85,13 +82,13 @@ function TopSectionNav({ lang }: { lang: Lang }) {
 function Footer({ lang }: { lang: Lang }) {
   const t = ui[lang]; const m = routeMap[lang];
   return <footer className="footer">
-    <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Strategic judgment, regional fluency, and applied AI for consequential decisions." : "Kritik kararlar için stratejik muhakeme, bölgesel derinlik ve uygulamalı yapay zekâ."}</p></div>
+    <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Strategy and EU-readiness advisory for Turkish industry and exporters." : "Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı."}</p></div>
     <div className="footer-links">
-      <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.solutions}`}>{t.nav[0]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[1]}</a><a href={`/${lang}/${m.newsletter}`}>{lang === "en" ? "Regulation updates" : "Mevzuat bülteni"}</a><a href={`/${lang}/${m.decisionLab}`}>{lang === "en" ? "Decision Lab tools" : "Karar Laboratuvarı araçları"}</a><a href={`/${lang}/${m.sampleWork}`}>{lang === "en" ? "Sample work" : "Örnek çalışmalar"}</a><a href={`/${lang}/${m.markets}`}>{lang === "en" ? "Markets" : "Coğrafyalar"}</a><a href={`/${lang}/${m.about}`}>{t.nav[2]}</a></div>
+      <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.solutions}`}>{t.nav[0]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[1]}</a><a href={`/${lang}/${m.newsletter}`}>{lang === "en" ? "Regulation updates" : "Mevzuat bülteni"}</a><a href={`/${lang}/${m.decisionLab}`}>{lang === "en" ? "Readiness checks" : "Hazırlık testleri"}</a><a href={`/${lang}/${m.sampleWork}`}>{lang === "en" ? "Sample work" : "Örnek çalışmalar"}</a><a href={`/${lang}/${m.about}`}>{t.nav[2]}</a></div>
       <div><span>{lang === "en" ? "Contact" : "İletişim"}</span><a href={`/${lang}/${m.contact}`}>{t.cta}</a><a href="mailto:furkangul@ganrichadvisory.com">furkangul@ganrichadvisory.com</a><a href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
     </div>
     <nav className="footer-trust-links" aria-label={lang === "en" ? "Privacy and legal" : "Gizlilik ve hukuk"}>
-      <a href={`/${lang}/${m.privacyCenter}`}>{lang === "en" ? "Privacy and legal" : "Gizlilik ve hukuk"}</a>
+      <a href={`/${lang}/${m.privacy}`}>{lang === "en" ? "Privacy" : "Gizlilik"}</a>
       <a href={`/${lang}/${m.kvkk}`}>KVKK</a>
       <button type="button" onClick={openCookiePreferences}>{lang === "en" ? "Cookie preferences" : "Çerez tercihleri"}</button>
       <a href={`/${lang}/${m.legal}`}>{lang === "en" ? "Legal notice" : "Yasal bildirim"}</a>
@@ -117,7 +114,6 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "sampleWork") page = <SampleWorkPage lang={lang}/>;
   if (kind.startsWith("note")) page = <NotePage lang={lang} kind={kind}/>;
   if (kind === "expertise") page = <ExpertisePage lang={lang}/>;
-  if (kind === "markets") page = <RegionalPage lang={lang}/>;
   if (kind === "insights") page = <InsightsPage lang={lang}/>;
   if (kind.startsWith("category")) page = <InsightCategoryPage lang={lang} kind={kind}/>;
   if (kind.startsWith("article")) page = <InsightExperiencePage lang={lang} index={insightIndex(kind)}/>;
@@ -135,9 +131,8 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "privateBriefing") page = <PrivateBriefingPage lang={lang}/>;
   if (kind === "about") page = <AboutPage lang={lang}/>;
   if (kind === "contact") page = <ContactExperience lang={lang}/>;
-  if (kind === "privacyCenter") page = <PrivacyCenterPage lang={lang}/>;
   if (kind === "cookiePreferences") page = <CookiePreferencesPage lang={lang}/>;
-  if (["privacy", "kvkk", "cookies", "dataRights", "aiTransparency", "legal", "terms", "policyUpdates", "vendors"].includes(kind)) page = <TrustContentPage lang={lang} kind={kind as "privacy" | "kvkk" | "cookies" | "dataRights" | "aiTransparency" | "legal" | "terms" | "policyUpdates" | "vendors"}/>;
+  if (["privacy", "kvkk", "legal"].includes(kind)) page = <TrustContentPage lang={lang} kind={kind as "privacy" | "kvkk" | "legal"}/>;
   if (kind === "notFound") page = <PageHero eyebrow="404" title={lang === "en" ? "This page is not available." : "Bu sayfa mevcut değil."} intro={lang === "en" ? "Return to the Ganrich Advisory home page." : "Ganrich Advisory ana sayfasına dönün."}/>;
   return <SiteLayout lang={lang} route={route}><Suspense fallback={<div className="route-loading" role="status">{lang === "en" ? "Loading…" : "Yükleniyor…"}</div>}>{page}</Suspense></SiteLayout>;
 }

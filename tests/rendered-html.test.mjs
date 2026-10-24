@@ -68,7 +68,7 @@ test("publishes the verified bilingual founder profile", async () => {
 
 test("server-renders the bilingual strategic intelligence routes", async () => {
   const routes = [
-    ["/en/decision-lab", /Decision Lab/, /Work on the decision/],
+    ["/en/decision-lab", /EU Readiness Checks/, /See in two minutes where you stand on an EU rule/],
     ["/tr/karar-laboratuvari/karar-atlasi", /Karar Atlası/, /Karardan başlayın/],
     ["/en/decision-lab/decision-framer", /Decision Framer/, /What decision needs to be made/],
     ["/en/decision-lab/market-entry-compass", /Market Entry Compass/, /EDITABLE WEIGHTS/],
@@ -121,7 +121,6 @@ test("renders bilingual engagement, sample, and decision-note journeys", async (
   for(const path of paths){const response=await render(path);assert.equal(response.status,200,path);const html=await response.text();assert.match(html,/rel="canonical"/);assert.match(html,/hrefLang="tr"/);assert.doesNotMatch(html,/href="[^"]*undefined/);}
   const contact=await (await render("/en/contact")).text();
   assert.match(contact,/What are you deciding/);assert.match(contact,/optional/);
-  const markets=await (await render("/en/markets")).text();assert.doesNotMatch(markets,/Content architecture/);
 });
 
 test("keeps core interactions keyboard-operable and marketing JavaScript within budget", async () => {
@@ -144,11 +143,11 @@ test("keeps core interactions keyboard-operable and marketing JavaScript within 
 
 
   assert.match(shell, /role="dialog" aria-modal="true" aria-labelledby="briefing-tray-title"/);
-  assert.match(shell, /aria-controls="ganrich-command"/);
+  assert.doesNotMatch(shell, /ganrich-command/); // the header search palette was removed in Wave 1
   assert.match(site, /lazy\(\(\) => import\("\.\/intelligence"\)/);
   assert.match(intelligence, /event\.key === "ArrowRight"/);
   assert.match(controls, /event\.key === "Escape"/);
-  assert.match(privacy, /Trust should be designed into the experience/);
+  assert.match(privacy, /mergedTrustParts/);
   assert.match(css, /min-height: 44px/);
   // 152 KB since the contact-step beacon (PR #14). Gzip output differs by a few hundred bytes between
   // machines (153354 in the cloud container, 153737 on the Mac), so the budget keeps about 2 KB of headroom.
@@ -295,13 +294,11 @@ test("returns a true house-voice 404 and keeps analytics disabled by default", a
 
 test("publishes a restrained bilingual privacy and trust center", async () => {
   const routes = [
-    ["/en/privacy-center", /Trust should be designed into the experience\./, /No analytics cookies or advertising trackers/],
-    ["/tr/gizlilik-merkezi", /Güven, deneyimin içine tasarlanmalıdır\./, /İsteğe bağlı tercihler varsayılan olarak kapalı/],
     ["/en/privacy", /Privacy, explained in plain language\./, /transmitted securely and stored/],
+    ["/en/privacy", /id="cookies"[\s\S]*deliberately small technology footprint/, /Analytics cookies, advertising/],
+    ["/en/privacy", /id="rights"[\s\S]*Your data rights, through a secure channel\./, /Do not send identity documents/],
     ["/tr/kvkk-aydinlatma-metni", /Türkiye veri koruma bilgilendirmesi\./, /Aydınlatma/],
-    ["/en/cookies", /deliberately small technology footprint/, /Analytics cookies, advertising/],
-    ["/en/data-rights", /Your data rights, through a secure channel\./, /Do not send identity documents/],
-    ["/en/ai-transparency", /AI assists the work/, /Decision Lab tools run in the visitor’s browser/],
+    ["/en/legal", /id="ai"[\s\S]*AI assists the work/, /Decision Lab tools run in the visitor’s browser/],
     ["/en/cookie-preferences", /Cookie preferences/, /Functional preferences/],
   ];
 
@@ -478,12 +475,12 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   const graph = html => JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1].replace(/\\u003c/g, "<"))["@graph"];
   const types = html => graph(html).map(node => [].concat(node["@type"]).join(","));
 
-  // Tags are visible on the page, in the keywords meta and in the hub filter.
+  // Tags are visible on the page, in the keywords meta and on the hub's flagship cards.
   assert.match(solution, /class="solution-tags"/);
   assert.match(solution, /<li>CBAM<\/li>/);
   assert.match(solution, /name="keywords" content="CBAM,/);
-  assert.match(hub, /Konuya göre filtreleyin/);
-  assert.match(hub, /aria-pressed="true"[^>]*>Tümü/);
+  assert.match(hub, /Çoğu müşterinin başladığı yer/);
+  assert.match(hub, /class="solution-tags"/);
 
   // Structured data describes the organisation, the site, the page and the offer.
   for (const type of ["Organization,ProfessionalService", "WebSite", "WebPage", "BreadcrumbList", "Service", "FAQPage"]) assert.ok(types(solution).includes(type), `solution page lacks ${type}`);
@@ -533,7 +530,7 @@ test("homepage whitepapers match the solutions catalogue", async () => {
 });
 
 test("retired pages redirect to the simplified paths", async () => {
-  for (const [path, target] of [["/en/expertise", /\/en\/solutions#strategy$/], ["/tr/uzmanlik", /\/tr\/cozumler#strategy$/], ["/en/private-executive-briefing", /\/en\/contact\?service=briefing$/]]) {
+  for (const [path, target] of [["/en/expertise", /\/en\/solutions#strategy$/], ["/tr/uzmanlik", /\/tr\/cozumler#strategy$/], ["/en/markets", /\/en\/solutions#strategy$/], ["/tr/cografyalar", /\/tr\/cozumler#strategy$/], ["/en/private-executive-briefing", /\/en\/contact\?service=briefing$/]]) {
     const response = await render(path);
     assert.ok([301, 307, 308].includes(response.status), `${path} status ${response.status}`);
     assert.match(response.headers.get("location") ?? "", target, path);
@@ -610,11 +607,11 @@ test("publishes the Opportunity Studio showcase in both languages without linkin
 });
 
 test("gives each trust page its own title and keeps the offer catalogue to home and solutions", async () => {
-  const paths = ["/en/privacy", "/en/cookies", "/en/terms", "/tr/kvkk-aydinlatma-metni", "/tr/gizlilik", "/tr/kullanim-kosullari"];
+  const paths = ["/en/privacy", "/en/legal", "/tr/kvkk-aydinlatma-metni", "/tr/gizlilik", "/tr/yasal-bilgilendirme"];
   const pages = await Promise.all(paths.map(path => render(path).then(response => response.text())));
   const titles = pages.map(page => page.match(/<title>([^<]*)<\/title>/)?.[1]);
   assert.equal(new Set(titles).size, paths.length);
-  assert.match(pages[3], /<title>KVKK Aydınlatma Metni \| Ganrich Advisory<\/title>/);
+  assert.match(pages[2], /<title>KVKK Aydınlatma Metni \| Ganrich Advisory<\/title>/);
   const [home, about] = await Promise.all([render("/en"), render("/en/about")].map(p => p.then(response => response.text())));
   assert.match(home, /"OfferCatalog"/);
   assert.doesNotMatch(about, /"OfferCatalog"/);
@@ -622,7 +619,7 @@ test("gives each trust page its own title and keeps the offer catalogue to home 
 });
 
 test("names the data controller and states purposes, transfers, retention and how to apply", async () => {
-  const [kvkk, privacy, rights, vendors] = await Promise.all(["/tr/kvkk-aydinlatma-metni", "/en/privacy", "/tr/ilgili-kisi-basvurusu", "/en/vendors"].map(path => render(path).then(response => response.text())));
+  const [kvkk, privacy, rights, vendors] = await Promise.all(["/tr/kvkk-aydinlatma-metni", "/en/privacy", "/tr/gizlilik", "/en/privacy"].map(path => render(path).then(response => response.text())));
   for (const page of [kvkk, privacy, rights]) {
     assert.match(page, /Ahmed Furkan Gül/);
     assert.match(page, /furkangul@ganrichadvisory\.com/);
@@ -644,4 +641,58 @@ test("Turkish pages spell the founder's name Gül and English pages keep Gul", a
   assert.match(insights, /author: "Ahmed Furkan Gül"/);
   const banner = await readFile(new URL("../app/privacy-controls.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(banner, /Gösterişsiz/);
+});
+
+test("folds the trust pages into privacy, KVKK and legal, and redirects the old addresses to their sections", async () => {
+  const cases = [
+    ["/en/privacy-center", "/en/privacy"], ["/tr/gizlilik-merkezi", "/tr/gizlilik"],
+    ["/en/cookies", "/en/privacy#cookies"], ["/en/vendors", "/en/privacy#providers"], ["/en/data-rights", "/en/privacy#rights"],
+    ["/tr/ilgili-kisi-basvurusu", "/tr/gizlilik#rights"], ["/en/policy-updates", "/en/privacy#changes"],
+    ["/en/terms", "/en/legal#terms"], ["/tr/kullanim-kosullari", "/tr/yasal-bilgilendirme#terms"], ["/en/ai-transparency", "/en/legal#ai"],
+  ];
+  for (const [path, target] of cases) {
+    const response = await render(path);
+    assert.ok([301, 307, 308].includes(response.status), `${path} status ${response.status}`);
+    assert.ok((response.headers.get("location") ?? "").endsWith(target), `${path} -> ${response.headers.get("location")}`);
+  }
+  const privacy = await (await render("/en/privacy")).text();
+  for (const id of ["cookies", "providers", "rights", "changes"]) assert.match(privacy, new RegExp(`id="${id}"`));
+  const sitemap = await (await render("/sitemap.xml")).text();
+  assert.doesNotMatch(sitemap, /privacy-center|\/en\/cookies<|data-rights|ai-transparency|\/en\/terms<|policy-updates|\/en\/vendors</);
+});
+
+test("turns the Decision Lab into a readiness-check hub with the decision tools below", async () => {
+  const [en, tr] = await Promise.all(["/en/decision-lab", "/tr/karar-laboratuvari"].map(path => render(path).then(response => response.text())));
+  for (const href of ["/en/decision-lab/cbam-readiness-check", "/en/decision-lab/cra-readiness-check", "/en/decision-lab/eudr-readiness-check"]) assert.match(en, new RegExp(`href="${href}"`));
+  assert.equal((en.match(/Start the check/g) ?? []).length, 3);
+  assert.match(en, /href="\/en\/decision-lab\/decision-framer"/);
+  assert.doesNotMatch(en, /Five instruments|tool-need/);
+  assert.match(tr, /Hazırlık testleri/);
+});
+
+test("leads the solutions hub with the four flagship programmes and lists the rest below", async () => {
+  const hub = await (await render("/en/solutions")).text();
+  const flagship = hub.slice(hub.indexOf('id="flagship"'), hub.indexOf('id="more"'));
+  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "EUDR Traceability File", "AI Order Desk Assistant"]) assert.match(flagship, new RegExp(title));
+  assert.doesNotMatch(flagship, /Industrial Water Balance|PFAS Substitution/);
+  assert.equal((flagship.match(/Take the 2-minute check/g) ?? []).length, 3);
+  const more = hub.slice(hub.indexOf('id="more"'), hub.indexOf('id="strategy"'));
+  for (const title of ["PFAS Substitution Programme", "Industrial Water Balance", "E-commerce Margin Clarity"]) assert.match(more, new RegExp(title));
+  assert.doesNotMatch(more, /CBAM Data Readiness/);
+  assert.doesNotMatch(hub, /aria-pressed/);
+});
+
+test("keeps the header to the menu, language switch and one call to action", async () => {
+  const html = await (await render("/tr")).text();
+  const header = html.slice(html.indexOf('<header class="header">'), html.indexOf("</header>"));
+  assert.doesNotMatch(header, /⌘K|Keşfet|explore-trigger/);
+  assert.match(header, /Ön görüşme isteyin/);
+});
+
+test("tells one positioning story in the footer, About page and structured data", async () => {
+  const [about, home, aboutTr] = await Promise.all(["/en/about", "/en", "/tr/hakkimizda"].map(path => render(path).then(response => response.text())));
+  assert.match(about, /Strategy and EU-readiness advisory for Turkish industry and exporters\./);
+  assert.match(about, /EU-readiness advisory for Turkish manufacturers and exporters/);
+  assert.match(aboutTr, /Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı\./);
+  for (const page of [about, home, aboutTr]) assert.doesNotMatch(page, /Middle East and North Africa|regional fluency|bölgesel derinlik/);
 });
