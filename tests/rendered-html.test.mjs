@@ -743,3 +743,23 @@ test("lists whitepapers, articles and decision notes in one technical-notes libr
   const tr = await (await render("/tr/icgoruler")).text();
   for (const label of ["AB kuralları", "Enerji ve sanayi", "Uygulamalı yapay zekâ", "Strateji ve büyüme", "Teknik not (PDF)", "Karar notu"]) assert.ok(tr.includes(label), label);
 });
+
+test("publishes the EU regulation calendar with official sources and feeds the homepage timeline from it", async () => {
+  for (const [path, title, source] of [["/en/insights/eu-regulation-calendar", /EU Regulation Calendar \| Ganrich Advisory/, /Official text: Regulation \(EU\) 2023\/956/], ["/tr/icgoruler/ab-mevzuat-takvimi", /AB Mevzuat Takvimi \| Ganrich Advisory/, /Resmî metin: Regulation \(EU\) 2023\/956/]]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, title);
+    assert.match(html, source);
+    assert.match(html, /href="https:\/\/eur-lex\.europa\.eu\/eli\/reg\/2024\/2847\/oj"/);
+    assert.match(html, /2026-10-24/);
+  }
+  const home = await (await render("/tr")).text();
+  assert.match(home, /href="\/tr\/icgoruler\/ab-mevzuat-takvimi"/);
+  assert.match(home, /10 Ekim 2026/);
+  const { ruleCalendar } = await import("../app/regulation-calendar.ts");
+  for (const r of ruleCalendar) {
+    assert.match(r.date, /^\d{4}-\d{2}-\d{2}$/, r.id);
+    assert.match(r.source.url, /^https:\/\/(eur-lex|trade\.ec)\.europa\.eu\//, r.id);
+  }
+});
