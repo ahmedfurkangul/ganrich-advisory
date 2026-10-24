@@ -667,3 +667,7 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .solution-more-group { padding: 26px 0; border-top: 1px solid var(--sand); }.solution-more-group h3 { margin: 0 0 14px; font-size: 15px; font-weight: 500; letter-spacing: .02em; }.solution-more-group ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 6vw; margin: 0; padding: 0; list-style: none; }.solution-more-group li { display: grid; gap: 4px; }.solution-more-group li a { color: var(--ink); font-size: 17px; }.solution-more-group li span { color: var(--slate); font-size: 14px; line-height: 1.5; }
 @media (max-width: 760px) { .solution-more-group ul { grid-template-columns: 1fr; } }
 .solution-flagship .solution-grid { grid-template-columns: repeat(auto-fill,minmax(min(100%,420px),1fr)); gap: 0 6vw; }
+
+/* Homepage readiness checks */
+.home-checks .editorial-heading > p:last-child { max-width: 60ch; margin-top: 16px; }
+.home-checks > .text-link { display: inline-block; margin-top: 36px; }
