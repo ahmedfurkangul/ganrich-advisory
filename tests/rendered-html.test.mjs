@@ -120,7 +120,6 @@ test("renders bilingual engagement, sample, and decision-note journeys", async (
   for(const path of paths){const response=await render(path);assert.equal(response.status,200,path);const html=await response.text();assert.match(html,/rel="canonical"/);assert.match(html,/hrefLang="tr"/);assert.doesNotMatch(html,/href="[^"]*undefined/);}
   const contact=await (await render("/en/contact")).text();
   assert.match(contact,/What are you deciding/);assert.match(contact,/optional/);
-  const markets=await (await render("/en/markets")).text();assert.doesNotMatch(markets,/Content architecture/);
 });
 
 test("keeps core interactions keyboard-operable and marketing JavaScript within budget", async () => {
@@ -532,7 +531,7 @@ test("homepage whitepapers match the solutions catalogue", async () => {
 });
 
 test("retired pages redirect to the simplified paths", async () => {
-  for (const [path, target] of [["/en/expertise", /\/en\/solutions#strategy$/], ["/tr/uzmanlik", /\/tr\/cozumler#strategy$/], ["/en/private-executive-briefing", /\/en\/contact\?service=briefing$/]]) {
+  for (const [path, target] of [["/en/expertise", /\/en\/solutions#strategy$/], ["/tr/uzmanlik", /\/tr\/cozumler#strategy$/], ["/en/markets", /\/en\/solutions#strategy$/], ["/tr/cografyalar", /\/tr\/cozumler#strategy$/], ["/en/private-executive-briefing", /\/en\/contact\?service=briefing$/]]) {
     const response = await render(path);
     assert.ok([301, 307, 308].includes(response.status), `${path} status ${response.status}`);
     assert.match(response.headers.get("location") ?? "", target, path);
