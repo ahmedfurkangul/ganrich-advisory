@@ -67,7 +67,7 @@ test("publishes the verified bilingual founder profile", async () => {
 
 test("server-renders the bilingual strategic intelligence routes", async () => {
   const routes = [
-    ["/en/decision-lab", /Decision Lab/, /Work on the decision/],
+    ["/en/decision-lab", /EU Readiness Checks/, /See in two minutes where you stand on an EU rule/],
     ["/tr/karar-laboratuvari/karar-atlasi", /Karar Atlası/, /Karardan başlayın/],
     ["/en/decision-lab/decision-framer", /Decision Framer/, /What decision needs to be made/],
     ["/en/decision-lab/market-entry-compass", /Market Entry Compass/, /EDITABLE WEIGHTS/],
@@ -632,6 +632,15 @@ test("names the data controller and states purposes, transfers, retention and ho
   assert.match(privacy, /24 months from receipt/);
   assert.match(vendors, /Cloudflare, Inc\./);
   assert.doesNotMatch(kvkk + privacy + rights + vendors, /Publication gate|Yayın kapısı|not yet published|henüz yayımlanmamaktadır/);
+});
+
+test("turns the Decision Lab into a readiness-check hub with the decision tools below", async () => {
+  const [en, tr] = await Promise.all(["/en/decision-lab", "/tr/karar-laboratuvari"].map(path => render(path).then(response => response.text())));
+  for (const href of ["/en/decision-lab/cbam-readiness-check", "/en/decision-lab/cra-readiness-check", "/en/decision-lab/eudr-readiness-check"]) assert.match(en, new RegExp(`href="${href}"`));
+  assert.equal((en.match(/Start the check/g) ?? []).length, 3);
+  assert.match(en, /href="\/en\/decision-lab\/decision-framer"/);
+  assert.doesNotMatch(en, /Five instruments|tool-need/);
+  assert.match(tr, /Hazırlık testleri/);
 });
 
 test("leads the solutions hub with the four flagship programmes and lists the rest below", async () => {
