@@ -157,7 +157,7 @@ export default async function LocalizedPage({ params }: Props) {
   const kind = pageKind(lang, route);
   if (kind === "notFound") notFound();
   // Folded into simpler destinations; the old addresses keep working through a permanent redirect.
-  if (kind === "expertise") permanentRedirect(`/${lang}/${routeMap[lang].solutions}#strategy`);
+  if (kind === "expertise" || kind === "markets") permanentRedirect(`/${lang}/${routeMap[lang].solutions}#strategy`);
   if (kind === "privateBriefing") permanentRedirect(`/${lang}/${routeMap[lang].contact}?service=briefing`);
   const article = kind.startsWith("article") ? insightArticles[lang][insightIndex(kind)] : null;
   const category = kind.startsWith("category") ? insightCategoryForKind(lang, kind) : null;
