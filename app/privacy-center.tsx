@@ -249,7 +249,7 @@ const pages: Record<Lang, Record<TrustKind, {
         ["What is not active", "The current build does not set analytics or advertising cookies and does not run behavioural profiling, cross-site tracking, third-party media embeds, or external AI prompt processing."],
         ["Who receives the data", "Form submissions reach Ahmed Furkan Gül as email alerts. The site and its data run on service providers that act on our instructions: Cloudflare (hosting, database, file storage and security), Resend (sending confirmation and alert emails), Microsoft (the furkangul@ganrichadvisory.com mailbox) and Google (a Gmail mailbox that receives form alerts). Their servers are in the United States and other countries, so your data is transferred abroad. Data is never sold or used for anyone else's marketing, and is given to public authorities only when the law requires it."],
         ["How long it is kept", "Each type of data is deleted when its period ends:", ["Contact, check-result and download requests: 24 months from receipt, then deleted automatically. Copies in our mailbox are deleted on the same schedule. If an engagement follows, the related correspondence is kept with that engagement's records for as long as the law requires.", "Regulation updates: for as long as you are subscribed. Sign-ups that are never confirmed are deleted after 30 days. After you unsubscribe we keep only your address and the date, so that you are not added again.", "Download links: valid for 24 hours and deleted shortly after they expire.", "Visit statistics: 13 months."]],
-        ["Your choices and rights", "Use Cookie preferences at any time to withdraw optional local storage. Clearing browser storage also removes locally saved choices and drafts. To ask what we hold about you, or to have it corrected or deleted, see Data rights."],
+        ["Your choices and rights", "Use Cookie preferences at any time to withdraw optional local storage. Clearing browser storage also removes locally saved choices and drafts. To ask what we hold about you, or to have it corrected or deleted, see Your data rights below."],
       ],
     },
     kvkk: {
@@ -329,6 +329,7 @@ const pages: Record<Lang, Record<TrustKind, {
       title: "A visible record of meaningful changes.",
       intro: "Material changes will be dated and summarized here rather than silently folded into long text.",
       sections: [
+        ["24 October 2026 · Version 1.2", "Merged the privacy, cookie, provider, data-rights and change-log pages into one privacy notice, and the terms and AI transparency into the legal notice. Old addresses redirect to the matching section."],
         ["24 October 2026 · Version 1.1", "Named the data controller (Ahmed Furkan Gül, Ganrich Advisory), published the KVKK notice with purposes, legal bases, transfers and rights, listed the service providers, and set retention periods that the site now enforces automatically."],
         ["23 July 2026 · Privacy center v1.0", "Introduced bilingual privacy controls, a current-site technology inventory, separate notice and preference experiences, AI transparency, data-rights readiness, and publication gates for unverified legal facts."],
         ["Change discipline", "Future entries should identify what changed, why it changed, when it takes effect, and whether a renewed choice is required."],
@@ -364,7 +365,7 @@ const pages: Record<Lang, Record<TrustKind, {
         ["Etkin olmayanlar", "Mevcut sürüm analitik veya reklam çerezi kullanmaz; davranışsal profilleme, siteler arası izleme, üçüncü taraf medya gömme veya haricî yapay zekâ istem işleme faaliyeti yürütmez."],
         ["Verilerin aktarıldığı taraflar", "Form gönderimleri Ahmed Furkan Gül'e e-posta bildirimi olarak ulaşır. Site ve veriler, talimatlarımız doğrultusunda çalışan şu hizmet sağlayıcılar üzerinde işletilir: Cloudflare (barındırma, veritabanı, dosya depolama ve güvenlik), Resend (onay ve bildirim e-postalarının gönderimi), Microsoft (furkangul@ganrichadvisory.com e-posta kutusu) ve Google (form bildirimlerini alan Gmail kutusu). Bu sağlayıcıların sunucuları ABD ve diğer ülkelerde bulunduğundan verileriniz yurt dışına aktarılır. Veriler satılmaz, başkalarının pazarlamasında kullanılmaz; kamu kurumlarına yalnızca kanunen zorunlu olduğunda verilir."],
         ["Saklama süreleri", "Her veri türü, süresi dolduğunda silinir:", ["İletişim, test sonucu ve belge talepleri: alındığı tarihten itibaren 24 ay, ardından otomatik olarak silinir. E-posta kutumuzdaki kopyaları da aynı takvimle silinir. Bir danışmanlık çalışması başlarsa ilgili yazışmalar, mevzuatın öngördüğü süre boyunca o çalışmanın kayıtlarıyla birlikte saklanır.", "Mevzuat bülteni: kayıtlı olduğunuz sürece. Onaylanmayan kayıtlar 30 gün sonra silinir. Kaydınızı iptal ettiğinizde, sizi yeniden listeye eklememek için yalnızca adresinizi ve iptal tarihini saklarız.", "İndirme bağlantıları: 24 saat geçerlidir ve süresi dolduktan kısa süre sonra silinir.", "Ziyaret istatistikleri: 13 ay."]],
-        ["Tercihleriniz ve haklarınız", "İsteğe bağlı yerel depolama iznini dilediğiniz zaman Çerez tercihleri üzerinden geri çekebilirsiniz. Tarayıcı verilerini temizlemek de yerel tercih ve taslakları kaldırır. Hakkınızda tuttuğumuz verileri öğrenmek, düzeltilmesini veya silinmesini istemek için İlgili kişi hakları sayfasına bakın."],
+        ["Tercihleriniz ve haklarınız", "İsteğe bağlı yerel depolama iznini dilediğiniz zaman Çerez tercihleri üzerinden geri çekebilirsiniz. Tarayıcı verilerini temizlemek de yerel tercih ve taslakları kaldırır. Hakkınızda tuttuğumuz verileri öğrenmek, düzeltilmesini veya silinmesini istemek için aşağıdaki Haklarınız bölümüne bakın."],
       ],
     },
     kvkk: {
@@ -444,6 +445,7 @@ const pages: Record<Lang, Record<TrustKind, {
       title: "Önemli değişiklikler için görünür kayıt.",
       intro: "Esaslı değişiklikler uzun metinlerin içine sessizce eklenmek yerine burada tarih ve özetle yayımlanır.",
       sections: [
+        ["24 Ekim 2026 · Sürüm 1.2", "Gizlilik, çerez, hizmet sağlayıcı, ilgili kişi hakları ve değişiklik kaydı sayfaları tek gizlilik bildiriminde; kullanım koşulları ve yapay zekâ şeffaflığı yasal bildirimde birleştirildi. Eski adresler ilgili bölüme yönlenir."],
         ["24 Ekim 2026 · Sürüm 1.1", "Veri sorumlusu (Ahmed Furkan Gül, Ganrich Advisory) belirtildi; amaçları, hukuki sebepleri, aktarımları ve hakları içeren KVKK aydınlatma metni yayımlandı; hizmet sağlayıcılar listelendi ve sitenin artık otomatik uyguladığı saklama süreleri belirlendi."],
         ["23 Temmuz 2026 · Gizlilik merkezi v1.0", "İki dilli gizlilik kontrolleri, mevcut site teknoloji envanteri, ayrıştırılmış aydınlatma ve tercih deneyimleri, yapay zekâ şeffaflığı, ilgili kişi hakları hazırlığı ve doğrulanmamış hukuki olgular için yayın kapıları eklendi."],
         ["Değişiklik disiplini", "Gelecekteki kayıtlar neyin, neden ve ne zaman değiştiğini ve yeni bir tercih gerekip gerekmediğini belirtmelidir."],
@@ -468,8 +470,8 @@ const pages: Record<Lang, Record<TrustKind, {
 export function TrustShell({ lang, label, title, intro, children }: { lang: Lang; label: string; title: string; intro: string; children: React.ReactNode }) {
   const m = routeMap[lang];
   const nav = lang === "en"
-    ? [["Overview", m.privacyCenter], ["Privacy", m.privacy], ["Cookies", m.cookies], ["Data rights", m.dataRights], ["AI", m.aiTransparency]]
-    : [["Genel bakış", m.privacyCenter], ["Gizlilik", m.privacy], ["Çerezler", m.cookies], ["Haklar", m.dataRights], ["Yapay zekâ", m.aiTransparency]];
+    ? [["Privacy", m.privacy], ["KVKK", m.kvkk], ["Legal", m.legal], ["Cookie preferences", m.cookiePreferences]]
+    : [["Gizlilik", m.privacy], ["KVKK", m.kvkk], ["Yasal", m.legal], ["Çerez tercihleri", m.cookiePreferences]];
   return <article className="trust-page">
     <header className="trust-hero"><span className="eyebrow">{label}</span><h1>{title}</h1><p>{intro}</p></header>
     <nav className="trust-subnav" aria-label={lang === "en" ? "Privacy center" : "Gizlilik merkezi"}>{nav.map(([text, href]) => <a key={href} href={`/${lang}/${href}`}>{text}</a>)}</nav>
@@ -477,42 +479,23 @@ export function TrustShell({ lang, label, title, intro, children }: { lang: Lang
   </article>;
 }
 
-export function TrustContentPage({ lang, kind }: { lang: Lang; kind: TrustKind }) {
-  const page = pages[lang][kind];
-  return <TrustShell lang={lang} label={page.label} title={page.title} intro={page.intro}>
-    <section className="trust-sections">{page.sections.map(([title, body, list], index) => <article key={title}><span>0{index + 1}</span><div><h2>{title}</h2><p>{body}</p>{list && <ul>{list.map((item) => <li key={item}>{item}</li>)}</ul>}</div></article>)}</section>
-    <p className="policy-version">{lang === "en" ? "Version 1.1 · Reviewed 24 October 2026" : "Sürüm 1.1 · İnceleme tarihi 24 Ekim 2026"}</p>
-  </TrustShell>;
+// Twelve trust pages became three: the old addresses redirect to these anchors (see the page route).
+export const mergedTrustParts: Partial<Record<TrustKind, Array<[TrustKind, string]>>> = {
+  privacy: [["cookies", "cookies"], ["vendors", "providers"], ["dataRights", "rights"], ["policyUpdates", "changes"]],
+  legal: [["terms", "terms"], ["aiTransparency", "ai"]],
+};
+
+function Sections({ sections }: { sections: Array<[string, string, string[]?]> }) {
+  return <section className="trust-sections">{sections.map(([title, body, list], index) => <article key={title}><span>0{index + 1}</span><div><h2>{title}</h2><p>{body}</p>{list && <ul>{list.map((item) => <li key={item}>{item}</li>)}</ul>}</div></article>)}</section>;
 }
 
-export function PrivacyCenterPage({ lang }: { lang: Lang }) {
-  const isEn = lang === "en";
-  const m = routeMap[lang];
-  const cards = isEn ? [
-    ["Privacy notice", "What this public site handles—and what it does not.", m.privacy],
-    ["Türkiye / KVKK", "Who controls your data, why it is processed, and your rights under Law No. 6698.", m.kvkk],
-    ["Cookies", "A small, first-party technology footprint.", m.cookies],
-    ["Data rights", "How to ask what we hold, or have it corrected or deleted.", m.dataRights],
-    ["AI transparency", "Tool status, data behaviour, and human accountability.", m.aiTransparency],
-    ["Legal notice", "The limits of website content and interactive tools.", m.legal],
-  ] : [
-    ["Gizlilik bildirimi", "Kamuya açık sitenin işlediği ve işlemediği unsurlar.", m.privacy],
-    ["KVKK", "Verilerinizin sorumlusu, işlenme amaçları ve 6698 sayılı Kanun kapsamındaki haklarınız.", m.kvkk],
-    ["Çerezler", "Küçük ve birinci taraf bir teknoloji izi.", m.cookies],
-    ["İlgili kişi hakları", "Hakkınızdaki verileri öğrenme, düzeltme veya silme başvurusu.", m.dataRights],
-    ["Yapay zekâ şeffaflığı", "Araç statüsü, veri davranışı ve insan sorumluluğu.", m.aiTransparency],
-    ["Yasal bildirim", "Site içeriği ve etkileşimli araçların sınırları.", m.legal],
-  ];
-  return <TrustShell lang={lang} label={isEn ? "PRIVACY + TRUST" : "GİZLİLİK + GÜVEN"} title={isEn ? "Trust should be designed into the experience." : "Güven, deneyimin içine tasarlanmalıdır."} intro={isEn ? "A concise, bilingual centre for privacy choices, current-site facts, AI transparency, and legal information." : "Gizlilik tercihleri, mevcut site olguları, yapay zekâ şeffaflığı ve hukuki bilgiler için özlü, iki dilli merkez."}>
-    <section className="trust-current">
-      <span>{isEn ? "CURRENT SITE CONFIGURATION" : "MEVCUT SİTE YAPILANDIRMASI"}</span>
-      <div><strong>{isEn ? "No analytics cookies or advertising trackers" : "Analitik çerezi veya reklam izleyicisi yok"}</strong><strong>{isEn ? "Optional preferences off by default" : "İsteğe bağlı tercihler varsayılan olarak kapalı"}</strong><strong>{isEn ? "Secure inquiry storage" : "Güvenli talep kaydı"}</strong></div>
-    </section>
-    <section className="trust-card-grid">{cards.map(([title, body, href], index) => <a key={href} href={`/${lang}/${href}`}><span>0{index + 1}</span><h2>{title}</h2><p>{body}</p><i aria-hidden="true">↗</i></a>)}</section>
-    <section className="trust-utility">
-      <a href={`/${lang}/${m.cookiePreferences}`}>{isEn ? "Manage cookie preferences" : "Çerez tercihlerini yönetin"} <span aria-hidden="true">↗</span></a>
-      <a href={`/${lang}/${m.policyUpdates}`}>{isEn ? "Policy updates" : "Politika güncellemeleri"} <span aria-hidden="true">↗</span></a>
-      <a href={`/${lang}/${m.terms}`}>{isEn ? "Website terms" : "Kullanım koşulları"} <span aria-hidden="true">↗</span></a>
-    </section>
+export function TrustContentPage({ lang, kind }: { lang: Lang; kind: TrustKind }) {
+  const page = pages[lang][kind];
+  // Old trust addresses redirect to a section here; the page loads lazily, so scroll once it exists.
+  useEffect(() => { const id = window.location.hash.slice(1); if (id) document.getElementById(id)?.scrollIntoView(); }, []);
+  return <TrustShell lang={lang} label={page.label} title={page.title} intro={page.intro}>
+    <Sections sections={page.sections}/>
+    {(mergedTrustParts[kind] ?? []).map(([part, anchor]) => { const p = pages[lang][part]; return <div key={part} id={anchor} className="trust-part"><header><span className="eyebrow">{p.label}</span><h2>{p.title}</h2><p>{p.intro}</p></header><Sections sections={p.sections}/></div>; })}
+    <p className="policy-version">{lang === "en" ? "Version 1.2 · Reviewed 24 October 2026" : "Sürüm 1.2 · İnceleme tarihi 24 Ekim 2026"}</p>
   </TrustShell>;
 }

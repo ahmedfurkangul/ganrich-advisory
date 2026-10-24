@@ -36,7 +36,6 @@ const AIValueLensPage = lazy(() => import("./intelligence").then((module) => ({ 
 const DecisionLabChangelogPage = lazy(() => import("./intelligence").then((module) => ({ default: module.DecisionLabChangelogPage })));
 const InsightExperiencePage = lazy(() => import("./intelligence").then((module) => ({ default: module.InsightExperiencePage })));
 const PrivateBriefingPage = lazy(() => import("./intelligence").then((module) => ({ default: module.PrivateBriefingPage })));
-const PrivacyCenterPage = lazy(() => import("./privacy-center").then((module) => ({ default: module.PrivacyCenterPage })));
 const CookiePreferencesPage = lazy(() => import("./privacy-center").then((module) => ({ default: module.CookiePreferencesPage })));
 const TrustContentPage = lazy(() => import("./privacy-center").then((module) => ({ default: module.TrustContentPage })));
 
@@ -91,7 +90,7 @@ function Footer({ lang }: { lang: Lang }) {
       <div><span>{lang === "en" ? "Contact" : "İletişim"}</span><a href={`/${lang}/${m.contact}`}>{t.cta}</a><a href="mailto:furkangul@ganrichadvisory.com">furkangul@ganrichadvisory.com</a><a href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
     </div>
     <nav className="footer-trust-links" aria-label={lang === "en" ? "Privacy and legal" : "Gizlilik ve hukuk"}>
-      <a href={`/${lang}/${m.privacyCenter}`}>{lang === "en" ? "Privacy and legal" : "Gizlilik ve hukuk"}</a>
+      <a href={`/${lang}/${m.privacy}`}>{lang === "en" ? "Privacy" : "Gizlilik"}</a>
       <a href={`/${lang}/${m.kvkk}`}>KVKK</a>
       <button type="button" onClick={openCookiePreferences}>{lang === "en" ? "Cookie preferences" : "Çerez tercihleri"}</button>
       <a href={`/${lang}/${m.legal}`}>{lang === "en" ? "Legal notice" : "Yasal bildirim"}</a>
@@ -135,9 +134,8 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "privateBriefing") page = <PrivateBriefingPage lang={lang}/>;
   if (kind === "about") page = <AboutPage lang={lang}/>;
   if (kind === "contact") page = <ContactExperience lang={lang}/>;
-  if (kind === "privacyCenter") page = <PrivacyCenterPage lang={lang}/>;
   if (kind === "cookiePreferences") page = <CookiePreferencesPage lang={lang}/>;
-  if (["privacy", "kvkk", "cookies", "dataRights", "aiTransparency", "legal", "terms", "policyUpdates", "vendors"].includes(kind)) page = <TrustContentPage lang={lang} kind={kind as "privacy" | "kvkk" | "cookies" | "dataRights" | "aiTransparency" | "legal" | "terms" | "policyUpdates" | "vendors"}/>;
+  if (["privacy", "kvkk", "legal"].includes(kind)) page = <TrustContentPage lang={lang} kind={kind as "privacy" | "kvkk" | "legal"}/>;
   if (kind === "notFound") page = <PageHero eyebrow="404" title={lang === "en" ? "This page is not available." : "Bu sayfa mevcut değil."} intro={lang === "en" ? "Return to the Ganrich Advisory home page." : "Ganrich Advisory ana sayfasına dönün."}/>;
   return <SiteLayout lang={lang} route={route}><Suspense fallback={<div className="route-loading" role="status">{lang === "en" ? "Preparing the workspace…" : "Çalışma alanı hazırlanıyor…"}</div>}>{page}</Suspense></SiteLayout>;
 }

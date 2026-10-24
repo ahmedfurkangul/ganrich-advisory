@@ -5,7 +5,7 @@ import { absoluteUrl } from "./site-config";
 export default function sitemap(): MetadataRoute.Sitemap {
   const languages: Lang[] = ["en", "tr"];
   // Redirected addresses stay out of the sitemap.
-  const redirected = new Set(["expertise", "privateBriefing"]);
+  const redirected = new Set(["expertise", "privateBriefing", "privacyCenter", "cookies", "vendors", "dataRights", "policyUpdates", "terms", "aiTransparency"]);
   // Category pages are noindex (see page metadata), so they stay out as well.
   const routeKeys = ["home", ...Object.keys(routeMap.en).filter(key => !redirected.has(key) && !key.startsWith("category"))];
   return routeKeys.flatMap((key) => languages.map((lang) => {
