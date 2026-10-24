@@ -26,7 +26,7 @@ const expertiseTopics: Record<Lang, string[]> = {
   tr: ["Kurumsal strateji", "Pazara giriş", "İşletim modeli tasarımı", "İş dönüşümü", "Uygulamalı yapay zekâ", "Karar kalitesi", "Türkiye", "Orta Doğu ve Kuzey Afrika"],
 };
 
-export function organizationNode(lang: Lang, description: string) {
+export function organizationNode(lang: Lang, description: string, { catalog = true }: { catalog?: boolean } = {}) {
   const en = lang === "en";
   return {
     "@type": ["Organization", "ProfessionalService"],
@@ -49,14 +49,15 @@ export function organizationNode(lang: Lang, description: string) {
       url: pageUrl(lang, "contact"),
       availableLanguage: ["English", "Turkish"],
     },
-    hasOfferCatalog: {
+    // The full catalogue is listed on the home and solutions pages only, not repeated on every page.
+    ...(catalog ? { hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: en ? "Advisory services and programmes" : "Danışmanlık hizmetleri ve programlar",
       itemListElement: [
         ...services[lang].map(s => ({ "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${pageUrl(lang, s.key)}#service`, name: s.title, url: pageUrl(lang, s.key) } })),
         ...solutions[lang].map(s => ({ "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${pageUrl(lang, s.key)}#service`, name: s.title, url: pageUrl(lang, s.key) } })),
       ],
-    },
+    } } : {}),
   };
 }
 
@@ -193,6 +194,5 @@ export function pageKeywords(lang: Lang, kind: string) {
   const solution = solutionByKey(lang, kind);
   if (solution) return solutionTags[lang][solution.key];
   if (kind === "solutions") return solutionTagList(lang);
-  if (kind === "home" || kind === "expertise") return expertiseTopics[lang];
   return undefined;
 }

@@ -63,6 +63,40 @@ const metaCopy = {
   },
 } as const;
 
+// Each trust page gets its own title and description; they used to share one.
+const trustMeta = {
+  en: {
+    privacyCenter: ["Privacy and Trust Centre | Ganrich Advisory", "How Ganrich Advisory handles visitor data, cookies, data-subject rights, AI use and legal terms, in one place."],
+    privacy: ["Privacy Notice | Ganrich Advisory", "What personal data the Ganrich Advisory website collects through its forms, newsletter and cookieless visit statistics, and why."],
+    kvkk: ["Türkiye Data Protection Notice (KVKK) | Ganrich Advisory", "Ganrich Advisory notice under Türkiye's Personal Data Protection Law No. 6698."],
+    cookies: ["Cookie Notice | Ganrich Advisory", "The small set of essential and optional browser storage the Ganrich Advisory website uses; no analytics or advertising cookies."],
+    cookiePreferences: ["Cookie Preferences | Ganrich Advisory", "Change or withdraw your optional browser storage choices for the Ganrich Advisory website."],
+    dataRights: ["Your Data Rights | Ganrich Advisory", "How to ask Ganrich Advisory about, correct or delete the personal data it holds about you."],
+    aiTransparency: ["AI Transparency | Ganrich Advisory", "Where Ganrich Advisory uses AI in its tools and work, and where human judgement stays in charge."],
+    terms: ["Terms of Use | Ganrich Advisory", "Plain terms for using the Ganrich Advisory website, its tools and its published notes."],
+    vendors: ["Service Providers | Ganrich Advisory", "The service providers involved in running the Ganrich Advisory website."],
+    policyUpdates: ["Policy Updates | Ganrich Advisory", "Dated changes to Ganrich Advisory privacy, cookie and legal notices."],
+  },
+  tr: {
+    privacyCenter: ["Gizlilik ve Güven Merkezi | Ganrich Advisory", "Ganrich Advisory ziyaretçi verisini, çerezleri, ilgili kişi haklarını, yapay zekâ kullanımını ve hukuki koşulları tek yerde açıklar."],
+    privacy: ["Gizlilik Bildirimi | Ganrich Advisory", "Ganrich Advisory sitesinin formlar, bülten ve çerezsiz ziyaret istatistikleri aracılığıyla hangi kişisel verileri neden topladığı."],
+    kvkk: ["KVKK Aydınlatma Metni | Ganrich Advisory", "6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında Ganrich Advisory aydınlatma metni."],
+    cookies: ["Çerez Bildirimi | Ganrich Advisory", "Ganrich Advisory sitesinin kullandığı zorunlu ve isteğe bağlı tarayıcı depolaması; analitik veya reklam çerezi yoktur."],
+    cookiePreferences: ["Çerez Tercihleri | Ganrich Advisory", "Ganrich Advisory sitesi için isteğe bağlı tarayıcı depolama tercihlerinizi değiştirin veya geri çekin."],
+    dataRights: ["İlgili Kişi Başvurusu | Ganrich Advisory", "Ganrich Advisory'nin hakkınızda tuttuğu kişisel verileri sorma, düzeltme veya silme talebinizi nasıl iletebileceğiniz."],
+    aiTransparency: ["Yapay Zekâ Şeffaflığı | Ganrich Advisory", "Ganrich Advisory'nin araçlarında ve çalışmalarında yapay zekâyı nerede kullandığı ve insan muhakemesinin nerede belirleyici kaldığı."],
+    terms: ["Kullanım Koşulları | Ganrich Advisory", "Ganrich Advisory sitesini, araçlarını ve yayımlanan notları kullanmaya ilişkin sade koşullar."],
+    vendors: ["Hizmet Sağlayıcılar | Ganrich Advisory", "Ganrich Advisory sitesinin işletilmesinde yer alan hizmet sağlayıcılar."],
+    policyUpdates: ["Politika Güncellemeleri | Ganrich Advisory", "Ganrich Advisory gizlilik, çerez ve hukuki bildirimlerindeki tarihli değişiklikler."],
+  },
+} as const;
+
+// Search results cut titles near 60 characters; long article titles drop the brand suffix.
+function withBrand(title: string) {
+  const full = `${title} | ${SITE_NAME}`;
+  return full.length > 65 ? title : full;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const p = await params;
   if (p.lang !== "en" && p.lang !== "tr") return { title: "Page not found | Ganrich Advisory", robots: { index: false, follow: false } };
@@ -71,11 +105,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const metaKind = (trustKinds.includes(kind) ? "trust" : kind) as keyof typeof metaCopy.en;
   const article = kind.startsWith("article") ? insightArticles[lang][insightIndex(kind)] : null;
   const category = kind.startsWith("category") ? insightCategoryForKind(lang, kind) : null;
+  const trust = trustMeta[lang][kind as keyof typeof trustMeta.en];
   const [title, description] = article
-    ? [`${article.title} | Ganrich Advisory`, article.thesis]
+    ? [withBrand(article.title), article.thesis]
     : category
       ? [`${category.label} ${lang === "en" ? "Insights" : "İçgörüleri"} | Ganrich Advisory`, category.description]
-    : (advisoryMeta(lang, kind) ?? metaCopy[lang][metaKind] ?? metaCopy[lang].home);
+    : (trust ?? advisoryMeta(lang, kind) ?? metaCopy[lang][metaKind] ?? metaCopy[lang].home);
   const socialCard = article
     ? `/og/${lang}/article-${article.slug}.png`
     : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind === "sampleWork" ? kind : metaKind in metaCopy[lang] ? metaKind : "home"}.png`;
@@ -95,7 +130,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       languages: { en: lang === "en" ? current : translated, tr: lang === "tr" ? current : translated, "x-default": "/en" },
       types: { "application/rss+xml": `/${lang}/feed.xml` },
     },
-    robots: kind === "cookiePreferences"
+    // Category pages only list a few notes each; the insights hub is the page to index.
+    robots: kind === "cookiePreferences" || category
       ? { index: false, follow: true }
       : { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
     openGraph: {
@@ -128,7 +164,7 @@ export default async function LocalizedPage({ params }: Props) {
   const currentUrl = absoluteUrl(`/${lang}${route ? `/${route}` : ""}`);
   const organizationId = ids.organization;
   const personId = ids.person(lang);
-  const title = article?.title ?? category?.label ?? advisoryMeta(lang, kind)?.[0]?.split("|")[0].trim() ?? (metaCopy[lang][kind as keyof typeof metaCopy.en]?.[0]?.split("|")[0].trim() || SITE_NAME);
+  const title = article?.title ?? category?.label ?? trustMeta[lang][kind as keyof typeof trustMeta.en]?.[0]?.split("|")[0].trim() ?? advisoryMeta(lang, kind)?.[0]?.split("|")[0].trim() ?? (metaCopy[lang][kind as keyof typeof metaCopy.en]?.[0]?.split("|")[0].trim() || SITE_NAME);
   const parent = article || category
     ? { name: lang === "en" ? "Insights" : "İçgörüler", url: absoluteUrl(`/${lang}/${routeMap[lang].insights}`) }
     : kind.startsWith("decision") || ["marketCompass", "boardBriefBuilder", "aiValueLens", "cbamCheck", "craCheck", "eudrCheck"].includes(kind)
@@ -142,7 +178,7 @@ export default async function LocalizedPage({ params }: Props) {
     ...(kind === "home" ? [] : [{ "@type": "ListItem", position: parent ? 3 : 2, name: title, item: currentUrl }]),
   ];
   const graph: Record<string, unknown>[] = [
-    organizationNode(lang, metaCopy[lang].home[1]),
+    organizationNode(lang, metaCopy[lang].home[1], { catalog: kind === "home" || kind === "solutions" }),
     websiteNode(metaCopy[lang].home[1]),
     webPageNode(lang, currentUrl, title, description, kind === "about" ? "AboutPage" : kind === "contact" ? "ContactPage" : kind === "solutions" || kind === "expertise" || kind === "insights" || category ? "CollectionPage" : "WebPage", { image: socialCard, ...(kind === "home" ? { mainEntity: { "@id": organizationId } } : {}) }),
     {

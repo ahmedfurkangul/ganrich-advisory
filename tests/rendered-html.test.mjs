@@ -193,7 +193,10 @@ test("publishes production-safe bilingual SEO, taxonomy, feeds, and discovery fi
   assert.match(feed, /<title>The Ganrich Brief<\/title>/);
   assert.match(feed, /decision-quality-applied-ai/);
   assert.match(turkishFeed, /<title>Ganrich Bülteni<\/title>/);
-  assert.match(sitemap, /https:\/\/ganrichadvisory\.com\/en\/insights\/category\/applied-ai/);
+  // Category pages stay reachable but are noindex and out of the sitemap.
+  assert.match(category, /(?:name="robots" content="noindex, follow"|content="noindex, follow" name="robots")/);
+  assert.doesNotMatch(sitemap, /\/insights\/category\//);
+  assert.match(sitemap, /https:\/\/ganrichadvisory\.com\/en\/insights\/decision-quality-applied-ai/);
   assert.match(sitemap, /hreflang="tr"/);
   assert.doesNotMatch(sitemap, /localhost/);
   assert.equal(reportSitemapResponse.status, 200);
@@ -224,7 +227,8 @@ test("keeps principal internal links inside the published route inventory", asyn
     const internalLinks = [...html.matchAll(/href="(\/[^"#]+)(?:#[^"]*)?"/g)]
       .map(match => match[1].replace(/&amp;/g, "&").split("?")[0])
       // Whitepaper pages come from D1 and are listed in reports-sitemap.xml, not the static sitemap.
-      .filter(path => !path.endsWith("/feed.xml") && !path.startsWith("/assets/") && !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(path));
+      // Category pages are linked for browsing but are noindex, so they are left out of the sitemap.
+      .filter(path => !path.endsWith("/feed.xml") && !path.startsWith("/assets/") && !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(path) && !/^\/(en\/insights\/category|tr\/icgoruler\/kategori)\//.test(path));
     for (const path of internalLinks) {
       assert.ok(sitemapPaths.has(path), `Internal link ${path} is absent from the canonical route inventory`);
     }
@@ -602,4 +606,16 @@ test("publishes the Opportunity Studio showcase in both languages without linkin
   assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/opportunity-studio#carbon"/);
   assert.match(await (await render("/tr/cozumler/yapay-zeka-siparis-masasi")).text(), /href="\/tr\/opportunity-studio#orders"/);
   await access(new URL("../public/studio/carbon-en.webp", import.meta.url));
+});
+
+test("gives each trust page its own title and keeps the offer catalogue to home and solutions", async () => {
+  const paths = ["/en/privacy", "/en/cookies", "/en/terms", "/tr/kvkk-aydinlatma-metni", "/tr/gizlilik", "/tr/kullanim-kosullari"];
+  const pages = await Promise.all(paths.map(path => render(path).then(response => response.text())));
+  const titles = pages.map(page => page.match(/<title>([^<]*)<\/title>/)?.[1]);
+  assert.equal(new Set(titles).size, paths.length);
+  assert.match(pages[3], /<title>KVKK Aydınlatma Metni \| Ganrich Advisory<\/title>/);
+  const [home, about] = await Promise.all([render("/en"), render("/en/about")].map(p => p.then(response => response.text())));
+  assert.match(home, /"OfferCatalog"/);
+  assert.doesNotMatch(about, /"OfferCatalog"/);
+  assert.doesNotMatch(home, /name="keywords"/);
 });
