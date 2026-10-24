@@ -30,7 +30,7 @@ type NotifyEnv = {
 };
 
 export function inquiryAlertMessage(inquiry: InquiryAlert) {
-  const label = inquiry.kind === "briefing" ? "Private briefing request" : "New inquiry";
+  const label = inquiry.kind === "briefing" ? "Private briefing request" : inquiry.kind === "download" ? "Whitepaper download" : "New inquiry";
   const lines = [
     `${label} from ${inquiry.name} <${inquiry.email}>`,
     "",

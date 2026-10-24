@@ -33,3 +33,8 @@ test("skips without configuration and never throws on provider errors", async ()
   assert.equal(await sendInquiryAlert(env, inquiry, async () => new Response("bad", { status: 422 })), "failed");
   assert.equal(await sendInquiryAlert(env, inquiry, async () => { throw new TypeError("network"); }), "failed");
 });
+
+test("labels whitepaper download leads", () => {
+  const { subject } = inquiryAlertMessage({ ...inquiry, kind: "download", interest: "PDF: The 24-hour test" });
+  assert.equal(subject, "Whitepaper download: Ayşe Demir (Demir Holding)");
+});
