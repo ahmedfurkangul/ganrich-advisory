@@ -90,6 +90,13 @@ export function trafficInsights(lang: Lang, r: TrafficReport): Insight[] {
     : `${t.inquiries} talep geldi; ziyaretçilere göre dönüşüm oranı %${(t.conversion * 100).toFixed(1)}.` });
 
   const f = r.funnel;
+  // Only judge once confirmation data exists; earlier days have no "seen" rows at all.
+  if (f && f.confirmed > 0 && f.visitors >= 20 && f.confirmed / f.visitors < 0.5) out.push({ tone: "watch", text: en
+    ? `Only ${f.confirmed} of ${f.visitors} visitors were confirmed by a browser. The rest are most likely automated clients that pass as people, so read visitor counts with care.`
+    : `${f.visitors} ziyaretçiden yalnızca ${f.confirmed} tanesi tarayıcıyla doğrulandı. Geri kalanı büyük olasılıkla insan gibi görünen otomatik istemciler; ziyaretçi sayılarını buna göre okuyun.` });
+  if (f && f.checkStart > 0) out.push({ tone: f.checkComplete > 0 ? "good" : "info", text: en
+    ? `${f.checkStart} readiness checks were started and ${f.checkComplete} reached a result.`
+    : `${f.checkStart} hazırlık testi başlatıldı, ${f.checkComplete} tanesi sonuca ulaştı.` });
   if (f && f.cta > 0) out.push({ tone: f.formSubmit > 0 ? "good" : "info", text: en
     ? `${f.cta} visitors clicked a contact button, ${f.formStart} started the form and ${f.formSubmit} sent it.`
     : `${f.cta} ziyaretçi iletişim düğmesine tıkladı, ${f.formStart} kişi formu doldurmaya başladı ve ${f.formSubmit} kişi gönderdi.` });

@@ -97,7 +97,7 @@ test("writes a cautious analysis from the numbers", () => {
     rising: [{ label: "/en/solutions", now: 80, before: 20 }],
     devices: [{ label: "mobile", views: 100, visitors: 60 }, { label: "desktop", views: 300, visitors: 90 }],
     pdfs: [{ label: "CBAM: actual or default?", views: 9 }],
-    funnel: { visitors: 150, cta: 12, formStart: 6, formSubmit: 2, inquiries: 3 },
+    funnel: { visitors: 150, confirmed: 40, cta: 12, formStart: 6, formSubmit: 2, inquiries: 3, checkStart: 5, checkComplete: 4 },
   };
   const en = trafficInsights("en", report).map(i => i.text).join("\n");
   assert.match(en, /Visitors rose 50% against the previous 30 days/);
@@ -108,6 +108,8 @@ test("writes a cautious analysis from the numbers", () => {
   assert.match(en, /4 visits hit a missing page/);
   assert.match(en, /12 visitors clicked a contact button, 6 started the form and 2 sent it/);
   assert.match(en, /More than half of the people who start the contact form leave/);
+  assert.match(en, /Only 40 of 150 visitors were confirmed by a browser/);
+  assert.match(en, /5 readiness checks were started and 4 reached a result/);
   const tr = trafficInsights("tr", report).map(i => i.text).join("\n");
   assert.match(tr, /Ziyaretçi sayısı önceki 30 güne göre %50 arttı/);
 });
@@ -140,4 +142,9 @@ test("records contact steps with the page only, and ignores bots, other sites an
   await logLeadEvent(beacon({ event: "cta", path: "/en" }, { "user-agent": "curl/8.5.0" }), { DB: db });
   await logLeadEvent(beacon({ event: "cta", path: "/en" }), { DB: db, ANALYTICS_LOGGING: "off" });
   assert.equal(inserts().length, 2);
+  // Browser confirmation and readiness-check steps are accepted; a headless browser is not a person.
+  await logLeadEvent(beacon({ event: "seen", path: "/tr" }), { DB: db });
+  await logLeadEvent(beacon({ event: "check_complete", path: "/tr/karar-laboratuvari/cbam-hazirlik-testi" }), { DB: db });
+  await logLeadEvent(beacon({ event: "seen", path: "/en" }, { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) HeadlessChrome/131.0.0.0 Safari/537.36" }), { DB: db });
+  assert.deepEqual(inserts().slice(2).map(s => s.params[4]), ["seen", "check_complete"]);
 });
