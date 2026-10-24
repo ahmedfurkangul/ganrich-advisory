@@ -260,6 +260,9 @@ test("adds restrained baseline security and indexing headers", async () => {
   assert.equal(pageResponse.headers.get("x-content-type-options"), "nosniff");
   assert.equal(pageResponse.headers.get("referrer-policy"), "strict-origin-when-cross-origin");
   assert.match(pageResponse.headers.get("permissions-policy") ?? "", /camera=\(\)/);
+  assert.equal(pageResponse.headers.get("strict-transport-security"), "max-age=31536000");
+  assert.equal(pageResponse.headers.get("x-frame-options"), "SAMEORIGIN");
+  assert.match(pageResponse.headers.get("content-security-policy") ?? "", /frame-ancestors 'self'/);
   assert.equal(apiResponse.headers.get("x-robots-tag"), "noindex, nofollow");
 });
 
