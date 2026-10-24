@@ -543,3 +543,16 @@ test("publishes the CBAM readiness check in both languages and links it from the
   assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/decision-lab\/cbam-readiness-check"/);
   assert.match(await (await render("/tr/karar-laboratuvari")).text(), /CBAM Hazırlık Testi/);
 });
+
+test("publishes the CRA readiness check in both languages and links it from the CRA programme", async () => {
+  for (const [path, title] of [["/en/decision-lab/cra-readiness-check", /CRA Readiness Check \| Ganrich Advisory/], ["/tr/karar-laboratuvari/cra-hazirlik-testi", /CRA Hazırlık Testi \| Ganrich Advisory/]]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, title);
+    assert.match(html, /rel="canonical"/);
+  }
+  assert.match(await (await render("/en/solutions/cra-incident-readiness")).text(), /href="\/en\/decision-lab\/cra-readiness-check"/);
+  assert.match(await (await render("/tr/cozumler/cra-olay-hazirligi")).text(), /href="\/tr\/karar-laboratuvari\/cra-hazirlik-testi"/);
+  assert.match(await (await render("/en/decision-lab")).text(), /CRA Readiness Check/);
+});

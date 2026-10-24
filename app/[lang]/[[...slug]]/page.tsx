@@ -23,6 +23,7 @@ const metaCopy = {
     marketCompass: ["Market Entry Compass | Ganrich Advisory", "Compare market opportunity and organizational readiness using transparent, editable assumptions."],
     boardBriefBuilder: ["Board Brief Builder | Ganrich Advisory", "Turn a framed decision into a disciplined one-page board memorandum."],
     aiValueLens: ["AI Value Lens | Ganrich Advisory", "Assess an AI use case across value, repeatability, readiness, adoption, and risk control."],
+    craCheck: ["CRA Readiness Check | Ganrich Advisory", "Eight questions on whether you could report an actively exploited vulnerability under the Cyber Resilience Act within 24 hours, with an instant result and the gaps to close first."],
     cbamCheck: ["CBAM Readiness Check | Ganrich Advisory", "Eight questions on whether your CBAM emissions data is ready for an EU buyer, with an instant result and the gaps to close first."],
     decisionLabChangelog: ["Decision Lab Changelog | Ganrich Advisory", "See what is live, what changed, and what remains under evaluation in the Ganrich Decision Lab."],
     privateBriefing: ["Private Executive Briefing | Ganrich Advisory", "Move from a published perspective, signal, or tool to a prepared discussion about your specific decision."],
@@ -45,6 +46,7 @@ const metaCopy = {
     marketCompass: ["Pazara Giriş Pusulası | Ganrich Advisory", "Pazar fırsatını ve kurumsal hazırlığı şeffaf, düzenlenebilir varsayımlarla karşılaştırın."],
     boardBriefBuilder: ["Yönetim Kurulu Brifingi Oluşturucu | Ganrich Advisory", "Çerçevelenmiş bir kararı disiplinli, tek sayfalık yönetim kurulu notuna dönüştürün."],
     aiValueLens: ["Yapay Zekâ Değer Merceği | Ganrich Advisory", "Bir yapay zekâ kullanım alanını değer, tekrarlanabilirlik, hazırlık, benimseme ve risk kontrolü üzerinden değerlendirin."],
+    craCheck: ["CRA Hazırlık Testi | Ganrich Advisory", "Siber Dayanıklılık Yasası kapsamında aktif olarak istismar edilen bir açığı 24 saat içinde bildirip bildiremeyeceğinizi sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
     cbamCheck: ["CBAM Hazırlık Testi | Ganrich Advisory", "CBAM emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
     decisionLabChangelog: ["Karar Laboratuvarı Değişiklik Günlüğü | Ganrich Advisory", "Ganrich Karar Laboratuvarında nelerin yayında, nelerin değiştiğini ve hangi araçların değerlendirmede olduğunu görün."],
     privateBriefing: ["Özel Yönetici Brifingi | Ganrich Advisory", "Yayımlanmış bir perspektif, sinyal veya araçtan kurumunuza özgü karar hakkında hazırlıklı bir görüşmeye geçin."],
@@ -123,7 +125,7 @@ export default async function LocalizedPage({ params }: Props) {
   const title = article?.title ?? category?.label ?? advisoryMeta(lang, kind)?.[0]?.split("|")[0].trim() ?? (metaCopy[lang][kind as keyof typeof metaCopy.en]?.[0]?.split("|")[0].trim() || SITE_NAME);
   const parent = article || category
     ? { name: lang === "en" ? "Insights" : "İçgörüler", url: absoluteUrl(`/${lang}/${routeMap[lang].insights}`) }
-    : kind.startsWith("decision") || ["marketCompass", "boardBriefBuilder", "aiValueLens", "cbamCheck"].includes(kind)
+    : kind.startsWith("decision") || ["marketCompass", "boardBriefBuilder", "aiValueLens", "cbamCheck", "craCheck"].includes(kind)
       ? { name: lang === "en" ? "Decision Lab" : "Karar Laboratuvarı", url: absoluteUrl(`/${lang}/${routeMap[lang].decisionLab}`) }
       : breadcrumbParent(lang, kind);
   const description = article?.thesis ?? category?.description ?? (advisoryMeta(lang, kind) ?? metaCopy[lang][kind as keyof typeof metaCopy.en] ?? metaCopy[lang].home)[1];
