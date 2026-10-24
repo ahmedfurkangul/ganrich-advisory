@@ -17,6 +17,7 @@ const StudioPage = lazy(() => import("./studio").then(m => ({default:m.StudioPag
 const SolutionPage = lazy(() => import("./solutions").then(m => ({default:m.SolutionPage})));
 const CbamReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.CbamReadinessCheck})));
 const CraReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.CraReadinessCheck})));
+const NewsletterPage = lazy(() => import("./newsletter").then(m => ({default:m.NewsletterPage})));
 const EudrReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.EudrReadinessCheck})));
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
@@ -86,7 +87,7 @@ function Footer({ lang }: { lang: Lang }) {
   return <footer className="footer">
     <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Strategic judgment, regional fluency, and applied AI for consequential decisions." : "Kritik kararlar için stratejik muhakeme, bölgesel derinlik ve uygulamalı yapay zekâ."}</p></div>
     <div className="footer-links">
-      <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.solutions}`}>{t.nav[0]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[1]}</a><a href={`/${lang}/${m.decisionLab}`}>{lang === "en" ? "Decision Lab tools" : "Karar Laboratuvarı araçları"}</a><a href={`/${lang}/${m.sampleWork}`}>{lang === "en" ? "Sample work" : "Örnek çalışmalar"}</a><a href={`/${lang}/${m.markets}`}>{lang === "en" ? "Markets" : "Coğrafyalar"}</a><a href={`/${lang}/${m.about}`}>{t.nav[2]}</a></div>
+      <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.solutions}`}>{t.nav[0]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[1]}</a><a href={`/${lang}/${m.newsletter}`}>{lang === "en" ? "Regulation updates" : "Mevzuat bülteni"}</a><a href={`/${lang}/${m.decisionLab}`}>{lang === "en" ? "Decision Lab tools" : "Karar Laboratuvarı araçları"}</a><a href={`/${lang}/${m.sampleWork}`}>{lang === "en" ? "Sample work" : "Örnek çalışmalar"}</a><a href={`/${lang}/${m.markets}`}>{lang === "en" ? "Markets" : "Coğrafyalar"}</a><a href={`/${lang}/${m.about}`}>{t.nav[2]}</a></div>
       <div><span>{lang === "en" ? "Contact" : "İletişim"}</span><a href={`/${lang}/${m.contact}`}>{t.cta}</a><a href="mailto:furkangul@ganrichadvisory.com">furkangul@ganrichadvisory.com</a><a href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
     </div>
     <nav className="footer-trust-links" aria-label={lang === "en" ? "Privacy and legal" : "Gizlilik ve hukuk"}>
@@ -129,6 +130,7 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "cbamCheck") page = <CbamReadinessCheck lang={lang}/>;
   if (kind === "craCheck") page = <CraReadinessCheck lang={lang}/>;
   if (kind === "eudrCheck") page = <EudrReadinessCheck lang={lang}/>;
+  if (kind === "newsletter") page = <NewsletterPage lang={lang}/>;
   if (kind === "decisionLabChangelog") page = <DecisionLabChangelogPage lang={lang}/>;
   if (kind === "privateBriefing") page = <PrivateBriefingPage lang={lang}/>;
   if (kind === "about") page = <AboutPage lang={lang}/>;

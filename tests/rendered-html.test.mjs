@@ -570,6 +570,20 @@ test("publishes the EUDR readiness check in both languages and links it from the
   assert.match(await (await render("/tr/karar-laboratuvari")).text(), /EUDR Hazırlık Testi/);
 });
 
+test("publishes the regulation newsletter page in both languages and offers sign-up on EU programmes", async () => {
+  for (const [path, title] of [["/en/insights/regulation-updates", /Regulation Updates \| Ganrich Advisory/], ["/tr/icgoruler/mevzuat-bulteni", /Mevzuat Bülteni \| Ganrich Advisory/]]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, title);
+    assert.match(html, /rel="canonical"/);
+  }
+  const eu = await (await render("/tr/cozumler/eudr-izlenebilirlik")).text();
+  assert.match(eu, /Mevzuat güncellemelerini e-postayla alın/);
+  assert.match(await (await render("/en")).text(), /href="\/en\/insights\/regulation-updates"/);
+  assert.match(await (await render("/tr/gizlilik")).text(), /E-postayla mevzuat bülteni/);
+});
+
 test("publishes the Opportunity Studio showcase in both languages without linking the private host", async () => {
   for (const [path, products] of [["/en/opportunity-studio", /Five working tools behind our programmes/], ["/tr/opportunity-studio", /Programlarımızın arkasındaki beş çalışma aracı/]]) {
     const response = await render(path);

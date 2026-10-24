@@ -649,6 +649,13 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .readiness-gaps { margin: 0 0 20px; padding-left: 1.1em; display: grid; gap: 8px; line-height: 1.5; color: var(--slate); }
 .readiness-links { display: flex; flex-wrap: wrap; gap: 12px 20px; }
 .readiness-links button { background: none; border: 0; padding: 0; font: inherit; cursor: pointer; }
+.updates-page { max-width: 760px; }
+.updates-points { margin: 0 0 32px; padding-left: 1.2em; line-height: 1.7; }
+.updates-outcome { border-left: 3px solid var(--forest, currentColor); padding: 10px 16px; margin: 0 0 28px; }
+.updates-signup h3 { font: 400 1.5rem/1.2 var(--serif); margin: 0 0 14px; }
+.updates-signup.compact { border-top: 1px solid var(--sand); }
+.updates-signup.compact > p { margin: 0 0 18px; }
+.updates-signup .contact-form { max-width: 640px; }
 .readiness-ask { grid-column: 1 / -1; border-top: 1px solid var(--sand); padding-top: 28px; }
 .readiness-ask h3, .readiness-result h3 { font: 400 1.5rem/1.2 var(--serif); margin: 0 0 14px; }
 @media (max-width: 760px) { .readiness-result { grid-template-columns: 1fr; } }
