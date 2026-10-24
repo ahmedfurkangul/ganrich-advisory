@@ -668,6 +668,15 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 @media (max-width: 760px) { .solution-more-group ul { grid-template-columns: 1fr; } }
 .solution-flagship .solution-grid { grid-template-columns: repeat(auto-fill,minmax(min(100%,420px),1fr)); gap: 0 6vw; }
 
+/* Flagship programme FAQ */
+.solution-faq h2 { margin: 16px 0 32px; }
+.solution-faq details { border-top: 1px solid var(--sand); }
+.solution-faq details:last-of-type { border-bottom: 1px solid var(--sand); }
+.solution-faq summary { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 20px 0; font: 1.25rem var(--serif); cursor: pointer; list-style: none; }
+.solution-faq summary::-webkit-details-marker { display: none; }
+.solution-faq summary .plus { flex: none; border: 0; transition: transform .2s; }
+.solution-faq details p { max-width: 70ch; margin: 0 0 24px; }
+.solution-faq .faq-checked { margin-top: 24px; font-size: .82rem; color: var(--stone); }
 /* Homepage readiness checks */
 .home-checks .editorial-heading > p:last-child { max-width: 60ch; margin-top: 16px; }
 .home-checks > .text-link { display: inline-block; margin-top: 36px; }

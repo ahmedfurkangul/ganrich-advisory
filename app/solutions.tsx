@@ -5,6 +5,7 @@ import { services } from './advisory-content';
 import { studioBySolution, studioProducts } from './studio-content';
 import { NewsletterSignup } from './newsletter';
 import { solutionByKey, solutions, solutionTags, solutionThemes } from './solutions-content';
+import { faqFor, FAQ_CHECKED } from './solution-faq';
 const url=(l:Lang,k:string)=>'/'+l+'/'+routeMap[l][k];
 const readinessChecks={solutionCbam:'cbamCheck',solutionCra:'craCheck',solutionEudr:'eudrCheck'} as const;
 const paperHref=(l:Lang,slug:string)=>l==='en'?'/en/insights/report/'+slug:'/tr/icgoruler/rapor/'+slug;
@@ -26,12 +27,15 @@ export function SolutionsHub({lang}:{lang:Lang}){const en=lang==='en',flagship=f
  <Conversation lang={lang}/>
 </>}
 
+function SolutionFaq({lang,solutionKey}:{lang:Lang;solutionKey:string}){const faq=faqFor(lang,solutionKey),en=lang==='en';if(!faq)return null;return <section className="advisory-section solution-faq" id="faq"><p className="kicker">{en?'Common questions':'Sık sorulan sorular'}</p><h2>{en?'Straight answers before you ask us.':'Bize sormadan önce net cevaplar.'}</h2><div>{faq.map(([q,a])=><details key={q}><summary>{q}<span className="plus" aria-hidden="true">+</span></summary><p>{a}</p></details>)}</div><p className="faq-checked">{en?`Last checked ${FAQ_CHECKED.en}. General information, not legal advice.`:`Son kontrol: ${FAQ_CHECKED.tr}. Genel bilgidir, hukuki görüş değildir.`}</p></section>}
+
 export function SolutionPage({lang,kind}:{lang:Lang;kind:string}){const en=lang==='en',s=solutionByKey(lang,kind)!,theme=solutionThemes[lang].find(t=>t.key===s.theme)!,related=solutions[lang].filter(x=>x.theme===s.theme&&x.key!==s.key);return <>
  <EditorialHero label={theme.label} title={s.title} intro={s.tagline}/>
  <div className="solution-hero-tags"><TagList lang={lang} tags={solutionTags[lang][s.key]}/></div>
- <nav className="advisory-subnav" aria-label={en?'On this page':'Bu sayfada'}>{[['why',en?'Why now':'Neden şimdi?'],['fit',en?'Is this for you?':'Size uygun mu?'],['outcomes',en?'What you leave with':'Elde edecekleriniz'],['start',en?'How we start':'Nasıl başlarız?']].map(([id,t])=><a key={id} href={'#'+id}>{t}</a>)}<a href={url(lang,'solutions')}>{en?'All solutions':'Tüm çözümler'} ↗</a></nav>
+ <nav className="advisory-subnav" aria-label={en?'On this page':'Bu sayfada'}>{[['why',en?'Why now':'Neden şimdi?'],['fit',en?'Is this for you?':'Size uygun mu?'],['outcomes',en?'What you leave with':'Elde edecekleriniz'],['start',en?'How we start':'Nasıl başlarız?'],...(faqFor(lang,s.key)?[['faq',en?'Questions':'Sorular']]:[])].map(([id,t])=><a key={id} href={'#'+id}>{t}</a>)}<a href={url(lang,'solutions')}>{en?'All solutions':'Tüm çözümler'} ↗</a></nav>
  <section className="advisory-section service-overview" id="why"><div><p className="kicker">{en?'Why now':'Neden şimdi?'}</p><h2>{s.question}</h2><p>{s.trigger}</p></div><div id="fit"><h2>{en?'Who it is for':'Kimler için?'}</h2><p>{s.audience}</p><h3>{en?'You may need this if':'Şu durumlar tanıdık geliyorsa'}</h3><ul className="deliverables">{s.signals.map(x=><li key={x}>{x}</li>)}</ul></div></section>
  <section className="advisory-section service-process" id="outcomes"><h2>{en?'What you leave with':'Elde edecekleriniz'}</h2><ul className="deliverables solution-outcomes">{s.outcomes.map(x=><li key={x}>{x}</li>)}</ul><div className="editorial-pair" id="start"><div><h3>{en?'How we start':'Nasıl başlarız?'}</h3><p>{s.firstStep}</p></div><div><h3>{en?'Scope and boundaries':'Kapsam ve sınırlar'}</h3><p>{s.boundaries}</p></div></div></section>
+ <SolutionFaq lang={lang} solutionKey={s.key}/>
  {(s.paper||s.key in readinessChecks)&&<section className="advisory-section solution-paper"><p className="kicker">{s.paper?(en?'Whitepaper':'Teknik not'):(en?'Readiness check':'Hazırlık testi')}</p>{s.paper?<><h3>{s.paper.title}</h3><a className="text-link" href={paperHref(lang,s.paper.slug)}>{en?'Read the whitepaper':'Teknik notu okuyun'} <span aria-hidden="true">↗</span></a></>:<h3>{en?'See in two minutes where your data stands.':'Verinizin nerede durduğunu iki dakikada görün.'}</h3>}{s.key in readinessChecks&&<a className="text-link" href={'/'+lang+'/'+routeMap[lang][readinessChecks[s.key as keyof typeof readinessChecks]]}>{en?'Take the 2-minute readiness check':'2 dakikalık hazırlık testini yapın'} <span aria-hidden="true">↗</span></a>}</section>}
  {s.theme==='eu'&&<NewsletterSignup lang={lang} source={url(lang,s.key)} compact/>}
  {(()=>{const t=studioBySolution(lang,s.key);return t&&<section className="advisory-section solution-studio"><p className="kicker">{en?'The tool we use':'Kullandığımız araç'}</p><h3>{t.name}</h3><p>{t.tagline}</p><a className="text-link" href={url(lang,'studio')+'#'+t.slug}>{en?'See how it works':'Nasıl çalıştığını görün'} <span aria-hidden="true">↗</span></a></section>})()}
