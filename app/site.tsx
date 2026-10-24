@@ -54,7 +54,7 @@ function A({ href, children, className = "", dataEvent }: { href: string; childr
 }
 
 function Wordmark() {
-  return <span className="wordmark"><Image src="/brand/ganrich-advisory-threshold.png" width={1260} height={260} alt="Ganrich Advisory" priority unoptimized/></span>;
+  return <span className="wordmark"><Image src="/brand/ganrich-advisory-threshold.webp" width={1260} height={260} alt="Ganrich Advisory" priority unoptimized/></span>;
 }
 
 function Header({ lang, route }: SiteProps) {
