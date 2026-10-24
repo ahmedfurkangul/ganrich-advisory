@@ -602,10 +602,10 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .traffic-chart .hit { fill: transparent; }
 .traffic-chart .point:hover circle, .traffic-chart g:hover > .column { fill: var(--bronze); }
 @media(max-width:700px){.traffic-dashboard{padding-top:24px}.traffic-channels li{grid-template-columns:1fr auto}.traffic-channels .traffic-bar{grid-column:1/-1;grid-row:2}}
-.solution-filter { padding-bottom: 0; }
-.solution-filter-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.solution-filter-chips button { border: 1px solid var(--sand); background: transparent; color: var(--slate); padding: 8px 14px; border-radius: 999px; font: inherit; font-size: .82rem; min-height: 44px; cursor: pointer; }
-.solution-filter-chips button[aria-pressed="true"] { background: var(--forest); border-color: var(--forest); color: var(--ivory); }
+
+
+
+
 .solution-tags { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 20px; padding: 0; }
 .solution-tags li { font-size: .72rem; letter-spacing: .02em; color: var(--bronze); border: 1px solid var(--sand); border-radius: 999px; padding: 3px 10px; }
 .advisory-hero:has(+ .solution-hero-tags) { border-bottom: 0; padding-bottom: 8px; }
@@ -661,3 +661,6 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 @media (max-width: 760px) { .readiness-result { grid-template-columns: 1fr; } }
 .pdf-studio-hero > div:last-child .text-link { display: block; width: fit-content; margin-top: 12px; }
 .email-gate form { margin-top: 24px; max-width: 900px; }
+.solution-more-group { padding: 26px 0; border-top: 1px solid var(--sand); }.solution-more-group h3 { margin: 0 0 14px; font-size: 15px; font-weight: 500; letter-spacing: .02em; }.solution-more-group ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 6vw; margin: 0; padding: 0; list-style: none; }.solution-more-group li { display: grid; gap: 4px; }.solution-more-group li a { color: var(--ink); font-size: 17px; }.solution-more-group li span { color: var(--slate); font-size: 14px; line-height: 1.5; }
+@media (max-width: 760px) { .solution-more-group ul { grid-template-columns: 1fr; } }
+.solution-flagship .solution-grid { grid-template-columns: repeat(auto-fill,minmax(min(100%,420px),1fr)); gap: 0 6vw; }

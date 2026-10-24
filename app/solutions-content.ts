@@ -106,15 +106,6 @@ export function solutionTagList(lang: Lang) {
  return [...new Set(solutions[lang].flatMap(solution => solutionTags[lang][solution.key]))].sort((a, b) => a.localeCompare(b, lang));
 }
 
-/** Hub filter: topics shared by several programmes first, then each programme's lead topic. */
-export function solutionFilterTags(lang: Lang) {
- const counts = new Map<string, number>();
- for (const solution of solutions[lang]) for (const tag of solutionTags[lang][solution.key]) counts.set(tag, (counts.get(tag) ?? 0) + 1);
- const shared = [...counts].filter(([, n]) => n > 1).sort((a, b) => b[1] - a[1]).map(([tag]) => tag);
- const leads = solutions[lang].map(solution => solutionTags[lang][solution.key][0]).filter(tag => !shared.includes(tag));
- return [...shared, ...leads];
-}
-
 export function solutionByKey(lang: Lang, key: string) {
  return solutions[lang].find(solution => solution.key === key);
 }
