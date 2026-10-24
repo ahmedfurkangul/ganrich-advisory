@@ -1,10 +1,9 @@
 "use client";
-import { lazy, useMemo, useState } from "react";
+import { lazy, useState } from "react";
 import { ServiceList, FounderWorking } from "./advisory";
 import { EngagementFormats } from "./advisory-details";
-import { expertise, insightArticles, insightCategories, insightCategoryForKind, insightHref, insights, Lang, routeMap } from "./content";
-import { PdfInsightHubCards } from "./pdf-insight-cards";
-import { DecisionNotes } from "./advisory-notes";
+import { expertise, Lang, routeMap } from "./content";
+import { TechnicalNotesLibrary } from "./technical-notes";
 const ui = {
  en:{skip:"Skip to content",nav:["Expertise","Sample work","Insights","Decision Lab","About"],cta:"Start a conversation",read:"Read the perspective",finalTitle:"What decision is on your agenda?",finalBody:"Share the context. We will come prepared with the questions that matter."},
  tr:{skip:"İçeriğe geç",nav:["Uzmanlık","Örnek çalışmalar","İçgörüler","Karar Laboratuvarı","Hakkımızda"],cta:"Görüşme başlatın",read:"Bakışı okuyun",finalTitle:"Gündeminizde hangi karar var?",finalBody:"Bağlamı paylaşın. Biz, önem taşıyan sorularla hazırlıklı gelelim."}
@@ -42,42 +41,7 @@ export function ExpertisePage({ lang }: { lang: Lang }) {
 }
 
 export function InsightsPage({ lang }: { lang: Lang }) {
-  const isEn = lang === "en";
-  const [filter, setFilter] = useState("all");
-  const [query, setQuery] = useState("");
-  const indexed = useMemo(() => insights[lang].map((item, index) => ({ item, index })), [lang]);
-  const list = useMemo(() => {
-    const normalizedQuery = query.trim().toLocaleLowerCase(lang === "en" ? "en-GB" : "tr-TR");
-    return indexed.filter(({ item }) => {
-      const matchesFilter = filter === "all" || item[2] === filter;
-      const searchable = item.join(" · ").toLocaleLowerCase(lang === "en" ? "en-GB" : "tr-TR");
-      return matchesFilter && (!normalizedQuery || searchable.includes(normalizedQuery));
-    });
-  }, [filter, indexed, lang, query]);
-  return <><PageHero eyebrow={isEn ? "INSIGHTS" : "İÇGÖRÜLER"} title={isEn ? "Ideas made for use." : "Kullanılmak için geliştirilen fikirler."} intro={isEn ? "Decision notes, research perspectives, and practical frameworks for growth, organization, and applied AI." : "Büyüme, organizasyon ve uygulamalı yapay zekâ için karar notları, araştırma perspektifleri ve pratik çerçeveler."}/>
-    <DecisionNotes lang={lang}/><section className="insights-directory section">
-      <a href={`/${lang}/${routeMap[lang].article}`}><span>01</span><div><small>{isEn ? "CONTROLLED READING DEPTH" : "KONTROLLÜ OKUMA DERİNLİĞİ"}</small><h2>{isEn ? "Executive reading modes" : "Yönetici okuma modları"}</h2><p>{isEn ? "Move between a 90-second view, executive implications, full analysis, and evidence." : "90 saniyelik bakış, yönetici çıkarımları, tam analiz ve kanıt arasında geçiş yapın."}</p></div><i>↗</i></a>
-      <a href={`/${lang}/${routeMap[lang].decisionFramer}`}><span>02</span><div><small>{isEn ? "FROM READING TO ACTION" : "OKUMADAN UYGULAMAYA"}</small><h2>{isEn ? "Decision Framer" : "Karar Çerçeveleyici"}</h2><p>{isEn ? "Turn an insight into a structured decision brief." : "Bir içgörüyü yapılandırılmış karar özetine dönüştürün."}</p></div><i>↗</i></a>
-    </section>
-    <nav className="insight-taxonomy" aria-label={isEn ? "Insight categories" : "İçgörü kategorileri"}>{insightCategories[lang].map((category) => <a key={category.key} href={`/${lang}/${routeMap[lang][category.key]}`}>{category.label}</a>)}</nav>
-    <section className="section filter-row"><div><button className={filter === "all" ? "active" : ""} onClick={() => setFilter("all")}>{isEn ? "All" : "Tümü"}</button>{[...new Set(insights[lang].map(x => x[2]))].map(x => <button className={filter === x ? "active" : ""} key={x} onClick={() => setFilter(x)}>{x}</button>)}</div><label><span>{isEn ? "Search" : "Ara"}</span><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder={isEn ? "Search insights" : "İçgörülerde ara"}/></label></section>
-    <section className="section publication-list">{list.length ? list.map(({ item: x, index }, displayIndex) => <article key={x[0]}><span>0{displayIndex + 1}</span><div><p className="meta">{x[4]} · {x[3]} · {insightArticles[lang][index].dateLabel} · {insightArticles[lang][index].author}</p><h2>{x[0]}</h2><p>{x[1]}</p><A href={insightHref(lang, index)} dataEvent="insight_viewed">{ui[lang].read}</A></div><div className={`mini-art art-${index}`} aria-hidden="true"><i/><b/></div></article>) : <div className="insight-empty" role="status"><span className="eyebrow">{isEn ? "NO MATCHES" : "EŞLEŞME YOK"}</span><h2>{isEn ? "No perspective matches this search." : "Bu aramayla eşleşen bir perspektif yok."}</h2><button type="button" className="text-link" onClick={() => { setFilter("all"); setQuery(""); }}>{isEn ? "Clear search" : "Aramayı temizleyin"} →</button></div>}</section><PdfInsightHubCards lang={lang}/></>;
-}
-
-export function InsightCategoryPage({ lang, kind }: { lang: Lang; kind: string }) {
-  const isEn = lang === "en";
-  const category = insightCategoryForKind(lang, kind);
-  if (!category) return null;
-  const articles = insightArticles[lang].map((article, index) => ({ article, index })).filter(({ article }) => article.topic === category.topic);
-  return <>
-    <PageHero eyebrow={isEn ? "INSIGHTS · CATEGORY" : "İÇGÖRÜLER · KATEGORİ"} title={`${category.label}.`} intro={category.description}/>
-    <nav className="insight-taxonomy category-page" aria-label={isEn ? "Insight categories" : "İçgörü kategorileri"}>
-      <a href={`/${lang}/${routeMap[lang].insights}`}>{isEn ? "All insights" : "Tüm içgörüler"}</a>
-      {insightCategories[lang].map((item) => <a className={item.key === category.key ? "active" : ""} aria-current={item.key === category.key ? "page" : undefined} key={item.key} href={`/${lang}/${routeMap[lang][item.key]}`}>{item.label}</a>)}
-    </nav>
-    <section className="section publication-list category-publications">{articles.map(({ article, index }, displayIndex) => <article key={article.slug}><span>0{displayIndex + 1}</span><div><p className="meta">{article.type} · {article.region} · {article.dateLabel} · {article.author}</p><h2>{article.title}</h2><p>{article.thesis}</p><A href={insightHref(lang, index)} dataEvent="insight_viewed">{ui[lang].read}</A></div><div className={`mini-art art-${index}`} aria-hidden="true"><i/><b/></div></article>)}</section>
-    <CTA lang={lang}/>
-  </>;
+  return <><TechnicalNotesLibrary lang={lang}/><CTA lang={lang}/></>;
 }
 
 export function AboutPage({ lang }: { lang: Lang }) {

@@ -13,7 +13,7 @@ const metaCopy = {
     home: ["Ganrich Advisory | EU Readiness and Strategy for Turkish Industry", "Independent advisory for Turkish manufacturers and exporters facing CBAM, the Cyber Resilience Act and other EU rules, and for leadership teams deciding where to grow next."],
     expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
     markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
-    insights: ["Insights | Ganrich Advisory", "Strategic perspectives, executive briefings, reports, frameworks, and data notes designed to be used."],
+    insights: ["Technical Notes | Ganrich Advisory", "Whitepapers on CBAM, the Cyber Resilience Act, the Machinery and Battery Regulations, packaging, energy and applied AI, plus strategy articles and decision notes, in one searchable library."],
     article: ["Decision Quality in the Age of Applied AI | Ganrich Advisory", "A Ganrich perspective on framing AI value around evidence, judgement, and consequential decisions."],
     articleTransformation: ["From Transformation Activity to Value | Ganrich Advisory", "A practical perspective on using decision cadence, ownership, dependencies, and value signals to move transformation forward."],
     articleMarketEntry: ["Market Entry Is a Sequence of Commitments | Ganrich Advisory", "A framework for separating reversible learning from irreversible investment in market-entry decisions."],
@@ -39,7 +39,7 @@ const metaCopy = {
     home: ["Ganrich Advisory | Türk Sanayisi için AB Uyumu ve Strateji", "CBAM, Siber Dayanıklılık Yasası ve diğer AB kurallarıyla karşı karşıya olan Türk üreticiler ve ihracatçılar ile bir sonraki büyüme adımını belirleyen yönetim ekipleri için bağımsız danışmanlık."],
     expertise: ["Uzmanlık | Ganrich Advisory", "Strateji, büyüme, işletim modeli, yapay zekâ, organizasyon ve uygulama için karar odaklı uzmanlık."],
     markets: ["Coğrafyalar | Ganrich Advisory", "Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika için pazara özgü kanıtlara dayalı bölgesel bakışlar."],
-    insights: ["İçgörüler | Ganrich Advisory", "Kullanılmak için geliştirilen stratejik bakışlar, yönetici bilgilendirmeleri, raporlar, çerçeveler ve veri notları."],
+    insights: ["Teknik Notlar | Ganrich Advisory", "CBAM, Siber Dayanıklılık Yasası, Makine ve Batarya Tüzükleri, ambalaj, enerji ve uygulamalı yapay zekâ üzerine teknik notlar; strateji makaleleri ve karar notlarıyla birlikte, aranabilir tek bir kütüphanede."],
     article: ["Uygulamalı Yapay Zekâ Çağında Karar Kalitesi | Ganrich Advisory", "Yapay zekâ değerini kanıt, muhakeme ve kritik kararlar etrafında çerçeveleyen Ganrich bakışı."],
     articleTransformation: ["Dönüşüm Faaliyetinden Değere | Ganrich Advisory", "Dönüşümü ilerletmek için karar ritmini, sahipliği, bağımlılıkları ve değer göstergelerini ele alan uygulamalı bir bakış."],
     articleMarketEntry: ["Pazara Giriş, Taahhütler Dizisidir | Ganrich Advisory", "Pazara giriş kararlarında geri döndürülebilir öğrenmeyi geri döndürülemez yatırımdan ayıran bir çerçeve."],
@@ -158,6 +158,8 @@ export default async function LocalizedPage({ params }: Props) {
   if (kind === "notFound") notFound();
   // Folded into simpler destinations; the old addresses keep working through a permanent redirect.
   if (kind === "expertise" || kind === "markets") permanentRedirect(`/${lang}/${routeMap[lang].solutions}#strategy`);
+  // Category pages are folded into the technical-notes library, with the strategy filter selected.
+  if (kind.startsWith("category")) permanentRedirect(`/${lang}/${routeMap[lang].insights}#strategy`);
   if (kind === "privateBriefing") permanentRedirect(`/${lang}/${routeMap[lang].contact}?service=briefing`);
   const trustTarget: Record<string, string> = { privacyCenter: "privacy", cookies: "privacy#cookies", vendors: "privacy#providers", dataRights: "privacy#rights", policyUpdates: "privacy#changes", terms: "legal#terms", aiTransparency: "legal#ai" };
   if (kind in trustTarget) { const [key, hash] = trustTarget[kind].split("#"); permanentRedirect(`/${lang}/${routeMap[lang][key]}${hash ? `#${hash}` : ""}`); }
