@@ -55,6 +55,11 @@ const cards = {
     ["solutionWater", "SOLUTIONS · INDUSTRIAL EFFICIENCY", "Industrial Water Balance"],
     ["solutionOrderDesk", "SOLUTIONS · AI IN COMMERCIAL OPERATIONS", "AI Order Desk Assistant"],
     ["solutionMargin", "SOLUTIONS · AI IN COMMERCIAL OPERATIONS", "E-commerce Margin Clarity"],
+    ["solutionMachinery", "SOLUTIONS · EU MARKET ACCESS", "Machinery Regulation Transition"],
+    ["solutionPackaging", "SOLUTIONS · EU MARKET ACCESS", "EU Packaging Compliance"],
+    ["solutionBattery", "SOLUTIONS · EU MARKET ACCESS", "Battery Passport Readiness"],
+    ["solutionForcedLabour", "SOLUTIONS · EU MARKET ACCESS", "Forced Labour Evidence"],
+    ["solutionTrEts", "SOLUTIONS · INDUSTRIAL EFFICIENCY", "Türkiye ETS Readiness"],
   ],
   tr: [
     ["home", "STRATEJİK DANIŞMANLIK", "Sonraki adım. Sağlam bir kararla."],
@@ -100,6 +105,11 @@ const cards = {
     ["solutionWater", "ÇÖZÜMLER · SANAYİDE VERİMLİLİK", "Sanayide Su Dengesi"],
     ["solutionOrderDesk", "ÇÖZÜMLER · TİCARİ OPERASYONLARDA YAPAY ZEKÂ", "Yapay Zekâ Sipariş Masası Asistanı"],
     ["solutionMargin", "ÇÖZÜMLER · TİCARİ OPERASYONLARDA YAPAY ZEKÂ", "E-Ticarette Katkı Kârı Netliği"],
+    ["solutionMachinery", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Makine Tüzüğüne Geçiş"],
+    ["solutionPackaging", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "AB Ambalaj Uyumu"],
+    ["solutionBattery", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Batarya Pasaportu Hazırlığı"],
+    ["solutionForcedLabour", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Zorla Çalıştırma Kanıtı"],
+    ["solutionTrEts", "ÇÖZÜMLER · SANAYİDE VERİMLİLİK", "Türkiye ETS Hazırlığı"],
   ],
 };
 

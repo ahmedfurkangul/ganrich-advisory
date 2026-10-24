@@ -427,6 +427,24 @@ test("publishes the solutions programmes in both languages without prices or dur
   for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "AI Order Desk Assistant", "Industrial Water Balance"]) assert.match(hub, new RegExp(title));
   const home = await (await render("/en")).text();
   assert.match(home, /href="\/en\/solutions"/);
+  // Batch 2 (October 2026): each new programme renders in both languages and links its own whitepaper.
+  const batch2 = [
+    ["/en/solutions/machinery-regulation-transition", "/tr/cozumler/makine-tuzugune-gecis", "machinery-regulation-no-transition-26659c0f", "makine-tuzugu-gecis-suresi-yok-6cec1c86"],
+    ["/en/solutions/eu-packaging-compliance", "/tr/cozumler/ab-ambalaj-uyumu", "ppwr-packaging-file-7d6aa9bd", "ppwr-ambalaj-dosyasi-65f6be90"],
+    ["/en/solutions/battery-passport-readiness", "/tr/cozumler/batarya-pasaportu-hazirligi", "battery-passport-data-supply-chain-9f541303", "batarya-pasaportu-veri-zinciri-11d198db"],
+    ["/en/solutions/forced-labour-supply-chain-evidence", "/tr/cozumler/zorla-calistirma-tedarik-kaniti", "forced-labour-proof-not-policy-a099a490", "zorla-calistirma-politika-degil-kanit-492125d0"],
+    ["/en/solutions/turkiye-ets-readiness", "/tr/cozumler/turkiye-ets-hazirligi", "turkiye-ets-monitoring-before-money-d75e501c", "turkiye-ets-paradan-once-olcum-000f6369"],
+  ];
+  for (const [enPath, trPath, enSlug, trSlug] of batch2) {
+    for (const [path, slug] of [[enPath, enSlug], [trPath, trSlug]]) {
+      const response = await render(path);
+      assert.equal(response.status, 200, path);
+      const html = await response.text();
+      assert.match(html, new RegExp(slug), `${path} links its whitepaper`);
+      const text = html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
+      assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\d+\s?(weeks?|months?|hafta|ay)\b/i, `${path} must not show prices or durations`);
+    }
+  }
   if (routeMap) assert.equal(Object.keys(routeMap.en).filter(key => key.startsWith("solution")).length, Object.keys(routeMap.tr).filter(key => key.startsWith("solution")).length);
 });
 
@@ -464,7 +482,7 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   const org = graph(home).find(node => node["@id"] === "https://ganrichadvisory.com/#organization");
   assert.equal(org.email, "furkangul@ganrichadvisory.com");
   assert.ok(org.sameAs.includes("https://www.linkedin.com/company/135278307/"));
-  assert.equal(org.hasOfferCatalog.itemListElement.length, 14);
+  assert.equal(org.hasOfferCatalog.itemListElement.length, 19); // 16 programmes and 3 strategy services
   assert.ok(types(hub).includes("ItemList") && types(hub).includes("CollectionPage"));
   assert.ok(types(service).includes("Service"));
   const crumbs = graph(solution).find(node => node["@type"] === "BreadcrumbList").itemListElement.map(item => item.name);

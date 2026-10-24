@@ -13,8 +13,12 @@ const ruleTimeline:{date:string;key:string;en:[string,string];tr:[string,string]
  {date:'2026-01-01',key:'solutionCbam',en:['1 Jan 2026','CBAM definitive regime: importers ask for emissions data'],tr:['1 Ocak 2026','CBAM kesin rejimi: ithalatçılar emisyon verisi istiyor']},
  {date:'2026-09-11',key:'solutionCra',en:['11 Sep 2026','Cyber Resilience Act reporting obligations begin'],tr:['11 Eylül 2026','Siber Dayanıklılık Yasası bildirim yükümlülükleri başladı']},
  {date:'2026-10-01',key:'solutionPfas',en:['Oct 2026','PFHxA restriction reaches textiles, footwear and food-contact paper'],tr:['Ekim 2026','PFHxA kısıtlaması tekstil, ayakkabı ve gıda ambalajında']},
+ {date:'2026-08-12',key:'solutionPackaging',en:['12 Aug 2026','Packaging needs a declaration of conformity (PPWR)'],tr:['12 Ağustos 2026','Ambalaj uygunluk beyanı gerektiriyor (PPWR)']},
  {date:'2026-11-01',key:'solutionEexport',en:['1 Nov 2026','Product identifiers for low-value distance sales'],tr:['1 Kasım 2026','Düşük değerli mesafeli satışlarda ürün tanımlayıcısı']},
  {date:'2026-12-30',key:'solutionEudr',en:['30 Dec 2026','EUDR applies to large and medium operators'],tr:['30 Aralık 2026','EUDR büyük ve orta işletmelere uygulanıyor']},
+ {date:'2027-01-20',key:'solutionMachinery',en:['20 Jan 2027','Machinery Regulation applies, with no transition period'],tr:['20 Ocak 2027','Makine Tüzüğü geçiş süresi olmadan uygulanıyor']},
+ {date:'2027-02-18',key:'solutionBattery',en:['18 Feb 2027','QR codes and battery passports for EU batteries'],tr:['18 Şubat 2027','AB bataryalarında QR kod ve batarya pasaportu']},
+ {date:'2027-12-14',key:'solutionForcedLabour',en:['14 Dec 2027','Ban on products made with forced labour'],tr:['14 Aralık 2027','Zorla çalıştırmayla üretilen ürünlere yasak']},
 ];
 function RuleTimeline({lang}:{lang:Lang}){const en=lang==='en',today=new Date().toISOString().slice(0,10);return <aside className="rule-timeline" aria-label={en?'EU rules timeline':'AB kuralları takvimi'}><p className="kicker">{en?'EU rules your buyers now apply':'Alıcılarınızın artık uyguladığı AB kuralları'}</p><ol>{ruleTimeline.map(r=>{const [when,what]=r[lang],live=r.date<=today;return <li key={r.key} className={live?'live':'upcoming'}><a href={url(lang,r.key)}><time dateTime={r.date}>{when}</time><span>{what}</span><small>{live?(en?'In force':'Yürürlükte'):(en?'Upcoming':'Yaklaşıyor')}</small></a></li>})}</ol></aside>}
 export function BoutiqueHome({lang}:{lang:Lang}){const en=lang==='en';const papers=homePapers[lang];return <>
