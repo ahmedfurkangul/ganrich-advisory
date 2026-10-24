@@ -9,7 +9,8 @@ function reportHref(lang: Lang, insight: Pick<PdfInsight, "slug"> & Partial<Pick
   return documentLanguage === "en" ? `/en/insights/report/${insight.slug}` : `/tr/icgoruler/rapor/${insight.slug}`;
 }
 
-export function PdfInsightHubCards({ lang }: { lang: Lang }) {
+// Lists published reports from the PDF studio. `exclude` drops reports the page already lists from static content.
+export function PdfInsightHubCards({ lang, exclude = [] }: { lang: Lang; exclude?: string[] }) {
   const [items, setItems] = useState<PdfInsight[]>([]);
 
   useEffect(() => {
@@ -20,11 +21,12 @@ export function PdfInsightHubCards({ lang }: { lang: Lang }) {
       .catch(() => setItems([]));
   }, [lang]);
 
-  if (!items.length) return null;
+  const shown = items.filter(item => !exclude.includes(item.slug));
+  if (!shown.length) return null;
 
   return (
     <section className="section publication-list pdf-publications">
-      {items.map((item, index) => (
+      {shown.map((item, index) => (
         <article key={item.id}>
           <span>{String(index + 4).padStart(2, "0")}</span>
           <div>

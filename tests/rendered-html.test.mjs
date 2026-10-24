@@ -176,12 +176,12 @@ test("publishes production-safe bilingual SEO, taxonomy, feeds, and discovery fi
     robotsResponse.text(),
   ]);
 
-  assert.equal(categoryResponse.status, 200);
-  assert.match(category, /Applied AI\./);
-  assert.match(category, /Decision-led perspectives on AI value/);
-  assert.match(category, /\/og\/en\/categoryAppliedAi\.png/);
-  assert.match(turkishCategory, /İşletim modeli\./);
-  assert.match(turkishCategory, /<html lang="tr"/);
+  // Category pages are folded into the technical-notes library with the strategy filter.
+  for (const [response, target] of [[categoryResponse, /\/en\/insights#strategy$/], [turkishCategoryResponse, /\/tr\/icgoruler#strategy$/]]) {
+    assert.ok([301, 307, 308].includes(response.status), `category status ${response.status}`);
+    assert.match(response.headers.get("location") ?? "", target);
+  }
+  void category; void turkishCategory;
   assert.match(article, /rel="canonical" href="https:\/\/ganrichadvisory\.com\/en\/insights\/decision-quality-applied-ai"/);
   assert.match(article, /rel="alternate" type="application\/rss\+xml" href="https:\/\/ganrichadvisory\.com\/en\/feed\.xml"/);
   assert.match(article, /"@type":"Article"/);
@@ -193,8 +193,6 @@ test("publishes production-safe bilingual SEO, taxonomy, feeds, and discovery fi
   assert.match(feed, /<title>The Ganrich Brief<\/title>/);
   assert.match(feed, /decision-quality-applied-ai/);
   assert.match(turkishFeed, /<title>Ganrich Bülteni<\/title>/);
-  // Category pages stay reachable but are noindex and out of the sitemap.
-  assert.match(category, /(?:name="robots" content="noindex, follow"|content="noindex, follow" name="robots")/);
   assert.doesNotMatch(sitemap, /\/insights\/category\//);
   assert.match(sitemap, /https:\/\/ganrichadvisory\.com\/en\/insights\/decision-quality-applied-ai/);
   assert.match(sitemap, /hreflang="tr"/);
@@ -237,7 +235,7 @@ test("keeps principal internal links inside the published route inventory", asyn
 
 test("makes insight search functional and governs dynamic PDF report discovery", async () => {
   const [siteSource, reportSource, englishRoute, turkishRoute, css] = await Promise.all([
-    readFile(new URL("../app/marketing-pages.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/technical-notes.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/pdf-insight-pages.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/[lang]/insights/report/[slug]/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/[lang]/icgoruler/rapor/[slug]/page.tsx", import.meta.url), "utf8"),
@@ -245,9 +243,9 @@ test("makes insight search functional and governs dynamic PDF report discovery",
   ]);
 
   assert.match(siteSource, /const \[query, setQuery\] = useState\(""\)/);
-  assert.match(siteSource, /searchable\.includes\(normalizedQuery\)/);
-  assert.match(siteSource, /No perspective matches this search\./);
-  assert.match(siteSource, /Bu aramayla eşleşen bir perspektif yok\./);
+  assert.match(siteSource, /toLocaleLowerCase\(locale\)\.includes\(q\)/);
+  assert.match(siteSource, /No note matches this search\./);
+  assert.match(siteSource, /Bu aramayla eşleşen bir not yok\./);
   assert.doesNotMatch(css, /\.newsletter\b/);
   assert.match(reportSource, /export async function pdfReportMetadata/);
   assert.match(reportSource, /robots: published \?/);
@@ -727,6 +725,23 @@ test("keeps the header call to action sized to its label", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   for (const rule of css.match(/[^{}]+\{[^}]*\bwidth:\s*44px[^}]*\}/g) ?? []) assert.doesNotMatch(rule, /\.button\.compact/);
   assert.match(css, /\.button\.compact, \.save-control, \.reading-modes button, \.command-input button \{ min-height: 44px; \}/);
+});
+
+test("lists whitepapers, articles and decision notes in one technical-notes library", async () => {
+  for (const [path, title, paper, article] of [
+    ["/en/insights", /Technical Notes \| Ganrich Advisory/, /href="\/en\/insights\/report\/cbam-actual-or-default-e9f664d8"/, /href="\/en\/insights\/decision-quality-applied-ai"/],
+    ["/tr/icgoruler", /Teknik Notlar \| Ganrich Advisory/, /href="\/tr\/icgoruler\/rapor\/cbam-gercek-mi-varsayilan-mi-ef31215c"/, /href="\/tr\/icgoruler\/uygulamali-yapay-zeka-karar-kalitesi"/],
+  ]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, title);
+    assert.match(html, paper);
+    assert.match(html, article);
+    assert.doesNotMatch(html, /\/(insights\/category|icgoruler\/kategori)\//);
+  }
+  const tr = await (await render("/tr/icgoruler")).text();
+  for (const label of ["AB kuralları", "Enerji ve sanayi", "Uygulamalı yapay zekâ", "Strateji ve büyüme", "Teknik not (PDF)", "Karar notu"]) assert.ok(tr.includes(label), label);
 });
 
 test("publishes the EU regulation calendar with official sources and feeds the homepage timeline from it", async () => {

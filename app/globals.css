@@ -690,6 +690,17 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 /* Homepage readiness checks */
 .home-checks .editorial-heading > p:last-child { max-width: 60ch; margin-top: 16px; }
 .home-checks > .text-link { display: inline-block; margin-top: 36px; }
+/* Technical notes library */
+.notes-filter button { min-height: 44px; }
+.notes-library { padding-top: 24px; }
+.notes-library ol { list-style: none; margin: 0; padding: 0; }
+.notes-library li { padding: 28px 0; border-bottom: 1px solid var(--sand); max-width: 880px; }
+.notes-library h2 { font: 400 clamp(1.3rem, 2.2vw, 1.75rem)/1.25 var(--serif); margin: 8px 0 10px; }
+.notes-library h2 a:hover { text-decoration: underline; }
+.notes-library li > p:not(.meta) { color: var(--slate); max-width: 70ch; margin: 0 0 10px; line-height: 1.55; }
+.notes-count { color: var(--stone); font-size: .85rem; margin: 0; }
+.notes-links { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: .9rem; }
+.notes-links a { text-decoration: underline; text-underline-offset: 3px; }
 /* EU regulation calendar */
 .rule-timeline > .text-link { display: inline-block; margin-top: 16px; font-size: .85rem; }
 .regulation-calendar { max-width: 880px; }

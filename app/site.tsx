@@ -7,7 +7,6 @@ const ServicePage = lazy(() => import("./advisory-details").then(m => ({default:
 const SampleWorkPage = lazy(() => import("./advisory-details").then(m => ({default:m.SampleWorkPage})));
 const ExpertisePage = lazy(() => import("./marketing-pages").then(m => ({default:m.ExpertisePage})));
 const InsightsPage = lazy(() => import("./marketing-pages").then(m => ({default:m.InsightsPage})));
-const InsightCategoryPage = lazy(() => import("./marketing-pages").then(m => ({default:m.InsightCategoryPage})));
 const AboutPage = lazy(() => import("./marketing-pages").then(m => ({default:m.AboutPage})));
 const PageHero = lazy(() => import("./marketing-pages").then(m => ({default:m.PageHero})));
 const ContactExperience = lazy(() => import("./contact-experience").then(m => ({default:m.ContactExperience})));
@@ -116,7 +115,6 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind.startsWith("note")) page = <NotePage lang={lang} kind={kind}/>;
   if (kind === "expertise") page = <ExpertisePage lang={lang}/>;
   if (kind === "insights") page = <InsightsPage lang={lang}/>;
-  if (kind.startsWith("category")) page = <InsightCategoryPage lang={lang} kind={kind}/>;
   if (kind.startsWith("article")) page = <InsightExperiencePage lang={lang} index={insightIndex(kind)}/>;
   if (kind === "decisionLab") page = <DecisionLabPage lang={lang}/>;
   if (kind === "decisionAtlas") page = <DecisionAtlasPage lang={lang}/>;
