@@ -146,7 +146,7 @@ test("keeps core interactions keyboard-operable and marketing JavaScript within 
   assert.match(site, /lazy\(\(\) => import\("\.\/intelligence"\)/);
   assert.match(intelligence, /event\.key === "ArrowRight"/);
   assert.match(controls, /event\.key === "Escape"/);
-  assert.match(privacy, /Trust should be designed into the experience/);
+  assert.match(privacy, /mergedTrustParts/);
   assert.match(css, /min-height: 44px/);
   // 152 KB since the contact-step beacon (PR #14). Gzip output differs by a few hundred bytes between
   // machines (153354 in the cloud container, 153737 on the Mac), so the budget keeps about 2 KB of headroom.
@@ -293,13 +293,11 @@ test("returns a true house-voice 404 and keeps analytics disabled by default", a
 
 test("publishes a restrained bilingual privacy and trust center", async () => {
   const routes = [
-    ["/en/privacy-center", /Trust should be designed into the experience\./, /No analytics cookies or advertising trackers/],
-    ["/tr/gizlilik-merkezi", /Güven, deneyimin içine tasarlanmalıdır\./, /İsteğe bağlı tercihler varsayılan olarak kapalı/],
     ["/en/privacy", /Privacy, explained in plain language\./, /transmitted securely and stored/],
+    ["/en/privacy", /id="cookies"[\s\S]*deliberately small technology footprint/, /Analytics cookies, advertising/],
+    ["/en/privacy", /id="rights"[\s\S]*Your data rights, through a secure channel\./, /Do not send identity documents/],
     ["/tr/kvkk-aydinlatma-metni", /Türkiye veri koruma bilgilendirmesi\./, /Aydınlatma/],
-    ["/en/cookies", /deliberately small technology footprint/, /Analytics cookies, advertising/],
-    ["/en/data-rights", /Your data rights, through a secure channel\./, /Do not send identity documents/],
-    ["/en/ai-transparency", /AI assists the work/, /Decision Lab tools run in the visitor’s browser/],
+    ["/en/legal", /id="ai"[\s\S]*AI assists the work/, /Decision Lab tools run in the visitor’s browser/],
     ["/en/cookie-preferences", /Cookie preferences/, /Functional preferences/],
   ];
 
@@ -608,11 +606,11 @@ test("publishes the Opportunity Studio showcase in both languages without linkin
 });
 
 test("gives each trust page its own title and keeps the offer catalogue to home and solutions", async () => {
-  const paths = ["/en/privacy", "/en/cookies", "/en/terms", "/tr/kvkk-aydinlatma-metni", "/tr/gizlilik", "/tr/kullanim-kosullari"];
+  const paths = ["/en/privacy", "/en/legal", "/tr/kvkk-aydinlatma-metni", "/tr/gizlilik", "/tr/yasal-bilgilendirme"];
   const pages = await Promise.all(paths.map(path => render(path).then(response => response.text())));
   const titles = pages.map(page => page.match(/<title>([^<]*)<\/title>/)?.[1]);
   assert.equal(new Set(titles).size, paths.length);
-  assert.match(pages[3], /<title>KVKK Aydınlatma Metni \| Ganrich Advisory<\/title>/);
+  assert.match(pages[2], /<title>KVKK Aydınlatma Metni \| Ganrich Advisory<\/title>/);
   const [home, about] = await Promise.all([render("/en"), render("/en/about")].map(p => p.then(response => response.text())));
   assert.match(home, /"OfferCatalog"/);
   assert.doesNotMatch(about, /"OfferCatalog"/);
@@ -620,7 +618,7 @@ test("gives each trust page its own title and keeps the offer catalogue to home 
 });
 
 test("names the data controller and states purposes, transfers, retention and how to apply", async () => {
-  const [kvkk, privacy, rights, vendors] = await Promise.all(["/tr/kvkk-aydinlatma-metni", "/en/privacy", "/tr/ilgili-kisi-basvurusu", "/en/vendors"].map(path => render(path).then(response => response.text())));
+  const [kvkk, privacy, rights, vendors] = await Promise.all(["/tr/kvkk-aydinlatma-metni", "/en/privacy", "/tr/gizlilik", "/en/privacy"].map(path => render(path).then(response => response.text())));
   for (const page of [kvkk, privacy, rights]) {
     assert.match(page, /Ahmed Furkan Gül/);
     assert.match(page, /furkangul@ganrichadvisory\.com/);
@@ -631,6 +629,24 @@ test("names the data controller and states purposes, transfers, retention and ho
   assert.match(privacy, /24 months from receipt/);
   assert.match(vendors, /Cloudflare, Inc\./);
   assert.doesNotMatch(kvkk + privacy + rights + vendors, /Publication gate|Yayın kapısı|not yet published|henüz yayımlanmamaktadır/);
+});
+
+test("folds the trust pages into privacy, KVKK and legal, and redirects the old addresses to their sections", async () => {
+  const cases = [
+    ["/en/privacy-center", "/en/privacy"], ["/tr/gizlilik-merkezi", "/tr/gizlilik"],
+    ["/en/cookies", "/en/privacy#cookies"], ["/en/vendors", "/en/privacy#providers"], ["/en/data-rights", "/en/privacy#rights"],
+    ["/tr/ilgili-kisi-basvurusu", "/tr/gizlilik#rights"], ["/en/policy-updates", "/en/privacy#changes"],
+    ["/en/terms", "/en/legal#terms"], ["/tr/kullanim-kosullari", "/tr/yasal-bilgilendirme#terms"], ["/en/ai-transparency", "/en/legal#ai"],
+  ];
+  for (const [path, target] of cases) {
+    const response = await render(path);
+    assert.ok([301, 307, 308].includes(response.status), `${path} status ${response.status}`);
+    assert.ok((response.headers.get("location") ?? "").endsWith(target), `${path} -> ${response.headers.get("location")}`);
+  }
+  const privacy = await (await render("/en/privacy")).text();
+  for (const id of ["cookies", "providers", "rights", "changes"]) assert.match(privacy, new RegExp(`id="${id}"`));
+  const sitemap = await (await render("/sitemap.xml")).text();
+  assert.doesNotMatch(sitemap, /privacy-center|\/en\/cookies<|data-rights|ai-transparency|\/en\/terms<|policy-updates|\/en\/vendors</);
 });
 
 test("turns the Decision Lab into a readiness-check hub with the decision tools below", async () => {

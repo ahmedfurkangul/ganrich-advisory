@@ -159,6 +159,8 @@ export default async function LocalizedPage({ params }: Props) {
   // Folded into simpler destinations; the old addresses keep working through a permanent redirect.
   if (kind === "expertise" || kind === "markets") permanentRedirect(`/${lang}/${routeMap[lang].solutions}#strategy`);
   if (kind === "privateBriefing") permanentRedirect(`/${lang}/${routeMap[lang].contact}?service=briefing`);
+  const trustTarget: Record<string, string> = { privacyCenter: "privacy", cookies: "privacy#cookies", vendors: "privacy#providers", dataRights: "privacy#rights", policyUpdates: "privacy#changes", terms: "legal#terms", aiTransparency: "legal#ai" };
+  if (kind in trustTarget) { const [key, hash] = trustTarget[kind].split("#"); permanentRedirect(`/${lang}/${routeMap[lang][key]}${hash ? `#${hash}` : ""}`); }
   const article = kind.startsWith("article") ? insightArticles[lang][insightIndex(kind)] : null;
   const category = kind.startsWith("category") ? insightCategoryForKind(lang, kind) : null;
   const currentUrl = absoluteUrl(`/${lang}${route ? `/${route}` : ""}`);

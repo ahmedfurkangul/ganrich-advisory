@@ -661,6 +661,7 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 @media (max-width: 760px) { .readiness-result { grid-template-columns: 1fr; } }
 .pdf-studio-hero > div:last-child .text-link { display: block; width: fit-content; margin-top: 12px; }
 .email-gate form { margin-top: 24px; max-width: 900px; }
+.trust-part { padding-top: 72px; scroll-margin-top: 80px; }.trust-part > header { max-width: 760px; margin-bottom: 28px; }.trust-part > header h2 { margin: 10px 0 12px; font-size: clamp(30px,3.4vw,48px); }.trust-part > header p { color: var(--slate); }
 .lab-tools-archive ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 6vw; margin: 24px 0 32px; padding: 0; list-style: none; }.lab-tools-archive li { display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--sand); }.lab-tools-archive li a { color: var(--ink); font-size: 17px; }.lab-tools-archive li span { color: var(--slate); font-size: 14px; line-height: 1.5; }
 @media (max-width: 760px) { .lab-tools-archive ul { grid-template-columns: 1fr; } }
 .solution-more-group { padding: 26px 0; border-top: 1px solid var(--sand); }.solution-more-group h3 { margin: 0 0 14px; font-size: 15px; font-weight: 500; letter-spacing: .02em; }.solution-more-group ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 6vw; margin: 0; padding: 0; list-style: none; }.solution-more-group li { display: grid; gap: 4px; }.solution-more-group li a { color: var(--ink); font-size: 17px; }.solution-more-group li span { color: var(--slate); font-size: 14px; line-height: 1.5; }
