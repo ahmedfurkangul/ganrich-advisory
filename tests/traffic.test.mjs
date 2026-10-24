@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { classifyBot, deviceInfo, logLeadEvent, logTraffic, trafficKind } from "../worker/traffic.ts";
+import { RETENTION, classifyBot, deviceInfo, logLeadEvent, logTraffic, purgeExpiredRecords, trafficKind } from "../worker/traffic.ts";
 import { channelOf } from "../db/traffic.ts";
 import { trafficInsights } from "../app/traffic-insights.ts";
 
@@ -147,4 +147,17 @@ test("records contact steps with the page only, and ignores bots, other sites an
   await logLeadEvent(beacon({ event: "check_complete", path: "/tr/karar-laboratuvari/cbam-hazirlik-testi" }), { DB: db });
   await logLeadEvent(beacon({ event: "seen", path: "/en" }, { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) HeadlessChrome/131.0.0.0 Safari/537.36" }), { DB: db });
   assert.deepEqual(inserts().slice(2).map(s => s.params[4]), ["seen", "check_complete"]);
+});
+
+test("deletes form, sign-up and download-link data once its published retention period has passed", async () => {
+  const statements = [];
+  const db = { prepare(sql) { return { bind(...params) { return { run: async () => { statements.push({ sql, params }); if (sql.includes("download_grants")) throw new Error("no such table"); return {}; } }; } }; } };
+  const now = Date.parse("2026-10-24T12:00:00Z");
+  await purgeExpiredRecords(db, now);
+  const cutoff = table => statements.find(s => s.sql.includes(`FROM ${table}`))?.params[0];
+  assert.equal(cutoff("inquiries"), "2024-10-24T12:00:00.000Z");
+  assert.equal(cutoff("subscribers"), "2026-09-24T12:00:00.000Z");
+  assert.match(statements.find(s => s.sql.includes("subscribers")).sql, /status = 'pending'/);
+  assert.equal(cutoff("download_grants"), "2026-10-23T12:00:00.000Z"); // a failing table does not throw
+  assert.equal(RETENTION.inquiryDays, 730);
 });

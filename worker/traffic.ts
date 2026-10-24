@@ -101,6 +101,29 @@ async function sha256(value: string) {
   return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
+// Retention periods published in the privacy notice and the KVKK notice. Changing a number here
+// means changing those texts too (app/privacy-center.tsx).
+export const RETENTION = {
+  inquiryDays: 730,        // contact, check-result and download requests: 24 months
+  pendingSubscriberDays: 30, // newsletter sign-ups that were never confirmed
+  grantGraceDays: 1,       // expired 24-hour download links
+};
+
+const daysBefore = (now: number, days: number) => new Date(now - days * 86_400_000).toISOString();
+
+/** Deletes personal data that has passed its published retention period. Each table is purged on its
+ *  own so a missing table (an older local database) does not stop the others. */
+export async function purgeExpiredRecords(db: D1Database, now = Date.now()) {
+  const steps: Array<[string, string]> = [
+    ["DELETE FROM inquiries WHERE created_at < ?", daysBefore(now, RETENTION.inquiryDays)],
+    ["DELETE FROM subscribers WHERE status = 'pending' AND created_at < ?", daysBefore(now, RETENTION.pendingSubscriberDays)],
+    ["DELETE FROM download_grants WHERE expires_at < ?", daysBefore(now, RETENTION.grantGraceDays)],
+  ];
+  for (const [sql, cutoff] of steps) {
+    try { await db.prepare(sql).bind(cutoff).run(); } catch { /* table not present in this database */ }
+  }
+}
+
 let cachedSalt: { day: string; salt: string } | null = null;
 
 /** A random salt per UTC day. Older salts are deleted, so yesterday's hashes can never be recomputed. */
@@ -113,6 +136,8 @@ async function dailySalt(db: D1Database, day: string) {
   // Keep 13 months of traffic, enough for a year-on-year comparison.
   const cutoff = new Date(Date.parse(day) - 396 * 86_400_000).toISOString().slice(0, 10);
   await db.prepare("DELETE FROM page_views WHERE day < ?").bind(cutoff).run();
+  // The same once-a-day moment enforces the retention periods for form and newsletter data.
+  await purgeExpiredRecords(db);
   cachedSalt = { day, salt: row?.salt ?? fresh };
   return cachedSalt.salt;
 }
