@@ -1,0 +1,15 @@
+# Cloudflare Workers static assets: cache rules for unhashed public files.
+# Hashed bundles under /assets/ already get a one-year immutable policy.
+# Rename a file when its content changes, since browsers may keep it this long.
+/brand/*
+  Cache-Control: public, max-age=2592000
+/people/*
+  Cache-Control: public, max-age=2592000
+/studio/*
+  Cache-Control: public, max-age=604800
+/og/*
+  Cache-Control: public, max-age=86400
+/favicon.png
+  Cache-Control: public, max-age=604800
+/favicon.svg
+  Cache-Control: public, max-age=604800
