@@ -85,7 +85,7 @@ function TopSectionNav({ lang }: { lang: Lang }) {
 function Footer({ lang }: { lang: Lang }) {
   const t = ui[lang]; const m = routeMap[lang];
   return <footer className="footer">
-    <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Strategic judgment, regional fluency, and applied AI for consequential decisions." : "Kritik kararlar için stratejik muhakeme, bölgesel derinlik ve uygulamalı yapay zekâ."}</p></div>
+    <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Strategy and EU-readiness advisory for Turkish industry and exporters." : "Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı."}</p></div>
     <div className="footer-links">
       <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.solutions}`}>{t.nav[0]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[1]}</a><a href={`/${lang}/${m.newsletter}`}>{lang === "en" ? "Regulation updates" : "Mevzuat bülteni"}</a><a href={`/${lang}/${m.decisionLab}`}>{lang === "en" ? "Decision Lab tools" : "Karar Laboratuvarı araçları"}</a><a href={`/${lang}/${m.sampleWork}`}>{lang === "en" ? "Sample work" : "Örnek çalışmalar"}</a><a href={`/${lang}/${m.markets}`}>{lang === "en" ? "Markets" : "Coğrafyalar"}</a><a href={`/${lang}/${m.about}`}>{t.nav[2]}</a></div>
       <div><span>{lang === "en" ? "Contact" : "İletişim"}</span><a href={`/${lang}/${m.contact}`}>{t.cta}</a><a href="mailto:furkangul@ganrichadvisory.com">furkangul@ganrichadvisory.com</a><a href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>

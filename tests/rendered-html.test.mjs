@@ -633,3 +633,11 @@ test("names the data controller and states purposes, transfers, retention and ho
   assert.match(vendors, /Cloudflare, Inc\./);
   assert.doesNotMatch(kvkk + privacy + rights + vendors, /Publication gate|Yayın kapısı|not yet published|henüz yayımlanmamaktadır/);
 });
+
+test("tells one positioning story in the footer, About page and structured data", async () => {
+  const [about, home, aboutTr] = await Promise.all(["/en/about", "/en", "/tr/hakkimizda"].map(path => render(path).then(response => response.text())));
+  assert.match(about, /Strategy and EU-readiness advisory for Turkish industry and exporters\./);
+  assert.match(about, /EU-readiness advisory for Turkish manufacturers and exporters/);
+  assert.match(aboutTr, /Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı\./);
+  for (const page of [about, home, aboutTr]) assert.doesNotMatch(page, /Middle East and North Africa|regional fluency|bölgesel derinlik/);
+});
