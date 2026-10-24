@@ -157,6 +157,7 @@ export function TrafficDashboard({ lang, report, studioHref, selfHref }: { lang:
       <nav aria-label={en ? "Period" : "Dönem"} className="traffic-ranges">
         {RANGES.map(d => <a key={d} href={`${selfHref}?days=${d}`} aria-current={d === report.days ? "page" : undefined}>{en ? `${d} days` : `${d} gün`}</a>)}
         <a href={studioHref}>{en ? "PDF studio" : "PDF stüdyosu"} ↗</a>
+        <a href={`https://studio.ganrichadvisory.com/?lang=${lang}`} target="_blank" rel="noopener noreferrer">{en ? "Open Opportunity Studio" : "Opportunity Studio’yu aç"} ↗</a>
       </nav>
     </header>
 
