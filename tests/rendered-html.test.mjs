@@ -696,3 +696,11 @@ test("tells one positioning story in the footer, About page and structured data"
   assert.match(aboutTr, /Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı\./);
   for (const page of [about, home, aboutTr]) assert.doesNotMatch(page, /Middle East and North Africa|regional fluency|bölgesel derinlik/);
 });
+
+test("links the three readiness checks from the homepage", async () => {
+  const [en, tr] = await Promise.all(["/en", "/tr"].map(path => render(path).then(response => response.text())));
+  assert.match(en, /See where you stand in two minutes\./);
+  for (const path of ["/en/decision-lab/cbam-readiness-check", "/en/decision-lab/cra-readiness-check", "/en/decision-lab/eudr-readiness-check"]) assert.ok(en.includes(`href="${path}"`), path);
+  assert.match(tr, /Nerede durduğunuzu iki dakikada görün\./);
+  assert.ok(tr.includes('href="/tr/karar-laboratuvari/cbam-hazirlik-testi"'));
+});
