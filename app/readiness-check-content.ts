@@ -45,8 +45,8 @@ const cbamCopy = {
     ] as Question[],
   },
   tr: {
-    label: 'CBAM hazırlık testi',
-    title: 'CBAM veriniz AB alıcınız için ne kadar hazır?',
+    label: 'SKDM (CBAM) hazırlık testi',
+    title: 'SKDM (CBAM) veriniz AB alıcınız için ne kadar hazır?',
     intro: 'Sekiz soru, yaklaşık iki dakika. Sonucu hemen görürsünüz. Değerlendirme istemediğiniz sürece hiçbir şey kaydedilmez.',
     answers: ['Evet', 'Kısmen', 'Hayır veya emin değilim'] as const,
     progress: (n: number, total: number) => `${total} sorudan ${n} tanesi yanıtlandı`,
@@ -60,7 +60,7 @@ const cbamCopy = {
     gaps: 'Önce kapatılması gereken boşluklar',
     noGaps: 'Bu sekiz alanda belirgin bir boşluk yok.',
     disclaimer: 'Bu, yol gösterici bir öz değerlendirmedir; uyum görüşü veya doğrulama değildir.',
-    ask: 'CBAM hazırlık değerlendirmesi isteyin',
+    ask: 'SKDM (CBAM) hazırlık değerlendirmesi isteyin',
     askIntro: 'Sonucu gönderin; tek bir ürün ve tek bir AB alıcısı için önce neye bakacağımızı e-postayla yazalım.',
     name: 'Ad soyad', email: 'İş e-postası', company: 'Şirket',
     privacy: 'Gizlilik bildirimini okudum ve talebimin nasıl işleneceğini anladım.', privacyLink: 'Gizlilik bildirimi',
@@ -68,7 +68,7 @@ const cbamCopy = {
     sent: 'Teşekkürler. Sonucunuz Ganrich Advisory’ye ulaştı; e-postayla dönüş yapacağız.',
     error: 'Gönderilemedi. Lütfen tekrar deneyin veya furkangul@ganrichadvisory.com adresine yazın.',
     paper: 'Teknik notu okuyun: Gerçek mi, varsayılan mı?',
-    programme: 'CBAM Veri Hazırlığı programını inceleyin',
+    programme: 'SKDM (CBAM) Veri Hazırlığı programını inceleyin',
     restart: 'Baştan başlayın',
     questions: [
       { q: 'AB’ye sattığınız ürünlerden hangilerinin CBAM kapsamında olduğunu biliyor musunuz (demir-çelik, alüminyum, çimento, gübre, hidrojen, elektrik)?', gap: 'Ürünleri GTİP/KN kodlarıyla eşleştirin ve hangi AB sevkiyatlarının kapsamda olduğunu netleştirin.' },

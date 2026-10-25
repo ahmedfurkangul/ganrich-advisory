@@ -508,7 +508,7 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   const llmsText = await llms.text();
   assert.match(llmsText, /^# Ganrich Advisory\n\n> /);
   assert.match(llmsText, /\[CBAM Data Readiness\]\(https:\/\/ganrichadvisory\.com\/en\/solutions\/cbam-data-readiness\)/);
-  assert.match(llmsText, /\[CBAM Veri Hazırlığı\]\(https:\/\/ganrichadvisory\.com\/tr\/cozumler\/cbam-veri-hazirligi\)/);
+  assert.match(llmsText, /\[SKDM \(CBAM\) Veri Hazırlığı\]\(https:\/\/ganrichadvisory\.com\/tr\/cozumler\/cbam-veri-hazirligi\)/);
   assert.doesNotMatch(llmsText, /pdf-studio|\/api\//);
   const fullText = await llmsFull.text();
   assert.equal(llmsFull.status, 200);
@@ -545,7 +545,7 @@ test("retired pages redirect to the simplified paths", async () => {
 });
 
 test("publishes the CBAM readiness check in both languages and links it from the CBAM programme", async () => {
-  for (const [path, title] of [["/en/decision-lab/cbam-readiness-check", /CBAM Readiness Check \| Ganrich Advisory/], ["/tr/karar-laboratuvari/cbam-hazirlik-testi", /CBAM Hazırlık Testi \| Ganrich Advisory/]]) {
+  for (const [path, title] of [["/en/decision-lab/cbam-readiness-check", /CBAM Readiness Check \| Ganrich Advisory/], ["/tr/karar-laboratuvari/cbam-hazirlik-testi", /SKDM \(CBAM\) Hazırlık Testi \| Ganrich Advisory/]]) {
     const response = await render(path);
     assert.equal(response.status, 200, path);
     const html = await response.text();
@@ -553,7 +553,7 @@ test("publishes the CBAM readiness check in both languages and links it from the
     assert.match(html, /rel="canonical"/);
   }
   assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/decision-lab\/cbam-readiness-check"/);
-  assert.match(await (await render("/tr/karar-laboratuvari")).text(), /CBAM Hazırlık Testi/);
+  assert.match(await (await render("/tr/karar-laboratuvari")).text(), /SKDM \(CBAM\) Hazırlık Testi/);
 });
 
 test("publishes the CRA readiness check in both languages and links it from the CRA programme", async () => {
@@ -770,6 +770,20 @@ test("publishes the EU regulation calendar with official sources and feeds the h
   for (const r of ruleCalendar) {
     assert.match(r.date, /^\d{4}-\d{2}-\d{2}$/, r.id);
     assert.match(r.source.url, /^https:\/\/(eur-lex|trade\.ec)\.europa\.eu\//, r.id);
+  }
+});
+
+test("keeps page descriptions between 70 and 160 characters", async () => {
+  const paths = ["/en", "/tr", "/en/insights", "/tr/icgoruler", "/en/opportunity-studio", "/tr/opportunity-studio",
+    "/en/decision-lab/cra-readiness-check", "/tr/karar-laboratuvari/cra-hazirlik-testi", "/en/decision-lab/eudr-readiness-check",
+    "/tr/karar-laboratuvari/eudr-hazirlik-testi", "/en/insights/regulation-updates", "/tr/icgoruler/mevzuat-bulteni",
+    "/en/insights/eu-regulation-calendar", "/tr/icgoruler/ab-mevzuat-takvimi", "/en/legal", "/tr/yasal-bilgilendirme",
+    "/tr/iletisim", "/en/decision-lab/board-brief-builder", "/tr/karar-laboratuvari/karar-atlasi"];
+  for (const path of paths) {
+    const html = await (await render(path)).text();
+    const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? "";
+    const length = [...description.replace(/&#x27;|&quot;|&amp;|&lt;|&gt;|&#39;/g, "x")].length;
+    assert.ok(length >= 70 && length <= 160, `${path}: ${length}`);
   }
 });
 

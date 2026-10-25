@@ -3,17 +3,17 @@ import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import Site from "../../site";
 import { insightArticles, insightCategoryForKind, insightIndex, Lang, pageKind, routeMap } from "../../content";
-import { absoluteUrl, SITE_NAME, SITE_ORIGIN } from "../../site-config";
+import { absoluteUrl, metaDescription, SITE_NAME, SITE_ORIGIN } from "../../site-config";
 import { breadcrumbParent, FOUNDER_SAME_AS, founderName, ids, offeringNodes, organizationNode, pageKeywords, webPageNode, websiteNode } from "../../structured-data";
 
 type Props = { params: Promise<{ lang: string; slug?: string[] }> };
 
 const metaCopy = {
   en: {
-    home: ["Ganrich Advisory | EU Readiness and Strategy for Turkish Industry", "Independent advisory for Turkish manufacturers and exporters facing CBAM, the Cyber Resilience Act and other EU rules, and for leadership teams deciding where to grow next."],
+    home: ["Ganrich Advisory | EU Readiness and Strategy for Turkish Industry", "Independent advisory for Turkish manufacturers and exporters facing CBAM, the Cyber Resilience Act and other EU rules, and deciding where to grow next."],
     expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
     markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
-    insights: ["Technical Notes | Ganrich Advisory", "Whitepapers on CBAM, the Cyber Resilience Act, the Machinery and Battery Regulations, packaging, energy and applied AI, plus strategy articles and decision notes, in one searchable library."],
+    insights: ["Technical Notes | Ganrich Advisory", "Whitepapers on CBAM, the Cyber Resilience Act, machinery, batteries, packaging, energy and applied AI, plus strategy articles, in one searchable library."],
     article: ["Decision Quality in the Age of Applied AI | Ganrich Advisory", "A Ganrich perspective on framing AI value around evidence, judgement, and consequential decisions."],
     articleTransformation: ["From Transformation Activity to Value | Ganrich Advisory", "A practical perspective on using decision cadence, ownership, dependencies, and value signals to move transformation forward."],
     articleMarketEntry: ["Market Entry Is a Sequence of Commitments | Ganrich Advisory", "A framework for separating reversible learning from irreversible investment in market-entry decisions."],
@@ -21,46 +21,46 @@ const metaCopy = {
     decisionAtlas: ["Decision Atlas | Ganrich Advisory", "Explore Ganrich Advisory through the consequential decision currently on your agenda."],
     decisionFramer: ["Decision Framer | Ganrich Advisory", "Turn a broad executive priority into a structured, editable preliminary decision brief."],
     marketCompass: ["Market Entry Compass | Ganrich Advisory", "Compare market opportunity and organizational readiness using transparent, editable assumptions."],
-    boardBriefBuilder: ["Board Brief Builder | Ganrich Advisory", "Turn a framed decision into a disciplined one-page board memorandum."],
+    boardBriefBuilder: ["Board Brief Builder | Ganrich Advisory", "Turn a framed decision into a disciplined one-page board memorandum that sets out the options, the evidence and the decision required."],
     aiValueLens: ["AI Value Lens | Ganrich Advisory", "Assess an AI use case across value, repeatability, readiness, adoption, and risk control."],
-    studio: ["Opportunity Studio | Ganrich Advisory", "Five working tools behind our programmes: emissions records, order approval, incident response, accessibility remediation and product data, with human approval and private workspaces."],
-    regulationCalendar: ["EU Regulation Calendar | Ganrich Advisory", "Dates from which CBAM, the Cyber Resilience Act, EUDR, PPWR, the Machinery and Battery Regulations and other EU rules apply to Turkish exporters, each linked to the official text."],
-    newsletter: ["Regulation Updates | Ganrich Advisory", "Short email notes for Turkish manufacturers and exporters when an EU rule such as CBAM, the Cyber Resilience Act or EUDR changes: what changed, who it affects and what to check first."],
-    eudrCheck: ["EUDR Readiness Check | Ganrich Advisory", "Eight questions on whether your origin, geolocation and legality data is ready for your EU importer’s EUDR due-diligence statement, with an instant result and the gaps to close first."],
-    craCheck: ["CRA Readiness Check | Ganrich Advisory", "Eight questions on whether you could report an actively exploited vulnerability under the Cyber Resilience Act within 24 hours, with an instant result and the gaps to close first."],
+    studio: ["Opportunity Studio | Ganrich Advisory", "Five working tools behind our programmes: emissions records, order approval, incident response, accessibility fixes and product data, with human approval."],
+    regulationCalendar: ["EU Regulation Calendar | Ganrich Advisory", "When CBAM, the Cyber Resilience Act, EUDR, PPWR, the Machinery and Battery Regulations and other EU rules apply to Turkish exporters, with official links."],
+    newsletter: ["Regulation Updates | Ganrich Advisory", "Short email notes for Turkish exporters when an EU rule such as CBAM, the Cyber Resilience Act or EUDR changes: what changed, who it affects, what to check."],
+    eudrCheck: ["EUDR Readiness Check | Ganrich Advisory", "Eight questions on whether your origin, geolocation and legality data is ready for your EU importer’s EUDR due-diligence statement, with an instant result."],
+    craCheck: ["CRA Readiness Check | Ganrich Advisory", "Eight questions on whether you could report an actively exploited vulnerability under the Cyber Resilience Act within 24 hours, with an instant result."],
     cbamCheck: ["CBAM Readiness Check | Ganrich Advisory", "Eight questions on whether your CBAM emissions data is ready for an EU buyer, with an instant result and the gaps to close first."],
     decisionLabChangelog: ["Decision Lab Changelog | Ganrich Advisory", "See what is live, what changed, and what remains under evaluation in the Ganrich Decision Lab."],
     privateBriefing: ["Private Executive Briefing | Ganrich Advisory", "Move from a published perspective, signal, or tool to a prepared discussion about your specific decision."],
     about: ["About | Ganrich Advisory", "Ganrich Advisory is a strategy and EU-readiness advisory for Turkish manufacturers and exporters, led by Ahmed Furkan Gul in Istanbul."],
     contact: ["Contact | Ganrich Advisory", "Start a senior conversation about the strategic decision on your agenda."],
-    legal: ["Legal | Ganrich Advisory", "Ganrich Advisory website legal information."],
+    legal: ["Legal | Ganrich Advisory", "Who runs the Ganrich Advisory website, terms of use, intellectual property, limits of liability and how AI-assisted content is handled."],
     trust: ["Privacy + Trust | Ganrich Advisory", "Privacy choices, current-site facts, AI transparency, and legal information at Ganrich Advisory."],
   },
   tr: {
-    home: ["Ganrich Advisory | Türk Sanayisi için AB Uyumu ve Strateji", "CBAM, Siber Dayanıklılık Yasası ve diğer AB kurallarıyla karşı karşıya olan Türk üreticiler ve ihracatçılar ile bir sonraki büyüme adımını belirleyen yönetim ekipleri için bağımsız danışmanlık."],
+    home: ["Ganrich Advisory | Türk Sanayisi için AB Uyumu ve Strateji", "SKDM (CBAM), Siber Dayanıklılık Yasası ve diğer AB kurallarıyla karşı karşıya olan Türk üretici ve ihracatçılar için bağımsız strateji ve uyum danışmanlığı."],
     expertise: ["Uzmanlık | Ganrich Advisory", "Strateji, büyüme, işletim modeli, yapay zekâ, organizasyon ve uygulama için karar odaklı uzmanlık."],
     markets: ["Coğrafyalar | Ganrich Advisory", "Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika için pazara özgü kanıtlara dayalı bölgesel bakışlar."],
-    insights: ["Teknik Notlar | Ganrich Advisory", "CBAM, Siber Dayanıklılık Yasası, Makine ve Batarya Tüzükleri, ambalaj, enerji ve uygulamalı yapay zekâ üzerine teknik notlar; strateji makaleleri ve karar notlarıyla birlikte, aranabilir tek bir kütüphanede."],
+    insights: ["Teknik Notlar | Ganrich Advisory", "SKDM (CBAM), Siber Dayanıklılık Yasası, makine, batarya, ambalaj, enerji ve uygulamalı yapay zekâ üzerine teknik notlar ve strateji makaleleri tek kütüphanede."],
     article: ["Uygulamalı Yapay Zekâ Çağında Karar Kalitesi | Ganrich Advisory", "Yapay zekâ değerini kanıt, muhakeme ve kritik kararlar etrafında çerçeveleyen Ganrich bakışı."],
     articleTransformation: ["Dönüşüm Faaliyetinden Değere | Ganrich Advisory", "Dönüşümü ilerletmek için karar ritmini, sahipliği, bağımlılıkları ve değer göstergelerini ele alan uygulamalı bir bakış."],
     articleMarketEntry: ["Pazara Giriş, Taahhütler Dizisidir | Ganrich Advisory", "Pazara giriş kararlarında geri döndürülebilir öğrenmeyi geri döndürülemez yatırımdan ayıran bir çerçeve."],
     decisionLab: ["AB Hazırlık Testleri | Ganrich Advisory", "Verinizin CBAM, Siber Dayanıklılık Yasası ve EUDR için hazır olup olmadığını iki dakikada gösteren testler ile strateji ve büyüme kararları için araçlar."],
-    decisionAtlas: ["Karar Atlası | Ganrich Advisory", "Ganrich Advisory’i gündeminizdeki kritik karar üzerinden keşfedin."],
+    decisionAtlas: ["Karar Atlası | Ganrich Advisory", "Ganrich Advisory’yi gündeminizdeki kritik karar üzerinden keşfedin: durumunuza uyan programları, araçları ve notları görün."],
     decisionFramer: ["Karar Çerçeveleyici | Ganrich Advisory", "Geniş bir yönetici önceliğini yapılandırılmış ve düzenlenebilir bir ön karar özetine dönüştürün."],
     marketCompass: ["Pazara Giriş Pusulası | Ganrich Advisory", "Pazar fırsatını ve kurumsal hazırlığı şeffaf, düzenlenebilir varsayımlarla karşılaştırın."],
     boardBriefBuilder: ["Yönetim Kurulu Brifingi Oluşturucu | Ganrich Advisory", "Çerçevelenmiş bir kararı disiplinli, tek sayfalık yönetim kurulu notuna dönüştürün."],
     aiValueLens: ["Yapay Zekâ Değer Merceği | Ganrich Advisory", "Bir yapay zekâ kullanım alanını değer, tekrarlanabilirlik, hazırlık, benimseme ve risk kontrolü üzerinden değerlendirin."],
-    studio: ["Opportunity Studio | Ganrich Advisory", "Programlarımızın arkasındaki beş çalışma aracı: emisyon kaydı, sipariş onayı, olay müdahalesi, erişilebilirlik iyileştirmesi ve ürün verisi; insan onayı ve özel çalışma alanlarıyla."],
-    regulationCalendar: ["AB Mevzuat Takvimi | Ganrich Advisory", "CBAM, Siber Dayanıklılık Yasası, EUDR, PPWR, Makine ve Batarya Tüzükleri gibi AB kurallarının Türk ihracatçılara uygulandığı tarihler; her biri resmî metne bağlantılı."],
-    newsletter: ["Mevzuat Bülteni | Ganrich Advisory", "CBAM, Siber Dayanıklılık Yasası veya EUDR gibi bir AB kuralı değiştiğinde Türk üretici ve ihracatçılara kısa e-posta notları: ne değişti, kimi etkiliyor ve önce neye bakmalı."],
-    eudrCheck: ["EUDR Hazırlık Testi | Ganrich Advisory", "Menşe, coğrafi konum ve yasallık verinizin AB ithalatçınızın EUDR durum tespiti beyanı için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
-    craCheck: ["CRA Hazırlık Testi | Ganrich Advisory", "Siber Dayanıklılık Yasası kapsamında aktif olarak istismar edilen bir açığı 24 saat içinde bildirip bildiremeyeceğinizi sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
-    cbamCheck: ["CBAM Hazırlık Testi | Ganrich Advisory", "CBAM emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
+    studio: ["Opportunity Studio | Ganrich Advisory", "Programlarımızın arkasındaki beş çalışma aracı: emisyon kaydı, sipariş onayı, olay müdahalesi, erişilebilirlik ve ürün verisi; insan onayıyla."],
+    regulationCalendar: ["AB Mevzuat Takvimi | Ganrich Advisory", "SKDM (CBAM), Siber Dayanıklılık Yasası, EUDR, PPWR, Makine ve Batarya Tüzükleri gibi AB kurallarının Türk ihracatçılara uygulandığı tarihler ve resmî kaynaklar."],
+    newsletter: ["Mevzuat Bülteni | Ganrich Advisory", "SKDM (CBAM), Siber Dayanıklılık Yasası veya EUDR gibi bir AB kuralı değiştiğinde kısa e-posta notları: ne değişti, kimi etkiliyor, önce neye bakmalı."],
+    eudrCheck: ["EUDR Hazırlık Testi | Ganrich Advisory", "Menşe, coğrafi konum ve yasallık verinizin AB ithalatçınızın EUDR durum tespiti beyanına hazır olup olmadığını sekiz soruda görün; sonuç hemen ekranda."],
+    craCheck: ["CRA Hazırlık Testi | Ganrich Advisory", "Siber Dayanıklılık Yasası kapsamında istismar edilen bir açığı 24 saat içinde bildirebilir misiniz? Sekiz soruda görün; sonuç ve boşluklar hemen ekranda."],
+    cbamCheck: ["SKDM (CBAM) Hazırlık Testi | Ganrich Advisory", "SKDM (CBAM) emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
     decisionLabChangelog: ["Karar Laboratuvarı Değişiklik Günlüğü | Ganrich Advisory", "Ganrich Karar Laboratuvarında nelerin yayında, nelerin değiştiğini ve hangi araçların değerlendirmede olduğunu görün."],
     privateBriefing: ["Özel Yönetici Brifingi | Ganrich Advisory", "Yayımlanmış bir perspektif, sinyal veya araçtan kurumunuza özgü karar hakkında hazırlıklı bir görüşmeye geçin."],
     about: ["Hakkımızda | Ganrich Advisory", "Ganrich Advisory, Türk üretici ve ihracatçılar için strateji ve AB uyum danışmanlığıdır; İstanbul'da Ahmed Furkan Gül liderliğinde çalışır."],
-    contact: ["İletişim | Ganrich Advisory", "Gündeminizdeki stratejik karar hakkında kıdemli bir görüşme başlatın."],
-    legal: ["Hukuki Bilgilendirme | Ganrich Advisory", "Ganrich Advisory internet sitesi hukuki bilgileri."],
+    contact: ["İletişim | Ganrich Advisory", "Gündeminizdeki stratejik karar veya AB uyumu konusu hakkında kıdemli bir ön görüşme başlatın; kısa formu doldurmanız yeterli."],
+    legal: ["Hukuki Bilgilendirme | Ganrich Advisory", "Ganrich Advisory internet sitesini kimin işlettiği, kullanım koşulları, fikrî mülkiyet, sorumluluk sınırları ve yapay zekâ destekli içerik hakkında bilgiler."],
     trust: ["Gizlilik + Güven | Ganrich Advisory", "Ganrich Advisory gizlilik tercihleri, mevcut site olguları, yapay zekâ şeffaflığı ve hukuki bilgileri."],
   },
 } as const;
@@ -108,11 +108,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = kind.startsWith("article") ? insightArticles[lang][insightIndex(kind)] : null;
   const category = kind.startsWith("category") ? insightCategoryForKind(lang, kind) : null;
   const trust = trustMeta[lang][kind as keyof typeof trustMeta.en];
-  const [title, description] = article
+  const [title, fullDescription] = article
     ? [withBrand(article.title), article.thesis]
     : category
       ? [`${lang === "en" ? `${category.label} Insights` : `${category.label} üzerine içgörüler`} | Ganrich Advisory`, category.description]
     : (trust ?? advisoryMeta(lang, kind) ?? metaCopy[lang][metaKind] ?? metaCopy[lang].home);
+  const description = metaDescription(fullDescription);
   const socialCard = article
     ? `/og/${lang}/article-${article.slug}.png`
     : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind === "sampleWork" ? kind : metaKind in metaCopy[lang] ? metaKind : "home"}.png`;
