@@ -786,3 +786,9 @@ test("keeps page descriptions between 70 and 160 characters", async () => {
     assert.ok(length >= 70 && length <= 160, `${path}: ${length}`);
   }
 });
+
+test("links the August 2026 CBAM guidance note from the CBAM programme and the library", async () => {
+  assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/insights\/report\/cbam-august-guidance-turkish-exporters-58a4abcd"/);
+  assert.match(await (await render("/tr/cozumler/cbam-veri-hazirligi")).text(), /href="\/tr\/icgoruler\/rapor\/skdm-agustos-rehberleri-turk-ihracatci-1d698fcc"/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /Ağustos rehberleri: SKDM \(CBAM\)/);
+});
