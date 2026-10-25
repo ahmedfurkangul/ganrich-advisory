@@ -61,6 +61,11 @@ const cards = {
     ["solutionBattery", "SOLUTIONS · EU MARKET ACCESS", "Battery Passport Readiness"],
     ["solutionForcedLabour", "SOLUTIONS · EU MARKET ACCESS", "Forced Labour Evidence"],
     ["solutionTrEts", "SOLUTIONS · INDUSTRIAL EFFICIENCY", "Türkiye ETS Readiness"],
+    ["solutionCpr", "SOLUTIONS · EU MARKET ACCESS", "Construction Products Transition"],
+    ["solutionTextiles", "SOLUTIONS · EU MARKET ACCESS", "Textile Ecodesign Readiness"],
+    ["solutionNis2", "SOLUTIONS · EU MARKET ACCESS", "NIS2 Supplier Security"],
+    ["solutionMdr", "SOLUTIONS · EU MARKET ACCESS", "EU MDR Portfolio Transition"],
+    ["solutionSupplierData", "SOLUTIONS · EU MARKET ACCESS", "Supplier Sustainability Data"],
   ],
   tr: [
     ["home", "STRATEJİK DANIŞMANLIK", "Sonraki adım. Sağlam bir kararla."],
@@ -112,6 +117,11 @@ const cards = {
     ["solutionBattery", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Batarya Pasaportu Hazırlığı"],
     ["solutionForcedLabour", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Zorla Çalıştırma Kanıtı"],
     ["solutionTrEts", "ÇÖZÜMLER · SANAYİDE VERİMLİLİK", "Türkiye ETS Hazırlığı"],
+    ["solutionCpr", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Yapı Ürünlerinde Geçiş"],
+    ["solutionTextiles", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Tekstilde Ekotasarım Hazırlığı"],
+    ["solutionNis2", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "NIS2 Tedarikçi Güvenliği"],
+    ["solutionMdr", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "AB MDR Portföy Geçişi"],
+    ["solutionSupplierData", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Tedarikçi Sürdürülebilirlik Verisi"],
   ],
 };
 
