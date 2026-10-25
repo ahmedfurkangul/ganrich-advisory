@@ -1,0 +1,3 @@
+set -e
+npx wrangler r2 object put 'ganrich-prod-docs/pdf-insights/58a4abcd-58a6-47c5-8b60-dd239408e0e0/v1/Ganrich-CBAM-August-Guidance-EN.pdf' --file 'whitepapers/Ganrich-CBAM-August-Guidance-EN.pdf' --content-type application/pdf --content-disposition 'inline; filename="Ganrich-CBAM-August-Guidance-EN.pdf"' --remote
+npx wrangler r2 object put 'ganrich-prod-docs/pdf-insights/1d698fcc-8f2a-4d1c-b07a-9bff252aa405/v1/Ganrich-SKDM-Agustos-Rehberleri-TR.pdf' --file 'whitepapers/Ganrich-SKDM-Agustos-Rehberleri-TR.pdf' --content-type application/pdf --content-disposition 'inline; filename="Ganrich-SKDM-Agustos-Rehberleri-TR.pdf"' --remote
