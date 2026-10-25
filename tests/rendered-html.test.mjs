@@ -772,3 +772,17 @@ test("publishes the EU regulation calendar with official sources and feeds the h
     assert.match(r.source.url, /^https:\/\/(eur-lex|trade\.ec)\.europa\.eu\//, r.id);
   }
 });
+
+test("keeps page descriptions between 70 and 160 characters", async () => {
+  const paths = ["/en", "/tr", "/en/insights", "/tr/icgoruler", "/en/opportunity-studio", "/tr/opportunity-studio",
+    "/en/decision-lab/cra-readiness-check", "/tr/karar-laboratuvari/cra-hazirlik-testi", "/en/decision-lab/eudr-readiness-check",
+    "/tr/karar-laboratuvari/eudr-hazirlik-testi", "/en/insights/regulation-updates", "/tr/icgoruler/mevzuat-bulteni",
+    "/en/insights/eu-regulation-calendar", "/tr/icgoruler/ab-mevzuat-takvimi", "/en/legal", "/tr/yasal-bilgilendirme",
+    "/tr/iletisim", "/en/decision-lab/board-brief-builder", "/tr/karar-laboratuvari/karar-atlasi"];
+  for (const path of paths) {
+    const html = await (await render(path)).text();
+    const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? "";
+    const length = [...description.replace(/&#x27;|&quot;|&amp;|&lt;|&gt;|&#39;/g, "x")].length;
+    assert.ok(length >= 70 && length <= 160, `${path}: ${length}`);
+  }
+});
