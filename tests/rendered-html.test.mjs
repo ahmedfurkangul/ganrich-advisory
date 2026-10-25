@@ -149,9 +149,10 @@ test("keeps core interactions keyboard-operable and marketing JavaScript within 
   assert.match(controls, /event\.key === "Escape"/);
   assert.match(privacy, /mergedTrustParts/);
   assert.match(css, /min-height: 44px/);
-  // 152 KB since the contact-step beacon (PR #14). Gzip output differs by a few hundred bytes between
-  // machines (153354 in the cloud container, 153737 on the Mac), so the budget keeps about 2 KB of headroom.
-  assert.ok(compressedBytes <= 152 * 1024, `Marketing JavaScript is ${compressedBytes} gzip bytes; budget is 155648`);
+  // 157 KB since solutions batch 3 added five programmes to the client-side catalogue (156053 bytes in the
+  // cloud container). Gzip output differs by a few hundred bytes between machines (the Mac measures about
+  // 400 B more), so the budget keeps a little headroom.
+  assert.ok(compressedBytes <= 157 * 1024, `Marketing JavaScript is ${compressedBytes} gzip bytes; budget is ${157 * 1024}`);
 });
 
 test("publishes production-safe bilingual SEO, taxonomy, feeds, and discovery files", async () => {
@@ -438,6 +439,14 @@ test("publishes the solutions programmes in both languages without prices or dur
     ["/en/solutions/forced-labour-supply-chain-evidence", "/tr/cozumler/zorla-calistirma-tedarik-kaniti", "forced-labour-proof-not-policy-a099a490", "zorla-calistirma-politika-degil-kanit-492125d0"],
     ["/en/solutions/turkiye-ets-readiness", "/tr/cozumler/turkiye-ets-hazirligi", "turkiye-ets-monitoring-before-money-d75e501c", "turkiye-ets-paradan-once-olcum-000f6369"],
   ];
+  // Batch 3 (October 2026): five more EU market-access programmes with their own whitepapers.
+  batch2.push(
+    ["/en/solutions/construction-products-transition", "/tr/cozumler/yapi-urunlerinde-gecis", "construction-products-family-by-family-d0de592d", "yapi-urunleri-aile-aile-gecis-69b43613"],
+    ["/en/solutions/textile-ecodesign-readiness", "/tr/cozumler/tekstilde-ekotasarim-hazirligi", "espr-textiles-after-destruction-ban-22b37a1c", "espr-tekstil-imha-yasagindan-sonra-9b18a3aa"],
+    ["/en/solutions/nis2-supplier-security", "/tr/cozumler/nis2-tedarikci-guvenligi", "nis2-supplier-security-evidence-ea4bc3b0", "nis2-tedarikci-guvenligi-kaniti-afa3e63f"],
+    ["/en/solutions/eu-mdr-portfolio-transition", "/tr/cozumler/ab-mdr-portfoy-gecisi", "eu-mdr-two-deadlines-database-5c93bf77", "ab-mdr-iki-son-tarih-9abc973b"],
+    ["/en/solutions/supplier-sustainability-data", "/tr/cozumler/tedarikci-surdurulebilirlik-verisi", "supplier-sustainability-data-after-omnibus-97a36c53", "tedarikci-surdurulebilirlik-verisi-omnibus-82382d59"],
+  );
   for (const [enPath, trPath, enSlug, trSlug] of batch2) {
     for (const [path, slug] of [[enPath, enSlug], [trPath, trSlug]]) {
       const response = await render(path);
@@ -485,7 +494,7 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   const org = graph(home).find(node => node["@id"] === "https://ganrichadvisory.com/#organization");
   assert.equal(org.email, "furkangul@ganrichadvisory.com");
   assert.ok(org.sameAs.includes("https://www.linkedin.com/company/135278307/"));
-  assert.equal(org.hasOfferCatalog.itemListElement.length, 19); // 16 programmes and 3 strategy services
+  assert.equal(org.hasOfferCatalog.itemListElement.length, 24); // 21 programmes and 3 strategy services
   assert.ok(types(hub).includes("ItemList") && types(hub).includes("CollectionPage"));
   assert.ok(types(service).includes("Service"));
   const crumbs = graph(solution).find(node => node["@type"] === "BreadcrumbList").itemListElement.map(item => item.name);
