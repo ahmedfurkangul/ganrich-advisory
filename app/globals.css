@@ -525,6 +525,7 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .solution-note { padding-top: 0; font-size: .9rem; }
 .solution-paper { border-top: 1px solid var(--sand); }
 .solution-paper h3 { max-width: 30ch; }
+.solution-update { margin-top: 1rem; max-width: 60ch; font-size: 0.875rem; }
 .solution-related { background: #eae8df; }
 .solution-studio { border-top: 1px solid var(--sand); }
 .solution-studio h2, .solution-studio h3 { font: 400 clamp(1.5rem,2.4vw,2.2rem)/1.2 var(--serif); max-width: 30ch; margin: 0 0 12px; }

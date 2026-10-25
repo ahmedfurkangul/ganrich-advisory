@@ -772,3 +772,9 @@ test("publishes the EU regulation calendar with official sources and feeds the h
     assert.match(r.source.url, /^https:\/\/(eur-lex|trade\.ec)\.europa\.eu\//, r.id);
   }
 });
+
+test("links the August 2026 CBAM guidance note from the CBAM programme and the library", async () => {
+  assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/insights\/report\/cbam-august-guidance-turkish-exporters-58a4abcd"/);
+  assert.match(await (await render("/tr/cozumler/cbam-veri-hazirligi")).text(), /href="\/tr\/icgoruler\/rapor\/skdm-agustos-rehberleri-turk-ihracatci-1d698fcc"/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /Ağustos rehberleri: SKDM \(CBAM\)/);
+});
