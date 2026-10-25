@@ -179,7 +179,9 @@ export async function logTraffic(request: Request, response: Response, env: Traf
 // "check_start" and "check_complete" follow the readiness checks.
 export const LEAD_EVENTS = new Set(["seen", "cta", "form_start", "form_submit", "check_start", "check_complete"]);
 
-export async function logLeadEvent(request: Request, env: TrafficEnv) {
+// The body must be read before the beacon is answered: a Worker cannot read a request stream after the
+// response has gone, so the caller reads it and passes it in.
+export async function logLeadEvent(request: Request, env: TrafficEnv, body?: string) {
   if (!env?.DB || env.ANALYTICS_LOGGING === "off") return;
   const userAgent = request.headers.get("user-agent") ?? "";
   if (classifyBot(userAgent)) return;
@@ -187,7 +189,7 @@ export async function logLeadEvent(request: Request, env: TrafficEnv) {
   if (origin && origin !== new URL(request.url).origin) return;
   let payload: { event?: unknown; path?: unknown };
   try {
-    payload = JSON.parse((await request.text()).slice(0, 1000));
+    payload = JSON.parse((body ?? await request.text()).slice(0, 1000));
   } catch {
     return;
   }

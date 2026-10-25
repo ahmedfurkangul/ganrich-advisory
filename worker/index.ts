@@ -63,7 +63,8 @@ const worker = {
     }
 
     if (url.pathname === "/api/lead-event" && request.method === "POST") {
-      ctx.waitUntil(logLeadEvent(request, env).catch(() => undefined));
+      const body = await request.text().catch(() => "");
+      ctx.waitUntil(logLeadEvent(request, env, body).catch(error => console.error("lead-event", error)));
       return new Response(null, { status: 204, headers: { "cache-control": "no-store" } });
     }
 

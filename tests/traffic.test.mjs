@@ -147,6 +147,12 @@ test("records contact steps with the page only, and ignores bots, other sites an
   await logLeadEvent(beacon({ event: "check_complete", path: "/tr/karar-laboratuvari/cbam-hazirlik-testi" }), { DB: db });
   await logLeadEvent(beacon({ event: "seen", path: "/en" }, { "user-agent": "Mozilla/5.0 (X11; Linux x86_64) HeadlessChrome/131.0.0.0 Safari/537.36" }), { DB: db });
   assert.deepEqual(inserts().slice(2).map(s => s.params[4]), ["seen", "check_complete"]);
+  // The Worker reads the body before answering the beacon and passes it in; the request stream is
+  // already used up by then, so logLeadEvent must not try to read it again.
+  const answered = beacon({ event: "seen", path: "/tr/cozumler" });
+  const body = await answered.text();
+  await logLeadEvent(answered, { DB: db }, body);
+  assert.equal(inserts().at(-1).params[2], "/tr/cozumler");
 });
 
 test("deletes form, sign-up and download-link data once its published retention period has passed", async () => {
