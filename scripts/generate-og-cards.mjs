@@ -101,7 +101,7 @@ const cards = {
     ["serviceOperating", "UZMANLIK · İŞLETİM MODELİ", "İşletim Modeli İncelemesi"],
     ["serviceAI", "UZMANLIK · UYGULAMALI YAPAY ZEKÂ", "Yapay Zekâ Değer Analizi"],
     ["sampleWork", "ÖRNEK ÇALIŞMALAR", "Temsili karar notları."],
-    ["solutionCbam", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "CBAM Veri Hazırlığı"],
+    ["solutionCbam", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "SKDM (CBAM) Veri Hazırlığı"],
     ["solutionCra", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "CRA Olay Hazırlığı"],
     ["solutionEudr", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "EUDR İzlenebilirlik Dosyası"],
     ["solutionPfas", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "PFAS İkame Programı"],
