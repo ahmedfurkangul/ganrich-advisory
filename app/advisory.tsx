@@ -13,7 +13,7 @@ const ruleTimeline=ruleCalendar.filter(r=>r.home);
 function RuleTimeline({lang}:{lang:Lang}){const en=lang==='en',today=new Date().toISOString().slice(0,10);return <aside className="rule-timeline" aria-label={en?'EU rules timeline':'AB kuralları takvimi'}><p className="kicker">{en?'EU rules your buyers now apply':'Alıcılarınızın artık uyguladığı AB kuralları'}</p><ol>{ruleTimeline.map(r=>{const what=r[lang][0],live=r.date<=today;return <li key={r.id} className={live?'live':'upcoming'}><a href={url(lang,r.key)}><time dateTime={r.date}>{ruleDateLabel(lang,r.date)}</time><span>{what}</span><small>{live?(en?'In force':'Yürürlükte'):(en?'Upcoming':'Yaklaşıyor')}</small></a></li>})}</ol><a className="text-link" href={url(lang,'regulationCalendar')}>{en?'Full calendar with official sources':'Resmî kaynaklarıyla tüm takvim'} ↗</a></aside>}
 // The three readiness checks, linked from the homepage so a visitor can test a rule before asking for a review.
 const readinessChecks:{key:string;en:[string,string];tr:[string,string]}[]=[
- {key:'cbamCheck',en:['CBAM','Is your emissions data ready for your EU buyer?'],tr:['CBAM','Emisyon veriniz AB alıcınız için hazır mı?']},
+ {key:'cbamCheck',en:['CBAM','Is your emissions data ready for your EU buyer?'],tr:['SKDM (CBAM)','Emisyon veriniz AB alıcınız için hazır mı?']},
  {key:'craCheck',en:['Cyber Resilience Act','Could you report an exploited vulnerability within 24 hours?'],tr:['Siber Dayanıklılık Yasası','İstismar edilen bir açığı 24 saat içinde bildirebilir misiniz?']},
  {key:'eudrCheck',en:['EUDR','Would your origin and geolocation data support your importer’s filing?'],tr:['EUDR','Menşe ve coğrafi konum veriniz ithalatçınızın beyanı için yeterli mi?']},
 ];

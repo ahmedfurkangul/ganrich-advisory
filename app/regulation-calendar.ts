@@ -27,7 +27,7 @@ export const ruleCalendar: RuleDate[] = [
     tr: ["Avrupa Erişilebilirlik Yasası e-ticarette uygulanıyor", "AB tüketicilerine satış yapan online mağazalar ve belirli ürünler erişilebilirlik şartlarını karşılamalı. Hizmet sunan mikro işletmeler muaf."],
     source: { act: "Directive (EU) 2019/882", url: "https://eur-lex.europa.eu/eli/dir/2019/882/oj" } },
   { id: "cbam", date: "2026-01-01", key: "solutionCbam", check: "cbamCheck", home: true,
-    rule: { en: "CBAM", tr: "CBAM" },
+    rule: { en: "CBAM", tr: "SKDM (CBAM)" },
     en: ["CBAM definitive regime: importers ask for emissions data", "EU importers of steel, aluminium, cement, fertilisers, hydrogen and electricity declare embedded emissions and buy certificates, so they ask their suppliers for actual emissions data."],
     tr: ["CBAM kesin rejimi: ithalatçılar emisyon verisi istiyor", "Çelik, alüminyum, çimento, gübre, hidrojen ve elektrik ithal eden AB şirketleri gömülü emisyonu beyan edip sertifika alıyor; bu yüzden tedarikçilerinden gerçek emisyon verisi istiyor."],
     source: { act: "Regulation (EU) 2023/956", url: "https://eur-lex.europa.eu/eli/reg/2023/956/oj" } },
