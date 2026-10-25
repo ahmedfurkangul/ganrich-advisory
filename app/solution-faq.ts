@@ -38,7 +38,7 @@ export const solutionFaq: Record<Lang, Record<string, Faq>> = {
   },
   tr: {
     solutionCbam: [
-      ['Yalnızca AB’ye ihracat yapıyorsak CBAM bizi de kapsar mı?', 'Yasal yükümlülükler AB’deki ithalatçıdadır: yetkili CBAM beyancısı olmalı ve ithal ettiği malların gömülü emisyonlarını bildirmelidir. Üretici olarak siz bir beyan vermezsiniz; ancak alıcınız gerçek emisyon değerlerini ancak siz tesis düzeyinde veri sağlarsanız kullanabilir. Veri yoksa ithalatçı varsayılan değerleri kullanmak zorundadır.'],
+      ['Yalnızca AB’ye ihracat yapıyorsak SKDM (CBAM) bizi de kapsar mı?', 'Yasal yükümlülükler AB’deki ithalatçıdadır: yetkili CBAM beyancısı olmalı ve ithal ettiği malların gömülü emisyonlarını bildirmelidir. Üretici olarak siz bir beyan vermezsiniz; ancak alıcınız gerçek emisyon değerlerini ancak siz tesis düzeyinde veri sağlarsanız kullanabilir. Veri yoksa ithalatçı varsayılan değerleri kullanmak zorundadır.'],
       ['Hangi ithalatçılar kapsamda?', 'Kapsamdaki mallardan yılda toplam 50 tonun üzerinde ithalat yapanlar. Bu eşiğin altındaki ithalatçılar muaftır; bu yüzden bazı alıcılar veri isterken bazıları istemez.'],
       ['Gerçek ve varsayılan değer ayrımı neden önemli?', 'Varsayılan değerler ihtiyatlı belirlenir ve bunlara eklenen pay önümüzdeki yıllarda artar. Birçok tesiste doğrulanmış gerçek değerler ithalatçının taşıdığı CBAM maliyetini düşürür; bu maliyet de çoğu zaman fiyat görüşmesine geri döner.'],
       ['Alıcımız bizden hangi verileri ister?', 'Uygulamada: üretim yolu, tesisin doğrudan emisyonları, bazı mallarda elektrikten kaynaklanan dolaylı emisyonlar ve bunları ürün bazına dağıtmak için kullanılan girdi ve çıktılar. Üretim ülkesinde ödenmiş bir karbon fiyatı varsa o da önemlidir.'],

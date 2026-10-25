@@ -304,7 +304,7 @@ function IntelligenceHero({ label, title, intro }: { label: string; title: strin
 export function DecisionLabPage({ lang }: { lang: Lang }) {
   const isEn = lang === "en"; const m = routeMap[lang];
   const checks = [
-    [isEn ? "CBAM Readiness Check" : "CBAM Hazırlık Testi", isEn ? "Is your emissions data ready for your EU buyer, and are actual values worth the effort?" : "Emisyon veriniz AB alıcınız için hazır mı, gerçek değerler emeğe değer mi?", m.cbamCheck],
+    [isEn ? "CBAM Readiness Check" : "SKDM (CBAM) Hazırlık Testi", isEn ? "Is your emissions data ready for your EU buyer, and are actual values worth the effort?" : "Emisyon veriniz AB alıcınız için hazır mı, gerçek değerler emeğe değer mi?", m.cbamCheck],
     [isEn ? "CRA Readiness Check" : "CRA Hazırlık Testi", isEn ? "Could you report an actively exploited vulnerability within 24 hours under the Cyber Resilience Act?" : "Siber Dayanıklılık Yasası kapsamında istismar edilen bir açığı 24 saat içinde bildirebilir misiniz?", m.craCheck],
     [isEn ? "EUDR Readiness Check" : "EUDR Hazırlık Testi", isEn ? "Would your origin, geolocation and legality data let your EU importer file its due-diligence statement?" : "Menşe, coğrafi konum ve yasallık veriniz AB ithalatçınızın durum tespiti beyanı için yeterli mi?", m.eudrCheck],
   ];

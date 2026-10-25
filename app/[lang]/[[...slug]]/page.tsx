@@ -55,7 +55,7 @@ const metaCopy = {
     newsletter: ["Mevzuat Bülteni | Ganrich Advisory", "CBAM, Siber Dayanıklılık Yasası veya EUDR gibi bir AB kuralı değiştiğinde Türk üretici ve ihracatçılara kısa e-posta notları: ne değişti, kimi etkiliyor ve önce neye bakmalı."],
     eudrCheck: ["EUDR Hazırlık Testi | Ganrich Advisory", "Menşe, coğrafi konum ve yasallık verinizin AB ithalatçınızın EUDR durum tespiti beyanı için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
     craCheck: ["CRA Hazırlık Testi | Ganrich Advisory", "Siber Dayanıklılık Yasası kapsamında aktif olarak istismar edilen bir açığı 24 saat içinde bildirip bildiremeyeceğinizi sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
-    cbamCheck: ["CBAM Hazırlık Testi | Ganrich Advisory", "CBAM emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
+    cbamCheck: ["SKDM (CBAM) Hazırlık Testi | Ganrich Advisory", "SKDM (CBAM) emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
     decisionLabChangelog: ["Karar Laboratuvarı Değişiklik Günlüğü | Ganrich Advisory", "Ganrich Karar Laboratuvarında nelerin yayında, nelerin değiştiğini ve hangi araçların değerlendirmede olduğunu görün."],
     privateBriefing: ["Özel Yönetici Brifingi | Ganrich Advisory", "Yayımlanmış bir perspektif, sinyal veya araçtan kurumunuza özgü karar hakkında hazırlıklı bir görüşmeye geçin."],
     about: ["Hakkımızda | Ganrich Advisory", "Ganrich Advisory, Türk üretici ve ihracatçılar için strateji ve AB uyum danışmanlığıdır; İstanbul'da Ahmed Furkan Gül liderliğinde çalışır."],
