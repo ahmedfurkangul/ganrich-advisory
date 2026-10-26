@@ -792,3 +792,8 @@ test("links the August 2026 CBAM guidance note from the CBAM programme and the l
   assert.match(await (await render("/tr/cozumler/cbam-veri-hazirligi")).text(), /href="\/tr\/icgoruler\/rapor\/skdm-agustos-rehberleri-turk-ihracatci-1d698fcc"/);
   assert.match(await (await render("/tr/icgoruler")).text(), /Ağustos rehberleri: SKDM \(CBAM\)/);
 });
+
+test("states the Türkiye ETS pilot procedures and the January 2027 monitoring plan deadline", async () => {
+  assert.match(await (await render("/tr/cozumler/turkiye-ets-hazirligi")).text(), /27 Ocak 2027/);
+  assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /27 January 2027/);
+});
