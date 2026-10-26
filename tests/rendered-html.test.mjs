@@ -800,3 +800,8 @@ test("answers the practical SKDM questions on the CBAM programme page and in FAQ
   for (const q of ["SKDM (CBAM) nedir?", "Hangi mallar ve GTİP kodları kapsamda?", "SKDM sertifikası ne kadar, ne zaman ödenir?", "SKDM iletişim şablonu nedir?"]) assert.ok(questions.includes(q), q);
   assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /What is CBAM, and what is SKDM\?/);
 });
+
+test("states the Türkiye ETS pilot procedures and the January 2027 monitoring plan deadline", async () => {
+  assert.match(await (await render("/tr/cozumler/turkiye-ets-hazirligi")).text(), /27 Ocak 2027/);
+  assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /27 January 2027/);
+});
