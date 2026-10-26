@@ -805,3 +805,9 @@ test("states the Türkiye ETS pilot procedures and the January 2027 monitoring p
   assert.match(await (await render("/tr/cozumler/turkiye-ets-hazirligi")).text(), /27 Ocak 2027/);
   assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /27 January 2027/);
 });
+
+test("links the textile product passport note from its programme and the library", async () => {
+  assert.match(await (await render("/en/solutions/textile-ecodesign-readiness")).text(), /href="\/en\/insights\/report\/textile-product-passport-turkish-suppliers-eb264118"/);
+  assert.match(await (await render("/tr/cozumler/tekstilde-ekotasarim-hazirligi")).text(), /href="\/tr\/icgoruler\/rapor\/tekstil-urun-pasaportu-turk-tedarikci-66a3e53c"/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /Tekstilde dijital ürün pasaportu/);
+});
