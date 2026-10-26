@@ -821,3 +821,9 @@ test("links the EUDR checklist note and states the timber date for micro and sma
   assert.match(tr, /AB Kereste Tüzüğü kapsamındaki ahşap ürünlerinin/);
   assert.match(await (await render("/tr/icgoruler")).text(), /Türk ahşap ve mobilya ihracatçıları için kontrol listesi/);
 });
+
+test("links the textile product passport note from its programme and the library", async () => {
+  assert.match(await (await render("/en/solutions/textile-ecodesign-readiness")).text(), /href="\/en\/insights\/report\/textile-product-passport-turkish-suppliers-eb264118"/);
+  assert.match(await (await render("/tr/cozumler/tekstilde-ekotasarim-hazirligi")).text(), /href="\/tr\/icgoruler\/rapor\/tekstil-urun-pasaportu-turk-tedarikci-66a3e53c"/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /Tekstilde dijital ürün pasaportu/);
+});
