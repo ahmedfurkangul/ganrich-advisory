@@ -793,6 +793,14 @@ test("links the August 2026 CBAM guidance note from the CBAM programme and the l
   assert.match(await (await render("/tr/icgoruler")).text(), /Ağustos rehberleri: SKDM \(CBAM\)/);
 });
 
+test("answers the practical SKDM questions on the CBAM programme page and in FAQPage data", async () => {
+  const tr = await (await render("/tr/cozumler/cbam-veri-hazirligi")).text();
+  const faq = JSON.parse(tr.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1].replace(/\\u003c/g, "<"))["@graph"].find(node => node["@type"] === "FAQPage");
+  const questions = faq.mainEntity.map(item => item.name);
+  for (const q of ["SKDM (CBAM) nedir?", "Hangi mallar ve GTİP kodları kapsamda?", "SKDM sertifikası ne kadar, ne zaman ödenir?", "SKDM iletişim şablonu nedir?"]) assert.ok(questions.includes(q), q);
+  assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /What is CBAM, and what is SKDM\?/);
+});
+
 test("states the Türkiye ETS pilot procedures and the January 2027 monitoring plan deadline", async () => {
   assert.match(await (await render("/tr/cozumler/turkiye-ets-hazirligi")).text(), /27 Ocak 2027/);
   assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /27 January 2027/);
