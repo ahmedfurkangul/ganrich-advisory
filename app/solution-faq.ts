@@ -27,7 +27,7 @@ export const solutionFaq: Record<Lang, Record<string, Faq>> = {
       ['Do products already on the market count?', 'Yes. The reporting obligations apply to in-scope products already on the EU market, not only to new ones.'],
     ],
     solutionEudr: [
-      ['When does EUDR apply?', 'It is scheduled to apply from 30 December 2026 for large and medium operators and from 30 June 2027 for micro and small ones. The dates have moved before, so we confirm them at the start of each engagement.'],
+      ['When does EUDR apply?', 'From 30 December 2026 for large and medium operators, and for micro and small operators of timber products already covered by the EU Timber Regulation. Other micro and small operators follow on 30 June 2027. The Commission’s May 2026 review confirmed there will be no further postponement.'],
       ['Who files the due-diligence statement?', 'The operator who places the product on the EU market, usually your EU importer. As an exporter outside the EU you do not file one, but the importer cannot file without the information you supply.'],
       ['What information will our importer ask for?', 'The country of production, the geolocation of every plot of land where the wood was harvested, quantities, supplier details and evidence that harvesting was legal under the rules of the country of production.'],
       ['How precise does geolocation need to be?', 'For plots larger than four hectares, a polygon of the plot boundary is required. Smaller plots can be described with a single point.'],
@@ -60,7 +60,7 @@ export const solutionFaq: Record<Lang, Record<string, Faq>> = {
       ['Piyasadaki mevcut ürünler de sayılır mı?', 'Evet. Bildirim yükümlülükleri yalnızca yeni ürünlere değil, AB pazarında zaten bulunan kapsamdaki ürünlere de uygulanır.'],
     ],
     solutionEudr: [
-      ['EUDR ne zaman uygulanacak?', 'Büyük ve orta işletmeler için 30 Aralık 2026’dan, mikro ve küçük işletmeler için 30 Haziran 2027’den itibaren uygulanması planlanıyor. Tarihler daha önce de değişti; bu yüzden her çalışmanın başında yeniden teyit ediyoruz.'],
+      ['EUDR ne zaman uygulanacak?', 'Büyük ve orta işletmeciler ile AB Kereste Tüzüğü kapsamındaki ahşap ürünlerinin mikro ve küçük işletmecileri için 30 Aralık 2026’dan itibaren. Diğer mikro ve küçük işletmeciler 30 Haziran 2027’de takip ediyor. Komisyon’un Mayıs 2026 incelemesi yeni bir erteleme olmayacağını teyit etti.'],
       ['Durum tespiti beyanını kim verir?', 'Ürünü AB pazarına süren işletme, yani genellikle AB’deki ithalatçınız. AB dışındaki ihracatçı olarak siz beyan vermezsiniz; ancak ithalatçı sizin sağladığınız bilgi olmadan beyan veremez.'],
       ['İthalatçımız bizden hangi bilgileri isteyecek?', 'Üretim ülkesi, kerestenin kesildiği her arazi parçasının coğrafi konumu, miktarlar, tedarikçi bilgileri ve kesimin üretim ülkesinin kurallarına göre yasal olduğunu gösteren kanıtlar.'],
       ['Coğrafi konum ne kadar hassas olmalı?', 'Dört hektardan büyük arazilerde arazi sınırını gösteren bir poligon gerekir. Daha küçük araziler tek bir noktayla tanımlanabilir.'],

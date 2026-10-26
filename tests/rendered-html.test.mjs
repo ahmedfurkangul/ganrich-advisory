@@ -806,6 +806,22 @@ test("states the Türkiye ETS pilot procedures and the January 2027 monitoring p
   assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /27 January 2027/);
 });
 
+test("links the Türkiye ETS pilot note from its programme and the library", async () => {
+  assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /href="\/en\/insights\/report\/turkiye-ets-pilot-monitoring-plan-8fa4535e"/);
+  assert.match(await (await render("/tr/cozumler/turkiye-ets-hazirligi")).text(), /href="\/tr\/icgoruler\/rapor\/turkiye-ets-pilotu-izleme-plani-98334c09"/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /Türkiye ETS pilotu: Ocak 2027/);
+});
+
+test("links the EUDR checklist note and states the timber date for micro and small operators", async () => {
+  const en = await (await render("/en/solutions/eudr-traceability")).text();
+  assert.match(en, /href="\/en\/insights\/report\/eudr-checklist-turkish-wood-furniture-204bc82e"/);
+  assert.match(en, /timber products already covered by the EU Timber Regulation/);
+  const tr = await (await render("/tr/cozumler/eudr-izlenebilirlik")).text();
+  assert.match(tr, /href="\/tr\/icgoruler\/rapor\/eudr-kontrol-listesi-ahsap-mobilya-a607fc4b"/);
+  assert.match(tr, /AB Kereste Tüzüğü kapsamındaki ahşap ürünlerinin/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /Türk ahşap ve mobilya ihracatçıları için kontrol listesi/);
+});
+
 test("links the textile product passport note from its programme and the library", async () => {
   assert.match(await (await render("/en/solutions/textile-ecodesign-readiness")).text(), /href="\/en\/insights\/report\/textile-product-passport-turkish-suppliers-eb264118"/);
   assert.match(await (await render("/tr/cozumler/tekstilde-ekotasarim-hazirligi")).text(), /href="\/tr\/icgoruler\/rapor\/tekstil-urun-pasaportu-turk-tedarikci-66a3e53c"/);
