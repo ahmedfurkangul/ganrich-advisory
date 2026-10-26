@@ -2,13 +2,17 @@ import type { Lang } from './content';
 
 // Direct answers to the questions buyers ask most about the four flagship programmes.
 // Shown on the programme page and added to its FAQPage structured data. Keep dates in line with solutions-content.ts.
-export const FAQ_CHECKED = { en: '24 October 2026', tr: '24 Ekim 2026' } as const;
+export const FAQ_CHECKED = { en: '26 October 2026', tr: '26 Ekim 2026' } as const;
 
 type Faq = [question: string, answer: string][];
 
 export const solutionFaq: Record<Lang, Record<string, Faq>> = {
   en: {
     solutionCbam: [
+      ['What is CBAM, and what is SKDM?', 'CBAM is the EU’s Carbon Border Adjustment Mechanism. It puts a carbon price on the emissions embedded in certain goods imported into the EU, so that imports carry a cost comparable to EU production under the EU emissions trading system. In Türkiye the same mechanism is called SKDM (Sınırda Karbon Düzenleme Mekanizması). Reporting ran from October 2023 to the end of 2025; the paying period began on 1 January 2026.'],
+      ['Which goods and customs codes are covered?', 'Annex I of the CBAM Regulation lists the covered goods by CN code: cement, iron and steel, aluminium, fertilisers, hydrogen and electricity, including some downstream products such as certain steel and aluminium articles. Türkiye’s GTİP codes follow the EU Combined Nomenclature at eight-digit level, so the check is made product by product against Annex I.'],
+      ['How much does a CBAM certificate cost, and when is it paid?', 'For 2026 imports the price is the quarterly average of EU ETS auction prices, which the Commission publishes after each quarter on its CBAM pages. From 2027 the price is a weekly average. Certificates are bought from 1 February 2027, and those for 2026 imports are surrendered with the annual declaration by 30 September 2027.'],
+      ['What is the CBAM communication template?', 'A spreadsheet published by the Commission that installation operators can use to send embedded emissions data to their EU importers in a common format. Its use is voluntary, but most importers ask for it or for the same data. For actual values in a 2026 declaration, the data behind it must also be verified.'],
       ['Does CBAM apply to us if we only export to the EU?', 'The legal obligations sit with the EU importer, who must be an authorised CBAM declarant and report the embedded emissions of the goods it brings in. As the producer you file nothing yourself, but your buyer can only use actual emissions values if you supply installation-level data. Without it, the importer must use default values.'],
       ['Which importers are covered?', 'Importers bringing in more than 50 tonnes a year of covered goods in total. Below that threshold an importer is exempt, which is why some buyers ask for data and others do not.'],
       ['Why does actual versus default matter?', 'Default values are set conservatively, and the mark-up added to them rises over the coming years. For many installations, verified actual values lower the CBAM cost the importer carries, and that cost often comes back into the price conversation.'],
@@ -38,6 +42,10 @@ export const solutionFaq: Record<Lang, Record<string, Faq>> = {
   },
   tr: {
     solutionCbam: [
+      ['SKDM (CBAM) nedir?', 'Sınırda Karbon Düzenleme Mekanizması (SKDM), AB’deki adıyla CBAM, AB’ye ithal edilen belirli mallara gömülü emisyonlara karbon fiyatı uygular. Amaç, ithal malların AB emisyon ticaret sistemi altındaki AB üretimiyle karşılaştırılabilir bir maliyet taşımasıdır. Ekim 2023’ten 2025 sonuna kadar yalnızca raporlama yapıldı; ödemeli dönem 1 Ocak 2026’da başladı.'],
+      ['Hangi mallar ve GTİP kodları kapsamda?', 'SKDM Tüzüğü’nün I. Eki kapsamdaki malları KN koduna göre listeler: çimento, demir-çelik, alüminyum, gübre, hidrojen ve elektrik; bazı çelik ve alüminyum mamulleri gibi ileri ürünler de dahil. Türkiye’nin GTİP kodları sekiz haneli düzeyde AB Kombine Nomenklatürü’nü izler; bu yüzden kontrol ürün bazında I. Ek’e göre yapılır.'],
+      ['SKDM sertifikası ne kadar, ne zaman ödenir?', '2026 ithalatı için fiyat, AB ETS ihale fiyatlarının çeyreklik ortalamasıdır; Komisyon bu fiyatı her çeyrekten sonra SKDM sayfalarında yayımlar. 2027’den itibaren haftalık ortalama uygulanır. Sertifikalar 1 Şubat 2027’den itibaren satın alınır; 2026 ithalatına ait olanlar 30 Eylül 2027’ye kadar yıllık beyanla teslim edilir.'],
+      ['SKDM iletişim şablonu nedir?', 'Komisyon’un yayımladığı ve tesis işletmecilerinin gömülü emisyon verisini AB’deki ithalatçılarına ortak bir formatta göndermek için kullanabildiği bir tablo. Kullanımı gönüllüdür, ancak çoğu ithalatçı bu şablonu ya da aynı verileri ister. 2026 beyanında gerçek değer kullanılacaksa şablonun arkasındaki verinin doğrulanmış olması da gerekir.'],
       ['Yalnızca AB’ye ihracat yapıyorsak SKDM (CBAM) bizi de kapsar mı?', 'Yasal yükümlülükler AB’deki ithalatçıdadır: yetkili CBAM beyancısı olmalı ve ithal ettiği malların gömülü emisyonlarını bildirmelidir. Üretici olarak siz bir beyan vermezsiniz; ancak alıcınız gerçek emisyon değerlerini ancak siz tesis düzeyinde veri sağlarsanız kullanabilir. Veri yoksa ithalatçı varsayılan değerleri kullanmak zorundadır.'],
       ['Hangi ithalatçılar kapsamda?', 'Kapsamdaki mallardan yılda toplam 50 tonun üzerinde ithalat yapanlar. Bu eşiğin altındaki ithalatçılar muaftır; bu yüzden bazı alıcılar veri isterken bazıları istemez.'],
       ['Gerçek ve varsayılan değer ayrımı neden önemli?', 'Varsayılan değerler ihtiyatlı belirlenir ve bunlara eklenen pay önümüzdeki yıllarda artar. Birçok tesiste doğrulanmış gerçek değerler ithalatçının taşıdığı CBAM maliyetini düşürür; bu maliyet de çoğu zaman fiyat görüşmesine geri döner.'],
