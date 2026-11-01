@@ -6,6 +6,7 @@ import { getEditor, requireEditor } from "./editor-auth";
 import { PdfInsightReport, PdfInsightStudio } from "./pdf-insights";
 import { SiteLayout } from "./site";
 import { absoluteUrl, metaDescription, SITE_NAME, SITE_ORIGIN } from "./site-config";
+import { reportSeo } from "./report-seo";
 import { reportTranslation } from "./solutions-content";
 
 export async function PdfStudioRoute({ lang }: { lang: Lang }) {
@@ -27,12 +28,13 @@ export async function pdfReportMetadata(lang: Lang, slug: string): Promise<Metad
   const path = reportPath(lang, insight.slug);
   const pairSlug = reportTranslation(lang, insight.slug);
   const pair = pairSlug ? reportPath(lang === "en" ? "tr" : "en", pairSlug) : undefined;
-  const description = metaDescription(insight.shortSummary || insight.executiveThesis);
+  const seo = reportSeo[insight.slug];
+  const description = seo ? seo[1] : metaDescription(insight.shortSummary || insight.executiveThesis);
   const socialCard = `/og/${lang}/insights.png`;
   const published = insight.status === "published" && insight.gatingModel !== "private";
   return {
     metadataBase: new URL(SITE_ORIGIN),
-    title: `${insight.title} | Ganrich Advisory`,
+    title: seo ? `${seo[0]} | Ganrich` : `${insight.title} | Ganrich Advisory`,
     description,
     alternates: {
       canonical: path,
