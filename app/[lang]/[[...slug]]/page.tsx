@@ -10,7 +10,7 @@ type Props = { params: Promise<{ lang: string; slug?: string[] }> };
 
 const metaCopy = {
   en: {
-    home: ["Ganrich Advisory | EU Readiness and Strategy for Turkish Industry", "Independent advisory for Turkish manufacturers and exporters facing CBAM, the Cyber Resilience Act and other EU rules, and deciding where to grow next."],
+    home: ["CBAM, CRA & EU Readiness for Turkish Industry | Ganrich", "Independent advisory for Turkish manufacturers and exporters facing CBAM, the Cyber Resilience Act and other EU rules, and deciding where to grow next."],
     expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
     markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
     insights: ["Technical Notes | Ganrich Advisory", "Whitepapers on CBAM, the Cyber Resilience Act, machinery, batteries, packaging, energy and applied AI, plus strategy articles, in one searchable library."],
@@ -32,7 +32,7 @@ const metaCopy = {
     decisionLabChangelog: ["Decision Lab Changelog | Ganrich Advisory", "See what is live, what changed, and what remains under evaluation in the Ganrich Decision Lab."],
     privateBriefing: ["Private Executive Briefing | Ganrich Advisory", "Move from a published perspective, signal, or tool to a prepared discussion about your specific decision."],
     about: ["About | Ganrich Advisory", "Ganrich Advisory is a strategy and EU-readiness advisory for Turkish manufacturers and exporters, led by Ahmed Furkan Gul in Istanbul."],
-    contact: ["Contact | Ganrich Advisory", "Start a senior conversation about the strategic decision on your agenda."],
+    contact: ["Contact | Ganrich Advisory", "Contact Ganrich Advisory in Istanbul about CBAM and EU readiness, market entry or an AI decision: a founder-led first conversation, started with a short form."],
     legal: ["Legal | Ganrich Advisory", "Who runs the Ganrich Advisory website, terms of use, intellectual property, limits of liability and how AI-assisted content is handled."],
     trust: ["Privacy + Trust | Ganrich Advisory", "Privacy choices, current-site facts, AI transparency, and legal information at Ganrich Advisory."],
   },
@@ -50,8 +50,8 @@ const metaCopy = {
     marketCompass: ["Pazara Giriş Pusulası | Ganrich Advisory", "Pazar fırsatını ve kurumsal hazırlığı şeffaf, düzenlenebilir varsayımlarla karşılaştırın."],
     boardBriefBuilder: ["Yönetim Kurulu Brifingi Oluşturucu | Ganrich Advisory", "Çerçevelenmiş bir kararı disiplinli, tek sayfalık yönetim kurulu notuna dönüştürün."],
     aiValueLens: ["Yapay Zekâ Değer Merceği | Ganrich Advisory", "Bir yapay zekâ kullanım alanını değer, tekrarlanabilirlik, hazırlık, benimseme ve risk kontrolü üzerinden değerlendirin."],
-    studio: ["Opportunity Studio | Ganrich Advisory", "Programlarımızın arkasındaki beş çalışma aracı: emisyon kaydı, sipariş onayı, olay müdahalesi, erişilebilirlik ve ürün verisi; insan onayıyla."],
-    regulationCalendar: ["AB Mevzuat Takvimi | Ganrich Advisory", "SKDM (CBAM), Siber Dayanıklılık Yasası, EUDR, PPWR, Makine ve Batarya Tüzükleri gibi AB kurallarının Türk ihracatçılara uygulandığı tarihler ve resmî kaynaklar."],
+    studio: ["Opportunity Studio: Beş Çalışma Aracı | Ganrich Advisory", "Programlarımızın arkasındaki beş çalışma aracı: emisyon kaydı, sipariş onayı, olay müdahalesi, erişilebilirlik ve ürün verisi; insan onayıyla."],
+    regulationCalendar: ["AB Mevzuat Takvimi | Ganrich Advisory", "AB Yeşil Mutabakat ve dijital kurallarının Türk ihracatçılara uygulandığı tarihler: SKDM, CRA, EUDR, PPWR, Makine ve Batarya Tüzükleri; resmî kaynaklarla."],
     newsletter: ["Mevzuat Bülteni | Ganrich Advisory", "SKDM (CBAM), Siber Dayanıklılık Yasası veya EUDR gibi bir AB kuralı değiştiğinde kısa e-posta notları: ne değişti, kimi etkiliyor, önce neye bakmalı."],
     eudrCheck: ["EUDR Hazırlık Testi | Ganrich Advisory", "Menşe, coğrafi konum ve yasallık verinizin AB ithalatçınızın EUDR durum tespiti beyanına hazır olup olmadığını sekiz soruda görün; sonuç hemen ekranda."],
     craCheck: ["CRA Hazırlık Testi | Ganrich Advisory", "Siber Dayanıklılık Yasası kapsamında istismar edilen bir açığı 24 saat içinde bildirebilir misiniz? Sekiz soruda görün; sonuç ve boşluklar hemen ekranda."],
