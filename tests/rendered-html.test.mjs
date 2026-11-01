@@ -844,3 +844,13 @@ test("gives every programme report a short search title and a full description",
   }
   assert.match(reportSource, /seo \? `\$\{seo\[0\]\} \| Ganrich`/);
 });
+
+test("points x-default at each page's own English URL and pairs EN/TR reports", async () => {
+  const tr = await (await render("/tr/cozumler/turkiye-ets-hazirligi")).text();
+  assert.match(tr, /hrefLang="x-default" href="https:\/\/ganrichadvisory\.com\/en\/solutions\/turkiye-ets-readiness"/);
+  const en = await (await render("/en/solutions")).text();
+  assert.match(en, /hrefLang="x-default" href="https:\/\/ganrichadvisory\.com\/en\/solutions"/);
+  const reportSource = await readFile(new URL("../app/pdf-insight-pages.tsx", import.meta.url), "utf8");
+  assert.match(reportSource, /reportTranslation\(lang, insight\.slug\)/);
+  assert.match(reportSource, /"x-default": lang === "en" \? path : pair/);
+});
