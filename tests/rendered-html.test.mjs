@@ -23,7 +23,7 @@ test("server-renders the English consultancy experience", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Ganrich Advisory \| EU Readiness and Strategy for Turkish Industry<\/title>/i);
+  assert.match(html, /<title>CBAM, CRA &amp; EU Readiness for Turkish Industry \| Ganrich<\/title>/i);
   assert.match(html, /A clear next step on EU rules and growth decisions\./);
   assert.match(html, /Turkish industry and exporters/);
   assert.match(html, /CBAM definitive regime/);
@@ -601,7 +601,7 @@ test("publishes the Opportunity Studio showcase in both languages without linkin
     const response = await render(path);
     assert.equal(response.status, 200, path);
     const html = await response.text();
-    assert.match(html, /Opportunity Studio \| Ganrich Advisory/);
+    assert.match(html, /Opportunity Studio(: Beş Çalışma Aracı)? \| Ganrich Advisory/);
     assert.match(html, products);
     for (const name of ["Carbon Ledger", "Order Pilot", "Signal Room", "Access Studio", "Border Atlas"]) assert.match(html, new RegExp(name));
     assert.match(html, /\?service=studio/);
@@ -826,6 +826,16 @@ test("links the textile product passport note from its programme and the library
   assert.match(await (await render("/en/solutions/textile-ecodesign-readiness")).text(), /href="\/en\/insights\/report\/textile-product-passport-turkish-suppliers-eb264118"/);
   assert.match(await (await render("/tr/cozumler/tekstilde-ekotasarim-hazirligi")).text(), /href="\/tr\/icgoruler\/rapor\/tekstil-urun-pasaportu-turk-tedarikci-66a3e53c"/);
   assert.match(await (await render("/tr/icgoruler")).text(), /Tekstilde dijital ürün pasaportu/);
+});
+
+test("uses the Turkish search terms and fuller descriptions on key pages", async () => {
+  const ets = await (await render("/tr/cozumler/turkiye-ets-hazirligi")).text();
+  assert.match(ets, /<title>Türkiye ETS \(TR ETS\) Pilot Hazırlığı \| Ganrich Advisory<\/title>/);
+  assert.match(ets, /name="description" content="TR ETS pilot döneminde/);
+  assert.match(await (await render("/tr/icgoruler/ab-mevzuat-takvimi")).text(), /AB Yeşil Mutabakat düzenlemeleri/);
+  assert.match(await (await render("/tr")).text(), /AB Yeşil Mutabakat ve ürün kuralları/);
+  assert.match(await (await render("/tr/cozumler/tekstilde-ekotasarim-hazirligi")).text(), /name="description" content="ESPR ve Dijital Ürün Pasaportu/);
+  assert.match(await (await render("/tr/cozumler/zorla-calistirma-tedarik-kaniti")).text(), /<title>Zorla Çalıştırma Tüzüğü: Tedarik Zinciri Kanıtı \| Ganrich<\/title>/);
 });
 
 test("gives every programme report a short search title and a full description", async () => {

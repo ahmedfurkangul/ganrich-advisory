@@ -21,7 +21,7 @@ const copy = {
   tr: {
     label: 'AB mevzuat takvimi',
     title: 'AB alıcılarınızın çalıştığı kural tarihleri.',
-    intro: 'Türk üretici ve ihracatçıların AB’ye sattığı ürünlere AB kurallarının uygulanmaya başladığı tarihler; her biri resmî metnin bağlantısıyla. Alıcınız veriyi bu tarihten çok önce isteyebilir.',
+    intro: 'SKDM, EUDR ve ESPR gibi AB Yeşil Mutabakat düzenlemeleri ile siber güvenlik ve ürün kurallarının Türk üretici ve ihracatçıların AB’ye sattığı ürünlere uygulanmaya başladığı tarihler; her biri resmî metnin bağlantısıyla. Alıcınız veriyi bu tarihten çok önce isteyebilir.',
     checked: 'Tarihler resmî metinlerle en son şu tarihte karşılaştırıldı:',
     disclaimer: 'Bu takvim planlama için bir özettir, hukuki görüş değildir. Kapsam, istisnalar ve sonraki değişiklikler resmî metindedir.',
     upcoming: 'Yaklaşanlar', inForce: 'Uygulanmakta olanlar',
