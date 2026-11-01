@@ -827,3 +827,20 @@ test("links the textile product passport note from its programme and the library
   assert.match(await (await render("/tr/cozumler/tekstilde-ekotasarim-hazirligi")).text(), /href="\/tr\/icgoruler\/rapor\/tekstil-urun-pasaportu-turk-tedarikci-66a3e53c"/);
   assert.match(await (await render("/tr/icgoruler")).text(), /Tekstilde dijital ürün pasaportu/);
 });
+
+test("gives every programme report a short search title and a full description", async () => {
+  const [seoSource, reportSource, solutionsSource] = await Promise.all([
+    readFile(new URL("../app/report-seo.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/pdf-insight-pages.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/solutions-content.ts", import.meta.url), "utf8"),
+  ]);
+  const entries = [...seoSource.matchAll(/'([a-z0-9-]+)': \['((?:[^'\\]|\\.)*)', '((?:[^'\\]|\\.)*)'\]/g)];
+  const slugs = [...solutionsSource.matchAll(/(?:paper|update): \{ title: '(?:[^'\\]|\\.)*', slug: '([^']+)'/g)].map(m => m[1]);
+  for (const slug of slugs) assert.ok(entries.some(e => e[1] === slug), `missing SEO entry for ${slug}`);
+  for (const [, slug, title, description] of entries) {
+    assert.ok([...`${title} | Ganrich`].length <= 60, `${slug} title`);
+    const length = [...description].length;
+    assert.ok(length >= 150 && length <= 160, `${slug} description ${length}`);
+  }
+  assert.match(reportSource, /seo \? `\$\{seo\[0\]\} \| Ganrich`/);
+});
