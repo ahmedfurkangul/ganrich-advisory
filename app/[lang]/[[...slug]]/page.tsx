@@ -130,7 +130,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     publisher: SITE_NAME,
     alternates: {
       canonical: current,
-      languages: { en: lang === "en" ? current : translated, tr: lang === "tr" ? current : translated, "x-default": "/en" },
+      languages: { en: lang === "en" ? current : translated, tr: lang === "tr" ? current : translated, "x-default": lang === "en" ? current : translated },
       types: { "application/rss+xml": `/${lang}/feed.xml` },
     },
     // Category pages only list a few notes each; the insights hub is the page to index.

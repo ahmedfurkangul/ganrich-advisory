@@ -6,11 +6,15 @@ import { getEditor, requireEditor } from "./editor-auth";
 import { PdfInsightReport, PdfInsightStudio } from "./pdf-insights";
 import { SiteLayout } from "./site";
 import { absoluteUrl, metaDescription, SITE_NAME, SITE_ORIGIN } from "./site-config";
+import { reportSeo } from "./report-seo";
+import { reportTranslation } from "./solutions-content";
 
 export async function PdfStudioRoute({ lang }: { lang: Lang }) {
   const user = await requireEditor();
   return <SiteLayout lang={lang} route={routeMap[lang].insights}><PdfInsightStudio lang={lang} editor={user.displayName}/></SiteLayout>;
 }
+
+const reportPath = (lang: Lang, slug: string) => lang === "en" ? `/en/insights/report/${slug}` : `/tr/icgoruler/rapor/${slug}`;
 
 export async function pdfReportMetadata(lang: Lang, slug: string): Promise<Metadata> {
   const insight = await findPdfInsight(slug, lang).catch(() => null);
@@ -21,16 +25,20 @@ export async function pdfReportMetadata(lang: Lang, slug: string): Promise<Metad
       robots: { index: false, follow: false },
     };
   }
-  const path = lang === "en" ? `/en/insights/report/${insight.slug}` : `/tr/icgoruler/rapor/${insight.slug}`;
-  const description = metaDescription(insight.shortSummary || insight.executiveThesis);
+  const path = reportPath(lang, insight.slug);
+  const pairSlug = reportTranslation(lang, insight.slug);
+  const pair = pairSlug ? reportPath(lang === "en" ? "tr" : "en", pairSlug) : undefined;
+  const seo = reportSeo[insight.slug];
+  const description = seo ? seo[1] : metaDescription(insight.shortSummary || insight.executiveThesis);
   const socialCard = `/og/${lang}/insights.png`;
   const published = insight.status === "published" && insight.gatingModel !== "private";
   return {
     metadataBase: new URL(SITE_ORIGIN),
-    title: `${insight.title} | Ganrich Advisory`,
+    title: seo ? `${seo[0]} | Ganrich` : `${insight.title} | Ganrich Advisory`,
     description,
     alternates: {
       canonical: path,
+      ...(pair ? { languages: { en: lang === "en" ? path : pair, tr: lang === "tr" ? path : pair, "x-default": lang === "en" ? path : pair } } : {}),
       types: { "application/rss+xml": `/${lang}/feed.xml` },
     },
     robots: published ? { index: true, follow: true } : { index: false, follow: false, noarchive: true },

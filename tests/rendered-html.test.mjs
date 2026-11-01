@@ -837,3 +837,30 @@ test("uses the Turkish search terms and fuller descriptions on key pages", async
   assert.match(await (await render("/tr/cozumler/tekstilde-ekotasarim-hazirligi")).text(), /name="description" content="ESPR ve Dijital Ürün Pasaportu/);
   assert.match(await (await render("/tr/cozumler/zorla-calistirma-tedarik-kaniti")).text(), /<title>Zorla Çalıştırma Tüzüğü: Tedarik Zinciri Kanıtı \| Ganrich<\/title>/);
 });
+
+test("gives every programme report a short search title and a full description", async () => {
+  const [seoSource, reportSource, solutionsSource] = await Promise.all([
+    readFile(new URL("../app/report-seo.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/pdf-insight-pages.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/solutions-content.ts", import.meta.url), "utf8"),
+  ]);
+  const entries = [...seoSource.matchAll(/'([a-z0-9-]+)': \['((?:[^'\\]|\\.)*)', '((?:[^'\\]|\\.)*)'\]/g)];
+  const slugs = [...solutionsSource.matchAll(/(?:paper|update): \{ title: '(?:[^'\\]|\\.)*', slug: '([^']+)'/g)].map(m => m[1]);
+  for (const slug of slugs) assert.ok(entries.some(e => e[1] === slug), `missing SEO entry for ${slug}`);
+  for (const [, slug, title, description] of entries) {
+    assert.ok([...`${title} | Ganrich`].length <= 60, `${slug} title`);
+    const length = [...description].length;
+    assert.ok(length >= 150 && length <= 160, `${slug} description ${length}`);
+  }
+  assert.match(reportSource, /seo \? `\$\{seo\[0\]\} \| Ganrich`/);
+});
+
+test("points x-default at each page's own English URL and pairs EN/TR reports", async () => {
+  const tr = await (await render("/tr/cozumler/turkiye-ets-hazirligi")).text();
+  assert.match(tr, /hrefLang="x-default" href="https:\/\/ganrichadvisory\.com\/en\/solutions\/turkiye-ets-readiness"/);
+  const en = await (await render("/en/solutions")).text();
+  assert.match(en, /hrefLang="x-default" href="https:\/\/ganrichadvisory\.com\/en\/solutions"/);
+  const reportSource = await readFile(new URL("../app/pdf-insight-pages.tsx", import.meta.url), "utf8");
+  assert.match(reportSource, /reportTranslation\(lang, insight\.slug\)/);
+  assert.match(reportSource, /"x-default": lang === "en" \? path : pair/);
+});
