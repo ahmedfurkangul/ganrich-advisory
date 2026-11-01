@@ -129,3 +129,14 @@ export function solutionTagList(lang: Lang) {
 export function solutionByKey(lang: Lang, key: string) {
  return solutions[lang].find(solution => solution.key === key);
 }
+
+// EN and TR editions of each programme report, paired by position in the two language lists. Used for report hreflang.
+export function reportTranslation(lang: Lang, slug: string): string | undefined {
+  const other: Lang = lang === 'en' ? 'tr' : 'en';
+  for (const [i, s] of solutions[lang].entries()) {
+    const o = solutions[other][i];
+    if (s.paper?.slug === slug && o?.paper) return o.paper.slug;
+    if (s.update?.slug === slug && o?.update) return o.update.slug;
+  }
+  return undefined;
+}
