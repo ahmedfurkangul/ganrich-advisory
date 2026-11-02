@@ -2,6 +2,7 @@ import type { Lang } from './content';
 import { services } from './advisory-content';
 import { notes } from './advisory-note-content';
 import { solutionByKey } from './solutions-content';
+import { guideByKey } from './guides-content';
 // Search titles and descriptions where the on-page tagline is too short or lacks the searched term.
 const solutionMeta: Record<Lang, Record<string, [title: string | null, description: string]>> = {
  en: {
@@ -21,6 +22,7 @@ const solutionMeta: Record<Lang, Record<string, [title: string | null, descripti
 export function advisoryMeta(lang:Lang,key:string):[string,string]|undefined{
  const s=services[lang].find(s=>s.key===key);if(s)return [s.title+' | Ganrich Advisory',s.intro];
  const n=notes[lang].find(n=>n.key===key);if(n)return [n.title+' | Ganrich Advisory',n.thesis];
+ const g=guideByKey(key);if(g)return [g[lang].title,g[lang].description];
  const sol=solutionByKey(lang,key);if(sol){const m=solutionMeta[lang][key];return [m?.[0]??sol.title+' | Ganrich Advisory',m?.[1]||sol.tagline];}
  if(key==='solutions')return lang==='en'?['Solutions | Ganrich Advisory','EU-readiness programmes for Turkish exporters: CBAM, EUDR, CRA, ESPR and Türkiye ETS, plus energy, water and AI projects scoped to one clear decision.']:['Çözümler | Ganrich Advisory','Türk ihracatçılar için AB Yeşil Mutabakat uyum programları: SKDM, EUDR, CRA, ESPR ve TR ETS; ayrıca enerji, su ve yapay zekâ projeleri.'];
  if(key==='sampleWork')return lang==='en'?['Sample work | Ganrich Advisory','Illustrative decision memos from Ganrich Advisory on market entry, operating models and AI pilots, showing how a hard question becomes a clear decision.']:['Örnek çalışmalar | Ganrich Advisory','Ganrich Advisory’den pazara giriş, işletim modeli ve yapay zekâ pilotları için temsili karar notları: zor bir sorunun net bir karara nasıl dönüştüğünü görün.'];

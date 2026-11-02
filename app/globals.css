@@ -716,3 +716,26 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .calendar-links { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: .88rem; }
 .calendar-links a { text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 720px) { .calendar-item { grid-template-columns: 1fr; } }
+
+/* Long-form guides (EUDR, steel DPP) */
+.guide-hero h1 { max-width: 22ch; }
+.guide-body h3 { font: 600 1.1rem/1.4 var(--font-text); margin: 28px 0 10px; }
+.guide-body p { margin: 0 0 16px; line-height: 1.65; }
+.guide-body ul, .guide-body ol { color: var(--slate); padding-left: 1.4em; margin: 0 0 18px; }
+.guide-body ul { list-style: disc; }
+.guide-body ol { list-style: decimal; }
+.guide-body li::marker { color: var(--bronze); }
+.guide-body li { margin: 8px 0; line-height: 1.6; }
+.guide-body a { text-decoration: underline; text-underline-offset: 3px; }
+.guide-cover { margin: 8px 0 32px; }
+.guide-cover img { width: 100%; height: auto; display: block; border: 1px solid var(--sand); }
+.guide-table { overflow-x: auto; margin: 0 0 24px; }
+.guide-table table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.guide-table th, .guide-table td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--sand); color: var(--slate); }
+.guide-table th { font-weight: 600; }
+.guide-faq details { border-top: 1px solid var(--sand); }
+.guide-faq details:last-of-type { border-bottom: 1px solid var(--sand); }
+.guide-faq summary { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 16px 0; font: 1.15rem var(--serif); cursor: pointer; list-style: none; }
+.guide-faq summary::-webkit-details-marker { display: none; }
+.guide-sources { margin-top: 36px; font-size: .92rem; }
+.guide-sources a { word-break: break-word; }

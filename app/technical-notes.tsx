@@ -4,6 +4,7 @@ import { insightArticles, insightHref, Lang, routeMap } from "./content";
 import { notes } from "./advisory-note-content";
 import { solutions } from "./solutions-content";
 import { PdfInsightHubCards } from "./pdf-insight-cards";
+import { guideIndex } from "./guides-index";
 
 // The insights hub as one library: whitepapers, articles and decision notes in a single list,
 // filtered by area (EU rules, industry, AI, strategy) and searchable. The old category pages
@@ -20,14 +21,14 @@ const copy = {
     eyebrow: "TECHNICAL NOTES", title: "Notes you can use before the first call.",
     intro: "Whitepapers on EU rules, energy and applied AI, plus articles and decision notes on strategy and growth, in one place. Every whitepaper is free to read in the browser.",
     all: "All", groups: { eu: "EU rules", industry: "Energy and industry", ai: "Applied AI", strategy: "Strategy and growth" },
-    search: "Search", placeholder: "Search the notes", paper: "Whitepaper (PDF)", article: "Article", note: "Decision note",
+    search: "Search", placeholder: "Search the notes", paper: "Whitepaper (PDF)", guide: "Guide", article: "Article", note: "Decision note",
     read: "Read", programme: "The programme", empty: "No note matches this search.", clear: "Clear search", count: (n: number) => `${n} notes`,
   },
   tr: {
     eyebrow: "TEKNİK NOTLAR", title: "İlk görüşmeden önce işinize yarayacak notlar.",
     intro: "AB kuralları, enerji ve uygulamalı yapay zekâ üzerine teknik notlar; strateji ve büyüme üzerine makaleler ve karar notları, tek yerde. Teknik notların tamamı tarayıcıda ücretsiz okunabilir.",
     all: "Tümü", groups: { eu: "AB kuralları", industry: "Enerji ve sanayi", ai: "Uygulamalı yapay zekâ", strategy: "Strateji ve büyüme" },
-    search: "Ara", placeholder: "Notlarda arayın", paper: "Teknik not (PDF)", article: "Makale", note: "Karar notu",
+    search: "Ara", placeholder: "Notlarda arayın", paper: "Teknik not (PDF)", guide: "Rehber", article: "Makale", note: "Karar notu",
     read: "Okuyun", programme: "İlgili program", empty: "Bu aramayla eşleşen bir not yok.", clear: "Aramayı temizleyin", count: (n: number) => `${n} not`,
   },
 };
@@ -45,7 +46,10 @@ export function libraryEntries(lang: Lang): Entry[] {
   const decisionNotes: Entry[] = notes[lang].map(n => ({
     id: n.key, group: "strategy", type: c.note, topic: c.groups.strategy, title: n.title, summary: n.thesis, href: url(lang, n.key),
   }));
-  return [...papers, ...articles, ...decisionNotes];
+  const guideEntries: Entry[] = guideIndex.map(g => ({
+    id: g.key, group: "eu", type: c.guide, topic: g.topic[lang], title: g[lang].h1, summary: g[lang].description, href: url(lang, g.key), extra: { label: c.programme, href: url(lang, g.solution) },
+  }));
+  return [...guideEntries, ...papers, ...articles, ...decisionNotes];
 }
 
 export function TechnicalNotesLibrary({ lang }: { lang: Lang }) {
