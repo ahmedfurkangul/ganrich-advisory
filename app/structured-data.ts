@@ -97,7 +97,7 @@ export function breadcrumbParent(lang: Lang, kind: string) {
   const en = lang === "en";
   if (kind.startsWith("solution") && kind !== "solutions") return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
   if (kind.startsWith("service") || kind === "studio") return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
-  if (kind.startsWith("note")) return { name: en ? "Insights" : "İçgörüler", url: pageUrl(lang, "insights") };
+  if (kind.startsWith("note") || kind.startsWith("guide")) return { name: en ? "Insights" : "İçgörüler", url: pageUrl(lang, "insights") };
   return null;
 }
 

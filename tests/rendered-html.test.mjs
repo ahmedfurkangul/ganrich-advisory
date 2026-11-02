@@ -864,3 +864,30 @@ test("points x-default at each page's own English URL and pairs EN/TR reports", 
   assert.match(reportSource, /reportTranslation\(lang, insight\.slug\)/);
   assert.match(reportSource, /"x-default": lang === "en" \? path : pair/);
 });
+
+test("publishes the EUDR and steel passport guides in both languages with full text in the HTML", async () => {
+  const pages = [
+    ["/en/insights/eudr-30-december-2026-turkish-exporters", "EUDR 30 December 2026: What Your EU Buyer Will Ask For", "/tr/icgoruler/eudr-30-aralik-2026-ihracatci", /The data pack your EU buyer will ask for/],
+    ["/tr/icgoruler/eudr-30-aralik-2026-ihracatci", "EUDR 30 Aralık 2026: AB Alıcınız Sizden Ne İsteyecek?", "/en/insights/eudr-30-december-2026-turkish-exporters", /AB alıcınızın isteyeceği veri paketi/],
+    ["/en/insights/steel-digital-product-passport-espr-turkiye", "Steel Digital Product Passport: What ESPR Means for Türkiye", "/tr/icgoruler/celik-dijital-urun-pasaportu-espr", /How DPP and CBAM data overlap/],
+    ["/tr/icgoruler/celik-dijital-urun-pasaportu-espr", "Çelik Dijital Ürün Pasaportu: ESPR Türk Üreticiye Ne Getirir", "/en/insights/steel-digital-product-passport-espr-turkiye", /<table>/],
+  ];
+  for (const [path, title, pair, body] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.match(html, body);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"Article"/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guide(Eudr2026|SteelDpp)\.png/);
+    assert.match(html, /\/guides\/guide(Eudr2026|SteelDpp)-(en|tr)\.webp/);
+  }
+  const [routes, index, content] = await Promise.all(["advisory-routes.ts", "guides-index.ts", "guides-content.ts"].map(f => readFile(new URL(`../app/${f}`, import.meta.url), "utf8")));
+  for (const p of ["insights/eudr-30-december-2026-turkish-exporters", "icgoruler/celik-dijital-urun-pasaportu-espr"]) {
+    assert.ok(routes.includes(`'${p}'`) && content.includes(`"path": "${p}"`), p);
+  }
+  for (const m of index.matchAll(/"h1": "((?:[^"\\]|\\.)*)"/g)) assert.ok(content.includes(`"h1": "${m[1]}"`), "index h1 matches content");
+  assert.match(await (await render("/tr/icgoruler")).text(), /Çelik Dijital Ürün Pasaportu: ESPR Türk çelik üreticisinden/);
+});

@@ -1,4 +1,5 @@
 import { advisoryMeta } from "../../advisory-meta";
+import { guideByKey } from "../../guides-content";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import Site from "../../site";
@@ -116,7 +117,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = metaDescription(fullDescription);
   const socialCard = article
     ? `/og/${lang}/article-${article.slug}.png`
-    : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind === "sampleWork" ? kind : metaKind in metaCopy[lang] ? metaKind : "home"}.png`;
+    : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind.startsWith("guide") || kind === "sampleWork" ? kind : metaKind in metaCopy[lang] ? metaKind : "home"}.png`;
   const keywords = pageKeywords(lang, kind);
   const metadataBase = new URL(SITE_ORIGIN);
   const current = `/${lang}${route ? `/${route}` : ""}`; const other: Lang = lang === "en" ? "tr" : "en"; const currentKind = pageKind(lang, route); const translated = currentKind === "home" || currentKind === "notFound" ? `/${other}` : `/${other}/${routeMap[other][currentKind]}`;
@@ -178,7 +179,7 @@ export default async function LocalizedPage({ params }: Props) {
       ? { name: lang === "en" ? "Decision Lab" : "Karar Laboratuvarı", url: absoluteUrl(`/${lang}/${routeMap[lang].decisionLab}`) }
       : breadcrumbParent(lang, kind);
   const description = article?.thesis ?? category?.description ?? (advisoryMeta(lang, kind) ?? metaCopy[lang][kind as keyof typeof metaCopy.en] ?? metaCopy[lang].home)[1];
-  const socialCard = absoluteUrl(article ? `/og/${lang}/article-${article.slug}.png` : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind === "sampleWork" ? kind : kind in metaCopy[lang] ? kind : "home"}.png`);
+  const socialCard = absoluteUrl(article ? `/og/${lang}/article-${article.slug}.png` : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind.startsWith("guide") || kind === "sampleWork" ? kind : kind in metaCopy[lang] ? kind : "home"}.png`);
   const breadcrumbItems = [
     { "@type": "ListItem", position: 1, name: lang === "en" ? "Home" : "Ana sayfa", item: absoluteUrl(`/${lang}`) },
     ...(parent ? [{ "@type": "ListItem", position: 2, name: parent.name, item: parent.url }] : []),
@@ -209,7 +210,31 @@ export default async function LocalizedPage({ params }: Props) {
     image: absoluteUrl(`/og/${lang}/article-${article.slug}.png`),
     mainEntityOfPage: currentUrl,
   });
-  if (kind === "about" || article || kind.startsWith("note")) graph.push({
+  const guide = guideByKey(kind);
+  if (guide) {
+    const g = guide[lang];
+    graph.push({
+      "@type": "Article",
+      "@id": `${currentUrl}#article`,
+      headline: g.h1,
+      description: g.description,
+      datePublished: guide.date,
+      dateModified: guide.date,
+      inLanguage: lang === "en" ? "en-GB" : "tr-TR",
+      articleSection: guide.topic[lang],
+      author: { "@id": personId },
+      publisher: { "@id": organizationId },
+      image: absoluteUrl(`/og/${lang}/${guide.key}.png`),
+      mainEntityOfPage: currentUrl,
+    });
+    const faq = g.blocks.flatMap(b => b.t === "faq" ? b.items : []);
+    if (faq.length) graph.push({
+      "@type": "FAQPage",
+      "@id": `${currentUrl}#faq`,
+      mainEntity: faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\*([^*]+)\*/g, "$1") } })),
+    });
+  }
+  if (kind === "about" || article || guide || kind.startsWith("note")) graph.push({
     "@type": "Person",
     "@id": personId,
     name: founderName(lang),
