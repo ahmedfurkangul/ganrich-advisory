@@ -891,3 +891,29 @@ test("publishes the EUDR and steel passport guides in both languages with full t
   for (const m of index.matchAll(/"h1": "((?:[^"\\]|\\.)*)"/g)) assert.ok(content.includes(`"h1": "${m[1]}"`), "index h1 matches content");
   assert.match(await (await render("/tr/icgoruler")).text(), /Çelik Dijital Ürün Pasaportu: ESPR Türk çelik üreticisinden/);
 });
+
+test("publishes the CBAM 2026 and CRA standards guides with FAQ markup, sitemap entries and working internal links", async () => {
+  const pages = [
+    ["/en/insights/cbam-2026-update-tr-ets-cop31", "CBAM 2026 Update: Prices, Deadlines and TR ETS Before COP31", "/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets", /<strong>10% in 2026, 20% in 2027 and 30% in 2028<\/strong>/],
+    ["/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets", "SKDM 2026: Sertifika Fiyatları, Takvim ve TR ETS Pilotu", "/en/insights/cbam-2026-update-tr-ets-cop31", /18814 sayılı Olur ile süre 27 Ocak 2027/],
+    ["/en/insights/cra-compliance-without-harmonised-standards", "CRA Compliance Without Harmonised Standards: What to Rely On", "/tr/icgoruler/cra-uyumu-standart-yokken-turk-uretici", /Route 1: default products, module A without standards/],
+    ["/tr/icgoruler/cra-uyumu-standart-yokken-turk-uretici", "CRA Uyumu: Standart Yokken Türk Üretici Neye Dayanacak?", "/en/insights/cra-compliance-without-harmonised-standards", /standartsız modül A/],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, body] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.match(html, body);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guide(Cbam2026|CraStandards)\.png/);
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+  }
+  const tr = await (await render("/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets")).text();
+  assert.equal((tr.match(/<li>Tesisiniz TR ETS pilot/g) ?? []).length, 2, "TR checklist has steps 4 and 6");
+  const content = await readFile(new URL("../app/guides-content.ts", import.meta.url), "utf8");
+  const links = [...new Set([...content.matchAll(/\]\((\/(?:en|tr)\/[^)]+)\)/g)].map(m => m[1]))];
+  for (const link of links) assert.equal((await render(link)).status, 200, `internal link ${link}`);
+});

@@ -6,15 +6,16 @@ import { guideByKey, type GuideBlock } from "./guides-content";
 // Long-form guides, rendered on the server: the full text is in the first HTML response.
 const url = (l: Lang, k: string) => "/" + l + "/" + routeMap[l][k];
 
-// Inline markup used in the article text: [label](href) links and *emphasis*. Bare URLs in source lists become links.
+// Inline markup used in the article text: [label](href) links, **strong**, *emphasis*. Bare URLs in source lists become links.
 function inline(text: string): ReactNode[] {
   const out: ReactNode[] = [];
-  const re = /\[([^\]]+)\]\(([^)]+)\)|\*([^*]+)\*|(https:\/\/[^\s)]+)/g;
+  const re = /\[([^\]]+)\]\(([^)]+)\)|\*([^*]+)\*|(https:\/\/[^\s)]+)|\*\*([^*]+)\*\*/g;
   let last = 0, m: RegExpExecArray | null, i = 0;
   while ((m = re.exec(text))) {
     if (m.index > last) out.push(text.slice(last, m.index));
     if (m[1]) out.push(<a key={i++} href={m[2]}>{m[1]}</a>);
     else if (m[3]) out.push(<em key={i++}>{m[3]}</em>);
+    else if (m[5]) out.push(<strong key={i++}>{m[5]}</strong>);
     else if (m[4]) out.push(<a key={i++} href={m[4]} rel="noopener noreferrer" target="_blank">{m[4].replace(/^https:\/\//, "").replace(/\/$/, "")}</a>);
     last = re.lastIndex;
   }

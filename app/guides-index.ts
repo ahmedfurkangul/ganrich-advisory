@@ -4,6 +4,38 @@ import type { Lang } from "./content";
 export type GuideIndexEntry = { key: string; solution: string; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
  {
+  "key": "guideCbam2026",
+  "solution": "solutionCbam",
+  "topic": {
+   "en": "CBAM",
+   "tr": "SKDM (CBAM)"
+  },
+  "en": {
+   "h1": "CBAM 2026 update: what Turkish producers should know before COP31 in Antalya",
+   "description": "CBAM 2026 for Turkish producers: Q1–Q3 certificate prices, the 30 Sep 2027 declaration, verification, the 50-tonne rule and how the new TR ETS pilot fits in."
+  },
+  "tr": {
+   "h1": "SKDM 2026 güncellemesi: COP31 öncesinde Türk sanayicisinin bilmesi gerekenler",
+   "description": "SKDM 2026'da neler değişti? 1.-3. çeyrek sertifika fiyatları, 30 Eylül 2027 beyanı, doğrulama, 50 ton eşiği ve yeni TR ETS pilot dönemi ihracatçıya tek yazıda."
+  }
+ },
+ {
+  "key": "guideCraStandards",
+  "solution": "solutionCra",
+  "topic": {
+   "en": "CRA",
+   "tr": "CRA"
+  },
+  "en": {
+   "h1": "CRA compliance without harmonised standards: what can a Turkish manufacturer rely on?",
+   "description": "No CRA harmonised standard is cited yet and the deadlines are moving. What the Cyber Resilience Act lets Turkish manufacturers rely on until 11 December 2027."
+  },
+  "tr": {
+   "h1": "CRA uyumu: standart yokken Türk üretici neye dayanacak?",
+   "description": "CRA için henüz atfı yayımlanmış uyumlaştırılmış standart yok, tarihler kayıyor. Siber Dayanıklılık Yasası 11 Aralık 2027'ye dek üreticiye hangi yolları açıyor?"
+  }
+ },
+ {
   "key": "guideEudr2026",
   "solution": "solutionEudr",
   "topic": {
