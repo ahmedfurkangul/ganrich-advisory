@@ -4,6 +4,7 @@ import { Lang, routeMap } from './content';
 import { EditorialHero } from './advisory';
 import { leadEvent } from './analytics';
 import { checks, scoreCheck, type Answer, type CheckConfig, type CheckId } from './readiness-check-content';
+import { Arrow } from "./arrow-icon";
 
 // A short self-assessment that ends in a result and an optional request for a review. Answers stay in the
 // browser unless the visitor sends the request, which goes through the normal inquiry API. The visitor can ask
@@ -85,7 +86,7 @@ function ReadinessCheck({ lang, id }: { lang: Lang; id: CheckId }) {
         <div>
           <h3>{c.gaps}</h3>
           {gaps.length ? <ul className="readiness-gaps">{gaps.map(g => <li key={g.q}>{g.gap}</li>)}</ul> : <p>{c.noGaps}</p>}
-          <p className="readiness-links">{paperHref && <a className="text-link" href={paperHref}>{c.paper} ↗</a>}<a className="text-link" href={solutionHref}>{c.programme} ↗</a><button type="button" className="text-link readiness-print" onClick={() => window.print()}>{x.pdf}</button><button type="button" className="text-link" onClick={() => { setDone(false); setStatus('idle'); }}>{c.restart}</button></p>
+          <p className="readiness-links">{paperHref && <a className="text-link" href={paperHref}>{c.paper} <Arrow/></a>}<a className="text-link" href={solutionHref}>{c.programme} <Arrow/></a><button type="button" className="text-link readiness-print" onClick={() => window.print()}>{x.pdf}</button><button type="button" className="text-link" onClick={() => { setDone(false); setStatus('idle'); }}>{c.restart}</button></p>
         </div>
         <section className="readiness-ask">
           <h3>{c.ask}</h3>

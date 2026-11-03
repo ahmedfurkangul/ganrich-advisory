@@ -891,3 +891,12 @@ test("publishes the EUDR and steel passport guides in both languages with full t
   for (const m of index.matchAll(/"h1": "((?:[^"\\]|\\.)*)"/g)) assert.ok(content.includes(`"h1": "${m[1]}"`), "index h1 matches content");
   assert.match(await (await render("/tr/icgoruler")).text(), /Çelik Dijital Ürün Pasaportu: ESPR Türk çelik üreticisinden/);
 });
+
+test("link arrows are SVG icons, not the emoji-prone ↗ character", async () => {
+  for (const path of ["/en", "/tr", "/en/solutions", "/tr/cozumler", "/en/about", "/tr/hakkinda"]) {
+    const response = await render(path);
+    const html = await response.text();
+    assert.equal(html.includes("↗"), false, `${path} still renders the ↗ character`);
+    if (response.status === 200) assert.match(html, /class="arrow-icon/, `${path} has no arrow icon`);
+  }
+});
