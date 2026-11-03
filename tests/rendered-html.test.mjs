@@ -917,3 +917,12 @@ test("publishes the CBAM 2026 and CRA standards guides with FAQ markup, sitemap 
   const links = [...new Set([...content.matchAll(/\]\((\/(?:en|tr)\/[^)]+)\)/g)].map(m => m[1]))];
   for (const link of links) assert.equal((await render(link)).status, 200, `internal link ${link}`);
 });
+
+test("link arrows are SVG icons, not the emoji-prone ↗ character", async () => {
+  for (const path of ["/en", "/tr", "/en/solutions", "/tr/cozumler", "/en/about", "/tr/hakkinda"]) {
+    const response = await render(path);
+    const html = await response.text();
+    assert.equal(html.includes("↗"), false, `${path} still renders the ↗ character`);
+    if (response.status === 200) assert.match(html, /class="arrow-icon/, `${path} has no arrow icon`);
+  }
+});

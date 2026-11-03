@@ -3,6 +3,7 @@ import type { Lang } from "./content";
 import { channelLabel, trafficInsights } from "./traffic-insights";
 import { services } from "./advisory-content";
 import { solutions } from "./solutions-content";
+import { Arrow } from "./arrow-icon";
 
 // Editor-only traffic dashboard. Server-rendered HTML and SVG: no client JavaScript, no third-party script.
 
@@ -174,8 +175,8 @@ export function TrafficDashboard({ lang, report, studioHref, selfHref }: { lang:
       </div>
       <nav aria-label={en ? "Period" : "Dönem"} className="traffic-ranges">
         {RANGES.map(d => <a key={d} href={`${selfHref}?days=${d}`} aria-current={d === report.days ? "page" : undefined}>{en ? `${d} days` : `${d} gün`}</a>)}
-        <a href={studioHref}>{en ? "PDF studio" : "PDF stüdyosu"} ↗</a>
-        <a href={`https://studio.ganrichadvisory.com/?lang=${lang}`} target="_blank" rel="noopener noreferrer">{en ? "Open Opportunity Studio" : "Opportunity Studio’yu aç"} ↗</a>
+        <a href={studioHref}>{en ? "PDF studio" : "PDF stüdyosu"} <Arrow/></a>
+        <a href={`https://studio.ganrichadvisory.com/?lang=${lang}`} target="_blank" rel="noopener noreferrer">{en ? "Open Opportunity Studio" : "Opportunity Studio’yu aç"} <Arrow/></a>
       </nav>
     </header>
 

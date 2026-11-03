@@ -5,6 +5,7 @@ import { notes } from "./advisory-note-content";
 import { solutions } from "./solutions-content";
 import { PdfInsightHubCards } from "./pdf-insight-cards";
 import { guideIndex } from "./guides-index";
+import { Arrow } from "./arrow-icon";
 
 // The insights hub as one library: whitepapers, articles and decision notes in a single list,
 // filtered by area (EU rules, industry, AI, strategy) and searchable. The old category pages
@@ -84,7 +85,7 @@ export function TechnicalNotesLibrary({ lang }: { lang: Lang }) {
         <p className="meta">{e.type} · {e.topic}</p>
         <h2><a href={e.href} data-analytics-event={e.type === c.paper ? undefined : "insight_viewed"}>{e.title}</a></h2>
         <p>{e.summary}</p>
-        <p className="notes-links"><a href={e.href}>{c.read} ↗</a>{e.extra && <a href={e.extra.href}>{e.extra.label} ↗</a>}</p>
+        <p className="notes-links"><a href={e.href}>{c.read} <Arrow/></a>{e.extra && <a href={e.extra.href}>{e.extra.label} <Arrow/></a>}</p>
       </li>)}</ol> : <div className="insight-empty" role="status"><h2>{c.empty}</h2><button type="button" className="text-link" onClick={() => { setFilter("all"); setQuery(""); }}>{c.clear} →</button></div>}
     </section>
     <PdfInsightHubCards lang={lang} exclude={knownSlugs}/>

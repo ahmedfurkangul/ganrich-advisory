@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Lang, routeMap } from "./content";
 import { optionalPreferencesEnabled } from "./privacy-controls";
+import { Arrow } from "./arrow-icon";
 
 type BriefItem = { id: string; title: string; type: string; href: string };
 
@@ -99,7 +100,7 @@ export function BriefingTray({ lang }: { lang: Lang }) {
         <div className="tray-actions">
           <button className="button" type="button" onClick={() => window.print()}>{isEn ? "Export brief" : "Brifingi dışa aktar"}</button>
           <a href={`mailto:?subject=${encodeURIComponent(isEn ? "My Ganrich briefing" : "Ganrich brifingim")}&body=${encodeURIComponent(`${items.map((item, index) => `${index + 1}. ${item.title} — ${item.href}`).join("\n")}${note ? `\n\n${isEn ? "Working note" : "Çalışma notu"}:\n${note}` : ""}`)}`}>{isEn ? "Email this to me" : "Bunu e-posta ile gönder"}</a>
-          <a href={`/${lang}/${routeMap[lang].contact}?service=briefing`}>{isEn ? "Request a private briefing" : "Özel brifing talep edin"} <span aria-hidden="true">↗</span></a>
+          <a href={`/${lang}/${routeMap[lang].contact}?service=briefing`}>{isEn ? "Request a private briefing" : "Özel brifing talep edin"} <Arrow/></a>
         </div>
       </aside>
     </div>}
