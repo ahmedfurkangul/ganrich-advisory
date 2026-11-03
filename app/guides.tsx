@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Lang, routeMap } from "./content";
 import { Conversation } from "./advisory";
 import { guideByKey, type GuideBlock } from "./guides-content";
+import { Arrow } from "./arrow-icon";
 
 // Long-form guides, rendered on the server: the full text is in the first HTML response.
 const url = (l: Lang, k: string) => "/" + l + "/" + routeMap[l][k];
@@ -45,7 +46,7 @@ export function GuidePage({ lang, kind }: { lang: Lang; kind: string }) {
       <figure className="guide-cover"><img src={`/guides/${g.image}-${lang}.webp`} width={1600} height={900} alt={t.h1} decoding="async"/></figure>
       {t.blocks.map((b, i) => <Block key={i} b={b}/>)}
       <p className="note-status">{en ? `Dates and sources last checked ${g.checked.en}. General information, not legal advice.` : `Tarihler ve kaynaklar en son ${g.checked.tr} tarihinde kontrol edildi. Genel bilgidir, hukuki görüş değildir.`}</p>
-      <p className="notes-links"><a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} ↗</a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All technical notes" : "Tüm teknik notlar"}</a></p>
+      <p className="notes-links"><a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All technical notes" : "Tüm teknik notlar"}</a></p>
     </article>
     <Conversation lang={lang}/>
   </>;

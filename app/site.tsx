@@ -24,6 +24,7 @@ import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
 import { BriefingTray } from "./intelligence-shell";
 import { openCookiePreferences, PrivacyControls } from "./privacy-controls";
+import { Arrow } from "./arrow-icon";
 
 type SiteProps = { lang: Lang; route: string };
 
@@ -49,7 +50,7 @@ const ui = {
 const navKeys = ["solutions", "insights", "about", "contact"] as const;
 
 function A({ href, children, className = "", dataEvent }: { href: string; children: React.ReactNode; className?: string; dataEvent?: string }) {
-  return <a href={href} className={className} data-analytics-event={dataEvent}>{children}<span aria-hidden="true" className="arrow">↗</span></a>;
+  return <a href={href} className={className} data-analytics-event={dataEvent}>{children}<Arrow className="arrow"/></a>;
 }
 
 function Wordmark() {
@@ -86,14 +87,14 @@ function Footer({ lang }: { lang: Lang }) {
     <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Strategy and EU-readiness advisory for Turkish industry and exporters." : "Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı."}</p></div>
     <div className="footer-links">
       <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.solutions}`}>{t.nav[0]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[1]}</a><a href={`/${lang}/${m.regulationCalendar}`}>{lang === "en" ? "EU regulation calendar" : "AB mevzuat takvimi"}</a><a href={`/${lang}/${m.newsletter}`}>{lang === "en" ? "Regulation updates" : "Mevzuat bülteni"}</a><a href={`/${lang}/${m.decisionLab}`}>{lang === "en" ? "Readiness checks" : "Hazırlık testleri"}</a><a href={`/${lang}/${m.sampleWork}`}>{lang === "en" ? "Sample work" : "Örnek çalışmalar"}</a><a href={`/${lang}/${m.about}`}>{t.nav[2]}</a></div>
-      <div><span>{lang === "en" ? "Contact" : "İletişim"}</span><a href={`/${lang}/${m.contact}`}>{t.cta}</a><a href="mailto:furkangul@ganrichadvisory.com">furkangul@ganrichadvisory.com</a><a href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
+      <div><span>{lang === "en" ? "Contact" : "İletişim"}</span><a href={`/${lang}/${m.contact}`}>{t.cta}</a><a href="mailto:furkangul@ganrichadvisory.com">furkangul@ganrichadvisory.com</a><a href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">LinkedIn <Arrow/></a></div>
     </div>
     <nav className="footer-trust-links" aria-label={lang === "en" ? "Privacy and legal" : "Gizlilik ve hukuk"}>
       <a href={`/${lang}/${m.privacy}`}>{lang === "en" ? "Privacy" : "Gizlilik"}</a>
       <a href={`/${lang}/${m.kvkk}`}>KVKK</a>
       <button type="button" onClick={openCookiePreferences}>{lang === "en" ? "Cookie preferences" : "Çerez tercihleri"}</button>
       <a href={`/${lang}/${m.legal}`}>{lang === "en" ? "Legal notice" : "Yasal bildirim"}</a>
-      <a href={`/${lang}/feed.xml`}>RSS ↗</a>
+      <a href={`/${lang}/feed.xml`}>RSS <Arrow/></a>
     </nav>
     <div className="footer-base"><p>© {new Date().getFullYear()} Ganrich Advisory</p><p>{lang === "en" ? "Privacy controls · v1.0" : "Gizlilik kontrolleri · v1.0"}</p></div>
   </footer>;

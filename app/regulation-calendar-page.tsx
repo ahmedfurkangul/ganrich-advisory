@@ -3,6 +3,7 @@ import { Lang, routeMap } from './content';
 import { EditorialHero } from './advisory';
 import { NewsletterSignup } from './newsletter';
 import { CALENDAR_CHECKED, RuleDate, ruleCalendar, ruleDateLabel } from './regulation-calendar';
+import { Arrow } from "./arrow-icon";
 
 // EU rule dates with the official source for each, split into what already applies and what is coming.
 
@@ -39,9 +40,9 @@ function RuleItem({ lang, r }: { lang: Lang; r: RuleDate }) {
       <h3>{headline}</h3>
       <p>{detail}</p>
       <p className="calendar-links">
-        <a href={url(lang, r.key)}>{c.programme} ↗</a>
-        {r.check && <a href={url(lang, r.check)}>{c.check} ↗</a>}
-        <a href={r.source.url} rel="noopener noreferrer" target="_blank">{`${c.source}: ${r.source.act} ↗`}</a>
+        <a href={url(lang, r.key)}>{c.programme} <Arrow/></a>
+        {r.check && <a href={url(lang, r.check)}>{c.check} <Arrow/></a>}
+        <a href={r.source.url} rel="noopener noreferrer" target="_blank">{`${c.source}: ${r.source.act}`} <Arrow/></a>
       </p>
     </div>
   </li>;

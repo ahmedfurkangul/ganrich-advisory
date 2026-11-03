@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { PdfInsight } from "../db/pdf-insights";
 import type { Lang } from "./content";
+import { Arrow } from "./arrow-icon";
 
 function reportHref(lang: Lang, insight: Pick<PdfInsight, "slug"> & Partial<Pick<PdfInsight, "language">>) {
   const documentLanguage = insight.language ?? lang;
@@ -36,7 +37,7 @@ export function PdfInsightHubCards({ lang, exclude = [] }: { lang: Lang; exclude
             <h2>{item.title}</h2>
             <p>{item.shortSummary || item.executiveThesis}</p>
             <a href={reportHref(lang, item)}>
-              {lang === "en" && item.language === "tr" ? "Explore the Turkish report" : lang === "en" ? "Explore the report" : "Raporu inceleyin"} <span aria-hidden="true">↗</span>
+              {lang === "en" && item.language === "tr" ? "Explore the Turkish report" : lang === "en" ? "Explore the report" : "Raporu inceleyin"} <Arrow/>
             </a>
           </div>
           <div className="mini-art report-art" aria-hidden="true"><span>PDF</span><i/><b/></div>

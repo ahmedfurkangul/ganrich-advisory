@@ -4,13 +4,14 @@ import { ServiceList, FounderWorking } from "./advisory";
 import { EngagementFormats } from "./advisory-details";
 import { expertise, Lang, routeMap } from "./content";
 import { TechnicalNotesLibrary } from "./technical-notes";
+import { Arrow } from "./arrow-icon";
 const ui = {
  en:{skip:"Skip to content",nav:["Expertise","Sample work","Insights","Decision Lab","About"],cta:"Start a conversation",read:"Read the perspective",finalTitle:"What decision is on your agenda?",finalBody:"Share the context. We will come prepared with the questions that matter."},
  tr:{skip:"İçeriğe geç",nav:["Uzmanlık","Örnek çalışmalar","İçgörüler","Karar Laboratuvarı","Hakkımızda"],cta:"Görüşme başlatın",read:"Bakışı okuyun",finalTitle:"Gündeminizde hangi karar var?",finalBody:"Bağlamı paylaşın. Biz, önem taşıyan sorularla hazırlıklı gelelim."}
 } as const;
 
 function A({ href, children, className = "", dataEvent }: { href: string; children: React.ReactNode; className?: string; dataEvent?: string }) {
-  return <a href={href} className={className} data-analytics-event={dataEvent}>{children}<span aria-hidden="true" className="arrow">↗</span></a>;
+  return <a href={href} className={className} data-analytics-event={dataEvent}>{children}<Arrow className="arrow"/></a>;
 }
 
 function SectionHead({ label, title, body }: { label: string; title: string; body?: string }) {
@@ -68,8 +69,8 @@ export function AboutPage({ lang }: { lang: Lang }) {
         </div>
         <div className="founder-evidence">{evidence.map((item, i) => <article key={item[0]}><span>0{i + 1}</span><strong>{item[0]}</strong><p>{item[1]}</p></article>)}</div>
         <div className="founder-links">
-          <a className="button outline" href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">{isEn ? "View LinkedIn profile" : "LinkedIn profilini görüntüleyin"} <span aria-hidden="true">↗</span></a>
-          <a className="text-link" href="https://avesis.kent.edu.tr/ahmedfurkan.gul" target="_blank" rel="noreferrer">{isEn ? "Academic profile" : "Akademik profil"} <span aria-hidden="true">↗</span></a>
+          <a className="button outline" href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">{isEn ? "View LinkedIn profile" : "LinkedIn profilini görüntüleyin"} <Arrow/></a>
+          <a className="text-link" href="https://avesis.kent.edu.tr/ahmedfurkan.gul" target="_blank" rel="noreferrer">{isEn ? "Academic profile" : "Akademik profil"} <Arrow/></a>
         </div>
       </div>
     </section>
