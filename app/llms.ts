@@ -1,5 +1,5 @@
 import { listPdfInsights, type PdfInsight } from "../db/pdf-insights";
-import { services } from "./advisory-content";
+import { listedServices as services } from "./advisory-content";
 import { aiDecisions } from "./ai-decisions-content";
 import { notes } from "./advisory-note-content";
 import { insightArticles, insightHref, Lang, routeMap } from "./content";

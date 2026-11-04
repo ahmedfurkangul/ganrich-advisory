@@ -166,6 +166,8 @@ export default async function LocalizedPage({ params }: Props) {
   if (kind === "expertise" || kind === "markets") permanentRedirect(`/${lang}/${routeMap[lang].solutions}#strategy`);
   // Category pages are folded into the technical-notes library, with the strategy filter selected.
   if (kind.startsWith("category")) permanentRedirect(`/${lang}/${routeMap[lang].insights}#strategy`);
+  // The AI Value Diagnostic became the board diagnostic on the AI Decisions page.
+  if (kind === "serviceAI") permanentRedirect(`/${lang}/${routeMap[lang].aiDecisions}#aiDiagnostic`);
   if (kind === "privateBriefing") permanentRedirect(`/${lang}/${routeMap[lang].contact}?service=briefing`);
   const trustTarget: Record<string, string> = { privacyCenter: "privacy", cookies: "privacy#cookies", vendors: "privacy#providers", dataRights: "privacy#rights", policyUpdates: "privacy#changes", terms: "legal#terms", aiTransparency: "legal#ai" };
   if (kind in trustTarget) { const [key, hash] = trustTarget[kind].split("#"); permanentRedirect(`/${lang}/${routeMap[lang][key]}${hash ? `#${hash}` : ""}`); }
