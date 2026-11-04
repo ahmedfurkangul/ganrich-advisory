@@ -596,7 +596,7 @@ test("publishes the regulation newsletter page in both languages and offers sign
   assert.match(await (await render("/tr/gizlilik")).text(), /E-postayla mevzuat bülteni/);
 });
 
-test("publishes the Opportunity Studio showcase in both languages without linking the private host", async () => {
+test("keeps the Opportunity Studio showcase reachable but unlinked and noindex, and the Order Desk makes no build claim", async () => {
   for (const [path, products] of [["/en/opportunity-studio", /Five working tools behind our programmes/], ["/tr/opportunity-studio", /Programlarımızın arkasındaki beş çalışma aracı/]]) {
     const response = await render(path);
     assert.equal(response.status, 200, path);
@@ -607,9 +607,17 @@ test("publishes the Opportunity Studio showcase in both languages without linkin
     assert.match(html, /\?service=studio/);
     assert.doesNotMatch(html, /studio\.ganrichadvisory\.com/);
   }
-  assert.match(await (await render("/en/solutions")).text(), /href="\/en\/opportunity-studio"/);
-  assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/opportunity-studio#carbon"/);
-  assert.match(await (await render("/tr/cozumler/yapay-zeka-siparis-masasi")).text(), /href="\/tr\/opportunity-studio#orders"/);
+  // Since the AI positioning brief (4 Nov 2026) the showcase stays reachable but is noindex and unlinked:
+  // Ganrich does not build or run AI for clients.
+  assert.match(await (await render("/en/opportunity-studio")).text(), /name="robots" content="noindex/);
+  for (const path of ["/en/solutions", "/tr/cozumler", "/en/solutions/cbam-data-readiness", "/tr/cozumler/yapay-zeka-siparis-masasi", "/en/contact"]) {
+    assert.doesNotMatch(await (await render(path)).text(), /href="\/(en|tr)\/opportunity-studio|value="studio"/, `${path} links the Studio`);
+  }
+  assert.doesNotMatch(await (await render("/sitemap.xml")).text(), /opportunity-studio/);
+  const desk = await (await render("/en/solutions/ai-order-desk-assistant")).text();
+  assert.match(desk, /We do not build, resell or operate the software/);
+  assert.match(desk, /Do you build the assistant\?/);
+  assert.match(await (await render("/tr/cozumler/yapay-zeka-siparis-masasi")).text(), /Yazılımı geliştirmiyor, satmıyor veya işletmiyoruz/);
   await access(new URL("../public/studio/carbon-en.webp", import.meta.url));
 });
 
