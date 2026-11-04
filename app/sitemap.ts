@@ -5,7 +5,9 @@ import { absoluteUrl } from "./site-config";
 export default function sitemap(): MetadataRoute.Sitemap {
   const languages: Lang[] = ["en", "tr"];
   // Redirected addresses stay out of the sitemap.
-  const redirected = new Set(["expertise", "markets", "privateBriefing", "privacyCenter", "cookies", "vendors", "dataRights", "policyUpdates", "terms", "aiTransparency"]);
+  const redirected = new Set(["serviceAI", "expertise", "markets", "privateBriefing", "privacyCenter", "cookies", "vendors", "dataRights", "policyUpdates", "terms", "aiTransparency"]);
+  // Opportunity Studio is noindex and unlinked since the AI positioning brief (Ganrich does not build or run AI for clients).
+  redirected.add("studio");
   // Category pages are noindex (see page metadata), so they stay out as well.
   const routeKeys = ["home", ...Object.keys(routeMap.en).filter(key => !redirected.has(key) && !key.startsWith("category"))];
   return routeKeys.flatMap((key) => languages.map((lang) => {
@@ -15,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const otherRoute = key === "home" ? "" : routeMap[other][key];
     const isArticle = key.startsWith("article");
     const isCategory = key.startsWith("category");
-    const isOffering = key === "solutions" || key.startsWith("solution") || key.startsWith("service") || key === "expertise";
+    const isOffering = key === "solutions" || key.startsWith("solution") || key.startsWith("service") || key === "aiDecisions" || key === "expertise";
     const articleIndex = ["article", "articleTransformation", "articleMarketEntry", "articleCorridor", "articleFamilyHoldings", "articleIndustrialAi"].indexOf(key);
     return {
       url: absoluteUrl(path),

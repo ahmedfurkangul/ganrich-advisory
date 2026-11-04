@@ -117,7 +117,7 @@ test("publishes page-specific bilingual social cards", async () => {
 });
 
 test("renders bilingual engagement, sample, and decision-note journeys", async () => {
-  const paths=["/en/expertise/market-entry","/en/expertise/operating-model","/en/expertise/ai-value","/en/sample-work","/en/insights/entry-model-choice","/en/insights/founder-decision-rights","/en/insights/ai-pilot-or-process","/en/insights/transformation-value-review","/tr/uzmanlik/pazara-giris","/tr/uzmanlik/isletim-modeli","/tr/uzmanlik/yapay-zeka-degeri","/tr/ornek-calismalar","/tr/icgoruler/pazara-giris-modeli","/tr/icgoruler/kurucu-karar-haklari","/tr/icgoruler/yapay-zeka-pilotu-ve-surec","/tr/icgoruler/donusum-deger-takibi"];
+  const paths=["/en/expertise/market-entry","/en/expertise/operating-model","/en/sample-work","/en/insights/entry-model-choice","/en/insights/founder-decision-rights","/en/insights/ai-pilot-or-process","/en/insights/transformation-value-review","/tr/uzmanlik/pazara-giris","/tr/uzmanlik/isletim-modeli","/tr/ornek-calismalar","/tr/icgoruler/pazara-giris-modeli","/tr/icgoruler/kurucu-karar-haklari","/tr/icgoruler/yapay-zeka-pilotu-ve-surec","/tr/icgoruler/donusum-deger-takibi"];
   for(const path of paths){const response=await render(path);assert.equal(response.status,200,path);const html=await response.text();assert.match(html,/rel="canonical"/);assert.match(html,/hrefLang="tr"/);assert.doesNotMatch(html,/href="[^"]*undefined/);}
   const contact=await (await render("/en/contact")).text();
   assert.match(contact,/What are you deciding/);assert.match(contact,/optional/);
@@ -494,7 +494,7 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   const org = graph(home).find(node => node["@id"] === "https://ganrichadvisory.com/#organization");
   assert.equal(org.email, "furkangul@ganrichadvisory.com");
   assert.ok(org.sameAs.includes("https://www.linkedin.com/company/135278307/"));
-  assert.equal(org.hasOfferCatalog.itemListElement.length, 24); // 21 programmes and 3 strategy services
+  assert.equal(org.hasOfferCatalog.itemListElement.length, 24); // 21 programmes, 2 strategy services and AI Decisions
   assert.ok(types(hub).includes("ItemList") && types(hub).includes("CollectionPage"));
   assert.ok(types(service).includes("Service"));
   const crumbs = graph(solution).find(node => node["@type"] === "BreadcrumbList").itemListElement.map(item => item.name);
@@ -596,7 +596,7 @@ test("publishes the regulation newsletter page in both languages and offers sign
   assert.match(await (await render("/tr/gizlilik")).text(), /E-postayla mevzuat bülteni/);
 });
 
-test("publishes the Opportunity Studio showcase in both languages without linking the private host", async () => {
+test("keeps the Opportunity Studio showcase reachable but unlinked and noindex, and the Order Desk makes no build claim", async () => {
   for (const [path, products] of [["/en/opportunity-studio", /Five working tools behind our programmes/], ["/tr/opportunity-studio", /Programlarımızın arkasındaki beş çalışma aracı/]]) {
     const response = await render(path);
     assert.equal(response.status, 200, path);
@@ -607,9 +607,17 @@ test("publishes the Opportunity Studio showcase in both languages without linkin
     assert.match(html, /\?service=studio/);
     assert.doesNotMatch(html, /studio\.ganrichadvisory\.com/);
   }
-  assert.match(await (await render("/en/solutions")).text(), /href="\/en\/opportunity-studio"/);
-  assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/opportunity-studio#carbon"/);
-  assert.match(await (await render("/tr/cozumler/yapay-zeka-siparis-masasi")).text(), /href="\/tr\/opportunity-studio#orders"/);
+  // Since the AI positioning brief (4 Nov 2026) the showcase stays reachable but is noindex and unlinked:
+  // Ganrich does not build or run AI for clients.
+  assert.match(await (await render("/en/opportunity-studio")).text(), /name="robots" content="noindex/);
+  for (const path of ["/en/solutions", "/tr/cozumler", "/en/solutions/cbam-data-readiness", "/tr/cozumler/yapay-zeka-siparis-masasi", "/en/contact"]) {
+    assert.doesNotMatch(await (await render(path)).text(), /href="\/(en|tr)\/opportunity-studio|value="studio"/, `${path} links the Studio`);
+  }
+  assert.doesNotMatch(await (await render("/sitemap.xml")).text(), /opportunity-studio/);
+  const desk = await (await render("/en/solutions/ai-order-desk-assistant")).text();
+  assert.match(desk, /We do not build, resell or operate the software/);
+  assert.match(desk, /Do you build the assistant\?/);
+  assert.match(await (await render("/tr/cozumler/yapay-zeka-siparis-masasi")).text(), /Yazılımı geliştirmiyor, satmıyor veya işletmiyoruz/);
   await access(new URL("../public/studio/carbon-en.webp", import.meta.url));
 });
 
@@ -925,4 +933,58 @@ test("link arrows are SVG icons, not the emoji-prone ↗ character", async () =>
     assert.equal(html.includes("↗"), false, `${path} still renders the ↗ character`);
     if (response.status === 200) assert.match(html, /class="arrow-icon/, `${path} has no arrow icon`);
   }
+});
+
+test("AI Decisions page renders in both languages with offers, FAQ and Service schema, and no prices or ratings", async () => {
+  const pages = [
+    ["/en/expertise/ai-decisions", "AI Decisions: Independent AI Advisory | Ganrich Advisory", "/tr/uzmanlik/yapay-zeka-kararlari", /AI decisions, independent of the vendor who builds them\./, /We do not build or resell AI systems\./, /We take no vendor commissions or referral fees\./],
+    ["/tr/uzmanlik/yapay-zeka-kararlari", "Yapay Zekâ Kararları: Bağımsız Danışmanlık | Ganrich Advisory", "/en/expertise/ai-decisions", /Yapay zekâ kararları, onu kuran tedarikçiden bağımsız\./, /Yapay zekâ sistemi geliştirmiyor veya satmıyoruz\./, /komisyon veya yönlendirme ücreti almıyoruz/],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, hero, noBuild, noCommission] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    for (const re of [hero, noBuild, noCommission, /KVKK/, /EU AI Act|AB Yapay Zekâ Yasası/]) assert.match(html, re, `${path} ${re}`);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"Service"/);
+    assert.match(html, /"@type":"OfferCatalog"/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.doesNotMatch(html, /AggregateRating|"@type":"Review"|"price"/, `${path} has no ratings, reviews or prices`);
+    const text = html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
+    assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\bTL\b|₺/, `${path} must not show prices`);
+    assert.match(text, /4 (weeks|hafta)/, `${path} shows the approved four-week durations`);
+    assert.match(html, /\/og\/(en|tr)\/aiDecisions\.png/);
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+    for (const link of [...html.matchAll(/href="(\/(?:en|tr)\/[^"#?]+)/g)].map(m => m[1]).filter((v, i, a) => a.indexOf(v) === i)) {
+      assert.equal((await render(link)).status, 200, `${path} links ${link}`);
+    }
+  }
+  const llms = await (await render("/llms.txt")).text();
+  assert.match(llms, /\/en\/expertise\/ai-decisions/);
+});
+
+test("home pages link the AI Decisions page and the About page states the AI decision role", async () => {
+  for (const [path, href] of [["/en", "/en/expertise/ai-decisions"], ["/tr", "/tr/uzmanlik/yapay-zeka-kararlari"]]) {
+    const html = await (await render(path)).text();
+    assert.ok(html.includes(`href="${href}"`), `${path} links ${href}`);
+  }
+  assert.match(await (await render("/en/about")).text(), /independent decision layer above deployment: it does not build AI/);
+  assert.match(await (await render("/tr/hakkimizda")).text(), /uygulamanın üzerindeki bağımsız karar katmanıdır: yapay zekâ geliştirmez/);
+});
+
+test("the old AI Value Diagnostic address redirects to the board diagnostic on the AI Decisions page", async () => {
+  for (const [from, to] of [["/en/expertise/ai-value", "/en/expertise/ai-decisions#aiDiagnostic"], ["/tr/uzmanlik/yapay-zeka-degeri", "/tr/uzmanlik/yapay-zeka-kararlari#aiDiagnostic"]]) {
+    const response = await render(from);
+    assert.ok([307, 308].includes(response.status), `${from} status ${response.status}`);
+    assert.ok((response.headers.get("location") ?? "").endsWith(to), `${from} -> ${response.headers.get("location")}`);
+  }
+  const sitemap = await (await render("/sitemap.xml")).text();
+  assert.doesNotMatch(sitemap, /expertise\/ai-value<|uzmanlik\/yapay-zeka-degeri</);
+  const hub = await (await render("/en/solutions")).text();
+  assert.ok(hub.includes('href="/en/expertise/ai-decisions"'), "solutions hub links AI Decisions");
+  assert.doesNotMatch(hub, /AI Value Diagnostic/);
+  const contact = await (await render("/en/contact")).text();
+  assert.doesNotMatch(contact, /AI Value Diagnostic/);
 });

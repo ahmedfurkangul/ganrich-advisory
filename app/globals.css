@@ -741,3 +741,22 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .guide-sources a { word-break: break-word; }
 /* Inline SVG link arrow (replaces the emoji-prone "↗" character) */
 .arrow-icon { display: inline-block; width: .72em; height: .72em; vertical-align: -.02em; flex: none; overflow: visible; }
+/* AI Decisions page */
+.ai-do-list li { display: grid; gap: 4px; }
+.ai-do-list strong { color: var(--ink); font-weight: 600; }
+.ai-decisions-scope h3 { margin-top: 40px; }
+.ai-offers { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(24px,4vw,60px); }
+.ai-offers > article { border-top: 1px solid var(--ink); padding-top: 24px; display: flex; flex-direction: column; align-items: flex-start; }
+.ai-offers h4 { font-size: .82rem; font-weight: 500; letter-spacing: .035em; color: var(--slate); margin: 16px 0 0; }
+.ai-offers .deliverables { width: 100%; margin-bottom: 24px; }
+.ai-regulation-links { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px 32px; }
+.ai-faq { max-width: 860px; }
+@media (max-width: 820px) { .ai-offers { grid-template-columns: 1fr; } }
+/* Home: AI Decisions tile */
+.ai-decisions-tile > a { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 8px clamp(32px,7vw,100px); border-top: 1px solid var(--ink); border-bottom: 1px solid var(--sand); padding: 32px 0; align-items: start; }
+.ai-decisions-tile .kicker { grid-column: 1 / -1; margin: 0; }
+.ai-decisions-tile h2 { margin: 0; }
+.ai-decisions-tile p:not(.kicker) { margin: 0 0 16px; }
+.ai-decisions-tile span { grid-column: 2; justify-self: start; font-size: .82rem; border-bottom: 1px solid var(--sand); padding: 8px 0; }
+.ai-decisions-tile a:hover span { border-color: var(--ink); }
+@media (max-width: 820px) { .ai-decisions-tile > a { grid-template-columns: 1fr; } .ai-decisions-tile span { grid-column: 1; } }
