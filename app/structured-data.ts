@@ -1,6 +1,6 @@
 import type { Lang } from "./content";
 import { routeMap } from "./content";
-import { services } from "./advisory-content";
+import { listedServices, services } from "./advisory-content";
 import { notes } from "./advisory-note-content";
 import { solutionByKey, solutions, solutionTagList, solutionTags, solutionThemes } from "./solutions-content";
 import { absoluteUrl, SITE_NAME } from "./site-config";
@@ -58,7 +58,8 @@ export function organizationNode(lang: Lang, description: string, { catalog = tr
       "@type": "OfferCatalog",
       name: en ? "Advisory services and programmes" : "Danışmanlık hizmetleri ve programlar",
       itemListElement: [
-        ...services[lang].map(s => ({ "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${pageUrl(lang, s.key)}#service`, name: s.title, url: pageUrl(lang, s.key) } })),
+        ...listedServices[lang].map(s => ({ "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${pageUrl(lang, s.key)}#service`, name: s.title, url: pageUrl(lang, s.key) } })),
+        { "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${pageUrl(lang, "aiDecisions")}#service`, name: lang === "en" ? "AI Decisions" : "Yapay Zekâ Kararları", url: pageUrl(lang, "aiDecisions") } },
         ...solutions[lang].map(s => ({ "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${pageUrl(lang, s.key)}#service`, name: s.title, url: pageUrl(lang, s.key) } })),
       ],
     } } : {}),
@@ -205,7 +206,7 @@ export function offeringNodes(lang: Lang, kind: string, url: string) {
     "@type": "ItemList",
     "@id": `${url}#services`,
     name: en ? "Advisory services" : "Danışmanlık hizmetleri",
-    itemListElement: services[lang].map((s, i) => ({ "@type": "ListItem", position: i + 1, url: pageUrl(lang, s.key), name: s.title })),
+    itemListElement: listedServices[lang].map((s, i) => ({ "@type": "ListItem", position: i + 1, url: pageUrl(lang, s.key), name: s.title })),
   }];
   const note = notes[lang].find(n => n.key === kind);
   if (note) return [{
