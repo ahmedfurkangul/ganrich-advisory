@@ -956,3 +956,12 @@ test("AI Decisions page renders in both languages with offers, FAQ and Service s
   const llms = await (await render("/llms.txt")).text();
   assert.match(llms, /\/en\/expertise\/ai-decisions/);
 });
+
+test("home pages link the AI Decisions page and the About page states the AI decision role", async () => {
+  for (const [path, href] of [["/en", "/en/expertise/ai-decisions"], ["/tr", "/tr/uzmanlik/yapay-zeka-kararlari"]]) {
+    const html = await (await render(path)).text();
+    assert.ok(html.includes(`href="${href}"`), `${path} links ${href}`);
+  }
+  assert.match(await (await render("/en/about")).text(), /independent decision layer above deployment: it does not build AI/);
+  assert.match(await (await render("/tr/hakkimizda")).text(), /uygulamanın üzerindeki bağımsız karar katmanıdır: yapay zekâ geliştirmez/);
+});
