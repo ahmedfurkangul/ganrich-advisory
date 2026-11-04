@@ -12,6 +12,7 @@ type Props = { params: Promise<{ lang: string; slug?: string[] }> };
 const metaCopy = {
   en: {
     home: ["CBAM, CRA & EU Readiness for Turkish Industry | Ganrich", "Independent advisory for Turkish manufacturers and exporters facing CBAM, the Cyber Resilience Act and other EU rules, and deciding where to grow next."],
+    aiDecisions: ["AI Decisions: Independent AI Advisory | Ganrich Advisory", "Independent of AI vendors: we help boards decide where AI is worth doing, choose and govern the partner who builds it, and check that the value arrives."],
     expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
     markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
     insights: ["Technical Notes | Ganrich Advisory", "Whitepapers on CBAM, the Cyber Resilience Act, machinery, batteries, packaging, energy and applied AI, plus strategy articles, in one searchable library."],
@@ -39,6 +40,7 @@ const metaCopy = {
   },
   tr: {
     home: ["Ganrich Advisory | Türk Sanayisi için AB Uyumu ve Strateji", "SKDM (CBAM), Siber Dayanıklılık Yasası ve diğer AB kurallarıyla karşı karşıya olan Türk üretici ve ihracatçılar için bağımsız strateji ve uyum danışmanlığı."],
+    aiDecisions: ["Yapay Zekâ Kararları: Bağımsız Danışmanlık | Ganrich Advisory", "Tedarikçiden bağımsız yapay zekâ kararları: yapay zekânın nerede değer yarattığına karar verin, onu kuracak ortağı seçin ve değerin gelip gelmediğini izleyin."],
     expertise: ["Uzmanlık | Ganrich Advisory", "Strateji, büyüme, işletim modeli, yapay zekâ, organizasyon ve uygulama için karar odaklı uzmanlık."],
     markets: ["Coğrafyalar | Ganrich Advisory", "Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika için pazara özgü kanıtlara dayalı bölgesel bakışlar."],
     insights: ["Teknik Notlar | Ganrich Advisory", "SKDM (CBAM), Siber Dayanıklılık Yasası, makine, batarya, ambalaj, enerji ve uygulamalı yapay zekâ üzerine teknik notlar ve strateji makaleleri tek kütüphanede."],

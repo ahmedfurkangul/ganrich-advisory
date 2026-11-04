@@ -5,6 +5,7 @@ import { notes } from "./advisory-note-content";
 import { solutionByKey, solutions, solutionTagList, solutionTags, solutionThemes } from "./solutions-content";
 import { absoluteUrl, SITE_NAME } from "./site-config";
 import { faqFor } from "./solution-faq";
+import { aiDecisions } from "./ai-decisions-content";
 
 // Schema.org nodes shared by every page. Everything here repeats facts that are visible on the site,
 // so search engines and LLM crawlers get the same story as human readers.
@@ -96,7 +97,7 @@ export function webPageNode(lang: Lang, url: string, name: string, description: 
 export function breadcrumbParent(lang: Lang, kind: string) {
   const en = lang === "en";
   if (kind.startsWith("solution") && kind !== "solutions") return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
-  if (kind.startsWith("service") || kind === "studio") return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
+  if (kind.startsWith("service") || kind === "studio" || kind === "aiDecisions") return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
   if (kind.startsWith("note") || kind.startsWith("guide")) return { name: en ? "Insights" : "İçgörüler", url: pageUrl(lang, "insights") };
   return null;
 }
@@ -140,6 +141,34 @@ export function offeringNodes(lang: Lang, kind: string, url: string) {
         mainEntity: faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
       },
     ];
+  }
+  if (kind === "aiDecisions") {
+    const c = aiDecisions[lang];
+    // Service and FAQ only: no ratings, reviews or prices (approved brief, 4 Nov 2026).
+    return [{
+      "@type": "Service",
+      "@id": `${url}#service`,
+      name: en ? "AI Decisions" : "Yapay Zekâ Kararları",
+      description: c.lead,
+      serviceType: en ? "Independent AI advisory" : "Bağımsız yapay zekâ danışmanlığı",
+      provider,
+      areaServed: en ? ["Türkiye", "Middle East and North Africa", "Europe", "Africa"] : ["Türkiye", "Orta Doğu ve Kuzey Afrika", "Avrupa", "Afrika"],
+      audience: { "@type": "BusinessAudience", audienceType: en ? "Boards and leadership teams" : "Yönetim kurulları ve yönetim ekipleri" },
+      availableLanguage: ["English", "Turkish"],
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: c.offersTitle,
+        itemListElement: c.offers.map(o => ({ "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${url}#${o.key}`, name: o.title, description: o.deliverables.join("; ") } })),
+      },
+      url,
+      mainEntityOfPage: `${url}#webpage`,
+    }, {
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      inLanguage: inLanguage(lang),
+      isPartOf: { "@id": `${url}#webpage` },
+      mainEntity: c.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+    }];
   }
   if (kind === "solutions") return [{
     "@type": "ItemList",

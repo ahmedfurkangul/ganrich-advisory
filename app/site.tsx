@@ -19,6 +19,7 @@ const RegulationCalendarPage = lazy(() => import("./regulation-calendar-page").t
 const NewsletterPage = lazy(() => import("./newsletter").then(m => ({default:m.NewsletterPage})));
 const EudrReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.EudrReadinessCheck})));
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
+const AiDecisionsPage = lazy(() => import("./ai-decisions").then(m => ({default:m.AiDecisionsPage})));
 const GuidePage = lazy(() => import("./guides").then(m => ({default:m.GuidePage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
@@ -116,6 +117,7 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "sampleWork") page = <SampleWorkPage lang={lang}/>;
   if (kind.startsWith("note")) page = <NotePage lang={lang} kind={kind}/>;
   if (kind.startsWith("guide")) page = <GuidePage lang={lang} kind={kind}/>;
+  if (kind === "aiDecisions") page = <AiDecisionsPage lang={lang}/>;
   if (kind === "expertise") page = <ExpertisePage lang={lang}/>;
   if (kind === "insights") page = <InsightsPage lang={lang}/>;
   if (kind.startsWith("article")) page = <InsightExperiencePage lang={lang} index={insightIndex(kind)}/>;

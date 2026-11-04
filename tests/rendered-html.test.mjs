@@ -926,3 +926,33 @@ test("link arrows are SVG icons, not the emoji-prone ↗ character", async () =>
     if (response.status === 200) assert.match(html, /class="arrow-icon/, `${path} has no arrow icon`);
   }
 });
+
+test("AI Decisions page renders in both languages with offers, FAQ and Service schema, and no prices or ratings", async () => {
+  const pages = [
+    ["/en/expertise/ai-decisions", "AI Decisions: Independent AI Advisory | Ganrich Advisory", "/tr/uzmanlik/yapay-zeka-kararlari", /AI decisions, independent of the vendor who builds them\./, /We do not build or resell AI systems\./, /We take no vendor commissions or referral fees\./],
+    ["/tr/uzmanlik/yapay-zeka-kararlari", "Yapay Zekâ Kararları: Bağımsız Danışmanlık | Ganrich Advisory", "/en/expertise/ai-decisions", /Yapay zekâ kararları, onu kuran tedarikçiden bağımsız\./, /Yapay zekâ sistemi geliştirmiyor veya satmıyoruz\./, /komisyon veya yönlendirme ücreti almıyoruz/],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, hero, noBuild, noCommission] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    for (const re of [hero, noBuild, noCommission, /KVKK/, /EU AI Act|AB Yapay Zekâ Yasası/]) assert.match(html, re, `${path} ${re}`);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"Service"/);
+    assert.match(html, /"@type":"OfferCatalog"/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.doesNotMatch(html, /AggregateRating|"@type":"Review"|"price"/, `${path} has no ratings, reviews or prices`);
+    const text = html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
+    assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\bTL\b|₺/, `${path} must not show prices`);
+    assert.match(text, /4 (weeks|hafta)/, `${path} shows the approved four-week durations`);
+    assert.match(html, /\/og\/(en|tr)\/aiDecisions\.png/);
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+    for (const link of [...html.matchAll(/href="(\/(?:en|tr)\/[^"#?]+)/g)].map(m => m[1]).filter((v, i, a) => a.indexOf(v) === i)) {
+      assert.equal((await render(link)).status, 200, `${path} links ${link}`);
+    }
+  }
+  const llms = await (await render("/llms.txt")).text();
+  assert.match(llms, /\/en\/expertise\/ai-decisions/);
+});
