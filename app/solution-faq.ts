@@ -34,6 +34,7 @@ export const solutionFaq: Record<Lang, Record<string, Faq>> = {
       ['Is furniture in scope?', 'Wood and many wood products are in scope, including a number of furniture codes. The list is set by customs code and was updated in 2026, so we check it product line by product line.'],
     ],
     solutionOrderDesk: [
+      ['Do you build the assistant?', 'No. We do not build, resell or operate the software. We help you decide whether it is worth doing, select the partner who builds it, and check the accuracy and value it delivers. We take no vendor commissions or referral fees.'],
       ['Does the assistant send orders or invoices on its own?', 'No. It prepares a draft order in the ERP and a member of your team approves, edits or rejects it. Nothing reaches the customer or the invoice run without that approval.'],
       ['Which ERP systems can it work with?', 'Any system that can import orders, through an API or a structured file. We confirm the route with your ERP partner before the pilot starts.'],
       ['What happens to customer messages and personal data?', 'Messages are processed only to prepare the draft order, under a written agreement and with the data kept to what the order needs. Your KVKK notice and retention rules apply, and the pilot design records where data is processed.'],
@@ -67,6 +68,7 @@ export const solutionFaq: Record<Lang, Record<string, Faq>> = {
       ['Mobilya kapsamda mı?', 'Ahşap ve birçok ahşap ürünü, bazı mobilya kodları dahil, kapsamdadır. Liste gümrük koduna göre belirlenir ve 2026’da güncellendi; bu yüzden kontrolü ürün grubu bazında yapıyoruz.'],
     ],
     solutionOrderDesk: [
+      ['Asistanı siz mi kuruyorsunuz?', 'Hayır. Yazılımı geliştirmiyor, satmıyor veya işletmiyoruz. Yapmaya değip değmeyeceğine karar vermenize, onu kuracak ortağı seçmenize ve sağladığı doğruluk ile değeri kontrol etmenize yardımcı oluyoruz. Tedarikçilerden komisyon veya yönlendirme ücreti almıyoruz.'],
       ['Asistan siparişi veya faturayı kendi başına gönderir mi?', 'Hayır. ERP’de bir taslak sipariş hazırlar; ekibinizden biri onaylar, düzeltir veya reddeder. Bu onay olmadan müşteriye veya fatura sürecine hiçbir şey ulaşmaz.'],
       ['Hangi ERP sistemleriyle çalışır?', 'API veya yapılandırılmış dosya ile sipariş alabilen her sistemle. Pilottan önce yolu ERP iş ortağınızla birlikte netleştiririz.'],
       ['Müşteri mesajlarına ve kişisel verilere ne olur?', 'Mesajlar yalnızca taslak siparişi hazırlamak için, yazılı bir sözleşme çerçevesinde ve siparişin gerektirdiği veriyle sınırlı olarak işlenir. KVKK aydınlatmanız ve saklama kurallarınız geçerlidir; pilot tasarımı verinin nerede işlendiğini kayda geçirir.'],

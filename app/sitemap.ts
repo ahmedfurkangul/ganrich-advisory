@@ -6,6 +6,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const languages: Lang[] = ["en", "tr"];
   // Redirected addresses stay out of the sitemap.
   const redirected = new Set(["serviceAI", "expertise", "markets", "privateBriefing", "privacyCenter", "cookies", "vendors", "dataRights", "policyUpdates", "terms", "aiTransparency"]);
+  // Opportunity Studio is noindex and unlinked since the AI positioning brief (Ganrich does not build or run AI for clients).
+  redirected.add("studio");
   // Category pages are noindex (see page metadata), so they stay out as well.
   const routeKeys = ["home", ...Object.keys(routeMap.en).filter(key => !redirected.has(key) && !key.startsWith("category"))];
   return routeKeys.flatMap((key) => languages.map((lang) => {

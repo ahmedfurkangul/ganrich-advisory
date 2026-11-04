@@ -137,7 +137,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       types: { "application/rss+xml": `/${lang}/feed.xml` },
     },
     // Category pages only list a few notes each; the insights hub is the page to index.
-    robots: kind === "cookiePreferences" || category
+    robots: kind === "cookiePreferences" || kind === "studio" || category
       ? { index: false, follow: true }
       : { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
     openGraph: {
