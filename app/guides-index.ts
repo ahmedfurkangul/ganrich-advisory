@@ -4,6 +4,22 @@ import type { Lang } from "./content";
 export type GuideIndexEntry = { key: string; solution: string; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
  {
+  "key": "guideCraReporting",
+  "solution": "solutionCra",
+  "topic": {
+   "en": "CRA",
+   "tr": "CRA"
+  },
+  "en": {
+   "h1": "CRA Reporting for Refrigeration and White-Goods Exporters",
+   "description": "ENISA and the Commission’s 4 Nov 2026 joint statement on refrigeration cyber incidents: CRA Art. 14 reporting since 11 Sep. What Turkish exporters must do."
+  },
+  "tr": {
+   "h1": "CRA Bildirim Yükümlülüğü: Beyaz Eşya ve Soğutma İhracatçısı",
+   "description": "ENISA ve Komisyon’un 4 Kasım 2026 ortak açıklaması: ticari soğutma siber olayları ve CRA Madde 14 bildirimi. Beyaz eşya ve soğutma ihracatçısı için özet."
+  }
+ },
+ {
   "key": "guideCbam2026",
   "solution": "solutionCbam",
   "topic": {

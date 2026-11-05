@@ -1,6 +1,6 @@
 import type { Lang } from "./content";
 
-// Long-form guides (EUDR, steel DPP, CBAM 2026, CRA standards). Text comes from the reviewed article drafts as written;
+// Long-form guides (EUDR, steel DPP, CBAM 2026, CRA standards, CRA reporting). Text comes from the reviewed article drafts as written;
 // inline links use [text](/path) and emphasis uses *text*, rendered by app/guides.tsx.
 export type GuideBlock =
   | { t: "h2" | "h3" | "p"; text: string }
@@ -12,6 +12,408 @@ export type GuideText = { path: string; title: string; description: string; h1: 
 export type Guide = { key: string; solution: string; date: string; checked: Record<Lang, string>; image: string; readingTime: Record<Lang, string>; topic: Record<Lang, string> } & Record<Lang, GuideText>;
 
 export const guides: Guide[] = [
+ {
+  "key": "guideCraReporting",
+  "solution": "solutionCra",
+  "date": "2026-11-05",
+  "checked": {
+   "en": "5 November 2026",
+   "tr": "5 Kasım 2026"
+  },
+  "image": "guideCraReporting",
+  "readingTime": {
+   "en": "8 min",
+   "tr": "8 dk"
+  },
+  "topic": {
+   "en": "CRA",
+   "tr": "CRA"
+  },
+  "en": {
+   "path": "insights/cra-reporting-white-goods-refrigeration",
+   "title": "CRA Reporting for Refrigeration and White-Goods Exporters",
+   "description": "ENISA and the Commission’s 4 Nov 2026 joint statement on refrigeration cyber incidents: CRA Art. 14 reporting since 11 Sep. What Turkish exporters must do.",
+   "h1": "CRA Reporting for Refrigeration and White-Goods Exporters",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "On 4 November 2026 ENISA and the European Commission published a joint statement on cyber incidents affecting commercial refrigeration systems and similar devices across the EU. The incidents have been under way since 11 October 2026, with a further wave on 1–2 November. The statement’s clearest message for manufacturers is not new law: since 11 September 2026, makers of hardware and software products must report actively exploited vulnerabilities and severe incidents through the Cyber Resilience Act’s Single Reporting Platform."
+    },
+    {
+     "t": "p",
+     "text": "This article sticks to that statement and to Article 14 of Regulation (EU) 2024/2847. It is for Turkish manufacturers who place connected refrigeration or related white-goods products with digital elements on the EU market. It does not repeat our separate piece on missing harmonised standards and conformity routes; the link is below."
+    },
+    {
+     "t": "h2",
+     "text": "What the joint statement says"
+    },
+    {
+     "t": "p",
+     "text": "The ENISA page of 4 November 2026 records the following:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Since 11 October 2026, commercial refrigeration systems and similar devices have been hit by cybersecurity incidents in a number of EU Member States.",
+      "After a new wave on 1–2 November, ENISA, the Commission (DG CNECT), Europol’s EC3, the EU CSIRTs Network and EU-CyCLONe advise organisations to act at once to reduce exposure.",
+      "Affected Member States are investigating; CSIRTs and EU-CyCLONe are exchanging information.",
+      "**EU policy reminder:** as of 11 September 2026, manufacturers of hardware and software products must report severe incidents and actively exploited vulnerabilities through the CRA Single Reporting Platform, under Regulation (EU) 2024/2847.",
+      "The CRA’s main cybersecurity requirements apply from 11 December 2027.",
+      "Entities covered by the NIS2 Directive must manage cybersecurity risk and report significant incidents to their national CSIRT or authority."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "The statement names no manufacturers, brands, countries of origin or attack methods. This article therefore names no Turkish companies. Whether your product is affected is a question for your security and field teams, read against CSIRT advisories and your own telemetry."
+    },
+    {
+     "t": "h2",
+     "text": "When did CRA reporting start?"
+    },
+    {
+     "t": "p",
+     "text": "Under Article 71(2) of Regulation (EU) 2024/2847, the Regulation applies from 11 December 2027, but **Article 14 applies from 11 September 2026**. Article 69(3) reaches backwards: products with digital elements placed on the market before 11 December 2027 are still subject to Article 14. Section 9.1 of the Commission’s guidance of 27 July 2026 (C(2026) 5252, paragraph 210) repeats the same point and adds that reporting continues after a product’s support period ends, whereas the vulnerability-handling duties in Annex I, Part II, do not apply in the same way to unsupported or pre-2027 products."
+    },
+    {
+     "t": "p",
+     "text": "If you place a connected commercial refrigerator, controller or similar product with digital elements on the EU market and you are the manufacturer for CRA purposes, Article 14 is live for you now. Waiting for December 2027 is not an option for reporting."
+    },
+    {
+     "t": "h2",
+     "text": "What Article 14 requires, and on which clocks"
+    },
+    {
+     "t": "p",
+     "text": "Article 14 creates two mandatory tracks: **actively exploited vulnerabilities** (Art. 14(1)–(2)) and **severe incidents having an impact on the security of the product** (Art. 14(3)–(5)). Both go through the single reporting platform under Article 16, to the CSIRT designated as coordinator and, at the same time, to ENISA."
+    },
+    {
+     "t": "p",
+     "text": "For an **actively exploited vulnerability**, the manufacturer must submit:"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Early warning** — without undue delay and in any event within **24 hours** of becoming aware;",
+      "**Vulnerability notification** — without undue delay and in any event within **72 hours** (product, nature of the exploit and vulnerability, measures taken and measures users can take);",
+      "**Final report** — no later than **14 days** after a corrective or mitigating measure is available (description and impact, any available information on the malicious actor, details of the security update or other fix)."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "For a **severe incident**, the same 24-hour / 72-hour skeleton applies; the final report is due within **one month** of the 72-hour notification (Art. 14(4)(c)). Article 14(5) treats an incident as severe if it negatively affects, or is capable of negatively affecting, the product’s ability to protect the availability, authenticity, integrity or confidentiality of sensitive or important data or functions, or if it has led, or is capable of leading, to the introduction or execution of malicious code in the product or in a user’s network and information systems."
+    },
+    {
+     "t": "p",
+     "text": "The Commission’s CRA reporting page and ENISA’s SRP FAQ summarise the same deadlines. Guidance C(2026) 5252 (paragraphs 213–215) reads “becoming aware” as the moment after an initial assessment when the manufacturer has a reasonable degree of certainty that active exploitation or a severe security impact has occurred. The guidance is not binding; it is the Commission’s own reading of the Article 14 trigger."
+    },
+    {
+     "t": "p",
+     "text": "Article 14(8) also requires manufacturers to inform impacted users — and where appropriate all users — of the vulnerability or incident and of risk-mitigation steps. The guidance (paragraphs 219–220) says this should be risk-based and proportionate; it does not require every technical detail to be published."
+    },
+    {
+     "t": "h2",
+     "text": "Which CSIRT does a Turkish manufacturer use?"
+    },
+    {
+     "t": "p",
+     "text": "Under Article 14(7), notifications use the electronic end-point of the CSIRT designated as coordinator in the Member State of the manufacturer’s **main establishment** in the Union, and are simultaneously available to ENISA. Main establishment is where decisions on the cybersecurity of the products are predominantly taken; if that cannot be determined, it is the Member State of the establishment with the highest number of employees in the Union."
+    },
+    {
+     "t": "p",
+     "text": "Where the manufacturer has no main establishment in the Union, the order is:"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "the Member State of the authorised representative acting for the highest number of that manufacturer’s products with digital elements;",
+      "the Member State of the importer placing the highest number of those products on the market;",
+      "the Member State of the distributor making the highest number available;",
+      "the Member State with the highest number of users of those products."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "For many Turkish exporters, steps 1–3 — EU authorised representative, importer or distributor — decide the CSIRT in practice. Lock the Article 14(7) CSIRT choice now and prepare the Assigned Representative (AR) appointment and MFA-enabled EU Login credentials now. Per the ENISA SRP FAQ (updated 15 October 2026, Q9), register on the SRP and start CSIRT validation only when you need to submit a notification — EU Login itself can be created in advance. Do not confuse the SRP Assigned Representative (a platform user role) with the Article 14(7) authorised representative (a CRA legal role). The SRP has been operational since 11 September 2026; ENISA’s SRP page still notes that on 4 November 2026 the platform was upgraded to version 1.3."
+    },
+    {
+     "t": "h2",
+     "text": "Does this incident “cover” your product?"
+    },
+    {
+     "t": "p",
+     "text": "The statement defines the affected class as commercial refrigeration systems and similar devices. It does not list product codes or software stacks. Keep three distinctions clear:"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Might your product be affected?** Check CSIRT advisories, customer reports, your own telemetry and component-vendor notices. If it is affected, the Article 14 clock runs from when you become aware.",
+      "**Does Article 14 apply even if you are not affected by this wave?** Yes, if you manufacture in-scope products with digital elements for the EU market. The statement is a reminder, not a new start date.",
+      "**Is NIS2 your duty?** The NIS2 sentence in the statement is aimed at entities under Directive (EU) 2022/2555. Your primary manufacturer track is CRA Article 14. Your EU customer may be under NIS2 and may ask you for supplier-security information; that is a separate relationship."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "On third-party components, guidance paragraph 218 says you must notify under Article 14(1) if an actively exploited vulnerability in a component is exploitable in your product or has been exploited in your product. If the vulnerable code is not reachable in your product, or has not been exploited there, mandatory reporting does not arise for that manufacturer. The Regulation provides for voluntary Article 15 notification (guidance §218), but per the ENISA SRP FAQ (updated 15 October 2026, Q4 and Q27) that channel is not yet open on the SRP — there is no live voluntary path on the platform today. Vulnerability-handling rules from 11 December 2027 are a separate matter."
+    },
+    {
+     "t": "h2",
+     "text": "What manufacturers should do now"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**Lock the CSIRT choice; prepare the AR and EU Login.** Freeze the Article 14(7) rationale on one page; name the Assigned Representative and open an MFA-enabled EU Login now. Per ENISA FAQ Q9 (15 October 2026), register on the SRP only when you need to submit a notification; keep mandates and EU representative / importer / distributor data consistent.",
+      "**Write the 24-hour / 72-hour decision tree.** Who decides that you have “become aware”, who files the early warning, who clears user notification — including nights and holidays.",
+      "**Inventory products by digital element.** Commercial cabinets, control boards, remote-access software, cloud pairing: which of these are products with digital elements under the CRA?",
+      "**Keep the CSIRT rationale on file.** One page applying Article 14(7) — the same file as the first action above.",
+      "**Draft the user notice.** For Article 14(8), with the guidance’s proportionality warning in mind.",
+      "**Do not confuse missing standards with reporting.** The absence of cited harmonised standards does not pause Article 14. For the conformity side, see [CRA compliance without harmonised standards](/en/insights/cra-compliance-without-harmonised-standards)."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Our [CRA incident readiness](/en/solutions/cra-incident-readiness) work builds Article 14 processes product by product. To see where you stand, use the [CRA readiness check](/en/decision-lab/cra-readiness-check); for a 24-hour tabletop frame, see our [CRA 24-hour test report](/en/insights/report/cra-the-24-hour-test-96989394). If EU customers are asking NIS2 supplier questions, see [NIS2 supplier security](/en/solutions/nis2-supplier-security). For the wider calendar, use the [EU regulation calendar](/en/insights/eu-regulation-calendar)."
+    },
+    {
+     "t": "h2",
+     "text": "FAQ"
+    },
+    {
+     "t": "faq",
+     "items": [
+      [
+       "When did CRA reporting start?",
+       "On 11 September 2026, under Article 71(2), second sentence, and Article 69(3) of Regulation (EU) 2024/2847. The ENISA–Commission joint statement of 4 November 2026 recalls the same date."
+      ],
+      [
+       "How long do I have for the early warning?",
+       "Without undue delay and in any event within 24 hours of becoming aware of an actively exploited vulnerability or a severe incident (Art. 14(2)(a) and 14(4)(a))."
+      ],
+      [
+       "Is the final-report deadline the same for vulnerabilities and severe incidents?",
+       "No. For actively exploited vulnerabilities it is no later than 14 days after a corrective or mitigating measure is available; for severe incidents it is within one month of the 72-hour notification (Art. 14(2)(c) and 14(4)(c))."
+      ],
+      [
+       "Where does a Turkey-based manufacturer notify?",
+       "If there is no main establishment in the Union, follow Article 14(7): the coordinator CSIRT of the Member State of the authorised representative, importer, distributor or largest user base, in that order, via the SRP with simultaneous access for ENISA."
+      ],
+      [
+       "Does the joint statement single out Turkish white-goods makers?",
+       "No. It describes incidents in commercial refrigeration systems and similar devices and names no manufacturers, brands or countries of origin. The Article 14 reminder is addressed to manufacturers of products with digital elements on the EU market generally."
+      ],
+      [
+       "Are the main CRA cybersecurity requirements already mandatory?",
+       "No. Per the statement and Article 71(2), those apply from 11 December 2027. What is live now is Article 14 (and, since 11 June 2026, Chapter IV on notified bodies)."
+      ]
+     ]
+    },
+    {
+     "t": "sources",
+     "title": "Sources (accessed 5 Nov 2026)",
+     "items": [
+      "ENISA / European Commission, “Joint statement on cyber incidents in refrigeration systems across the EU”, 4 Nov 2026: [ENISA news](https://www.enisa.europa.eu/news/joint-statement-on-cyber-incidents-in-refrigeration-systems-across-the-eu) (accessed 2026-11-05).",
+      "Regulation (EU) 2024/2847 (Cyber Resilience Act), Articles 14, 69(3) and 71(2): [EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847) (accessed 2026-11-05 via headless Chrome).",
+      "European Commission, “Cyber Resilience Act – Reporting obligations”: [digital-strategy](https://digital-strategy.ec.europa.eu/en/policies/cra-reporting) (accessed 2026-11-05).",
+      "European Commission, C(2026) 5252 — CRA guidance (annex), 27 Jul 2026, Section 9.1: [library page](https://digital-strategy.ec.europa.eu/en/library/commission-publishes-new-guidance-support-timely-cyber-resilience-act-implementation), [PDF annex](https://ec.europa.eu/newsroom/dae/redirection/document/131456) (accessed 2026-11-05).",
+      "ENISA, CRA Single Reporting Platform (SRP): [SRP](https://www.enisa.europa.eu/cra-srp) (accessed 2026-11-05; page still notes the 4 Nov 2026 upgrade to v1.3).",
+      "ENISA, CRA SRP Frequently Asked Questions, *Updated: 15 October 2026* — Q4 and Q27 (Art. 15 voluntary channel not yet open on the SRP); Q9 (register only when you need to submit a notification): [FAQ](https://www.enisa.europa.eu/topics/product-security/vulnerability-services/eu-incident-response-and-cyber-crisis-management/single-reporting-platform-srp/frequently-asked-questions) (accessed 2026-11-05)."
+     ]
+    }
+   ]
+  },
+  "tr": {
+   "path": "icgoruler/cra-bildirim-beyaz-esya-sogutma",
+   "title": "CRA Bildirim: Beyaz Eşya ve Soğutma İhracatçısı",
+   "description": "ENISA ve Komisyon’un 4 Kasım 2026 ortak açıklaması: ticari soğutma siber olayları ve CRA Madde 14 bildirimi. Beyaz eşya ve soğutma ihracatçısı için özet.",
+   "h1": "CRA Bildirim Yükümlülüğü: Beyaz Eşya ve Soğutma İhracatçısı",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "ENISA ile Avrupa Komisyonu, 4 Kasım 2026’da AB genelinde ticari soğutma sistemlerini ve benzer cihazları etkileyen siber olaylara ilişkin ortak bir açıklama yayımladı. Açıklamaya göre olaylar 11 Ekim 2026’dan beri sürüyor; 1–2 Kasım’da yeni bir dalga görüldü. Metnin üreticilere yönelik net hatırlatması şu: 11 Eylül 2026’dan beri, dijital unsurlu ürün üreticileri aktif olarak istismar edilen güvenlik açıklarını ve güvenlik üzerinde etkisi olan ciddi olayları Siber Dayanıklılık Tüzüğü’nün (CRA) Tek Bildirim Platformu’na bildirmek zorunda."
+    },
+    {
+     "t": "p",
+     "text": "Bu yazı, açıklamanın kendisini ve (AB) 2024/2847 sayılı Tüzük’ün Madde 14 metnini temel alarak, AB’ye bağlı soğutma veya beyaz eşya ürünü satan Türk üreticinin bugün hangi bildirimi, hangi sürede ve hangi kanaldan yapması gerektiğini özetliyor. Harmonize standartların gecikmesi ve uygunluk değerlendirme yolları için ayrı bir yazımız var; burada odak yalnızca yürürlükteki bildirim yükümlülüğü."
+    },
+    {
+     "t": "h2",
+     "text": "Ortak açıklama ne diyor?"
+    },
+    {
+     "t": "p",
+     "text": "ENISA sayfasında yayımlanan 4 Kasım 2026 tarihli ortak açıklama şu noktaları kayda geçiriyor:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "11 Ekim 2026’dan beri birkaç AB üye devletinde ticari soğutma sistemleri ve benzer cihazlar siber olaylardan etkilenmiş durumda.",
+      "1–2 Kasım’da yeni bir olay dalgası yaşandıktan sonra ENISA, Komisyon (DG CNECT), Europol EC3, AB CSIRT’ler Ağı ve EU-CyCLONe, etkilenen sistemlerde riski azaltmak için derhal harekete geçilmesini tavsiye ediyor.",
+      "Etkilenen üye devletler durumu inceliyor; CSIRT’ler ve EU-CyCLONe bilgi değiş tokuşu yapıyor.",
+      "**AB politikası hatırlatması:** 11 Eylül 2026’dan itibaren donanım ve yazılım ürünü üreticileri, ciddi olayları ve aktif olarak istismar edilen güvenlik açıklarını CRA Tek Bildirim Platformu üzerinden bildirmeli ((AB) 2024/2847).",
+      "CRA’nın ana siber güvenlik gereklilikleri 11 Aralık 2027’den itibaren uygulanacak.",
+      "NIS2 kapsamındaki kuruluşlar, operasyonlarına ilişkin siber riskleri yönetmeli ve önemli olayları ulusal CSIRT veya yetkili makama bildirmeli."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Açıklama üretici adı, marka, menşe ülke veya saldırı yöntemi vermiyor. Bu nedenle bu yazıda da Türk şirket adı yok; ürününüzün olaydan etkilenip etkilenmediği, sizin güvenlik ve saha ekiplerinizin CSIRT tavsiyeleri ve kendi telemetrisiyle cevaplayacağı bir soru."
+    },
+    {
+     "t": "h2",
+     "text": "CRA bildirim yükümlülüğü ne zamandan beri geçerli?"
+    },
+    {
+     "t": "p",
+     "text": "(AB) 2024/2847 sayılı Siber Dayanıklılık Tüzüğü Madde 71(2)’ye göre Tüzük’ün genel uygulama tarihi 11 Aralık 2027’dir; ancak Madde 14 **11 Eylül 2026’dan itibaren** uygulanır. Madde 69(3) ise bunu geriye doğru da bağlar: 11 Aralık 2027’den önce piyasaya arz edilmiş dijital unsurlu ürünler için Madde 14 yükümlülükleri yine geçerlidir. Komisyon’un 27 Temmuz 2026 tarihli C(2026) 5252 sayılı rehberinin 9.1 bölümü (paragraf 210) aynı noktayı tekrarlar: bildirim, ürünün destek süresi bittikten sonra da devam eder; destek süresi bitmiş veya 2027 öncesi piyasaya çıkmış ürünlerde Madde 14 yine uygulanır, oysa Ek I Kısım II’deki güvenlik açığı yönetimi yükümlülükleri o ürünler için aynı şekilde işlemez."
+    },
+    {
+     "t": "p",
+     "text": "Pratik sonuç: AB pazarına sunduğunuz bağlı soğutucu, ticari dolap, kontrol ünitesi veya benzeri dijital unsurlu bir ürün varsa — ve siz CRA anlamında üretici iseniz — Madde 14 takvimi sizin için bugün işliyor. 11 Aralık 2027’yi beklemek yok."
+    },
+    {
+     "t": "h2",
+     "text": "Madde 14 neyi, hangi sürelerle bildiriyor?"
+    },
+    {
+     "t": "p",
+     "text": "Madde 14 iki ayrı zorunlu bildirim hattı kuruyor: **aktif olarak istismar edilen güvenlik açığı** (Madde 14(1)–(2)) ve **ürünün güvenliği üzerinde etkisi olan ciddi olay** (Madde 14(3)–(5)). Her iki hatta da bildirim, Madde 16’da kurulan tek bildirim platformu üzerinden, koordinatör olarak belirlenen CSIRT’e ve aynı anda ENISA’ya gider."
+    },
+    {
+     "t": "p",
+     "text": "**Aktif olarak istismar edilen güvenlik açığı** için üretici:"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Erken uyarı:** farkına vardığı andan itibaren gecikmeksizin ve her hâlükârda **24 saat** içinde;",
+      "**Güvenlik açığı bildirimi:** gecikmeksizin ve her hâlükârda **72 saat** içinde (ürün, istismarın genel niteliği, alınan ve kullanıcının alabileceği önlemler);",
+      "**Nihai rapor:** düzeltici veya azaltıcı bir önlem (ör. yama) çıktıktan sonra en geç **14 gün** içinde (açığın tanımı ve etkisi, varsa kötü niyetli aktör bilgisi, güvenlik güncellemesi ayrıntıları)."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "**Ciddi olay** için aynı 24 saat / 72 saat iskeleti geçerli; nihai rapor ise 72 saatlik bildirimin ardından **bir ay** içinde verilir (Madde 14(4)(c)). Madde 14(5), bir olayın “ciddi” sayılması için iki alternatif ölçüt koyuyor: ürünün hassas veya önemli veri ya da işlevlerin gizliliği, bütünlüğü, kimlik doğruluğu veya kullanılabilirliğini koruma yeteneğini olumsuz etkilemesi (veya etkileyebilecek olması); ya da ürüne veya kullanıcının ağ ve bilgi sistemlerine zararlı kodun sokulmasına veya çalıştırılmasına yol açması (veya açabilecek olması)."
+    },
+    {
+     "t": "p",
+     "text": "Komisyon’un CRA bildirim sayfası ve ENISA SRP SSS’si aynı süreleri özetliyor. C(2026) 5252 rehberi (paragraf 213–215), “farkına varma” anını, şüpheli bir olayın ilk değerlendirilmesinden sonra üreticinin makul bir kesinliğe ulaştığı an olarak tarif ediyor; rehber bağlayıcı değil ama Madde 14’teki “becomes aware” ifadesini uygularken Komisyon’un kendi okuması bu."
+    },
+    {
+     "t": "p",
+     "text": "Madde 14(8) ayrıca, etkilenen kullanıcıları — ve uygun olduğunda tüm kullanıcıları — olay veya açıktan ve alınabilecek önlemlerden haberdar etme yükümlülüğü getiriyor. Rehber (paragraf 219–220) bunun risk temelli ve orantılı uygulanacağını; her ayrıntının kamuya dökülmesi gerekmediğini belirtiyor."
+    },
+    {
+     "t": "h2",
+     "text": "Türk üretici hangi CSIRT’e bildirir?"
+    },
+    {
+     "t": "p",
+     "text": "Madde 14(7)’ye göre bildirim, üreticinin Birlik’teki **ana kuruluşunun** bulunduğu üye devletin koordinatör CSIRT’inin elektronik uç noktası üzerinden yapılır ve ENISA’ya eşzamanlı erişilir. Ana kuruluş, ürünlerinin siber güvenliğine ilişkin kararların ağırlıklı olarak alındığı üye devlet sayılır; belirlenemezse Birlik’teki çalışan sayısı en yüksek kuruluşun bulunduğu üye devlet esas alınır."
+    },
+    {
+     "t": "p",
+     "text": "Birlik’te ana kuruluşu olmayan üretici için sıra şöyle (eldeki bilgiye göre):"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "Üreticinin en fazla sayıda dijital unsurlu ürünü için hareket eden yetkili temsilcisinin kurulduğu üye devlet;",
+      "Üreticinin en fazla sayıda ürününü piyasaya arz eden ithalatçının kurulduğu üye devlet;",
+      "En fazla sayıda ürünü piyasada bulunduran distribütörün kurulduğu üye devlet;",
+      "Üreticinin ürünlerinin en fazla kullanıcısının bulunduğu üye devlet."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Birçok Türk ihracatçı için ilk üç basamak — AB’deki yetkili temsilci, ithalatçı veya distribütör — kararı fiilen belirler. Madde 14(7) CSIRT seçimini şimdi kilitleyin; Assigned Representative (AR) atamasını ve MFA’lı EU Login kimlik bilgilerini şimdiden hazırlayın. ENISA SRP SSS’sine göre (15 Ekim 2026 güncellemesi, S9) platforma kayıt ve doğrulama sürecini yalnızca bildirim göndermeniz gerektiğinde başlatın — EU Login hesabı önceden açılabilir. SRP’deki Assigned Representative, platform kullanıcı rolüdür; Madde 14(7)’deki yetkili temsilci ise CRA’daki hukuki roldür — ikisini karıştırmayın. ENISA SRP’si 11 Eylül 2026’dan beri açık; 4 Kasım 2026’da platformun 1.3 sürümüne yükseltildiği de not düşülmüş durumda."
+    },
+    {
+     "t": "h2",
+     "text": "Bu olay sizin ürününüzü “kapsıyor” mu?"
+    },
+    {
+     "t": "p",
+     "text": "Ortak açıklama, etkilenen cihaz sınıfını “ticari soğutma sistemleri ve benzer cihazlar” diye tanımlıyor; hangi ürün kodunun veya hangi yazılım yığınının etkilendiğini söylemiyor. Üç ayrımı net tutun:"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Sizin ürününüz olaydan etkilenmiş olabilir mi?** CSIRT tavsiyelerine, müşteri şikâyetlerine, kendi telemetrinize ve bileşen tedarikçilerinizin duyurularına bakın. Etkilenme varsa Madde 14 süresi, “farkına vardığınız” andan işlemeye başlar.",
+      "**Sizin ürününüz olaydan etkilenmese bile Madde 14 geçerli midir?** Evet — CRA kapsamındaki dijital unsurlu ürünlerin üreticisiyseniz, ileride aktif istismar veya ciddi olay farkına vardığınızda bildirim zorunluluğu zaten duruyor. Ortak açıklama bir hatırlatma; yeni bir yürürlük tarihi değil.",
+      "**NIS2 sizin yükümlülüğünüz mü?** Açıklamadaki NIS2 cümlesi, Direktif (AB) 2022/2555 kapsamındaki kuruluşlara yönelik. Üretici olarak sizin birincil hattınız CRA Madde 14’tür. AB’deki müşteriniz NIS2 kapsamında olabilir ve sizden tedarikçi güvenlik bilgisi isteyebilir; bu, ayrı bir ilişki."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Üçüncü taraf bileşende aktif istismar varsa, rehber paragraf 218’e göre o bileşen sizin ürününüzde istismar edilebiliyorsa veya sizin ürününüzde istismar edildiyse Madde 14(1) sizin için de tetiklenir; bileşendeki açık sizin ürününüzde ulaşılamıyorsa veya sizin ürününüzde istismar edilmediyse zorunlu bildirim doğmaz. Tüzük Madde 15 gönüllü bildirimi öngörür ve rehber §218 buna atıf eder; ancak ENISA SRP SSS’sine göre (15 Ekim 2026, S4 ve S27) gönüllü Madde 15 kanalı SRP’de henüz açık değildir — şu an SRP üzerinden canlı bir gönüllü yol yoktur. 11 Aralık 2027’den itibaren güvenlik açığı yönetimi kuralları ayrı meseledir."
+    },
+    {
+     "t": "h2",
+     "text": "Üreticiler şimdi ne yapmalı?"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**CSIRT seçimini kilitleyin; AR ve EU Login’i hazırlayın.** Madde 14(7) dosyanızı tek sayfada sabitleyin; Assigned Representative’i belirleyip MFA’lı EU Login’i şimdiden açın. ENISA SSS S9’a (15 Ekim 2026) göre SRP kaydını yalnızca bildirim göndermeniz gerektiğinde yapın; yetki belgesi ile Birlik’teki temsil / ithalatçı / distribütör bilgileriniz tutarlı olsun.",
+      "**24 saat / 72 saat karar ağacını yazın.** Kim “farkına varma” kararını veriyor, kim erken uyarıyı gönderiyor, kim kullanıcı bilgilendirmesini onaylıyor — tatilde ve gece vardiyasında da.",
+      "**Ürün envanterini dijital unsur bazında çıkarın.** Ticari soğutucu, kontrol kartı, uzak erişim yazılımı, bulut eşlemesi: hangisi CRA’da “dijital unsurlu ürün”?",
+      "**CSIRT seçim gerekçesini dosyada tutun.** Madde 14(7) sırasına göre hangi üye devlet, hangi koordinatör CSIRT — tek sayfalık gerekçe yukarıdaki ilk maddeyle aynı dosyadır.",
+      "**Müşteri bildirim taslağını hazırlayın.** Madde 14(8) için; rehberin orantılılık uyarısını unutmadan.",
+      "**Standart gecikmesini bildirimle karıştırmayın.** Harmonize standartların yokluğu Madde 14’ü ertelemez. Uygunluk tarafı için [CRA uyumu: standart yokken](/tr/icgoruler/cra-uyumu-standart-yokken-turk-uretici) yazımıza bakın."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "[CRA olay hazırlığı](/tr/cozumler/cra-olay-hazirligi) hizmetimiz Madde 14 süreçlerini ürün bazında kuruyor. Nerede durduğunuzu görmek için [CRA hazırlık testini](/tr/karar-laboratuvari/cra-hazirlik-testi) kullanabilir, 24 saatlik masaüstü tatbikat çerçevesi için [CRA 24 saat testi raporumuza](/tr/icgoruler/rapor/cra-24-saat-testi-37aca9ad) bakabilirsiniz. AB müşteriniz NIS2 kapsamında soru soruyorsa [NIS2 tedarikçi güvenliği](/tr/cozumler/nis2-tedarikci-guvenligi) sayfasına; tüm tarihleri izlemek için [AB mevzuat takvimine](/tr/icgoruler/ab-mevzuat-takvimi) geçin."
+    },
+    {
+     "t": "h2",
+     "text": "Sıkça sorulan sorular"
+    },
+    {
+     "t": "faq",
+     "items": [
+      [
+       "CRA bildirim yükümlülüğü ne zaman başladı?",
+       "11 Eylül 2026’da. Dayanak: (AB) 2024/2847 Madde 71(2) ikinci cümle ve Madde 69(3); ENISA–Komisyon ortak açıklaması (4 Kasım 2026) aynı tarihi hatırlatıyor."
+      ],
+      [
+       "Erken uyarı süresi ne kadar?",
+       "Aktif istismar veya ciddi olay farkına varıldıktan sonra gecikmeksizin ve her hâlükârda 24 saat (Madde 14(2)(a) ve 14(4)(a))."
+      ],
+      [
+       "Nihai rapor süresi güvenlik açığı ile ciddi olayda aynı mı?",
+       "Hayır. Aktif istismarda düzeltici/azaltıcı önlem çıktıktan sonra en geç 14 gün; ciddi olayda 72 saatlik bildirimden sonra bir ay (Madde 14(2)(c) ve 14(4)(c))."
+      ],
+      [
+       "Türkiye’de kurulu bir üretici nereye bildirir?",
+       "Birlik’te ana kuruluş yoksa Madde 14(7)’deki sıraya göre: yetkili temsilci, ithalatçı, distribütör veya kullanıcı sayısının en yüksek olduğu üye devletin koordinatör CSIRT’i; bildirim SRP üzerinden ENISA’ya da eşzamanlı açılır."
+      ],
+      [
+       "Ortak açıklama Türk beyaz eşya üreticilerini hedef alıyor mu?",
+       "Hayır. Açıklama ticari soğutma sistemleri ve benzer cihazlardaki olayları anlatıyor; üretici, marka veya menşe ülke saymıyor. Madde 14 hatırlatması, AB pazarındaki dijital unsurlu ürün üreticilerinin tümüne yönelik."
+      ],
+      [
+       "Ana CRA gereklilikleri de şimdiden mi zorunlu?",
+       "Hayır. Ortak açıklama ve Madde 71(2)’ye göre ana siber güvenlik gereklilikleri 11 Aralık 2027’de uygulanır; bugün yürürlükte olan kısım Madde 14 (ve 11 Haziran 2026’dan beri onaylanmış kuruluşlara ilişkin Bölüm IV)."
+      ]
+     ]
+    },
+    {
+     "t": "sources",
+     "title": "Kaynaklar (erişim 5 Kasım 2026)",
+     "items": [
+      "ENISA / Avrupa Komisyonu, “Joint statement on cyber incidents in refrigeration systems across the EU”, 04.11.2026: [ENISA haber](https://www.enisa.europa.eu/news/joint-statement-on-cyber-incidents-in-refrigeration-systems-across-the-eu) (erişim 2026-11-05).",
+      "(AB) 2024/2847 sayılı Siber Dayanıklılık Tüzüğü, Madde 14, 69(3) ve 71(2): [EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847) (erişim 2026-11-05, headless Chrome).",
+      "Avrupa Komisyonu, “Cyber Resilience Act – Reporting obligations”: [digital-strategy](https://digital-strategy.ec.europa.eu/en/policies/cra-reporting) (erişim 2026-11-05).",
+      "Avrupa Komisyonu, C(2026) 5252 — CRA uygulama rehberi (ek), 27.07.2026, Bölüm 9.1: [kütüphane sayfası](https://digital-strategy.ec.europa.eu/en/library/commission-publishes-new-guidance-support-timely-cyber-resilience-act-implementation), [PDF ek](https://ec.europa.eu/newsroom/dae/redirection/document/131456) (erişim 2026-11-05).",
+      "ENISA, CRA Single Reporting Platform (SRP): [SRP](https://www.enisa.europa.eu/cra-srp) (erişim 2026-11-05; sayfada 4 Kasım 2026’da v1.3 yükseltmesi notu hâlâ mevcut).",
+      "ENISA, CRA SRP Frequently Asked Questions, *Updated: 15 October 2026* — S4 ve S27 (Madde 15 gönüllü kanalı henüz açık değil); S9 (kayıt yalnızca bildirim gerekirken): [FAQ](https://www.enisa.europa.eu/topics/product-security/vulnerability-services/eu-incident-response-and-cyber-crisis-management/single-reporting-platform-srp/frequently-asked-questions) (erişim 2026-11-05)."
+     ]
+    }
+   ]
+  }
+ },
  {
   "key": "guideEudr2026",
   "solution": "solutionEudr",
