@@ -926,6 +926,29 @@ test("publishes the CBAM 2026 and CRA standards guides with FAQ markup, sitemap 
   for (const link of links) assert.equal((await render(link)).status, 200, `internal link ${link}`);
 });
 
+test("publishes the CRA reporting (refrigeration) guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
+  const pages = [
+    ["/en/insights/cra-reporting-white-goods-refrigeration", "CRA Reporting for Refrigeration and White-Goods Exporters", "/tr/icgoruler/cra-bildirim-beyaz-esya-sogutma", /<strong>Article 14 applies from 11 September 2026<\/strong>/],
+    ["/tr/icgoruler/cra-bildirim-beyaz-esya-sogutma", "CRA Bildirim: Beyaz Eşya ve Soğutma İhracatçısı", "/en/insights/cra-reporting-white-goods-refrigeration", /Beyaz eşya ve soğutma ihracatçısı için özet\./],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, body] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.match(html, body);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guideCraReporting\.png/);
+    assert.match(html, /href="https:\/\/www\.enisa\.europa\.eu\/news\/joint-statement-on-cyber-incidents-in-refrigeration-systems-across-the-eu" rel="noopener noreferrer" target="_blank"/);
+    assert.doesNotMatch(html, /beyaz eşya üreticileri şimdi ne yapmalı/i, "TR description is the reviewed one, without the urgency line");
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+  }
+  assert.match(await (await render("/en/insights")).text(), /CRA Reporting for Refrigeration and White-Goods Exporters/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /CRA Bildirim Yükümlülüğü: Beyaz Eşya ve Soğutma İhracatçısı/);
+});
+
 test("link arrows are SVG icons, not the emoji-prone ↗ character", async () => {
   for (const path of ["/en", "/tr", "/en/solutions", "/tr/cozumler", "/en/about", "/tr/hakkinda"]) {
     const response = await render(path);

@@ -14,7 +14,7 @@ function inline(text: string): ReactNode[] {
   let last = 0, m: RegExpExecArray | null, i = 0;
   while ((m = re.exec(text))) {
     if (m.index > last) out.push(text.slice(last, m.index));
-    if (m[1]) out.push(<a key={i++} href={m[2]}>{m[1]}</a>);
+    if (m[1]) out.push(m[2].startsWith("https://") ? <a key={i++} href={m[2]} rel="noopener noreferrer" target="_blank">{m[1]}</a> : <a key={i++} href={m[2]}>{m[1]}</a>);
     else if (m[3]) out.push(<em key={i++}>{m[3]}</em>);
     else if (m[5]) out.push(<strong key={i++}>{m[5]}</strong>);
     else if (m[4]) out.push(<a key={i++} href={m[4]} rel="noopener noreferrer" target="_blank">{m[4].replace(/^https:\/\//, "").replace(/\/$/, "")}</a>);
