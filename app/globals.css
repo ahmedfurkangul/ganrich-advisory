@@ -760,3 +760,8 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .ai-decisions-tile span { grid-column: 2; justify-self: start; font-size: .82rem; border-bottom: 1px solid var(--sand); padding: 8px 0; }
 .ai-decisions-tile a:hover span { border-color: var(--ink); }
 @media (max-width: 820px) { .ai-decisions-tile > a { grid-template-columns: 1fr; } .ai-decisions-tile span { grid-column: 1; } }
+
+/* Engraved Bosphorus scene above the footer (decorative). The drawing's waterline meets the dark footer. */
+.footer-scene { background: var(--ivory); border-top: 1px solid var(--sand); padding: clamp(28px, 5vw, 64px) 0 0; overflow: hidden; }
+.footer-scene img { display: block; width: 100%; min-width: 760px; height: auto; margin: 0 auto; opacity: .82; }
+@media (max-width: 760px) { .footer-scene img { margin-left: -12%; } }

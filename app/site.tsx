@@ -84,7 +84,8 @@ function TopSectionNav({ lang }: { lang: Lang }) {
 
 function Footer({ lang }: { lang: Lang }) {
   const t = ui[lang]; const m = routeMap[lang];
-  return <footer className="footer">
+  // Engraved line drawing of the Bosphorus above the footer: decorative, lazy-loaded, no links on it.
+  return <><div className="footer-scene" aria-hidden="true"><img src="/brand/footer-bosphorus-v1.svg" alt="" width={1600} height={320} loading="lazy" decoding="async"/></div><footer className="footer">
     <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Strategy and EU-readiness advisory for Turkish industry and exporters." : "Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı."}</p></div>
     <div className="footer-links">
       <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.solutions}`}>{t.nav[0]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[1]}</a><a href={`/${lang}/${m.regulationCalendar}`}>{lang === "en" ? "EU regulation calendar" : "AB mevzuat takvimi"}</a><a href={`/${lang}/${m.newsletter}`}>{lang === "en" ? "Regulation updates" : "Mevzuat bülteni"}</a><a href={`/${lang}/${m.decisionLab}`}>{lang === "en" ? "Readiness checks" : "Hazırlık testleri"}</a><a href={`/${lang}/${m.sampleWork}`}>{lang === "en" ? "Sample work" : "Örnek çalışmalar"}</a><a href={`/${lang}/${m.about}`}>{t.nav[2]}</a></div>
@@ -98,7 +99,7 @@ function Footer({ lang }: { lang: Lang }) {
       <a href={`/${lang}/feed.xml`}>RSS <Arrow/></a>
     </nav>
     <div className="footer-base"><p>© {new Date().getFullYear()} Ganrich Advisory</p><p>{lang === "en" ? "Privacy controls · v1.0" : "Gizlilik kontrolleri · v1.0"}</p></div>
-  </footer>;
+  </footer></>;
 }
 
 export function SiteLayout({ lang, route, children }: SiteProps & { children: React.ReactNode }) {

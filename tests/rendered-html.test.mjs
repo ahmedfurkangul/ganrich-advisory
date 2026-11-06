@@ -1011,3 +1011,10 @@ test("the old AI Value Diagnostic address redirects to the board diagnostic on t
   const contact = await (await render("/en/contact")).text();
   assert.doesNotMatch(contact, /AI Value Diagnostic/);
 });
+
+test("shows the engraved Bosphorus scene above the footer as a lazy, decorative image", async () => {
+  const html = await (await render("/tr")).text();
+  assert.match(html, /<div class="footer-scene" aria-hidden="true"><img src="\/brand\/footer-bosphorus-v1\.svg" alt=""[^>]*loading="lazy"/);
+  const svg = await readFile(new URL("../public/brand/footer-bosphorus-v1.svg", import.meta.url));
+  assert.ok(gzipSync(svg).length < 150_000, "footer drawing stays light");
+});
