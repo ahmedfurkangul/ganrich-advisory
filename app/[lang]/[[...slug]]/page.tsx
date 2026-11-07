@@ -7,6 +7,8 @@ import { insightArticles, insightCategoryForKind, insightIndex, Lang, pageKind, 
 import { absoluteUrl, metaDescription, SITE_NAME, SITE_ORIGIN } from "../../site-config";
 import { breadcrumbParent, FOUNDER_SAME_AS, founderName, ids, offeringNodes, organizationNode, pageKeywords, webPageNode, websiteNode } from "../../structured-data";
 
+const OG_CARD_VERSION = "2";
+
 type Props = { params: Promise<{ lang: string; slug?: string[] }> };
 
 const metaCopy = {
@@ -117,9 +119,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? [`${lang === "en" ? `${category.label} Insights` : `${category.label} üzerine içgörüler`} | Ganrich Advisory`, category.description]
     : (trust ?? advisoryMeta(lang, kind) ?? metaCopy[lang][metaKind] ?? metaCopy[lang].home);
   const description = metaDescription(fullDescription);
-  const socialCard = article
+  // Bump OG_CARD_VERSION when cards change: link previews (LinkedIn) cache image URLs, including failed fetches.
+  const socialCard = (article
     ? `/og/${lang}/article-${article.slug}.png`
-    : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind.startsWith("guide") || kind === "sampleWork" ? kind : metaKind in metaCopy[lang] ? metaKind : "home"}.png`;
+    : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind.startsWith("guide") || kind === "sampleWork" ? kind : metaKind in metaCopy[lang] ? metaKind : "home"}.png`) + `?v=${OG_CARD_VERSION}`;
   const keywords = pageKeywords(lang, kind);
   const metadataBase = new URL(SITE_ORIGIN);
   const current = `/${lang}${route ? `/${route}` : ""}`; const other: Lang = lang === "en" ? "tr" : "en"; const currentKind = pageKind(lang, route); const translated = currentKind === "home" || currentKind === "notFound" ? `/${other}` : `/${other}/${routeMap[other][currentKind]}`;
