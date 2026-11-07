@@ -782,3 +782,12 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
   .advisory-hero:has(+ .updates-page) h1 { font-size: clamp(2rem, 8vw, 2.6rem); margin-bottom: 16px; }
   .updates-page { padding-top: 28px; }
 }
+
+/* Contact page on a phone: the form comes first, the explanation after it */
+@media (max-width: 700px) {
+  .contact-section { display: flex; flex-direction: column; gap: 40px; }
+  .contact-section > form, .contact-section > .form-success { order: -1; }
+  .advisory-hero:has(+ .contact-section) { padding-bottom: 28px; }
+  .advisory-hero:has(+ .contact-section) h1 { font-size: clamp(2rem, 8vw, 2.6rem); margin-bottom: 16px; }
+  .contact-section .contact-form textarea { min-height: 0; }
+}

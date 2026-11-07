@@ -1060,3 +1060,15 @@ test("the bulletin page shows the email-only sign-up before the explanation", as
     assert.doesNotMatch(signup, /name="(name|organization)"/);
   }
 });
+
+test("the contact form needs only name, email and topic", async () => {
+  for (const path of ["/en/contact", "/tr/iletisim"]) {
+    const html = await (await render(path)).text();
+    const form = html.slice(html.indexOf('<form class="contact-form'));
+    const tag = (name) => form.match(new RegExp(`<(input|select)[^>]*name="${name}"[^>]*>`))?.[0] ?? "";
+    for (const field of ["name", "email", "topic"]) assert.match(tag(field), /required/, `${path}: ${field} required`);
+    assert.ok(tag("organization") && !/required/.test(tag("organization")), `${path}: company optional`);
+  }
+  const route = await readFile(new URL("../app/api/inquiries/route.ts", import.meta.url), "utf8");
+  assert.match(route, /kind === "contact" && !interest/);
+});

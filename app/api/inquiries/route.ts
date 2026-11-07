@@ -90,8 +90,8 @@ export async function POST(request: Request) {
 
   if (
     !kind || !source || name.length < 2 || !emailPattern.test(email)
-    // A contact request names its company and topic; the context line is optional.
-    || (kind === "contact" && (!organization || !interest))
+    // A contact request names its topic; company and context are optional.
+    || (kind === "contact" && !interest)
     || (kind === "briefing" && context.length < 30)
     || (kind === "briefing" && (!organization || !region || !interest))
     || (kind === "briefing" && decision.length < 15) || !privacyAcknowledged
