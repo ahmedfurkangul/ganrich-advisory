@@ -75,3 +75,16 @@ Ayrı ve açık onay gerektirir. Sıra:
 - Panel: `/en/insights/pdf-studio/analytics` ve `/tr/icgoruler/pdf-studyosu/analitik`. PDF stüdyosuyla aynı Cloudflare Access uygulamasının kapsamındadır ve `requireEditor()` ile ayrıca korunur.
 - Yayın öncesi `drizzle/0002_dusty_micromacro.sql` migration'ı uygulanmalıdır: `npx wrangler d1 migrations apply DB --env production --remote`. Tablo yoksa kayıt sessizce atlanır, site çalışmaya devam eder.
 - Kaydı kapatmak için Worker değişkeni: `ANALYTICS_LOGGING=off`.
+
+## Automatic deploys (Cloudflare Workers Builds, since 2026-11-07)
+
+The production Worker `ganrich-advisory` is connected to this repository in Cloudflare (Workers & Pages → ganrich-advisory → Settings → Builds). **Every push to `main` builds and deploys production**, so a PR is merged only after Furkan's go-live.
+
+- Build command: `npm test && CLOUDFLARE_ENV=production npm run build`. If a test fails, the build stops and nothing deploys.
+- Deploy command: `npx wrangler deploy`
+- Preview builds for other branches are off.
+- D1 migrations are **not** applied automatically. Before merging a PR that adds a file in `drizzle/`, apply it first, for example with `npx wrangler d1 migrations apply DB --env production --remote --config wrangler.jsonc`.
+- R2 uploads for new whitepapers are still a separate step. Do them before merging the PR that links to them.
+- Build logs: Workers & Pages → ganrich-advisory → Deployments. To roll back, use "Rollback" on an earlier version there.
+
+`scripts/deploy.sh` still works for a manual deploy from a laptop.
