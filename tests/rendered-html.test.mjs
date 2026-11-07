@@ -1022,3 +1022,14 @@ test("the old AI Value Diagnostic address redirects to the board diagnostic on t
   const contact = await (await render("/en/contact")).text();
   assert.doesNotMatch(contact, /AI Value Diagnostic/);
 });
+
+test("the bulletin page shows the email-only sign-up before the explanation", async () => {
+  for (const path of ["/en/insights/regulation-updates", "/tr/icgoruler/mevzuat-bulteni"]) {
+    const html = await (await render(path)).text();
+    const form = html.indexOf('class="updates-signup"'), points = html.indexOf('class="updates-points"');
+    assert.ok(form > 0 && points > form, `${path}: form before points`);
+    const signup = html.slice(form, points);
+    assert.match(signup, /name="email"/);
+    assert.doesNotMatch(signup, /name="(name|organization)"/);
+  }
+});

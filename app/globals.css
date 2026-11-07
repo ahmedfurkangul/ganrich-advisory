@@ -760,3 +760,11 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .ai-decisions-tile span { grid-column: 2; justify-self: start; font-size: .82rem; border-bottom: 1px solid var(--sand); padding: 8px 0; }
 .ai-decisions-tile a:hover span { border-color: var(--ink); }
 @media (max-width: 820px) { .ai-decisions-tile > a { grid-template-columns: 1fr; } .ai-decisions-tile span { grid-column: 1; } }
+
+/* Bulletin page: form first, so it is on the first phone screen */
+.updates-page .updates-points { margin: 28px 0 0; }
+@media (max-width: 700px) {
+  .advisory-hero:has(+ .updates-page) { padding-bottom: 28px; }
+  .advisory-hero:has(+ .updates-page) h1 { font-size: clamp(2rem, 8vw, 2.6rem); margin-bottom: 16px; }
+  .updates-page { padding-top: 28px; }
+}
