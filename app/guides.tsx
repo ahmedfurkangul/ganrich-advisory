@@ -4,7 +4,7 @@ import { Conversation } from "./advisory";
 import { guideByKey, type GuideBlock } from "./guides-content";
 import { Arrow } from "./arrow-icon";
 import { GuideCopy } from "./guide-copy";
-import { solutionPaperPath } from "./guide-copy-email";
+import { solutionPaperPath } from "./guide-paper";
 
 // Long-form guides, rendered on the server: the full text is in the first HTML response.
 const url = (l: Lang, k: string) => "/" + l + "/" + routeMap[l][k];

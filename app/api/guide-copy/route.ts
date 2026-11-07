@@ -4,7 +4,7 @@ import { sendGuideCopy } from "../../guide-copy-email";
 import { guideByKey } from "../../guides-content";
 import { routeMap } from "../../content";
 import { checks } from "../../readiness-check-content";
-import { solutionPaperPath } from "../../guide-copy-email";
+import { solutionPaperPath } from "../../guide-paper";
 import { normaliseEmail } from "../../newsletter-core";
 import { absoluteUrl } from "../../site-config";
 
