@@ -939,8 +939,8 @@ test("publishes the CBAM 2026 and CRA standards guides with FAQ markup, sitemap 
 
 test("publishes the CRA reporting (refrigeration) guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
   const pages = [
-    ["/en/insights/cra-reporting-white-goods-refrigeration", "CRA Reporting for Refrigeration and White-Goods Exporters", "/tr/icgoruler/cra-bildirim-beyaz-esya-sogutma", /<strong>Article 14 applies from 11 September 2026<\/strong>/],
-    ["/tr/icgoruler/cra-bildirim-beyaz-esya-sogutma", "CRA Bildirim: Beyaz Eşya ve Soğutma İhracatçısı", "/en/insights/cra-reporting-white-goods-refrigeration", /Beyaz eşya ve soğutma ihracatçısı için özet\./],
+    ["/en/insights/cra-reporting-white-goods-refrigeration", "CRA Reporting for Refrigeration and White-Goods Exporters", "/tr/icgoruler/cra-bildirim-beyaz-esya-sogutma", /<strong>Article 14 reporting has applied since 11 September 2026\.<\/strong>/],
+    ["/tr/icgoruler/cra-bildirim-beyaz-esya-sogutma", "CRA Bildirimi: Beyaz Eşya ve Soğutma İhracatçısı", "/en/insights/cra-reporting-white-goods-refrigeration", /<strong>Madde 14 bildirim yükümlülükleri 11 Eylül 2026’dan beri uygulanıyor\.<\/strong>/],
   ];
   const sitemap = await (await render("/sitemap.xml")).text();
   for (const [path, title, pair, body] of pages) {
@@ -957,7 +957,7 @@ test("publishes the CRA reporting (refrigeration) guide in both languages with F
     assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
   }
   assert.match(await (await render("/en/insights")).text(), /CRA Reporting for Refrigeration and White-Goods Exporters/);
-  assert.match(await (await render("/tr/icgoruler")).text(), /CRA Bildirim Yükümlülüğü: Beyaz Eşya ve Soğutma İhracatçısı/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /CRA Bildirimi: Beyaz Eşya ve Soğutma İhracatçısı/);
 });
 
 test("link arrows are SVG icons, not the emoji-prone ↗ character", async () => {

@@ -15,7 +15,7 @@ export const guideIndex: GuideIndexEntry[] = [
    "description": "ENISA and the Commission’s 4 Nov 2026 joint statement on refrigeration cyber incidents: CRA Art. 14 reporting since 11 Sep. What Turkish exporters must do."
   },
   "tr": {
-   "h1": "CRA Bildirim Yükümlülüğü: Beyaz Eşya ve Soğutma İhracatçısı",
+   "h1": "CRA Bildirimi: Beyaz Eşya ve Soğutma İhracatçısı",
    "description": "ENISA ve Komisyon’un 4 Kasım 2026 ortak açıklaması: ticari soğutma siber olayları ve CRA Madde 14 bildirimi. Beyaz eşya ve soğutma ihracatçısı için özet."
   }
  },
