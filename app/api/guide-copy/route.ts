@@ -4,6 +4,7 @@ import { sendGuideCopy } from "../../guide-copy-email";
 import { guideByKey } from "../../guides-content";
 import { routeMap } from "../../content";
 import { checks } from "../../readiness-check-content";
+import { solutionPaperPath } from "../../guide-copy-email";
 import { normaliseEmail } from "../../newsletter-core";
 import { absoluteUrl } from "../../site-config";
 
@@ -78,7 +79,7 @@ export async function POST(request: Request) {
       links: {
         guide: absoluteUrl(`/${language}/${t.path}`),
         programme: page(guide.solution),
-        paper: check?.paper ? absoluteUrl(check.paper[language]) : undefined,
+        paper: solutionPaperPath(language, guide.solution) ? absoluteUrl(solutionPaperPath(language, guide.solution)!) : undefined,
         check: check ? page(check.route) : undefined,
         contact: `${page("contact")}?service=${guide.solution}`,
       },
