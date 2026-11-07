@@ -1,8 +1,9 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { Lang, routeMap } from "./content";
 import { Conversation } from "./advisory";
 import { guideByKey, type GuideBlock } from "./guides-content";
 import { Arrow } from "./arrow-icon";
+import { checks, type CheckId } from "./readiness-check-content";
 
 // Long-form guides, rendered on the server: the full text is in the first HTML response.
 const url = (l: Lang, k: string) => "/" + l + "/" + routeMap[l][k];
@@ -37,15 +38,34 @@ function Block({ b }: { b: GuideBlock }) {
   }
 }
 
+// Guides whose programme has a readiness check show its first question in the middle of the article.
+// Each answer is a plain link that opens the check with that answer already filled in (?a1=2|1|0).
+const checkFor: Record<string, CheckId> = { solutionCbam: "cbam", solutionCra: "cra", solutionEudr: "eudr" };
+
+function CheckStarter({ lang, solution }: { lang: Lang; solution: string }) {
+  const id = checkFor[solution];
+  if (!id) return null;
+  const c = checks[id].copy[lang], href = url(lang, checks[id].route), en = lang === "en";
+  return <aside className="guide-check" aria-labelledby="guide-check-q">
+    <p className="kicker">{c.label} · {en ? `question 1 of ${c.questions.length}` : `${c.questions.length} sorudan 1.`}</p>
+    <p className="guide-check-q" id="guide-check-q">{c.questions[0].q}</p>
+    <div className="guide-check-options">{c.answers.map((a, j) => <a key={a} className="guide-check-option" href={`${href}?a1=${2 - j}`}>{a}</a>)}</div>
+    <p className="contact-small">{en ? "Your answer opens the rest of the check. Answers stay in your browser." : "Cevabınız testin devamını açar. Cevaplar tarayıcınızda kalır."}</p>
+  </aside>;
+}
+
 export function GuidePage({ lang, kind }: { lang: Lang; kind: string }) {
   const g = guideByKey(kind)!, t = g[lang], en = lang === "en";
+  // The check sits before the second section heading, so readers meet it after the opening section.
+  const h2s = t.blocks.flatMap((b, i) => b.t === "h2" ? [i] : []);
+  const checkAt = h2s[1] ?? h2s[0] ?? -1;
   const published = new Date(g.date + "T12:00:00Z").toLocaleDateString(en ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" });
   return <>
     <section className="advisory-hero guide-hero"><p className="kicker">{en ? "Technical note" : "Teknik not"} · {g.topic[lang]}</p><h1>{t.h1}</h1><p className="advisory-lead">{t.description}</p></section>
     <article className="decision-note-body guide-body">
       <p className="note-byline">{en ? "Ahmed Furkan Gul" : "Ahmed Furkan Gül"} · Ganrich Advisory · <time dateTime={g.date}>{published}</time> · {g.readingTime[lang]}</p>
       <figure className="guide-cover"><img src={`/guides/${g.image}-${lang}.webp`} width={1600} height={900} alt={t.h1} decoding="async"/></figure>
-      {t.blocks.map((b, i) => <Block key={i} b={b}/>)}
+      {t.blocks.map((b, i) => <Fragment key={i}>{i === checkAt && <CheckStarter lang={lang} solution={g.solution}/>}<Block b={b}/></Fragment>)}
       <p className="note-status">{en ? `Dates and sources last checked ${g.checked.en}. General information, not legal advice.` : `Tarihler ve kaynaklar en son ${g.checked.tr} tarihinde kontrol edildi. Genel bilgidir, hukuki görüş değildir.`}</p>
       <p className="notes-links"><a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All technical notes" : "Tüm teknik notlar"}</a></p>
     </article>
