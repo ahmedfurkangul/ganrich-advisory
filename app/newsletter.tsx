@@ -91,16 +91,17 @@ export function NewsletterPage({ lang }: { lang: Lang }) {
   };
   return <>
     <EditorialHero label={c.label} title={c.title} intro={c.intro}/>
-    <section className="advisory-section updates-page">
+    <section className="advisory-section updates-page" id="sign-up">
       {outcome === 'confirmed' && <p role="status" className="updates-outcome">{c.confirmed}</p>}
       {outcome === 'invalid' && <p role="alert" className="updates-outcome">{c.invalid}</p>}
       {token ? <div className="updates-signup">
         <h3>{c.unsubscribeTitle}</h3>
         {unsubscribed ? <p role="status">{unsubscribed}</p> : <button type="button" className="button" onClick={unsubscribe}>{c.unsubscribe}</button>}
       </div> : <>
-        <ul className="updates-points">{c.points.map(p => <li key={p}>{p}</li>)}</ul>
+        {/* The form comes first so it is on the first screen on a phone; the points explain it below. */}
         <NewsletterSignup lang={lang} source={`/${lang}/${routeMap[lang].newsletter}`}/>
         <p className="contact-small">{c.note}</p>
+        <ul className="updates-points">{c.points.map(p => <li key={p}>{p}</li>)}</ul>
       </>}
     </section>
   </>;
