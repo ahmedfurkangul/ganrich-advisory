@@ -4,6 +4,8 @@ import { Conversation } from "./advisory";
 import { guideByKey, type GuideBlock } from "./guides-content";
 import { Arrow } from "./arrow-icon";
 import { checks, type CheckId } from "./readiness-check-content";
+import { GuideCopy } from "./guide-copy";
+import { solutionPaperPath } from "./guide-paper";
 
 // Long-form guides, rendered on the server: the full text is in the first HTML response.
 const url = (l: Lang, k: string) => "/" + l + "/" + routeMap[l][k];
@@ -66,6 +68,7 @@ export function GuidePage({ lang, kind }: { lang: Lang; kind: string }) {
       <p className="note-byline">{en ? "Ahmed Furkan Gul" : "Ahmed Furkan Gül"} · Ganrich Advisory · <time dateTime={g.date}>{published}</time> · {g.readingTime[lang]}</p>
       <figure className="guide-cover"><img src={`/guides/${g.image}-${lang}.webp`} width={1600} height={900} alt={t.h1} decoding="async"/></figure>
       {t.blocks.map((b, i) => <Fragment key={i}>{i === checkAt && <CheckStarter lang={lang} solution={g.solution}/>}<Block b={b}/></Fragment>)}
+      <GuideCopy lang={lang} guide={g.key} hasPdf={Boolean(solutionPaperPath(lang, g.solution))}/>
       <p className="note-status">{en ? `Dates and sources last checked ${g.checked.en}. General information, not legal advice.` : `Tarihler ve kaynaklar en son ${g.checked.tr} tarihinde kontrol edildi. Genel bilgidir, hukuki görüş değildir.`}</p>
       <p className="notes-links"><a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All technical notes" : "Tüm teknik notlar"}</a></p>
     </article>

@@ -769,3 +769,9 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .guide-body .guide-check-option { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 18px; border: 1px solid var(--forest); border-radius: 999px; font-size: .95rem; color: var(--forest); background: var(--ivory); text-decoration: none; }
 .guide-body .guide-check-option:hover, .guide-body .guide-check-option:focus-visible { background: var(--forest); color: var(--ivory); }
 .guide-check .contact-small { margin: 0; }
+/* "Email me this guide" at the end of a guide */
+.guide-copy { margin: 40px 0 24px; padding: 28px; border: 1px solid var(--sand); background: var(--white); }
+.guide-body .guide-copy h2 { font: 400 1.6rem/1.2 var(--serif); margin: 0 0 8px; }
+.guide-copy .contact-form { max-width: 560px; }
+.guide-print { margin-top: 16px; background: none; border: 0; padding: 0; cursor: pointer; }
+@media print { .guide-copy, .guide-hero + .guide-body .notes-links, .advisory-conversation { display: none !important; } }

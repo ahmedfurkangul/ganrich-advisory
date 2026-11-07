@@ -1036,3 +1036,16 @@ test("guides with a readiness check start it mid-article with links that prefill
   const source = await readFile(new URL("../app/readiness-check.tsx", import.meta.url), "utf8");
   assert.match(source, /params\.get\('a1'\)/);
 });
+
+test("every guide ends with an email-only copy form and a Save as PDF button", async () => {
+  for (const path of ["/en/insights/eudr-30-december-2026-turkish-exporters", "/tr/icgoruler/celik-dijital-urun-pasaportu-espr"]) {
+    const html = await (await render(path)).text();
+    assert.match(html, /class="guide-copy"/);
+    assert.match(html, /name="email"/);
+    assert.doesNotMatch(html.slice(html.indexOf('class="guide-copy"')), /name="name"/);
+    assert.match(html, /PDF/);
+  }
+  const route = await readFile(new URL("../app/api/guide-copy/route.ts", import.meta.url), "utf8");
+  assert.match(route, /'download'/);
+  assert.match(route, /guideByKey/);
+});
