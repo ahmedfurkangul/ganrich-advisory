@@ -116,6 +116,17 @@ test("publishes page-specific bilingual social cards", async () => {
   ]);
 });
 
+test("every social card the calendar pages reference exists", async () => {
+  for (const [path, card] of [
+    ["/en/insights/eu-regulation-calendar", "/og/en/regulationCalendar.png"],
+    ["/tr/icgoruler/ab-mevzuat-takvimi", "/og/tr/regulationCalendar.png"],
+  ]) {
+    const html = await (await render(path)).text();
+    assert.ok(html.includes(card), `${path} references ${card}`);
+    await access(new URL(`../public${card}`, import.meta.url));
+  }
+});
+
 test("renders bilingual engagement, sample, and decision-note journeys", async () => {
   const paths=["/en/expertise/market-entry","/en/expertise/operating-model","/en/sample-work","/en/insights/entry-model-choice","/en/insights/founder-decision-rights","/en/insights/ai-pilot-or-process","/en/insights/transformation-value-review","/tr/uzmanlik/pazara-giris","/tr/uzmanlik/isletim-modeli","/tr/ornek-calismalar","/tr/icgoruler/pazara-giris-modeli","/tr/icgoruler/kurucu-karar-haklari","/tr/icgoruler/yapay-zeka-pilotu-ve-surec","/tr/icgoruler/donusum-deger-takibi"];
   for(const path of paths){const response=await render(path);assert.equal(response.status,200,path);const html=await response.text();assert.match(html,/rel="canonical"/);assert.match(html,/hrefLang="tr"/);assert.doesNotMatch(html,/href="[^"]*undefined/);}

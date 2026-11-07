@@ -67,6 +67,7 @@ const cards = {
     ["solutionNis2", "SOLUTIONS · EU MARKET ACCESS", "NIS2 Supplier Security"],
     ["solutionMdr", "SOLUTIONS · EU MARKET ACCESS", "EU MDR Portfolio Transition"],
     ["solutionSupplierData", "SOLUTIONS · EU MARKET ACCESS", "Supplier Sustainability Data"],
+    ["regulationCalendar", "INSIGHTS · EU REGULATION CALENDAR", "EU rules your buyers apply, 2026–2027"],
   ],
   tr: [
     ["home", "STRATEJİK DANIŞMANLIK", "Sonraki adım. Sağlam bir kararla."],
@@ -124,6 +125,7 @@ const cards = {
     ["solutionNis2", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "NIS2 Tedarikçi Güvenliği"],
     ["solutionMdr", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "AB MDR Portföy Geçişi"],
     ["solutionSupplierData", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Tedarikçi Sürdürülebilirlik Verisi"],
+    ["regulationCalendar", "İÇGÖRÜLER · AB MEVZUAT TAKVİMİ", "AB alıcınızın uyguladığı kurallar, 2026–2027"],
   ],
 };
 
@@ -211,6 +213,7 @@ const motif = await sharp(motifExtract.data, { raw: motifExtract.info }).png().t
 
 for (const [lang, entries] of Object.entries(cards)) {
   for (const [key, eyebrow, title] of entries) {
+    if (process.env.OG_ONLY && !process.env.OG_ONLY.split(",").includes(key)) continue;
     const result = await sharp(overlay(eyebrow, title, lang))
       .composite([{ input: motif, top: 65, left: 650 }])
       .png({ compressionLevel: 9, quality: 100 })
