@@ -1023,6 +1023,20 @@ test("the old AI Value Diagnostic address redirects to the board diagnostic on t
   assert.doesNotMatch(contact, /AI Value Diagnostic/);
 });
 
+test("guides with a readiness check start it mid-article with links that prefill the first answer", async () => {
+  for (const [path, check] of [
+    ["/en/insights/eudr-30-december-2026-turkish-exporters", "/en/decision-lab/eudr-readiness-check"],
+    ["/tr/icgoruler/eudr-30-aralik-2026-ihracatci", "/tr/karar-laboratuvari/eudr-hazirlik-testi"],
+  ]) {
+    const html = await (await render(path)).text();
+    assert.match(html, /class="guide-check"/);
+    for (const v of [2, 1, 0]) assert.ok(html.includes(`href="${check}?a1=${v}"`), `${path} links ${check}?a1=${v}`);
+    assert.ok(html.indexOf('class="guide-check"') > html.indexOf("<h2"), "the starter comes after the first section");
+  }
+  const source = await readFile(new URL("../app/readiness-check.tsx", import.meta.url), "utf8");
+  assert.match(source, /params\.get\('a1'\)/);
+});
+
 test("every guide ends with an email-only copy form and a Save as PDF button", async () => {
   for (const path of ["/en/insights/eudr-30-december-2026-turkish-exporters", "/tr/icgoruler/celik-dijital-urun-pasaportu-espr"]) {
     const html = await (await render(path)).text();
