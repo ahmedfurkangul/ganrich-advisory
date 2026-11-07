@@ -36,3 +36,14 @@ test("sends the result only to the visitor, with a reply-to for the founder", as
   assert.equal(body.reply_to, "furkangul@ganrichadvisory.com");
   assert.equal(await sendCheckResult({}, "buyer@example.com", { lang: "en", copy: checks.cra.copy.en, answers: [], links }), "skipped");
 });
+
+test("builds the emailed guide copy from the canonical guide text only", async () => {
+  const { guideCopyMessage } = await import("../app/guide-copy-email.ts");
+  const links = { guide: "https://ganrichadvisory.com/tr/icgoruler/x", programme: "https://ganrichadvisory.com/tr/cozumler/y", paper: "https://ganrichadvisory.com/tr/icgoruler/rapor/z", check: "https://ganrichadvisory.com/tr/karar-laboratuvari/t", contact: "https://ganrichadvisory.com/tr/iletisim?service=solutionCbam" };
+  const { subject, text, html } = guideCopyMessage({ lang: "tr", title: "Başlık <b>", description: "Özet", links });
+  assert.equal(subject, "Kopyanız: Başlık <b>");
+  assert.match(text, /PDF olarak kaydedin/);
+  assert.match(text, /rapor\/z/);
+  assert.doesNotMatch(html, /<b>/);
+  assert.match(text, /e-posta listesine eklemiyoruz/);
+});

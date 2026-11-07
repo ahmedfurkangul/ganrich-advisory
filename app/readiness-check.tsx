@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Lang, routeMap } from './content';
 import { EditorialHero } from './advisory';
 import { leadEvent } from './analytics';
@@ -31,6 +31,17 @@ function ReadinessCheck({ lang, id }: { lang: Lang; id: CheckId }) {
   const [copySent, setCopySent] = useState(false);
   const solutionHref = `/${lang}/${routeMap[lang][config.solution]}`;
   const paperHref = config.paper?.[lang];
+
+  // Arriving from a guide (?a1=2|1|0): the first answer is already given there, so fill it in and count the start.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const first = Number(params.get('a1'));
+    if (!params.has('a1') || ![0, 1, 2].includes(first)) return;
+    window.history.replaceState(null, '', window.location.pathname);
+    leadEvent('check_start');
+    queueMicrotask(() => setAnswers(a => a.map((v, k) => k === 0 ? first as Answer : v)));
+    document.querySelectorAll<HTMLElement>('.readiness-questions > li')[1]?.scrollIntoView({ block: 'center' });
+  }, []);
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
