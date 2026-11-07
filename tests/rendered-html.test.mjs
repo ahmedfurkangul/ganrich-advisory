@@ -1023,6 +1023,44 @@ test("the old AI Value Diagnostic address redirects to the board diagnostic on t
   assert.doesNotMatch(contact, /AI Value Diagnostic/);
 });
 
+test("guides with a readiness check start it mid-article with links that prefill the first answer", async () => {
+  for (const [path, check] of [
+    ["/en/insights/eudr-30-december-2026-turkish-exporters", "/en/decision-lab/eudr-readiness-check"],
+    ["/tr/icgoruler/eudr-30-aralik-2026-ihracatci", "/tr/karar-laboratuvari/eudr-hazirlik-testi"],
+  ]) {
+    const html = await (await render(path)).text();
+    assert.match(html, /class="guide-check"/);
+    for (const v of [2, 1, 0]) assert.ok(html.includes(`href="${check}?a1=${v}"`), `${path} links ${check}?a1=${v}`);
+    assert.ok(html.indexOf('class="guide-check"') > html.indexOf("<h2"), "the starter comes after the first section");
+  }
+  const source = await readFile(new URL("../app/readiness-check.tsx", import.meta.url), "utf8");
+  assert.match(source, /params\.get\('a1'\)/);
+});
+
+test("every guide ends with an email-only copy form and a Save as PDF button", async () => {
+  for (const path of ["/en/insights/eudr-30-december-2026-turkish-exporters", "/tr/icgoruler/celik-dijital-urun-pasaportu-espr"]) {
+    const html = await (await render(path)).text();
+    assert.match(html, /class="guide-copy"/);
+    assert.match(html, /name="email"/);
+    assert.doesNotMatch(html.slice(html.indexOf('class="guide-copy"')), /name="name"/);
+    assert.match(html, /PDF/);
+  }
+  const route = await readFile(new URL("../app/api/guide-copy/route.ts", import.meta.url), "utf8");
+  assert.match(route, /'download'/);
+  assert.match(route, /guideByKey/);
+});
+
+test("the bulletin page shows the email-only sign-up before the explanation", async () => {
+  for (const path of ["/en/insights/regulation-updates", "/tr/icgoruler/mevzuat-bulteni"]) {
+    const html = await (await render(path)).text();
+    const form = html.indexOf('class="updates-signup"'), points = html.indexOf('class="updates-points"');
+    assert.ok(form > 0 && points > form, `${path}: form before points`);
+    const signup = html.slice(form, points);
+    assert.match(signup, /name="email"/);
+    assert.doesNotMatch(signup, /name="(name|organization)"/);
+  }
+});
+
 test("the contact form needs only name, email and topic", async () => {
   for (const path of ["/en/contact", "/tr/iletisim"]) {
     const html = await (await render(path)).text();
