@@ -1,6 +1,7 @@
 "use client";
 
 import { lazy, Suspense, useEffect, useState } from "react";
+import { isServicePageKey } from "./service-page-index";
 import Image from "next/image";
 import { BoutiqueHome } from "./advisory";
 const ServicePage = lazy(() => import("./advisory-details").then(m => ({default:m.ServicePage})));
@@ -20,7 +21,7 @@ const NewsletterPage = lazy(() => import("./newsletter").then(m => ({default:m.N
 const EudrReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.EudrReadinessCheck})));
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
 const AiDecisionsPage = lazy(() => import("./ai-decisions").then(m => ({default:m.AiDecisionsPage})));
-const BuyerDeskPage = lazy(() => import("./buyer-desk").then(m => ({default:m.BuyerDeskPage})));
+const ServiceModelPage = lazy(() => import("./service-page").then(m => ({default:m.ServiceModelPage})));
 const GuidePage = lazy(() => import("./guides").then(m => ({default:m.GuidePage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
@@ -119,7 +120,7 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind.startsWith("note")) page = <NotePage lang={lang} kind={kind}/>;
   if (kind.startsWith("guide")) page = <GuidePage lang={lang} kind={kind}/>;
   if (kind === "aiDecisions") page = <AiDecisionsPage lang={lang}/>;
-  if (kind === "buyerDesk") page = <BuyerDeskPage lang={lang}/>;
+  if (isServicePageKey(kind)) page = <ServiceModelPage lang={lang} kind={kind}/>;
   if (kind === "expertise") page = <ExpertisePage lang={lang}/>;
   if (kind === "insights") page = <InsightsPage lang={lang}/>;
   if (kind.startsWith("article")) page = <InsightExperiencePage lang={lang} index={insightIndex(kind)}/>;
