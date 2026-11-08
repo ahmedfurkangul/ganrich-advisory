@@ -791,3 +791,10 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
   .advisory-hero:has(+ .contact-section) h1 { font-size: clamp(2rem, 8vw, 2.6rem); margin-bottom: 16px; }
   .contact-section .contact-form textarea { min-height: 0; }
 }
+
+/* EU Buyer Request Desk */
+.buyer-desk-steps { max-width: 860px; }
+.buyer-desk-steps div { display: grid; grid-template-columns: 32px minmax(0,1fr); gap: 6px 24px; align-items: start; }
+.buyer-desk-steps span { grid-row: span 2; padding-top: 4px; }
+.buyer-desk-steps p { grid-column: 2; margin: 0; color: var(--slate); }
+.buyer-desk-tile + .ai-decisions-tile > a { border-top-color: var(--sand); }

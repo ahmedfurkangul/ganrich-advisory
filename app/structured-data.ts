@@ -6,6 +6,7 @@ import { solutionByKey, solutions, solutionTagList, solutionTags, solutionThemes
 import { absoluteUrl, SITE_NAME } from "./site-config";
 import { faqFor } from "./solution-faq";
 import { aiDecisions } from "./ai-decisions-content";
+import { buyerDesk, BUYER_DESK_TITLE } from "./buyer-desk-content";
 
 // Schema.org nodes shared by every page. Everything here repeats facts that are visible on the site,
 // so search engines and LLM crawlers get the same story as human readers.
@@ -59,6 +60,7 @@ export function organizationNode(lang: Lang, description: string, { catalog = tr
       name: en ? "Advisory services and programmes" : "Danışmanlık hizmetleri ve programlar",
       itemListElement: [
         ...listedServices[lang].map(s => ({ "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${pageUrl(lang, s.key)}#service`, name: s.title, url: pageUrl(lang, s.key) } })),
+        { "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${pageUrl(lang, "buyerDesk")}#service`, name: BUYER_DESK_TITLE[lang], url: pageUrl(lang, "buyerDesk") } },
         { "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${pageUrl(lang, "aiDecisions")}#service`, name: lang === "en" ? "AI Decisions" : "Yapay Zekâ Kararları", url: pageUrl(lang, "aiDecisions") } },
         ...solutions[lang].map(s => ({ "@type": "Offer", itemOffered: { "@type": "Service", "@id": `${pageUrl(lang, s.key)}#service`, name: s.title, url: pageUrl(lang, s.key) } })),
       ],
@@ -98,7 +100,7 @@ export function webPageNode(lang: Lang, url: string, name: string, description: 
 export function breadcrumbParent(lang: Lang, kind: string) {
   const en = lang === "en";
   if (kind.startsWith("solution") && kind !== "solutions") return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
-  if (kind.startsWith("service") || kind === "studio" || kind === "aiDecisions") return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
+  if (kind.startsWith("service") || kind === "studio" || kind === "aiDecisions" || kind === "buyerDesk") return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
   if (kind.startsWith("note") || kind.startsWith("guide")) return { name: en ? "Insights" : "İçgörüler", url: pageUrl(lang, "insights") };
   return null;
 }
@@ -142,6 +144,29 @@ export function offeringNodes(lang: Lang, kind: string, url: string) {
         mainEntity: faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
       },
     ];
+  }
+  if (kind === "buyerDesk") {
+    const c = buyerDesk[lang];
+    // Service and FAQ only: no ratings, reviews or prices.
+    return [{
+      "@type": "Service",
+      "@id": `${url}#service`,
+      name: BUYER_DESK_TITLE[lang],
+      description: c.lead,
+      serviceType: en ? "EU buyer requirements advisory" : "AB alıcı talepleri danışmanlığı",
+      provider,
+      areaServed: ["Türkiye", "European Union"],
+      audience: { "@type": "BusinessAudience", audienceType: c.audience },
+      availableLanguage: ["English", "Turkish"],
+      url,
+      mainEntityOfPage: `${url}#webpage`,
+    }, {
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      inLanguage: inLanguage(lang),
+      isPartOf: { "@id": `${url}#webpage` },
+      mainEntity: c.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+    }];
   }
   if (kind === "aiDecisions") {
     const c = aiDecisions[lang];

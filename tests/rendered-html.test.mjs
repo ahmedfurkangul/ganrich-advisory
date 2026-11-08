@@ -24,8 +24,8 @@ test("server-renders the English consultancy experience", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>CBAM, CRA &amp; EU Readiness for Turkish Industry \| Ganrich<\/title>/i);
-  assert.match(html, /A clear next step on EU rules and growth decisions\./);
-  assert.match(html, /Turkish industry and exporters/);
+  assert.match(html, /Your EU buyer is asking\. Decide what to give, when and at what cost\./);
+  assert.match(html, /Turkish exporters facing EU buyer requirements/);
   assert.match(html, /CBAM definitive regime/);
   assert.match(html, /Request a first review/);
   assert.match(html, /hrefLang="tr"/);
@@ -40,7 +40,7 @@ test("server-renders localized Turkish content and metadata", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /Ganrich Advisory \| Türk Sanayisi için AB Uyumu ve Strateji/);
-  assert.match(html, /AB kuralları ve büyüme kararları için net bir sonraki adım\./);
+  assert.match(html, /AB alıcınız soruyor\. Neyi, ne zaman ve ne kadara vereceğinizi netleştirelim\./);
   assert.match(html, /CBAM kesin rejimi/);
   assert.match(html, /Ön görüşme isteyin/);
   assert.match(html, /hrefLang="en"/);
@@ -505,7 +505,7 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   const org = graph(home).find(node => node["@id"] === "https://ganrichadvisory.com/#organization");
   assert.equal(org.email, "furkangul@ganrichadvisory.com");
   assert.ok(org.sameAs.includes("https://www.linkedin.com/company/135278307/"));
-  assert.equal(org.hasOfferCatalog.itemListElement.length, 24); // 21 programmes, 2 strategy services and AI Decisions
+  assert.equal(org.hasOfferCatalog.itemListElement.length, 25); // 21 programmes, 2 strategy services, the EU Buyer Request Desk and AI Decisions
   assert.ok(types(hub).includes("ItemList") && types(hub).includes("CollectionPage"));
   assert.ok(types(service).includes("Service"));
   const crumbs = graph(solution).find(node => node["@type"] === "BreadcrumbList").itemListElement.map(item => item.name);
@@ -717,9 +717,10 @@ test("keeps the header to the menu, language switch and one call to action", asy
 
 test("tells one positioning story in the footer, About page and structured data", async () => {
   const [about, home, aboutTr] = await Promise.all(["/en/about", "/en", "/tr/hakkimizda"].map(path => render(path).then(response => response.text())));
-  assert.match(about, /Strategy and EU-readiness advisory for Turkish industry and exporters\./);
-  assert.match(about, /EU-readiness advisory for Turkish manufacturers and exporters/);
-  assert.match(aboutTr, /Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı\./);
+  assert.match(about, /Independent decision partner for Turkish exporters facing EU buyer requirements\./);
+  assert.match(about, /independent decision partner for Turkish manufacturers and exporters facing EU buyer requirements/);
+  assert.match(home, /Independent decision partner for Turkish exporters facing EU buyer requirements/);
+  assert.match(aboutTr, /AB alıcı talepleriyle karşılaşan Türk ihracatçılar için bağımsız karar ortağı\./);
   for (const page of [about, home, aboutTr]) assert.doesNotMatch(page, /Middle East and North Africa|regional fluency|bölgesel derinlik/);
 });
 
@@ -1071,4 +1072,36 @@ test("the contact form needs only name, email and topic", async () => {
   }
   const route = await readFile(new URL("../app/api/inquiries/route.ts", import.meta.url), "utf8");
   assert.match(route, /kind === "contact" && !interest/);
+});
+
+test("EU Buyer Request Desk page renders in both languages, is linked from home and contact, and shows no prices", async () => {
+  const pages = [
+    ["/en/expertise/eu-buyer-request-desk", "EU Buyer Request Desk | Ganrich Advisory", "/tr/uzmanlik/ab-alici-talep-masasi", /One desk for every EU buyer request\./, /We are not a verification body/, /take no commissions or referral fees/, "/en"],
+    ["/tr/uzmanlik/ab-alici-talep-masasi", "AB Alıcı Talep Masası | Ganrich Advisory", "/en/expertise/eu-buyer-request-desk", /AB alıcılarınızdan gelen her talep için tek masa\./, /Doğrulama kuruluşu değiliz/, /komisyon veya yönlendirme ücreti almıyoruz/, "/tr"],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, hero, noVerify, noCommission, home] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    for (const re of [hero, noVerify, noCommission, /KVKK/]) assert.match(html, re, `${path} ${re}`);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"Service"/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.doesNotMatch(html, /AggregateRating|"@type":"Review"|"price"/, `${path} has no ratings, reviews or prices`);
+    const text = html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
+    assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\bTL\b|₺/, `${path} must not show prices`);
+    assert.match(html, /\/og\/(en|tr)\/buyerDesk\.png/);
+    assert.ok(html.includes("?service=buyerDesk"), `${path} contact link preselects the desk`);
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+    for (const link of [...html.matchAll(/href="(\/(?:en|tr)\/[^"#?]+)/g)].map(m => m[1]).filter((v, i, a) => a.indexOf(v) === i)) {
+      assert.equal((await render(link)).status, 200, `${path} links ${link}`);
+    }
+    assert.ok((await (await render(home)).text()).includes(`href="${path}"`), `${home} links the desk`);
+  }
+  const contact = await readFile(new URL("../app/contact-experience.tsx", import.meta.url), "utf8");
+  assert.match(contact, /value="buyerDesk"/);
+  const llms = await (await render("/llms.txt")).text();
+  assert.match(llms, /\/en\/expertise\/eu-buyer-request-desk/);
 });

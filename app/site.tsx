@@ -20,6 +20,7 @@ const NewsletterPage = lazy(() => import("./newsletter").then(m => ({default:m.N
 const EudrReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.EudrReadinessCheck})));
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
 const AiDecisionsPage = lazy(() => import("./ai-decisions").then(m => ({default:m.AiDecisionsPage})));
+const BuyerDeskPage = lazy(() => import("./buyer-desk").then(m => ({default:m.BuyerDeskPage})));
 const GuidePage = lazy(() => import("./guides").then(m => ({default:m.GuidePage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
@@ -85,7 +86,7 @@ function TopSectionNav({ lang }: { lang: Lang }) {
 function Footer({ lang }: { lang: Lang }) {
   const t = ui[lang]; const m = routeMap[lang];
   return <footer className="footer">
-    <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Strategy and EU-readiness advisory for Turkish industry and exporters." : "Türk sanayi ve ihracatçıları için strateji ve AB uyum danışmanlığı."}</p></div>
+    <div className="footer-lead"><Wordmark/><p>{lang === "en" ? "Independent decision partner for Turkish exporters facing EU buyer requirements." : "AB alıcı talepleriyle karşılaşan Türk ihracatçılar için bağımsız karar ortağı."}</p></div>
     <div className="footer-links">
       <div><span>{lang === "en" ? "Navigate" : "Gezinin"}</span><a href={`/${lang}/${m.solutions}`}>{t.nav[0]}</a><a href={`/${lang}/${m.insights}`}>{t.nav[1]}</a><a href={`/${lang}/${m.regulationCalendar}`}>{lang === "en" ? "EU regulation calendar" : "AB mevzuat takvimi"}</a><a href={`/${lang}/${m.newsletter}`}>{lang === "en" ? "Regulation updates" : "Mevzuat bülteni"}</a><a href={`/${lang}/${m.decisionLab}`}>{lang === "en" ? "Readiness checks" : "Hazırlık testleri"}</a><a href={`/${lang}/${m.sampleWork}`}>{lang === "en" ? "Sample work" : "Örnek çalışmalar"}</a><a href={`/${lang}/${m.about}`}>{t.nav[2]}</a></div>
       <div><span>{lang === "en" ? "Contact" : "İletişim"}</span><a href={`/${lang}/${m.contact}`}>{t.cta}</a><a href="mailto:furkangul@ganrichadvisory.com">furkangul@ganrichadvisory.com</a><a href="https://www.linkedin.com/in/furkangul/" target="_blank" rel="noreferrer">LinkedIn <Arrow/></a></div>
@@ -118,6 +119,7 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind.startsWith("note")) page = <NotePage lang={lang} kind={kind}/>;
   if (kind.startsWith("guide")) page = <GuidePage lang={lang} kind={kind}/>;
   if (kind === "aiDecisions") page = <AiDecisionsPage lang={lang}/>;
+  if (kind === "buyerDesk") page = <BuyerDeskPage lang={lang}/>;
   if (kind === "expertise") page = <ExpertisePage lang={lang}/>;
   if (kind === "insights") page = <InsightsPage lang={lang}/>;
   if (kind.startsWith("article")) page = <InsightExperiencePage lang={lang} index={insightIndex(kind)}/>;
