@@ -1,6 +1,7 @@
 import { listPdfInsights, type PdfInsight } from "../db/pdf-insights";
 import { listedServices as services } from "./advisory-content";
 import { aiDecisions } from "./ai-decisions-content";
+import { buyerDesk, BUYER_DESK_TITLE } from "./buyer-desk-content";
 import { notes } from "./advisory-note-content";
 import { insightArticles, insightHref, Lang, routeMap } from "./content";
 import { absoluteUrl } from "./site-config";
@@ -41,6 +42,7 @@ export async function renderLlmsTxt() {
     const en = lang === "en";
     out.push(`## ${en ? "Advisory services (English)" : "Danışmanlık hizmetleri (Türkçe)"}`, "");
     for (const s of services[lang]) out.push(`- [${s.title}](${url(lang, s.key)}): ${oneLine(s.intro)}`);
+    out.push(`- [${BUYER_DESK_TITLE[lang]}](${url(lang, "buyerDesk")}): ${oneLine(buyerDesk[lang].lead)}`);
     out.push(`- [${en ? "AI Decisions" : "Yapay Zekâ Kararları"}](${url(lang, "aiDecisions")}): ${oneLine(aiDecisions[lang].lead)} ${aiDecisions[lang].offers.map(o => `${o.title} (${o.duration})`).join("; ")}.`);
     out.push("", `## ${en ? "Solutions programmes (English)" : "Çözüm programları (Türkçe)"}`, "", `- [${en ? "All programmes" : "Tüm programlar"}](${url(lang, "solutions")})`);
     for (const s of solutions[lang]) out.push(`- [${s.title}](${url(lang, s.key)}): ${oneLine(s.tagline)} (${solutionTags[lang][s.key].join(", ")})`);

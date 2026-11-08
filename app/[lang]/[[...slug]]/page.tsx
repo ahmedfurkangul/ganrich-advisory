@@ -13,7 +13,8 @@ type Props = { params: Promise<{ lang: string; slug?: string[] }> };
 
 const metaCopy = {
   en: {
-    home: ["CBAM, CRA & EU Readiness for Turkish Industry | Ganrich", "Independent advisory for Turkish manufacturers and exporters facing CBAM, the Cyber Resilience Act and other EU rules, and deciding where to grow next."],
+    home: ["CBAM, CRA & EU Readiness for Turkish Industry | Ganrich", "Independent decision partner for Turkish exporters facing CBAM, the Cyber Resilience Act, EUDR and other EU buyer requirements: what to do, when and at what cost."],
+    buyerDesk: ["EU Buyer Request Desk | Ganrich Advisory", "One independent desk for the CBAM, EUDR, packaging, forced labour and cyber questions your EU buyers send: sorted, decided with you and answered consistently."],
     aiDecisions: ["AI Decisions: Independent AI Advisory | Ganrich Advisory", "Independent of AI vendors: we help boards decide where AI is worth doing, choose and govern the partner who builds it, and check that the value arrives."],
     expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
     markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
@@ -35,13 +36,14 @@ const metaCopy = {
     cbamCheck: ["CBAM Readiness Check | Ganrich Advisory", "Eight questions on whether your CBAM emissions data is ready for an EU buyer, with an instant result and the gaps to close first."],
     decisionLabChangelog: ["Decision Lab Changelog | Ganrich Advisory", "See what is live, what changed, and what remains under evaluation in the Ganrich Decision Lab."],
     privateBriefing: ["Private Executive Briefing | Ganrich Advisory", "Move from a published perspective, signal, or tool to a prepared discussion about your specific decision."],
-    about: ["About | Ganrich Advisory", "Ganrich Advisory is a strategy and EU-readiness advisory for Turkish manufacturers and exporters, led by Ahmed Furkan Gul in Istanbul."],
+    about: ["About | Ganrich Advisory", "Ganrich Advisory is the independent decision partner for Turkish manufacturers and exporters facing EU buyer requirements, led by Ahmed Furkan Gul in Istanbul."],
     contact: ["Contact | Ganrich Advisory", "Contact Ganrich Advisory in Istanbul about CBAM and EU readiness, market entry or an AI decision: a founder-led first conversation, started with a short form."],
     legal: ["Legal | Ganrich Advisory", "Who runs the Ganrich Advisory website, terms of use, intellectual property, limits of liability and how AI-assisted content is handled."],
     trust: ["Privacy + Trust | Ganrich Advisory", "Privacy choices, current-site facts, AI transparency, and legal information at Ganrich Advisory."],
   },
   tr: {
-    home: ["Ganrich Advisory | Türk Sanayisi için AB Uyumu ve Strateji", "SKDM (CBAM), Siber Dayanıklılık Yasası ve diğer AB kurallarıyla karşı karşıya olan Türk üretici ve ihracatçılar için bağımsız strateji ve uyum danışmanlığı."],
+    home: ["Ganrich Advisory | Türk Sanayisi için AB Uyumu ve Strateji", "SKDM (CBAM), CRA, EUDR ve diğer AB alıcı talepleriyle karşılaşan Türk ihracatçılar için bağımsız karar ortağı: neyi, ne zaman ve ne kadara yapacağınız."],
+    buyerDesk: ["AB Alıcı Talep Masası | Ganrich Advisory", "AB alıcılarınızın gönderdiği SKDM, EUDR, ambalaj, zorla çalıştırma ve siber güvenlik soruları için tek bağımsız masa: sınıflandırılır, sizinle karar verilir."],
     aiDecisions: ["Yapay Zekâ Kararları: Bağımsız Danışmanlık | Ganrich Advisory", "Tedarikçiden bağımsız yapay zekâ kararları: yapay zekânın nerede değer yarattığına karar verin, onu kuracak ortağı seçin ve değerin gelip gelmediğini izleyin."],
     expertise: ["Uzmanlık | Ganrich Advisory", "Strateji, büyüme, işletim modeli, yapay zekâ, organizasyon ve uygulama için karar odaklı uzmanlık."],
     markets: ["Coğrafyalar | Ganrich Advisory", "Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika için pazara özgü kanıtlara dayalı bölgesel bakışlar."],
@@ -63,7 +65,7 @@ const metaCopy = {
     cbamCheck: ["SKDM (CBAM) Hazırlık Testi | Ganrich Advisory", "SKDM (CBAM) emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
     decisionLabChangelog: ["Karar Laboratuvarı Değişiklik Günlüğü | Ganrich Advisory", "Ganrich Karar Laboratuvarında nelerin yayında, nelerin değiştiğini ve hangi araçların değerlendirmede olduğunu görün."],
     privateBriefing: ["Özel Yönetici Brifingi | Ganrich Advisory", "Yayımlanmış bir perspektif, sinyal veya araçtan kurumunuza özgü karar hakkında hazırlıklı bir görüşmeye geçin."],
-    about: ["Hakkımızda | Ganrich Advisory", "Ganrich Advisory, Türk üretici ve ihracatçılar için strateji ve AB uyum danışmanlığıdır; İstanbul'da Ahmed Furkan Gül liderliğinde çalışır."],
+    about: ["Hakkımızda | Ganrich Advisory", "Ganrich Advisory, AB alıcı talepleriyle karşılaşan Türk üretici ve ihracatçılar için bağımsız karar ortağıdır; İstanbul'da Ahmed Furkan Gül liderliğinde çalışır."],
     contact: ["İletişim | Ganrich Advisory", "Gündeminizdeki stratejik karar veya AB uyumu konusu hakkında kıdemli bir ön görüşme başlatın; kısa formu doldurmanız yeterli."],
     legal: ["Hukuki Bilgilendirme | Ganrich Advisory", "Ganrich Advisory internet sitesini kimin işlettiği, kullanım koşulları, fikrî mülkiyet, sorumluluk sınırları ve yapay zekâ destekli içerik hakkında bilgiler."],
     trust: ["Gizlilik + Güven | Ganrich Advisory", "Ganrich Advisory gizlilik tercihleri, mevcut site olguları, yapay zekâ şeffaflığı ve hukuki bilgileri."],
