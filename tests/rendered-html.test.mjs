@@ -603,7 +603,14 @@ test("publishes the regulation newsletter page in both languages and offers sign
     assert.match(html, /rel="canonical"/);
   }
   const eu = await (await render("/tr/cozumler/eudr-izlenebilirlik")).text();
-  assert.match(eu, /Mevzuat güncellemelerini e-postayla alın/);
+  assert.match(eu, /Pazar Notu.{0,8}nu e-postayla alın/);
+  // The list is weekly now; the old "only when something changes" promise must not come back.
+  const tr = await (await render("/tr/icgoruler/mevzuat-bulteni")).text();
+  assert.match(tr, /her Pazar 08:00/);
+  assert.doesNotMatch(tr, /Yalnızca bilinmeye değer bir gelişme olduğunda/);
+  const en = await (await render("/en/insights/regulation-updates")).text();
+  assert.match(en, /every Sunday at 08:00 Istanbul time/);
+  assert.doesNotMatch(en, /Sent only when there is something worth knowing/);
   assert.match(await (await render("/en")).text(), /href="\/en\/insights\/regulation-updates"/);
   assert.match(await (await render("/tr/gizlilik")).text(), /E-postayla mevzuat bülteni/);
 });
