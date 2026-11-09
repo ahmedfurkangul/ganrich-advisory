@@ -13,6 +13,392 @@ export type Guide = { key: string; solution: string; date: string; checked: Reco
 
 export const guides: Guide[] = [
  {
+  "key": "guideCbamDefaults",
+  "solution": "solutionCbam",
+  "date": "2026-11-09",
+  "checked": {
+   "en": "9 November 2026",
+   "tr": "9 Kasım 2026"
+  },
+  "image": "guideCbamDefaults",
+  "readingTime": {
+   "en": "6 min",
+   "tr": "6 dk"
+  },
+  "topic": {
+   "en": "CBAM",
+   "tr": "SKDM (CBAM)"
+  },
+  "en": {
+   "path": "insights/cbam-default-values-2026-turkish-steel-aluminium",
+   "title": "CBAM Default Values 2026: Actual or Default for Steel",
+   "description": "CBAM default values for 2026, the 10–30% mark-up and Türkiye values for rebar, hot-rolled steel and aluminium, with a worked example and verification rules.",
+   "h1": "CBAM default values 2026: what the mark-up means for Turkish steel and aluminium exporters",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Every tonne of steel or aluminium a Turkish plant ships to the EU now carries a number: its embedded emissions. The EU importer declares either the plant's verified actual figure or the Commission's default value plus a mark-up. This note sets out where the 2026 default values come from, what they are for three common Turkish products, and what using actual data requires."
+    },
+    {
+     "t": "h2",
+     "text": "Where the 2026 default values come from"
+    },
+    {
+     "t": "p",
+     "text": "The default values are set in Annex I to Commission Implementing Regulation (EU) 2025/2621. The Commission corrected Annexes I and IV with Implementing Regulation (EU) 2026/1740, adopted on 20 July 2026, and says a consolidated text of 2025/2621 \"will be available soon\". It also publishes the values in an Excel file (version 2, dated 6 August 2026), which is for information only: the legally binding values are those in the regulation."
+    },
+    {
+     "t": "p",
+     "text": "The values are set by country and by product (CN code). Where a product is not listed for a country, or the field shows \"-\", the declarant must use the table \"Other countries and territories\", which is the average of the ten exporting countries with the highest emission intensities for that good (Commission CBAM Q&A, 4.25–4.26)."
+    },
+    {
+     "t": "h2",
+     "text": "The mark-up: 10% in 2026, 30% from 2028"
+    },
+    {
+     "t": "p",
+     "text": "Default values must be increased by a mark-up that rises each year. It applies to default values, not to verified actual data."
+    },
+    {
+     "t": "table",
+     "head": [
+      "Sector",
+      "2026",
+      "2027",
+      "2028 onwards"
+     ],
+     "rows": [
+      [
+       "Iron and steel, aluminium, cement, hydrogen",
+       "10%",
+       "20%",
+       "30%"
+      ],
+      [
+       "Fertilisers",
+       "1%",
+       "1%",
+       "1%"
+      ]
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Source: Commission CBAM Q&A (last updated 15 October 2026), 4.25. The Commission adds that the defaults including the mark-up are set so that embedded emissions are not underestimated, so it should \"in most cases\" be more advantageous to use actual values where they are available."
+    },
+    {
+     "t": "h2",
+     "text": "Türkiye default values for three common products"
+    },
+    {
+     "t": "table",
+     "head": [
+      "CN code",
+      "Product",
+      "Default value, total (tCO2e per tonne)"
+     ],
+     "rows": [
+      [
+       "7214 20 00",
+       "Rebar: bars and rods with indentations, ribs or other deformations",
+       "2.310"
+      ],
+      [
+       "7208",
+       "Hot-rolled flat products of iron or non-alloy steel, width ≥ 600 mm",
+       "2.428"
+      ],
+      [
+       "7601",
+       "Unwrought aluminium",
+       "1.700"
+      ]
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Source: Commission Excel \"Default values definitive period\", Türkiye sheet, version 2 (6 August 2026), based on Regulation (EU) 2026/1740. For these three goods the Türkiye table lists direct emissions only; indirect emissions show \"N/A\". Check your own CN codes in the regulation before relying on any figure."
+    },
+    {
+     "t": "h2",
+     "text": "Worked example: 1,000 tonnes of rebar"
+    },
+    {
+     "t": "p",
+     "text": "Using the Türkiye default for CN 7214 20 00 (2.310 tCO2e per tonne) and the mark-up for each year:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**2026:** 2.310 × 1.10 = 2.541 tCO2e per tonne, or 2,541 tCO2e for 1,000 tonnes.",
+      "**2027:** 2.310 × 1.20 = 2.772 tCO2e per tonne, or 2,772 tCO2e.",
+      "**2028 onwards:** 2.310 × 1.30 = 3.003 tCO2e per tonne, or 3,003 tCO2e."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "These are embedded emissions, not the number of certificates. The certificates an importer surrenders are reduced by the adjustment for EU free allocation and by any carbon price effectively paid in the country of production. If your verified intensity for the same product is below the marked-up default, actual data lowers your buyer's CBAM cost; if it is above, the default is the cheaper figure for now, but the gap narrows as the mark-up rises."
+    },
+    {
+     "t": "h2",
+     "text": "What using actual emissions requires"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**Verification:** actual emissions declared for goods imported from 1 January 2026 must be verified by an accredited CBAM verifier. The declarant includes the operator's calculation and the verification report in the CBAM declaration (Q&A 5.9).",
+      "**A first physical site visit:** the verifier must visit the installation the first time; a virtual visit or waiver is possible only in later years under strict conditions (Q&A 5.15).",
+      "**The right year:** for goods imported in 2026, the reporting period is 2026. If there are no actual verified emissions for 2026, default values must be used (Q&A 5.17).",
+      "**No LCA shortcuts:** emission factors from life-cycle assessments or life-cycle inventory databases are not accepted (Q&A 4.24).",
+      "**Timing:** national accreditation bodies were expected to issue the first CBAM accreditations around September 2026, with verification work in early 2027 (Q&A 5.12)."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "When actual data pays off, and when it does not"
+    },
+    {
+     "t": "p",
+     "text": "Compare your own intensity with the marked-up default, product by product. Actual data pays off when your figure is clearly lower and the volume to the EU is large enough to carry the cost of monitoring and verification. It may not pay off for small or one-off flows, or where your route is more emissions-intensive than the default. Agree with each EU buyer who pays for verification and how the CBAM cost is reflected in price. Our report [Actual or default? The CBAM data decision for Turkish metal exporters](/en/insights/report/cbam-actual-or-default-e9f664d8) sets out that decision."
+    },
+    {
+     "t": "h2",
+     "text": "Key dates"
+    },
+    {
+     "t": "p",
+     "text": "Sales of CBAM certificates start on 1 February 2027. The first annual CBAM declaration, for goods imported in 2026, is due by 30 September 2027 (Q&A)."
+    },
+    {
+     "t": "h2",
+     "text": "FAQ"
+    },
+    {
+     "t": "faq",
+     "items": [
+      [
+       "What is a CBAM default value?",
+       "The embedded-emissions value per tonne, set by the Commission by country and CN code, that the EU declarant uses when verified actual data is not available. The 2026 values are in Annex I to Implementing Regulation (EU) 2025/2621, as corrected by Implementing Regulation (EU) 2026/1740."
+      ],
+      [
+       "How large is the mark-up?",
+       "10% in 2026, 20% in 2027 and 30% from 2028 for iron and steel, aluminium, cement and hydrogen; 1% for fertilisers from 2026 (Commission CBAM Q&A, 4.25)."
+      ],
+      [
+       "Do actual emissions have to be verified?",
+       "Yes. Actual emissions declared for goods imported from 1 January 2026 must be verified by an accredited CBAM verifier, and the verification report goes with the declaration (Q&A 5.9)."
+      ],
+      [
+       "What if Türkiye has no value for my product?",
+       "If the product is not listed for Türkiye or the field shows \"-\", the declarant uses the \"Other countries and territories\" table, which averages the ten exporting countries with the highest emission intensities (Q&A 4.25–4.26)."
+      ],
+      [
+       "Can we use our LCA or EPD figures instead?",
+       "No. Emission factors from life-cycle assessments or life-cycle inventory databases are not accepted for calculating embedded emissions of CBAM goods (Q&A 4.24)."
+      ]
+     ]
+    },
+    {
+     "t": "p",
+     "text": "To see where your data stands, take the [CBAM readiness check](/en/decision-lab/cbam-readiness-check). For prices and the TR ETS link, see [CBAM 2026: prices and TR ETS](/en/insights/cbam-2026-update-tr-ets-cop31). Our [CBAM data readiness](/en/solutions/cbam-data-readiness) work prepares the file your buyer needs."
+    },
+    {
+     "t": "sources",
+     "title": "Sources",
+     "items": [
+      "European Commission, CBAM legislation and guidance (accessed 9 Nov 2026): https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-legislation-and-guidance_en",
+      "European Commission, Default values definitive period (Excel, version 2, 6 Aug 2026, Türkiye sheet; information only): https://taxation-customs.ec.europa.eu/document/download/1c05d211-80cb-4aaa-8ef0-e08005a95d7e_en?filename=DV%20correcting%20act_final%20update_06.08.xlsx",
+      "European Commission, CBAM Questions and Answers, last updated 15 Oct 2026, sections 4.24–4.26, 5.9, 5.12, 5.15, 5.17: https://taxation-customs.ec.europa.eu/document/download/013fa763-5dce-4726-a204-69fec04d5ce2_en"
+     ]
+    }
+   ]
+  },
+  "tr": {
+   "path": "icgoruler/skdm-varsayilan-degerler-2026-gercek-emisyon",
+   "title": "SKDM Varsayılan Değerleri 2026: Gerçek Emisyon mu?",
+   "description": "SKDM (CBAM) 2026 varsayılan değerleri, %10–30 ek pay; inşaat demiri, sıcak haddelenmiş çelik ve alüminyum için Türkiye değerleri, örnek hesap ve doğrulama.",
+   "h1": "SKDM varsayılan değerleri 2026: ek pay Türk çelik ve alüminyum ihracatçısı için ne anlama geliyor?",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Türk tesisinin AB'ye gönderdiği her ton çelik ve alüminyumun artık bir sayısı var: gömülü emisyonu. AB'deki ithalatçı, Sınırda Karbon Düzenleme Mekanizması (SKDM, AB'deki adıyla CBAM) kapsamında ya tesisin doğrulanmış gerçek emisyonunu ya da Komisyon'un varsayılan değerini ek payıyla birlikte beyan ediyor. Bu not, 2026 varsayılan değerlerinin nereden geldiğini, sık ihraç edilen üç Türk ürünü için ne olduğunu ve gerçek veri kullanmanın ne gerektirdiğini özetliyor."
+    },
+    {
+     "t": "h2",
+     "text": "2026 varsayılan değerleri nereden geliyor?"
+    },
+    {
+     "t": "p",
+     "text": "Varsayılan değerler (AB) 2025/2621 sayılı Komisyon Uygulama Tüzüğü'nün Ek I'inde yer alıyor. Komisyon, Ek I ve Ek IV'ü 20 Temmuz 2026'da kabul edilen (AB) 2026/1740 sayılı Uygulama Tüzüğü ile düzeltti ve 2025/2621'in konsolide metninin \"yakında\" yayımlanacağını belirtiyor. Değerler ayrıca bir Excel dosyasında (sürüm 2, 6 Ağustos 2026) yayımlanıyor; bu dosya yalnızca bilgi amaçlı, bağlayıcı değerler tüzükte."
+    },
+    {
+     "t": "p",
+     "text": "Değerler ülke ve ürün (GTİP/CN kodu) bazında belirleniyor. Ürün o ülke için listede yoksa ya da alanda \"-\" varsa beyan sahibi \"Diğer ülkeler ve bölgeler\" tablosunu kullanmak zorunda. Bu tablo, o ürün için emisyon yoğunluğu en yüksek on ihracatçı ülkenin ortalaması (Komisyon SKDM Soru-Cevap, 4.25–4.26)."
+    },
+    {
+     "t": "h2",
+     "text": "Ek pay: 2026'da %10, 2028'den itibaren %30"
+    },
+    {
+     "t": "p",
+     "text": "Varsayılan değerler her yıl artan bir ek payla yükseltiliyor. Ek pay varsayılan değere uygulanıyor, doğrulanmış gerçek veriye değil."
+    },
+    {
+     "t": "table",
+     "head": [
+      "Sektör",
+      "2026",
+      "2027",
+      "2028 ve sonrası"
+     ],
+     "rows": [
+      [
+       "Demir-çelik, alüminyum, çimento, hidrojen",
+       "%10",
+       "%20",
+       "%30"
+      ],
+      [
+       "Gübre",
+       "%1",
+       "%1",
+       "%1"
+      ]
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Kaynak: Komisyon SKDM Soru-Cevap (son güncelleme 15 Ekim 2026), 4.25. Komisyon, ek paylı varsayılan değerlerin gömülü emisyonu düşük göstermeyecek şekilde belirlendiğini, bu yüzden gerçek değer varsa kullanmanın \"çoğu durumda\" daha avantajlı olacağını ekliyor."
+    },
+    {
+     "t": "h2",
+     "text": "Üç yaygın ürün için Türkiye varsayılan değerleri"
+    },
+    {
+     "t": "table",
+     "head": [
+      "GTİP/CN kodu",
+      "Ürün",
+      "Varsayılan değer, toplam (ton başına tCO2e)"
+     ],
+     "rows": [
+      [
+       "7214 20 00",
+       "İnşaat demiri: nervürlü veya şekil verilmiş çubuklar",
+       "2,310"
+      ],
+      [
+       "7208",
+       "Demir veya alaşımsız çelikten sıcak haddelenmiş yassı ürünler, genişliği ≥ 600 mm",
+       "2,428"
+      ],
+      [
+       "7601",
+       "İşlenmemiş alüminyum",
+       "1,700"
+      ]
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Kaynak: Komisyon \"Default values definitive period\" Excel dosyası, Türkiye sayfası, sürüm 2 (6 Ağustos 2026), 2026/1740 sayılı Tüzük'e dayalı. Bu üç ürün için Türkiye tablosu yalnızca doğrudan emisyon veriyor; dolaylı emisyon \"N/A\". Herhangi bir rakama dayanmadan önce kendi GTİP kodlarınızı tüzükte kontrol edin."
+    },
+    {
+     "t": "h2",
+     "text": "Örnek hesap: 1.000 ton inşaat demiri"
+    },
+    {
+     "t": "p",
+     "text": "GTİP 7214 20 00 için Türkiye varsayılan değeri (ton başına 2,310 tCO2e) ve her yılın ek payıyla:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**2026:** 2,310 × 1,10 = ton başına 2,541 tCO2e; 1.000 ton için 2.541 tCO2e.",
+      "**2027:** 2,310 × 1,20 = ton başına 2,772 tCO2e; 2.772 tCO2e.",
+      "**2028 ve sonrası:** 2,310 × 1,30 = ton başına 3,003 tCO2e; 3.003 tCO2e."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Bu rakamlar gömülü emisyondur, sertifika adedi değildir. İthalatçının teslim edeceği sertifika sayısı, AB'deki ücretsiz tahsis düzeltmesi ve üretim ülkesinde fiilen ödenen karbon fiyatı düşüldükten sonra belirlenir. Aynı ürün için doğrulanmış yoğunluğunuz ek paylı varsayılan değerin altındaysa gerçek veri alıcınızın SKDM maliyetini düşürür; üstündeyse şimdilik varsayılan değer daha ucuzdur, ama ek pay arttıkça fark kapanır."
+    },
+    {
+     "t": "h2",
+     "text": "Gerçek emisyon kullanmak ne gerektiriyor?"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**Doğrulama:** 1 Ocak 2026'dan itibaren ithal edilen mallar için beyan edilen gerçek emisyonlar akredite bir SKDM doğrulayıcısı tarafından doğrulanmalı. Beyan sahibi, operatörün hesabını ve doğrulama raporunu SKDM beyanına ekler (Soru-Cevap 5.9).",
+      "**İlk yıl fiziki saha ziyareti:** Doğrulayıcı tesisi ilk kez fiziki olarak ziyaret etmek zorunda; sanal ziyaret ya da muafiyet ancak sonraki yıllarda ve sıkı koşullarla mümkün (Soru-Cevap 5.15).",
+      "**Doğru yıl:** 2026'da ithal edilen mallar için raporlama dönemi 2026. 2026'ya ait doğrulanmış gerçek emisyon yoksa varsayılan değer kullanılmak zorunda (Soru-Cevap 5.17).",
+      "**YDD kısayolu yok:** Yaşam döngüsü değerlendirmesi (LCA) ya da yaşam döngüsü envanteri veri tabanlarından alınan emisyon faktörleri kabul edilmiyor (Soru-Cevap 4.24).",
+      "**Zamanlama:** Ulusal akreditasyon kuruluşlarının ilk SKDM akreditasyonlarını Eylül 2026 civarında vermesi, doğrulama işinin 2027 başında yapılması bekleniyordu (Soru-Cevap 5.12)."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "Gerçek veri ne zaman kazandırır, ne zaman kazandırmaz?"
+    },
+    {
+     "t": "p",
+     "text": "Kendi yoğunluğunuzu ürün ürün ek paylı varsayılan değerle karşılaştırın. Değeriniz belirgin şekilde düşükse ve AB'ye giden hacim izleme ve doğrulama maliyetini taşıyacak kadar büyükse gerçek veri kazandırır. Küçük ya da tek seferlik sevkiyatlarda veya üretim rotanız varsayılan değerden daha yoğunsa kazandırmayabilir. Doğrulamanın bedelini kimin ödeyeceğini ve SKDM maliyetinin fiyata nasıl yansıyacağını her AB alıcısıyla konuşun. Bu kararı [SKDM'de gerçek emisyon mu, varsayılan değer mi?](/tr/icgoruler/rapor/cbam-gercek-mi-varsayilan-mi-ef31215c) raporumuzda ele alıyoruz."
+    },
+    {
+     "t": "h2",
+     "text": "Önemli tarihler"
+    },
+    {
+     "t": "p",
+     "text": "SKDM sertifikalarının satışı 1 Şubat 2027'de başlıyor. 2026 ithalatı için ilk yıllık SKDM beyanının son günü 30 Eylül 2027 (Soru-Cevap)."
+    },
+    {
+     "t": "h2",
+     "text": "Sıkça sorulan sorular"
+    },
+    {
+     "t": "faq",
+     "items": [
+      [
+       "SKDM'de varsayılan değer nedir?",
+       "Doğrulanmış gerçek veri olmadığında AB'deki beyan sahibinin kullandığı, Komisyon'un ülke ve GTİP kodu bazında belirlediği ton başına gömülü emisyon değeridir. 2026 değerleri, 2026/1740 ile düzeltilen 2025/2621 sayılı Uygulama Tüzüğü'nün Ek I'inde yer alır."
+      ],
+      [
+       "Varsayılan değere ne kadar ek pay eklenir?",
+       "Demir-çelik, alüminyum, çimento ve hidrojende 2026 için %10, 2027 için %20, 2028'den itibaren %30; gübrede 2026'dan itibaren %1 (Komisyon SKDM Soru-Cevap, 4.25)."
+      ],
+      [
+       "Gerçek emisyon kullanmak için doğrulama şart mı?",
+       "Evet. 1 Ocak 2026'dan itibaren ithal edilen mallar için beyan edilen gerçek emisyonlar akredite bir SKDM doğrulayıcısınca doğrulanmalı ve doğrulama raporu beyana eklenmeli (Soru-Cevap 5.9)."
+      ],
+      [
+       "Türkiye için ürünümün değeri yoksa ne olur?",
+       "Ürün Türkiye için listede yoksa ya da alanda \"-\" varsa beyan sahibi \"Diğer ülkeler ve bölgeler\" tablosunu kullanır; bu tablo emisyon yoğunluğu en yüksek on ihracatçı ülkenin ortalamasıdır (Soru-Cevap 4.25–4.26)."
+      ],
+      [
+       "Ürün karbon ayak izi (LCA/EPD) verimiz gerçek emisyon yerine geçer mi?",
+       "Hayır. Yaşam döngüsü değerlendirmesi ya da yaşam döngüsü envanteri veri tabanlarından alınan emisyon faktörleri SKDM gömülü emisyon hesabında kabul edilmiyor (Soru-Cevap 4.24)."
+      ]
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Verinizin nerede durduğunu görmek için [2 dakikalık SKDM hazırlık testini](/tr/karar-laboratuvari/cbam-hazirlik-testi) yapın. Sertifika fiyatları ve TR ETS bağlantısı için [SKDM 2026: güncel sertifika fiyatı ve TR ETS](/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets) yazımıza bakın. [SKDM veri hazırlığı çalışmamız](/tr/cozumler/cbam-veri-hazirligi) alıcınızın istediği dosyayı hazırlıyor."
+    },
+    {
+     "t": "sources",
+     "title": "Kaynaklar",
+     "items": [
+      "Avrupa Komisyonu, CBAM legislation and guidance (erişim 9 Kasım 2026): https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-legislation-and-guidance_en",
+      "Avrupa Komisyonu, Default values definitive period (Excel, sürüm 2, 6 Ağustos 2026, Türkiye sayfası; yalnızca bilgi amaçlı): https://taxation-customs.ec.europa.eu/document/download/1c05d211-80cb-4aaa-8ef0-e08005a95d7e_en?filename=DV%20correcting%20act_final%20update_06.08.xlsx",
+      "Avrupa Komisyonu, CBAM Questions and Answers, son güncelleme 15 Ekim 2026, bölüm 4.24–4.26, 5.9, 5.12, 5.15, 5.17: https://taxation-customs.ec.europa.eu/document/download/013fa763-5dce-4726-a204-69fec04d5ce2_en"
+     ]
+    }
+   ]
+  }
+ },
+ {
   "key": "guideUkCbam",
   "solution": "solutionCbam",
   "date": "2026-11-09",

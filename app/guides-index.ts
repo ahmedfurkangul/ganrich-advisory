@@ -4,6 +4,22 @@ import type { Lang } from "./content";
 export type GuideIndexEntry = { key: string; solution: string; group?: "strategy"; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
  {
+  "key": "guideCbamDefaults",
+  "solution": "solutionCbam",
+  "topic": {
+   "en": "CBAM",
+   "tr": "SKDM (CBAM)"
+  },
+  "en": {
+   "h1": "CBAM default values 2026: what the mark-up means for Turkish steel and aluminium exporters",
+   "description": "CBAM default values for 2026, the 10–30% mark-up and Türkiye values for rebar, hot-rolled steel and aluminium, with a worked example and verification rules."
+  },
+  "tr": {
+   "h1": "SKDM varsayılan değerleri 2026: ek pay Türk çelik ve alüminyum ihracatçısı için ne anlama geliyor?",
+   "description": "SKDM (CBAM) 2026 varsayılan değerleri, %10–30 ek pay; inşaat demiri, sıcak haddelenmiş çelik ve alüminyum için Türkiye değerleri, örnek hesap ve doğrulama."
+  }
+ },
+ {
   "key": "guideUkCbam",
   "solution": "solutionCbam",
   "topic": {
