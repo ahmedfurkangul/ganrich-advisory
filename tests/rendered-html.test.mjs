@@ -1007,6 +1007,26 @@ test("publishes the UK CBAM 2027 guide in both languages with FAQ markup, sitema
   assert.match(await (await render("/tr/icgoruler")).text(), /İngiltere SKDM&#x27;si 1 Ocak 2027&#x27;de başlıyor/);
 });
 
+test("publishes the SKDM/CBAM default values guide in both languages with FAQ markup, sources and the Türkiye values", async () => {
+  const pages = [
+    ["/en/insights/cbam-default-values-2026-turkish-steel-aluminium", "CBAM Default Values 2026: Actual or Default for Steel", "/tr/icgoruler/skdm-varsayilan-degerler-2026-gercek-emisyon", /2\.310 × 1\.10 = 2\.541/],
+    ["/tr/icgoruler/skdm-varsayilan-degerler-2026-gercek-emisyon", "SKDM Varsayılan Değerleri 2026: Gerçek Emisyon mu?", "/en/insights/cbam-default-values-2026-turkish-steel-aluminium", /2,310 × 1,10 = ton başına 2,541/],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, body] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.match(html, body);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guideCbamDefaults\.png/);
+    assert.match(html, /cbam-(actual-or-default-e9f664d8|gercek-mi-varsayilan-mi-ef31215c)/, "links the report");
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+  }
+});
+
 test("link arrows are SVG icons, not the emoji-prone ↗ character", async () => {
   for (const path of ["/en", "/tr", "/en/solutions", "/tr/cozumler", "/en/about", "/tr/hakkinda"]) {
     const response = await render(path);
