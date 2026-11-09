@@ -2830,7 +2830,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "The default values are published on the Commission's CBAM legislation and guidance page. Every producer should compare its own intensity per CN code with the default. If yours is lower, verified actual data is a commercial advantage. If it is higher, the mark-up rises every year and will not protect you for long."
+     "text": "The default values are published on the Commission's CBAM legislation and guidance page. Every producer should compare its own intensity per CN code with the default. If yours is lower, verified actual data is a commercial advantage. If it is higher, the mark-up rises every year and will not protect you for long. For that decision in detail, see our report [Actual or default? The CBAM data decision for Turkish metal exporters](/en/insights/report/cbam-actual-or-default-e9f664d8)."
     },
     {
      "t": "h2",
@@ -3080,7 +3080,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "Varsayılan değerler Komisyonun SKDM mevzuat ve rehber sayfasında yayımlanıyor. Her üretici kendi emisyon yoğunluğunu GTİP kodu bazında varsayılan değerle karşılaştırmalı. Yoğunluğunuz varsayılan değerin altındaysa doğrulanmış gerçek veri doğrudan ticari avantajdır. Üstündeyse, marj her yıl arttığı için varsayılan değer sizi uzun süre korumaz."
+     "text": "Varsayılan değerler Komisyonun SKDM mevzuat ve rehber sayfasında yayımlanıyor. Her üretici kendi emisyon yoğunluğunu GTİP kodu bazında varsayılan değerle karşılaştırmalı. Yoğunluğunuz varsayılan değerin altındaysa doğrulanmış gerçek veri doğrudan ticari avantajdır. Üstündeyse, marj her yıl arttığı için varsayılan değer sizi uzun süre korumaz. Kararın ayrıntısı için raporumuza bakın: [SKDM'de gerçek emisyon mu, varsayılan değer mi?](/tr/icgoruler/rapor/cbam-gercek-mi-varsayilan-mi-ef31215c)"
     },
     {
      "t": "h2",

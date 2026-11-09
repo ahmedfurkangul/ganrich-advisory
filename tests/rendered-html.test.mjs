@@ -213,6 +213,7 @@ test("publishes production-safe bilingual SEO, taxonomy, feeds, and discovery fi
   assert.match(reportSitemapResponse.headers.get("content-type") ?? "", /^application\/xml/);
   assert.match(reportSitemap, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
   assert.match(robots, /Disallow: \/api\//);
+  assert.match(robots, /Allow: \/api\/pdf-insights\/\*\/document/);
   assert.match(robots, /Sitemap: https:\/\/ganrichadvisory\.com\/sitemap\.xml/);
   assert.match(robots, /Sitemap: https:\/\/ganrichadvisory\.com\/reports-sitemap\.xml/);
 });
@@ -1007,23 +1008,16 @@ test("publishes the UK CBAM 2027 guide in both languages with FAQ markup, sitema
   assert.match(await (await render("/tr/icgoruler")).text(), /İngiltere SKDM&#x27;si 1 Ocak 2027&#x27;de başlıyor/);
 });
 
-test("publishes the SKDM/CBAM default values guide in both languages with FAQ markup, sources and the Türkiye values", async () => {
-  const pages = [
-    ["/en/insights/cbam-default-values-2026-turkish-steel-aluminium", "CBAM Default Values 2026: Actual or Default for Steel", "/tr/icgoruler/skdm-varsayilan-degerler-2026-gercek-emisyon", /2\.310 × 1\.10 = 2\.541/],
-    ["/tr/icgoruler/skdm-varsayilan-degerler-2026-gercek-emisyon", "SKDM Varsayılan Değerleri 2026: Gerçek Emisyon mu?", "/en/insights/cbam-default-values-2026-turkish-steel-aluminium", /2,310 × 1,10 = ton başına 2,541/],
+test("links the CBAM actual-vs-default report from the CBAM 2026 guide and the readiness check intro", async () => {
+  const pairs = [
+    ["/en/insights/cbam-2026-update-tr-ets-cop31", "/en/insights/report/cbam-actual-or-default-e9f664d8"],
+    ["/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets", "/tr/icgoruler/rapor/cbam-gercek-mi-varsayilan-mi-ef31215c"],
+    ["/en/decision-lab/cbam-readiness-check", "/en/insights/report/cbam-actual-or-default-e9f664d8"],
+    ["/tr/karar-laboratuvari/cbam-hazirlik-testi", "/tr/icgoruler/rapor/cbam-gercek-mi-varsayilan-mi-ef31215c"],
   ];
-  const sitemap = await (await render("/sitemap.xml")).text();
-  for (const [path, title, pair, body] of pages) {
-    const response = await render(path);
-    assert.equal(response.status, 200, path);
-    const html = await response.text();
-    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
-    assert.match(html, body);
-    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
-    assert.match(html, /"@type":"FAQPage"/);
-    assert.match(html, /\/og\/(en|tr)\/guideCbamDefaults\.png/);
-    assert.match(html, /cbam-(actual-or-default-e9f664d8|gercek-mi-varsayilan-mi-ef31215c)/, "links the report");
-    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+  for (const [page, report] of pairs) {
+    const html = await (await render(page)).text();
+    assert.ok(html.includes(`href="${report}"`), `${page} links ${report}`);
   }
 });
 

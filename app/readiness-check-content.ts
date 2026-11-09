@@ -67,7 +67,7 @@ const cbamCopy = {
     send: 'Sonucu gönderin', sending: 'Gönderiliyor…',
     sent: 'Teşekkürler. Sonucunuz Ganrich Advisory’ye ulaştı; e-postayla dönüş yapacağız.',
     error: 'Gönderilemedi. Lütfen tekrar deneyin veya furkangul@ganrichadvisory.com adresine yazın.',
-    paper: 'Teknik notu okuyun: Gerçek mi, varsayılan mı?',
+    paper: 'Teknik notu okuyun: SKDM’de gerçek emisyon mu, varsayılan değer mi?',
     programme: 'SKDM (CBAM) Veri Hazırlığı programını inceleyin',
     restart: 'Baştan başlayın',
     questions: [

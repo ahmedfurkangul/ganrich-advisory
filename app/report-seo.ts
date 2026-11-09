@@ -2,7 +2,7 @@
 // these keep the <title> within 60 characters (with " | Ganrich") and the description within 150–160.
 export const reportSeo: Record<string, [title: string, description: string]> = {
   'cbam-actual-or-default-e9f664d8': ['CBAM: Actual or Default Values for Metal Exporters', 'Should Turkish steel and aluminium exporters give EU buyers verified actual emissions or let them use CBAM default values? The data decision behind the cost.'],
-  'cbam-gercek-mi-varsayilan-mi-ef31215c': ['SKDM: Gerçek mi Varsayılan mı? Metal İhracatı', 'Türk çelik ve alüminyum ihracatçıları AB alıcısına doğrulanmış gerçek emisyon mu vermeli, SKDM varsayılan değerine mi bırakmalı? Maliyetin arkasındaki karar.'],
+  'cbam-gercek-mi-varsayilan-mi-ef31215c': ['SKDM: Gerçek Emisyon mu, Varsayılan Değer mi? 2026', 'SKDM (CBAM) gerçek emisyon mu, varsayılan değer mi? Türk çelik ve alüminyum ihracatçıları için 2026 varsayılan değerleri, %10–30 ek pay ve doğrulama kararı.'],
   'cbam-august-guidance-turkish-exporters-58a4abcd': ['CBAM August Guidance for Turkish Exporters', 'What the Commission’s ten CBAM guidance documents of August 2026 ask of Turkish plants: monitoring, calculation and verification of 2026 emissions data.'],
   'skdm-agustos-rehberleri-turk-ihracatci-1d698fcc': ['SKDM Ağustos Rehberleri ve Türk İhracatçı', 'Komisyon’un Ağustos 2026’da yayımladığı on SKDM (CBAM) rehberi Türk tesislerinden ne istiyor: 2026 emisyon verisinin izlenmesi, hesaplanması ve doğrulanması.'],
   'cra-the-24-hour-test-96989394': ['CRA Incident Reporting: The 24-Hour Test', 'Since 11 September 2026, makers of connected products sold in the EU must report exploited vulnerabilities within 24 and 72 hours. Is your team ready to do it?'],
@@ -36,3 +36,6 @@ export const reportSeo: Record<string, [title: string, description: string]> = {
   'eudr-checklist-turkish-wood-furniture-204bc82e': ['EUDR Checklist for Wood and Furniture Exporters', 'EUDR applies from 30 December 2026. An 8-point checklist for Turkish wood and furniture exporters: scope, country of harvest, geolocation, legality, handover.'],
   'eudr-kontrol-listesi-ahsap-mobilya-a607fc4b': ['EUDR Kontrol Listesi: Ahşap ve Mobilya', 'EUDR 30 Aralık 2026’dan itibaren uygulanıyor. Türk ahşap ve mobilya ihracatçıları için 8 maddelik liste: kapsam, kesim ülkesi, konum, yasallık ve teslim.'],
 };
+
+// Report pages with their own social card in public/og/{lang}/report-{slug}.png; others use the insights card.
+export const reportSocialCards = new Set(["cbam-actual-or-default-e9f664d8", "cbam-gercek-mi-varsayilan-mi-ef31215c"]);

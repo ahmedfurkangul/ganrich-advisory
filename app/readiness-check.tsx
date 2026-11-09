@@ -72,6 +72,7 @@ function ReadinessCheck({ lang, id }: { lang: Lang; id: CheckId }) {
   return <>
     <EditorialHero label={c.label} title={c.title} intro={c.intro}/>
     <section className="advisory-section readiness-check">
+      {paperHref && !done && <p className="readiness-paper-intro"><a className="text-link" href={paperHref}>{c.paper} <Arrow/></a></p>}
       {!done ? <form onSubmit={e => { e.preventDefault(); leadEvent('check_complete'); setDone(true); }}>
         <ol className="readiness-questions">{c.questions.map((q, i) => <li key={i}>
           <fieldset>

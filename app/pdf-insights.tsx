@@ -5,6 +5,7 @@ import type { PdfInsight } from "../db/pdf-insights";
 import type { Lang } from "./content";
 import { routeMap } from "./content";
 import { Arrow } from "./arrow-icon";
+import { contentTypeLabel } from "./content-type-label";
 
 const contentTypes = ["Report", "Infographic Series", "Report Extract", "Executive Briefing", "Strategic Perspective", "Research Paper", "Data Note", "Framework", "Field Note", "Regional Outlook", "Annual Outlook", "Case Note", "Presentation", "Archived Publication", "Other"];
 
@@ -193,8 +194,8 @@ export function PdfInsightReport({ lang, insight }: { lang: Lang; insight: PdfIn
   };
   return <article className="pdf-report">
     <header className="pdf-report-hero">
-      <nav aria-label={isEn ? "Breadcrumb" : "İçerik yolu"}><a href={`/${lang}`}>Ganrich</a><span>/</span><a href={`/${lang}/${routeMap[lang].insights}`}>{isEn ? "Insights" : "İçgörüler"}</a><span>/</span><span>{insight.contentType}</span></nav>
-      <div className="pdf-report-title"><div><p className="meta">{insight.contentType} · {insight.language.toUpperCase()} · v{insight.version}</p><h1>{insight.title}</h1>{insight.subtitle && <p>{insight.subtitle}</p>}</div><div className="report-cover-art" aria-label={isEn ? "Website editorial image, not the original report cover" : "Web sitesi editoryal görseli; özgün rapor kapağı değildir"}><span>PDF</span><i/><i/><i/><small>{isEn ? "EDITORIAL IMAGE" : "EDİTORYAL GÖRSEL"}</small></div></div>
+      <nav aria-label={isEn ? "Breadcrumb" : "İçerik yolu"}><a href={`/${lang}`}>Ganrich</a><span>/</span><a href={`/${lang}/${routeMap[lang].insights}`}>{isEn ? "Insights" : "İçgörüler"}</a><span>/</span><span>{contentTypeLabel(lang, insight.contentType)}</span></nav>
+      <div className="pdf-report-title"><div><p className="meta">{contentTypeLabel(lang, insight.contentType)} · {insight.language.toUpperCase()} · v{insight.version}</p><h1>{insight.title}</h1>{insight.subtitle && <p>{insight.subtitle}</p>}</div><div className="report-cover-art" aria-label={isEn ? "Website editorial image, not the original report cover" : "Web sitesi editoryal görseli; özgün rapor kapağı değildir"}><span>PDF</span><i/><i/><i/><small>{isEn ? "EDITORIAL IMAGE" : "EDİTORYAL GÖRSEL"}</small></div></div>
       <dl>{insight.author && <div><dt>{isEn ? "Author" : "Yazar"}</dt><dd>{insight.author}</dd></div>}{insight.publicationDate && <div><dt>{isEn ? "Published" : "Yayımlanma tarihi"}</dt><dd>{insight.publicationDate}</dd></div>}{insight.pageCount && <div><dt>{isEn ? "Pages" : "Sayfa"}</dt><dd>{insight.pageCount}</dd></div>}<div><dt>{isEn ? "Available languages" : "Mevcut diller"}</dt><dd>{insight.language === "en" ? "English" : "Türkçe"}</dd></div></dl>
     </header>
     <section className="report-thesis section"><span className="eyebrow">{isEn ? "EXECUTIVE THESIS" : "YÖNETİCİ TEZİ"}</span><h2>{insight.executiveThesis}</h2><small>{isEn ? "Editorially structured from the original publication." : "Özgün yayından editoryal olarak yapılandırılmıştır."}</small></section>

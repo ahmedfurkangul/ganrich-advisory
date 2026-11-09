@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { PdfInsight } from "../db/pdf-insights";
 import type { Lang } from "./content";
 import { Arrow } from "./arrow-icon";
+import { contentTypeLabel } from "./content-type-label";
 
 function reportHref(lang: Lang, insight: Pick<PdfInsight, "slug"> & Partial<Pick<PdfInsight, "language">>) {
   const documentLanguage = insight.language ?? lang;
@@ -32,7 +33,7 @@ export function PdfInsightHubCards({ lang, exclude = [] }: { lang: Lang; exclude
           <span>{String(index + 4).padStart(2, "0")}</span>
           <div>
             <p className="meta">
-              {item.contentType} · {item.regions.join(", ") || (lang === "en" ? "Cross-regional" : "Bölgeler arası")} · {item.language === "tr" && lang === "en" ? "Turkish original · English translation pending" : item.publicationDate ?? (lang === "en" ? "Source date shown in report" : "Kaynak tarihi raporda gösterilir")}
+              {contentTypeLabel(lang, item.contentType)} · {item.regions.join(", ") || (lang === "en" ? "Cross-regional" : "Bölgeler arası")} · {item.language === "tr" && lang === "en" ? "Turkish original · English translation pending" : item.publicationDate ?? (lang === "en" ? "Source date shown in report" : "Kaynak tarihi raporda gösterilir")}
             </p>
             <h2>{item.title}</h2>
             <p>{item.shortSummary || item.executiveThesis}</p>
