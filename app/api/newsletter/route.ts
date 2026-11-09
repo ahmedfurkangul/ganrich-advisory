@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isToken, normaliseEmail, subscribersTableSql } from "../../newsletter-core";
 import { subscribe } from "../../newsletter-server";
+import { syncUnsubscribed, type ResendSyncEnv } from "../../newsletter-resend";
 
 export const runtime = "edge";
 
@@ -43,7 +44,9 @@ export async function POST(request: Request) {
     const now = new Date().toISOString();
 
     if (unsubscribing) {
+      const row = await env.DB.prepare("SELECT email FROM subscribers WHERE token = ?").bind(input.token).first<{ email: string }>();
       await env.DB.prepare("UPDATE subscribers SET status = 'unsubscribed', unsubscribed_at = ? WHERE token = ? AND status != 'unsubscribed'").bind(now, input.token).run();
+      if (row) await syncUnsubscribed(env as unknown as ResendSyncEnv, row.email);
       return reply(language, 200, "You are unsubscribed and will receive no further updates.", "Kaydınız iptal edildi; size artık bülten gönderilmeyecek.");
     }
 

@@ -1,4 +1,5 @@
 import { isToken, newsletterPath, subscribersTableSql } from "../../../newsletter-core";
+import { syncSubscribed, type ResendSyncEnv } from "../../../newsletter-resend";
 
 export const runtime = "edge";
 
@@ -14,11 +15,14 @@ export async function GET(request: Request) {
       const { env } = await import("cloudflare:workers");
       if (env.DB) {
         await env.DB.batch(subscribersTableSql.map(sql => env.DB.prepare(sql)));
-        const row = await env.DB.prepare("SELECT language, status FROM subscribers WHERE token = ?").bind(token).first<{ language: string; status: string }>();
+        const row = await env.DB.prepare("SELECT email, language, status FROM subscribers WHERE token = ?").bind(token).first<{ email: string; language: string; status: string }>();
         if (row) {
           lang = row.language === "tr" ? "tr" : "en";
           if (row.status === "pending") {
             await env.DB.prepare("UPDATE subscribers SET status = 'active', confirmed_at = ? WHERE token = ? AND status = 'pending'").bind(new Date().toISOString(), token).run();
+            // Adds the address to the Resend segment the Sunday Brief is sent to. A failure is logged and
+            // does not undo the confirmation; the address can be synced again later.
+            await syncSubscribed(env as unknown as ResendSyncEnv, row.email, lang);
           }
           status = row.status === "unsubscribed" ? "invalid" : "confirmed";
         }
