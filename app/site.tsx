@@ -29,7 +29,7 @@ import { BriefingTray } from "./intelligence-shell";
 import { openCookiePreferences, PrivacyControls } from "./privacy-controls";
 import { Arrow } from "./arrow-icon";
 
-type SiteProps = { lang: Lang; route: string };
+type SiteProps = { lang: Lang; route: string; switchTo?: string };
 
 const DecisionLabPage = lazy(() => import("./intelligence").then((module) => ({ default: module.DecisionLabPage })));
 const DecisionAtlasPage = lazy(() => import("./intelligence").then((module) => ({ default: module.DecisionAtlasPage })));
@@ -60,7 +60,7 @@ function Wordmark() {
   return <span className="wordmark"><Image src="/brand/ganrich-advisory-threshold.webp" width={1260} height={260} alt="Ganrich Advisory" priority unoptimized/></span>;
 }
 
-function Header({ lang, route }: SiteProps) {
+function Header({ lang, route, switchTo }: SiteProps) {
   const [open, setOpen] = useState(false); const t = ui[lang]; const m = routeMap[lang];
   const hrefs = navKeys.map(k => m[k]);
   return <header className="header">
@@ -70,7 +70,7 @@ function Header({ lang, route }: SiteProps) {
       {t.nav.map((item, i) => <a key={item} href={`/${lang}/${hrefs[i]}`} aria-current={route === hrefs[i] ? "page" : undefined}>{item}</a>)}
     </nav>
     <div className="header-actions">
-      <a className="language" data-analytics-event="language_switched" href={switchHref(lang, route)} onClick={() => localStorage.setItem("ganrich-language", lang === "en" ? "tr" : "en")} ><span className={lang === "en" ? "active" : ""}>EN</span><i>/</i><span className={lang === "tr" ? "active" : ""}>TR</span><span className="sr-only">{lang === "en" ? "Türkçe sürüme geç" : "Switch to English"}</span></a>
+      <a className="language" data-analytics-event="language_switched" href={switchTo ?? switchHref(lang, route)} onClick={() => localStorage.setItem("ganrich-language", lang === "en" ? "tr" : "en")} ><span className={lang === "en" ? "active" : ""}>EN</span><i>/</i><span className={lang === "tr" ? "active" : ""}>TR</span><span className="sr-only">{lang === "en" ? "Türkçe sürüme geç" : "Switch to English"}</span></a>
       <a className="button compact" data-analytics-event="contact_started" href={`/${lang}/${m.contact}`}><span className="desktop-cta">{t.cta}</span><span className="mobile-cta">{lang === "en" ? "First review" : "Ön görüşme"}</span></a>
     </div>
   </header>;
@@ -103,9 +103,9 @@ function Footer({ lang }: { lang: Lang }) {
   </footer>;
 }
 
-export function SiteLayout({ lang, route, children }: SiteProps & { children: React.ReactNode }) {
+export function SiteLayout({ lang, route, switchTo, children }: SiteProps & { children: React.ReactNode }) {
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
-  return <><a className="skip" href="#content">{ui[lang].skip}</a><Header lang={lang} route={route}/><TopSectionNav lang={lang}/><main id="content">{children}</main><BriefingTray lang={lang}/><Footer lang={lang}/><PrivacyControls lang={lang}/><AnalyticsBridge/><LeadSignals/></>;
+  return <><a className="skip" href="#content">{ui[lang].skip}</a><Header lang={lang} route={route} switchTo={switchTo}/><TopSectionNav lang={lang}/><main id="content">{children}</main><BriefingTray lang={lang}/><Footer lang={lang}/><PrivacyControls lang={lang}/><AnalyticsBridge/><LeadSignals/></>;
 }
 
 
