@@ -1008,6 +1008,19 @@ test("publishes the UK CBAM 2027 guide in both languages with FAQ markup, sitema
   assert.match(await (await render("/tr/icgoruler")).text(), /İngiltere SKDM&#x27;si 1 Ocak 2027&#x27;de başlıyor/);
 });
 
+test("links the CBAM actual-vs-default report from the CBAM 2026 guide and the readiness check intro", async () => {
+  const pairs = [
+    ["/en/insights/cbam-2026-update-tr-ets-cop31", "/en/insights/report/cbam-actual-or-default-e9f664d8"],
+    ["/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets", "/tr/icgoruler/rapor/cbam-gercek-mi-varsayilan-mi-ef31215c"],
+    ["/en/decision-lab/cbam-readiness-check", "/en/insights/report/cbam-actual-or-default-e9f664d8"],
+    ["/tr/karar-laboratuvari/cbam-hazirlik-testi", "/tr/icgoruler/rapor/cbam-gercek-mi-varsayilan-mi-ef31215c"],
+  ];
+  for (const [page, report] of pairs) {
+    const html = await (await render(page)).text();
+    assert.ok(html.includes(`href="${report}"`), `${page} links ${report}`);
+  }
+});
+
 test("link arrows are SVG icons, not the emoji-prone ↗ character", async () => {
   for (const path of ["/en", "/tr", "/en/solutions", "/tr/cozumler", "/en/about", "/tr/hakkinda"]) {
     const response = await render(path);
