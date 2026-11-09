@@ -70,6 +70,16 @@ test("marks an unsubscribed address in Resend and treats an unknown contact as d
   assert.deepEqual(sent, { url: "https://api.resend.com/contacts/a%40example.com", method: "PATCH", body: { unsubscribed: true } });
 });
 
+test("uses the separate contacts key for Resend contacts when it is set", async () => {
+  const { syncUnsubscribed } = await import("../app/newsletter-resend.ts");
+  let auth;
+  const fetcher = async (url, init) => { auth = init.headers.authorization; return new Response("{}", { status: 200 }); };
+  await syncUnsubscribed({ RESEND_API_KEY: "send-only", RESEND_CONTACTS_API_KEY: "full", RESEND_SEGMENT_TR: "seg-tr" }, "a@example.com", fetcher);
+  assert.equal(auth, "Bearer full");
+  await syncUnsubscribed({ RESEND_API_KEY: "send-only", RESEND_SEGMENT_TR: "seg-tr" }, "a@example.com", fetcher);
+  assert.equal(auth, "Bearer send-only");
+});
+
 test("accepts only correctly signed, recent Resend webhooks", async () => {
   const { verifyResendWebhook } = await import("../app/newsletter-resend.ts");
   const { createHmac } = await import("node:crypto");
