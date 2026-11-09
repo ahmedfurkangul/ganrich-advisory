@@ -1036,6 +1036,17 @@ test("report pages link their programme, readiness check and guides, and switch 
   assert.match(site, /href=\{switchTo \?\? switchHref\(lang, route\)\}/);
 });
 
+test("every published programme report has an editorial cover image on disk", async () => {
+  const { readdir } = await import("node:fs/promises");
+  const source = await readFile(new URL("../app/report-covers.ts", import.meta.url), "utf8");
+  const keys = new Set([...source.matchAll(/"[^"]+": "([a-z0-9-]+)"/g)].map(m => m[1]));
+  const files = new Set(await readdir(new URL("../public/reports/covers/", import.meta.url)));
+  assert.equal(keys.size, 17);
+  for (const key of keys) assert.ok(files.has(`${key}.webp`), `${key}.webp exists`);
+  assert.equal([...source.matchAll(/"[^"]+-[0-9a-f]{8}": /g)].length, 34, "34 report slugs mapped");
+  for (const file of ["pdf-insights.tsx", "pdf-insight-cards.tsx"]) assert.match(await readFile(new URL(`../app/${file}`, import.meta.url), "utf8"), /reportCover\(/);
+});
+
 test("link arrows are SVG icons, not the emoji-prone ↗ character", async () => {
   for (const path of ["/en", "/tr", "/en/solutions", "/tr/cozumler", "/en/about", "/tr/hakkinda"]) {
     const response = await render(path);
