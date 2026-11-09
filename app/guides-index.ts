@@ -4,6 +4,22 @@ import type { Lang } from "./content";
 export type GuideIndexEntry = { key: string; solution: string; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
  {
+  "key": "guideUkCbam",
+  "solution": "solutionCbam",
+  "topic": {
+   "en": "UK CBAM",
+   "tr": "İngiltere SKDM"
+  },
+  "en": {
+   "h1": "UK CBAM from 1 January 2027: what Turkish steel and aluminium exporters must prepare",
+   "description": "UK CBAM starts on 1 January 2027. What Turkish steel and aluminium exporters must prepare, how it differs from EU CBAM and which emissions data UK buyers need."
+  },
+  "tr": {
+   "h1": "İngiltere SKDM'si 1 Ocak 2027'de başlıyor: Türk çelik ve alüminyum ihracatçısı neyi hazırlamalı?",
+   "description": "İngiltere SKDM'si 1 Ocak 2027'de başlıyor. Türk çelik ve alüminyum ihracatçısı için AB SKDM'den farkları, İngiliz alıcının isteyeceği veri ve 7 haftalık plan."
+  }
+ },
+ {
   "key": "guideCraReporting",
   "solution": "solutionCra",
   "topic": {

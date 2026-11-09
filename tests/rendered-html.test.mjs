@@ -961,6 +961,29 @@ test("publishes the CRA reporting (refrigeration) guide in both languages with F
   assert.match(await (await render("/tr/icgoruler")).text(), /CRA Bildirimi: Beyaz Eşya ve Soğutma İhracatçısı/);
 });
 
+test("publishes the UK CBAM 2027 guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
+  const pages = [
+    ["/en/insights/uk-cbam-2027-turkish-exporters", "UK CBAM 2027: What Turkish Steel and Aluminium Must Do", "/tr/icgoruler/ingiltere-skdm-2027-ihracatci", /<strong>£9\.69 per tCO2e for iron and steel<\/strong>/],
+    ["/tr/icgoruler/ingiltere-skdm-2027-ihracatci", "İngiltere SKDM 2027: Türk Çelik ve Alüminyum İhracatçısı", "/en/insights/uk-cbam-2027-turkish-exporters", /yedi haftalık eylem listesi/],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, body] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.match(html, body);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guideUkCbam\.png/);
+    assert.doesNotMatch(html, /\*?(Draft|Taslak)\. |DRAFT v2|editor notes|editör notları/i, "no draft footer, status line or editor notes");
+    assert.match(html, /(not legal or tax advice|hukuki ya da vergisel danışmanlık değildir)/);
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+  }
+  assert.match(await (await render("/en/insights")).text(), /UK CBAM from 1 January 2027/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /İngiltere SKDM&#x27;si 1 Ocak 2027&#x27;de başlıyor/);
+});
+
 test("link arrows are SVG icons, not the emoji-prone ↗ character", async () => {
   for (const path of ["/en", "/tr", "/en/solutions", "/tr/cozumler", "/en/about", "/tr/hakkinda"]) {
     const response = await render(path);
