@@ -1,8 +1,25 @@
 import type { Lang } from "./content";
 
 // Light index of the long-form guides for client components (the library). Full text lives in guides-content.ts.
-export type GuideIndexEntry = { key: string; solution: string; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
+export type GuideIndexEntry = { key: string; solution: string; group?: "strategy"; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
+ {
+  "key": "guideGulfEntry",
+  "solution": "serviceMarket",
+  "group": "strategy",
+  "topic": {
+   "en": "Gulf market entry",
+   "tr": "Körfez'e giriş"
+  },
+  "en": {
+   "h1": "Gulf market entry: UAE or Saudi Arabia first? A decision framework for Turkish companies",
+   "description": "UAE or Saudi Arabia; free zone, distributor or local partner? A Gulf entry framework for Turkish companies, with the tests that matter before you commit."
+  },
+  "tr": {
+   "h1": "Körfez pazarına giriş: Önce BAE mi, Suudi Arabistan mı? Türk şirketleri için karar çerçevesi",
+   "description": "BAE mi Suudi Arabistan mı; serbest bölge, distribütör mü yerel ortak mı? Türk şirketleri için Körfez'e giriş çerçevesi ve taahhütten önce yapılacak testler."
+  }
+ },
  {
   "key": "guideCraReporting",
   "solution": "solutionCra",

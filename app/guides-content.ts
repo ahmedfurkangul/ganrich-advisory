@@ -13,6 +13,468 @@ export type Guide = { key: string; solution: string; date: string; checked: Reco
 
 export const guides: Guide[] = [
  {
+  "key": "guideGulfEntry",
+  "solution": "serviceMarket",
+  "date": "2026-11-09",
+  "checked": {
+   "en": "9 November 2026",
+   "tr": "9 Kasım 2026"
+  },
+  "image": "guideGulfEntry",
+  "readingTime": {
+   "en": "9 min",
+   "tr": "9 dk"
+  },
+  "topic": {
+   "en": "Gulf market entry",
+   "tr": "Körfez'e giriş"
+  },
+  "en": {
+   "path": "insights/gulf-market-entry-framework-turkish-companies",
+   "title": "Gulf Market Entry: UAE or Saudi Arabia First? A Framework",
+   "description": "UAE or Saudi Arabia; free zone, distributor or local partner? A Gulf entry framework for Turkish companies, with the tests that matter before you commit.",
+   "h1": "Gulf market entry: UAE or Saudi Arabia first? A decision framework for Turkish companies",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Turkish boards discussing the Gulf usually start with one question: Dubai or Riyadh? It is the wrong first question; the country is the third or fourth decision. This piece sets out the sequence, the rules behind each step, and the tests to run before committing capital."
+    },
+    {
+     "t": "h2",
+     "text": "Ask \"which customer, which proof\" before \"which country\""
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Who is the first buyer?** A distributor, a retailer, an industrial user or a government entity; each points to a different entry model.",
+      "**What must the first 90 days prove?** Demand at your price, a partner who can execute, a clear compliance route.",
+      "**What is the smallest commitment that can prove it?** A distributor shipment proves more about demand than a company licence."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Then compare countries."
+    },
+    {
+     "t": "h2",
+     "text": "Five entry routes, lightest to heaviest"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Direct export** to an importer of record. Low cost, little control. The Saudi importer needs a commercial registration with the right activity code, plus any sector licence the activity needs (T.C. Ticaret Bakanlığı, *Suudi Arabistan Pazar Bilgileri*, 2026).",
+      "**Distributor or agent.** Türkiye's Ministry of Trade advises Saudi distributors who can deliver, support and solve problems locally, exclusive nationwide or by region (Jeddah-West, Riyadh-Central, Dammam-East) (Ticaret Bakanlığı, 2026).",
+      "**Free-zone company** in the UAE. Free zones have no foreign ownership restrictions (JAFZA website; DMCC website).",
+      "**Onshore company or branch.** In the UAE, foreign investors can fully own companies in all legal forms, except activities with a strategic impact (UAE Ministry of Economy and Tourism). That list is set by Cabinet Resolution No. 55 of 2021: defence and security, banking, exchange houses, finance companies and insurance, telecoms, money printing, Hajj and Umrah services, Quran centres and fisheries.",
+      "**Partner or joint venture**, by choice or because the activity requires it."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "UAE as a test base, Saudi Arabia as a scale market"
+    },
+    {
+     "t": "p",
+     "text": "**The UAE is usually the faster place to set up and test.** DMCC says its setup process \"takes around 10 working days\" (DMCC website), a claim covering licensing only; bank accounts and visas take longer. Corporate tax is 0% up to AED 375,000 of taxable income and 9% above (Cabinet Decision No. 116 of 2022, Arts. 2–3), for financial years starting on or after 1 June 2023. Multinational groups with global revenue of €750 million or more in at least two of the four preceding years also pay a domestic minimum top-up tax that lifts their UAE effective rate to 15%, for financial years starting on or after 1 January 2025 (Cabinet Decision No. 142 of 2024; UAE Ministry of Finance)."
+    },
+    {
+     "t": "p",
+     "text": "A Qualifying Free Zone Person pays 0% on qualifying income, but sales to mainland customers qualify only for specific activities. For goods, that generally means distribution from a VAT Designated Zone (such as JAFZA) to a customer who resells or processes them (Ministerial Decision No. 229 of 2025). DMCC is a free zone but does not appear on the Designated Zone list (Cabinet Decision No. 59 of 2017, as amended). If non-qualifying revenue exceeds the lower of 5% of revenue or AED 5 million, the 0% regime is lost for that year and the next four (FTA, Free Zone Persons guide). VAT at 5% still applies to most mainland sales."
+    },
+    {
+     "t": "p",
+     "text": "**Saudi Arabia is usually the larger market and the harder base.** Three rules shape the decision:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**Registration, not licensing.** The Investment Law, published on 16 August 2024, entered into force 180 days later, in February 2025, together with its Implementing Regulations (Ministerial Decision No. 1086/1446), and repealed the old Foreign Investment Law (Art. 16; Bureau of Experts). Foreign investors now register with the Ministry of Investment (MISA) before investing (Art. 7). Some activities are prohibited or restricted for foreign investors (Art. 8).",
+      "**Wholly foreign trading is capital-heavy.** MISA lists a minimum capital of SAR 30,000,000 for a 100% foreign commercial activity, with presence in at least three regional or global markets. It also requires an investment of at least SAR 300 million over five years (including the SAR 30 million capital), or SAR 200 million plus local manufacturing, R&D or logistics conditions. With a Saudi partner holding at least 25%, the minimum capital is SAR 26,666,667 (MISA, Investor Guide, 13th ed., February 2026). MISA has signalled some flexibility on these amounts for applicants with a detailed five-year business plan (Deloitte, May 2026), so treat them as the starting position, not the final number. Türkiye's Ministry of Trade cites the same SAR 30 million threshold as a reason for its distributor advice (Ticaret Bakanlığı, 2026).",
+      "**Tax.** A Saudi company's profits attributable to non-Saudi, non-GCC shareholders are taxed at 20% income tax; the share held by Saudi and GCC shareholders pays zakat at 2.5% of the zakat base. VAT is 15% (ZATCA). With mixed ownership, both apply."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "**Regional headquarters (RHQ).** Since 1 January 2024, Saudi government entities may contract with foreign companies that keep their Middle East and North Africa regional headquarters outside the Kingdom, and that appear on a list kept by MISA, only on restricted terms. The restriction also covers those companies' agents, distributors and suppliers for their goods and services (Council of Ministers Decision No. 461 of 1445H, Arts. 1, 3 and 5). Contracts worth an estimated SAR 1 million or less, and work performed outside Saudi Arabia, are exempt (Art. 4). In public tenders, a listed company's bid can be accepted only if it is the only technically acceptable bid, or the best technical bid and at least 25% cheaper than the next best (Art. 6). Government entities can also ask an exemption committee to approve a specific project or period (Arts. 9–10)."
+    },
+    {
+     "t": "p",
+     "text": "An RHQ needs a separate legal entity in Saudi Arabia (a company or registered branch), group presence in at least two countries other than Saudi Arabia and the group's head-office country, at least 15 full-time staff within a year, and no revenue-generating activity beyond RHQ functions (MISA, Terms and Conditions; Investor Guide, 13th ed.). In return, it gets 0% income tax on eligible income from eligible activities and 0% withholding tax on specified payments to non-residents, for 30 years, renewable (ZATCA, RHQ guideline, 2nd version, May 2026). An RHQ is rarely the entry move for Turkish companies. The trap: if you set up a MENA regional headquarters in Dubai and are listed, your Saudi distributor's sales of your products to government buyers can be caught as well."
+    },
+    {
+     "t": "h2",
+     "text": "\"Is UAE-as-test-base costing me in both markets?\""
+    },
+    {
+     "t": "p",
+     "text": "A sceptical CEO's objection: a Dubai base could restrict me and my Saudi distributor on government contracts over SAR 1 million, and a DMCC company may miss 0% on mainland sales. Honest answer: it can, under conditions you can test in advance."
+    },
+    {
+     "t": "p",
+     "text": "**It costs you in Saudi Arabia when** your target buyers are Saudi government entities on contracts above SAR 1 million, your UAE entity functions as your MENA regional headquarters, and your company is on MISA's list. The rule binds government entities (ministries, public bodies and government-founded non-profits), not private buyers. If you sell to state-owned companies or giga-project developers, ask whether they apply similar supplier rules."
+    },
+    {
+     "t": "p",
+     "text": "**It costs you in the UAE when** more than 5% of your free-zone company's revenue, or more than AED 5 million, comes from non-qualifying sources, such as goods sold to mainland customers from a zone or activity that does not qualify. Cross that line and the company loses the 0% regime for that year and the next four, and is taxed under the standard rules (9% above AED 375,000). Most mainland sales also carry 5% VAT either way."
+    },
+    {
+     "t": "p",
+     "text": "**How to structure around it:**"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "If Saudi government buyers are core, test the RHQ rule before you name a UAE entity your regional headquarters. Whether a UAE sales office counts as one is a question for legal advice; MISA's list is updated quarterly and circulated to government entities (Art. 5), so ask your Saudi buyer or counsel whether you are on it. The alternatives are a Saudi RHQ, bidding on the narrow terms above (sole acceptable bid, or best technical bid at least 25% cheaper), or asking the government buyer to seek an exemption (Arts. 9–10).",
+      "For UAE mainland goods sales, compare a Designated Zone distribution model, an onshore company, or a UAE distributor.",
+      "If neither market's rules fit, skip the UAE base and go straight to a Saudi distributor."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "Local partner: strategic choice, not legal must"
+    },
+    {
+     "t": "p",
+     "text": "In the UAE, a local shareholder is generally a choice. In Saudi Arabia, a partner is often the practical route: not always legally required, but the 100% foreign thresholds are high and buyers expect a local counterpart. Choose one for access, execution (warehousing, after-sales, spare parts) and regulatory work; Saudi buyers read physical presence as a sign someone will answer when problems arise (Ticaret Bakanlığı, 2026)."
+    },
+    {
+     "t": "p",
+     "text": "Protect yourself early: register your Saudi trademark in your Turkish company's name through a licensed Saudi IP agent with a legalised power of attorney, and hold pre-market approvals (food, medicines, medical devices) in your own name so a distributor change does not strand them (Ticaret Bakanlığı, 2026)."
+    },
+    {
+     "t": "h2",
+     "text": "Relationship-led and public-sector buying"
+    },
+    {
+     "t": "p",
+     "text": "Saudi buyers prefer people they have met or were introduced to by someone they trust, so trade fairs beat email outreach (Ticaret Bakanlığı, 2026)."
+    },
+    {
+     "t": "p",
+     "text": "Tenders are announced on Etimad. Local content weighs most with Aramco and in defence. Aramco's iktva programme reached 70% local content across its procurement in early 2026 and now aims for 75% by 2030 (Aramco, February 2026); in defence, the national target is to localise more than 50% of military spending by 2030, against 27.3% at end-2025 (GAMI). These are programme-level figures, not a fixed rule for every tender, so check the local-content terms of each tender."
+    },
+    {
+     "t": "h2",
+     "text": "Product compliance and paperwork, early"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**SABER** (SASO's platform) registration, required for regulated products, is the importer's or local seller's obligation (Ticaret Bakanlığı, 2026; saber.sa).",
+      "**SFDA** covers food, medicines, cosmetics and medical devices. Halal certificates must come from bodies the SFDA recognises; certificates issued under SMIIC standards are not accepted (Ticaret Bakanlığı, 2026).",
+      "**Legalisation.** MISA registration needs your commercial register and last-year financials certified by the Saudi embassy (MISA, Investor Guide, 13th ed.).",
+      "**Arabic labelling:** check the SASO or SFDA technical regulation for your product; labelling rules differ by product."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "A staged-commitment ladder with go/no-go gates"
+    },
+    {
+     "t": "table",
+     "head": [
+      "Stage",
+      "Commitment",
+      "Gate to pass before the next stage"
+     ],
+     "rows": [
+      [
+       "0. Desk test",
+       "Product compliance map; target buyer list",
+       "Product can be registered; no excluded activity"
+      ],
+      [
+       "1. Proof of demand",
+       "Fair visit; samples; first orders through a distributor",
+       "Repeat orders at target margin"
+      ],
+      [
+       "2. Partner proof",
+       "Distribution agreement with KPIs; trademark and approvals in your name",
+       "Partner hits KPIs for two to three quarters"
+      ],
+      [
+       "3. Light presence",
+       "UAE free-zone or onshore entity for regional sales and service",
+       "Regional revenue justifies fixed cost; RHQ and free-zone tests passed"
+      ],
+      [
+       "4. Saudi presence",
+       "MISA registration; Saudi entity, alone or with a partner",
+       "Saudi revenue, local content or public buyers require it"
+      ],
+      [
+       "5. RHQ",
+       "Only if government contracts are core",
+       "Government contracts above SAR 1m are core, and the business case covers RHQ substance (15 staff, 3 senior executives)"
+      ]
+     ]
+    },
+    {
+     "t": "p",
+     "text": "This is the logic of [market entry as a sequence of commitments](/en/insights/market-entry-sequence-of-commitments) and of our [market entry](/en/expertise/market-entry) work. On two-way capital flows, see [The Türkiye–Gulf capital corridor](/en/insights/turkiye-gulf-capital-corridor)."
+    },
+    {
+     "t": "h2",
+     "text": "FAQ"
+    },
+    {
+     "t": "faq",
+     "items": [
+      [
+       "Do I need a local company to sell?",
+       "No. An importer or distributor can sell for you. You need a company to import, hold stock, invoice locally, or bid where local presence is required."
+      ],
+      [
+       "What does the UAE's 9% corporate tax mean for a free-zone company?",
+       "A Qualifying Free Zone Person pays 0% on qualifying income and 9% on other taxable income, without the AED 375,000 0% band. If non-qualifying revenue exceeds 5% of total revenue or AED 5 million (whichever is lower), the 0% regime is lost for five tax periods. Mainland sales are where most companies trip this rule; model them with a tax adviser before choosing a zone. General information, not tax advice; rules change and depend on your facts."
+      ]
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "Next step"
+    },
+    {
+     "t": "p",
+     "text": "Test your case with our [Market Entry Compass](/en/decision-lab/market-entry-compass); see also the [Decision Lab](/en/decision-lab) and [Solutions](/en/solutions)."
+    },
+    {
+     "t": "p",
+     "text": "*Facts as of 9 November 2026. Rules differ by activity and emirate; this article is not legal or tax advice.*"
+    }
+   ]
+  },
+  "tr": {
+   "path": "icgoruler/korfez-pazara-giris-karar-cercevesi",
+   "title": "Körfez'e Giriş: Önce BAE mi, Suudi Arabistan mı?",
+   "description": "BAE mi Suudi Arabistan mı; serbest bölge, distribütör mü yerel ortak mı? Türk şirketleri için Körfez'e giriş çerçevesi ve taahhütten önce yapılacak testler.",
+   "h1": "Körfez pazarına giriş: Önce BAE mi, Suudi Arabistan mı? Türk şirketleri için karar çerçevesi",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Körfez'i konuşan yönetim kurullarında tartışma genellikle tek soruyla açılıyor: Dubai mi, Riyad mı? Bu, ilk sorulacak soru değil. Ülke seçimi sıralamada üçüncü ya da dördüncü karar. Bu yazıda kararların sırasını, her birini belirleyen kuralları ve sermaye bağlamadan önce yapılacak testleri ele alıyoruz."
+    },
+    {
+     "t": "h2",
+     "text": "Yanlış soru: \"Hangi müşteri, hangi kanıt\" yerine \"hangi ülke\""
+    },
+    {
+     "t": "p",
+     "text": "Önce üç soruya cevap verin:"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**İlk alıcı kim?** Distribütör, perakende zinciri, sanayi kullanıcısı ya da kamu kurumu; her biri farklı bir giriş modeline işaret ediyor.",
+      "**İlk 90 gün neyi kanıtlamalı?** Sizin fiyatınızda gerçek talep, işi yürütebilecek bir ortak ve ürününüz için net bir uygunluk yolu.",
+      "**Bunu kanıtlayacak en küçük taahhüt ne?** Distribütör üzerinden yapılan bir sevkiyat, talep hakkında şirket lisansından daha fazlasını söyler."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Ülkeleri ancak bundan sonra karşılaştırın."
+    },
+    {
+     "t": "h2",
+     "text": "Beş giriş yolu"
+    },
+    {
+     "t": "p",
+     "text": "En hafiften en ağıra:"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Doğrudan ihracat:** Yerel ithalatçıya satış. Maliyeti düşük, kontrolü az. Suudi ithalatçının ilgili faaliyet kodunu içeren ticari sicil kaydına (CR) ve sektör lisanslarına sahip olması gerekiyor (T.C. Ticaret Bakanlığı, *Suudi Arabistan Pazar Bilgileri*, 2026).",
+      "**Distribütör ya da acente:** Ticaret Bakanlığı, ürünü sürekli ulaştırabilecek, teknik destek verebilecek ve yerel sorunları çözebilecek Suudi distribütörlerle çalışmayı tavsiye ediyor. Distribütörlük tüm ülke için münhasır ya da üç ana bölge (Cidde-Batı, Riyad-Orta, Dammam-Doğu) bazında verilebiliyor (Ticaret Bakanlığı, 2026).",
+      "**BAE'de serbest bölge şirketi:** Serbest bölgelerde yabancı mülkiyet kısıtı yok (JAFZA ve DMCC internet siteleri).",
+      "**Ana karada (onshore) şirket ya da şube:** BAE'de yabancı yatırımcı, stratejik etkisi olan faaliyetler dışında tüm şirket türlerinde tam mülkiyete sahip olabiliyor (BAE Ekonomi ve Turizm Bakanlığı). Bu faaliyetler 2021 tarihli 55 sayılı Bakanlar Kurulu Kararı'nda sayılıyor: savunma ve güvenlik, bankacılık, döviz büroları, finansman şirketleri ve sigorta, telekomünikasyon, para basımı, hac ve umre hizmetleri, Kuran kursları ve balıkçılık.",
+      "**Yerel ortak ya da ortak girişim:** Faaliyet gerektirdiği için ya da bilinçli bir tercihle."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "BAE test üssü, Suudi Arabistan ölçek pazarı"
+    },
+    {
+     "t": "p",
+     "text": "**BAE genellikle kurulumun ve testin daha hızlı olduğu yer.** DMCC kuruluşun \"yaklaşık 10 iş günü\" sürdüğünü söylüyor; bu bölgenin kendi beyanı (DMCC internet sitesi) ve yalnızca lisans sürecini kapsıyor; banka hesabı ve vizeler daha uzun sürer. Kurumlar vergisi, 1 Haziran 2023 ve sonrasında başlayan hesap dönemlerinde 375.000 dirheme kadar vergilendirilebilir gelirde %0, üzerinde %9 (116 sayılı 2022 Bakanlar Kurulu Kararı, md. 2-3). Son dört yılın en az ikisinde küresel geliri 750 milyon avro ve üzerinde olan çok uluslu gruplar ayrıca, 1 Ocak 2025 ve sonrasında başlayan hesap dönemlerinden itibaren, BAE'deki efektif vergi oranlarını %15'e tamamlayan yurt içi asgari tamamlayıcı vergi öder (2024 tarihli 142 sayılı Bakanlar Kurulu Kararı; BAE Maliye Bakanlığı)."
+    },
+    {
+     "t": "p",
+     "text": "Nitelikli Serbest Bölge Kişisi nitelikli gelirinde %0 öder; ancak ana karadaki müşterilere satışlar yalnızca belirli faaliyetlerde nitelikli sayılır. Mallarda bu genellikle, KDV açısından \"belirlenmiş bölge\" (Designated Zone) olan bir serbest bölgeden (ör. JAFZA) malı yeniden satan ya da işleyen müşteriye yapılan dağıtım anlamına geliyor (2025 tarihli 229 sayılı Bakanlık Kararı). DMCC bir serbest bölge, ancak belirlenmiş bölgeler listesinde yer almıyor (2017 tarihli 59 sayılı Bakanlar Kurulu Kararı ve değişiklikleri). Nitelikli olmayan gelir toplam gelirin %5'ini ya da 5 milyon dirhemi (hangisi düşükse) aşarsa %0 rejimi o yıl ve izleyen dört yıl için kaybediliyor (FTA, Serbest Bölge Kişileri rehberi). Ana karaya satışların çoğunda %5 KDV yine uygulanıyor."
+    },
+    {
+     "t": "p",
+     "text": "**Suudi Arabistan genellikle daha büyük pazar ama daha zor üs.** Kararı üç kural belirliyor:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**Lisans değil kayıt.** 16 Ağustos 2024'te yayımlanan Yatırım Kanunu, yayımından 180 gün sonra, Şubat 2025'te, Uygulama Yönetmeliği (1086/1446 sayılı Bakanlık Kararı) ile birlikte yürürlüğe girdi ve eski Yabancı Yatırım Kanunu'nu yürürlükten kaldırdı (md. 16; Uzmanlar Kurulu). Yabancı yatırımcı artık yatırım yapmadan önce Yatırım Bakanlığı'na (MISA) kayıt oluyor (md. 7). Bazı faaliyetler yabancı yatırımcıya yasak ya da kısıtlı (md. 8). Ticaret Bakanlığı'nın 2026 rehberinde hâlâ \"MISA lisanslı yerel şirket\" ifadesi geçiyor; güncel terim \"kayıt\".",
+      "**%100 yabancı sermayeli ticaret şirketi sermaye yoğun.** MISA'ya göre %100 yabancı ticari faaliyet için asgari sermaye 30.000.000 riyal ve en az üç bölgesel ya da küresel pazarda varlık şartı var. Buna ek olarak beş yılda en az 300 milyon riyal (30 milyon riyallik sermaye dahil) ya da 200 milyon riyal artı yerel üretim, Ar-Ge veya lojistik şartları düzeyinde yatırım isteniyor. Suudi ortağın en az %25 pay aldığı ticari faaliyette asgari sermaye 26.666.667 riyal (MISA, Yatırımcı Rehberi, 13. baskı, Şubat 2026). MISA, ayrıntılı beş yıllık iş planı sunan başvurularda bu tutarlarda esneklik sinyali veriyor (Deloitte, Mayıs 2026); bu rakamları nihai değil, başlangıç pozisyonu olarak okuyun. Ticaret Bakanlığı da aynı 30 milyon riyallik eşiği distribütör tavsiyesinin gerekçesi olarak gösteriyor (Ticaret Bakanlığı, 2026).",
+      "**Vergi.** Suudi bir şirketin Suudi ve KİK vatandaşı olmayan ortaklara düşen kârı %20 gelir vergisine tabi; Suudi ve KİK ortaklarına düşen pay ise zekât matrahı üzerinden %2,5 zekât öder. KDV %15 (ZATCA). Karma ortaklıkta ikisi birlikte uygulanır."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "**Bölgesel merkez (RHQ).** 1 Ocak 2024'ten bu yana Suudi kamu kurumları, Orta Doğu ve Kuzey Afrika bölgesel merkezini Krallık dışında tutan ve MISA'nın listesinde yer alan yabancı şirketlerle ancak kısıtlı koşullarda sözleşme yapabiliyor. Kısıtlama bu şirketlerin ürün ve hizmetleri için çalışan acente, distribütör ve tedarikçilerini de kapsıyor (Bakanlar Kurulu'nun 1445H tarihli 461 sayılı Kararı, md. 1, 3 ve 5). Tahmini bedeli 1 milyon riyal veya altındaki işler ile Suudi Arabistan dışında yürütülen işler kapsam dışı (md. 4). Açık ihalelerde listedeki şirketin teklifi ancak teknik olarak kabul edilebilir tek teklifse ya da teknik açıdan en iyi teklif olup ikinci en iyi tekliften en az %25 ucuzsa kabul edilebiliyor (md. 6). Kamu kurumları belirli bir proje ya da süre için istisna komitesine de başvurabiliyor (md. 9–10)."
+    },
+    {
+     "t": "p",
+     "text": "RHQ için Suudi Arabistan'da ayrı bir tüzel kişilik (şirket ya da kayıtlı şube), grubun Suudi Arabistan ve ana merkez ülkesi dışında en az iki ülkede varlığı, bir yıl içinde en az 15 tam zamanlı çalışan ve RHQ faaliyetleri dışında gelir getiren ticari faaliyet yürütmeme şartları aranıyor (MISA, Şartlar ve Koşullar; Yatırımcı Rehberi, 13. baskı). Karşılığında uygun faaliyetlerden elde edilen uygun gelirde %0 gelir vergisi ve yurt dışı mukimlere yapılan belirli ödemelerde %0 stopaj, 30 yıl süreyle ve yenilenebilir şekilde uygulanıyor (ZATCA, RHQ rehberi, 2. sürüm, Mayıs 2026). Türk şirketlerinin çoğu için RHQ bir giriş adımı değil. Ancak bir tuzağa dikkat: Bölgesel merkezinizi Dubai'de kurar ve listeye girerseniz, Suudi distribütörünüzün ürünlerinizi kamu alıcılarına satışı da kısıtlamaya takılabilir."
+    },
+    {
+     "t": "h2",
+     "text": "\"BAE'yi test üssü yapmak bana iki pazarda da kaybettirir mi?\""
+    },
+    {
+     "t": "p",
+     "text": "Şüpheci bir CEO bunu açıkça soracaktır: Dubai'deki bir üs, 1 milyon riyalin üzerindeki kamu sözleşmelerinde hem beni hem Suudi distribütörümü kısıtlayabilir; DMCC şirketi de ana karadaki satışlarımda %0'dan yararlanamayabilir. Dürüst cevap: Kaybettirebilir, ama yalnızca önceden test edebileceğiniz belirli koşullarda."
+    },
+    {
+     "t": "p",
+     "text": "**Suudi Arabistan'da kaybettirir:** Hedef alıcılarınız 1 milyon riyalin üzerindeki sözleşmelerde Suudi kamu kurumlarıysa, BAE şirketiniz MENA bölgesel merkeziniz işlevini görüyorsa ve şirketiniz MISA'nın listesindeyse. Kural özel alıcıları değil, kamu kurumlarını (bakanlıklar, kamu kuruluşları ve devletin kurduğu kâr amacı gütmeyen kuruluşlar) bağlıyor. Devlete ait şirketlere ya da dev proje geliştiricilerine satıyorsanız benzer tedarikçi kuralları uygulayıp uygulamadıklarını sorun."
+    },
+    {
+     "t": "p",
+     "text": "**BAE'de kaybettirir:** Serbest bölge şirketinizin gelirinin %5'inden fazlası ya da 5 milyon dirhemden fazlası nitelikli olmayan kaynaklardan, örneğin nitelikli olmayan bir bölgeden ya da faaliyetten ana karadaki müşterilere yapılan mal satışlarından geliyorsa. Bu sınır aşılırsa şirket o yıl ve izleyen dört yıl için %0 rejimini kaybeder ve standart kurallarla (375.000 dirhemin üzerinde %9) vergilendirilir. Ana kara satışlarının çoğunda %5 KDV yine de uygulanır."
+    },
+    {
+     "t": "p",
+     "text": "**Nasıl yapılandırılır:**"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Suudi kamu alıcıları ana işinizse, bir BAE şirketini bölgesel merkeziniz yapmadan önce RHQ kuralını test edin. Bir BAE satış ofisinin bölgesel merkez sayılıp sayılmadığı hukuki danışmanlık konusu; MISA'nın listesi üç ayda bir güncellenip kamu kurumlarına dağıtılıyor (md. 5); listede olup olmadığınızı Suudi alıcınıza ya da hukuk danışmanınıza sorun. Alternatifler Suudi RHQ, yukarıdaki dar koşullarla teklif vermek (kabul edilebilir tek teklif ya da en az %25 ucuz en iyi teknik teklif) ya da kamu alıcısından istisna başvurusu yapmasını istemek (md. 9–10).",
+      "BAE ana karasına mal satışında belirlenmiş bölgeden dağıtım modelini, ana kara şirketini ya da BAE'li bir distribütörü karşılaştırın.",
+      "İki pazarın kuralları da uymuyorsa BAE üssünü atlayın ve doğrudan Suudi distribütörle başlayın."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "Yerel ortak: hukuki zorunluluk değil, stratejik tercih"
+    },
+    {
+     "t": "p",
+     "text": "BAE'de yerel hissedar, stratejik etkisi olan faaliyetler dışında genellikle tercih. Suudi Arabistan'da ortak çoğu zaman pratik yol: Kanun her durumda istemiyor, ama %100 yabancı ticaret eşikleri yüksek ve alıcılar yerel bir muhatap bekliyor."
+    },
+    {
+     "t": "p",
+     "text": "Ortağı getirdiği şey için seçin: kendi başınıza ulaşamayacağınız alıcılara erişim, uygulama (depolama, satış sonrası hizmet, yedek parça; Ticaret Bakanlığı'na göre Suudi alıcılar fiziksel varlığı, sorun çıktığında muhatap bulunacağının işareti olarak görüyor) ve mevzuat işleri."
+    },
+    {
+     "t": "p",
+     "text": "Kendinizi baştan koruyun. Markanızı Suudi Arabistan'da Türkiye'deki şirketiniz adına, Suudi Arabistan'da lisanslı bir marka vekili aracılığıyla, tasdikli vekâletnameyle tescil ettirin. Ön izin gerektiren ürünlerde (gıda, ilaç, tıbbi cihaz) izinleri kendi adınıza alın; böylece distribütör değiştirdiğinizde kayıtlarınız yarı yolda kalmaz (Ticaret Bakanlığı, 2026)."
+    },
+    {
+     "t": "h2",
+     "text": "İlişkiye dayalı ve kamu kaynaklı satın alma"
+    },
+    {
+     "t": "p",
+     "text": "Suudi alıcılar yüz yüze tanıdıkları ya da güvendikleri biri aracılığıyla tanıştıkları kişilerle iş yapmayı tercih ediyor; bu yüzden en önemli giriş faaliyeti fuar katılımı ve fuarlar e-postadan genellikle daha verimli (Ticaret Bakanlığı, 2026)."
+    },
+    {
+     "t": "p",
+     "text": "Kamu ihaleleri Etimad platformunda duyuruluyor. Yerli katkı en çok Aramco'da ve savunmada belirleyici. Aramco'nun iktva programı 2026 başında tedarikinde %70 yerli katkıya ulaştı ve 2030 için %75 hedefliyor (Aramco, Şubat 2026); savunmada ulusal hedef, 2030'a kadar askerî harcamaların %50'sinden fazlasını yerelleştirmek; 2025 sonunda oran %27,3'tü (GAMI). Bunlar her ihale için sabit bir kural değil, program düzeyinde rakamlar; her ihalenin yerli katkı şartlarını ayrıca kontrol edin."
+    },
+    {
+     "t": "h2",
+     "text": "Ürün uygunluğu ve evrak işleri: erkenden"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**SABER** (SASO'nun platformu): Teknik düzenlemeye tabi ürünler için kayıt zorunlu; kayıt ithalatçının ya da yerel satıcının yükümlülüğü (Ticaret Bakanlığı, 2026; saber.sa).",
+      "**SFDA:** Gıda, ilaç, kozmetik ve tıbbi cihazlardan sorumlu. Helal sertifikaları SFDA'nın tanıdığı kuruluşlardan alınmalı; SMIIC standartlarına göre düzenlenen helal sertifikaları kabul edilmiyor (Ticaret Bakanlığı, 2026).",
+      "**Belge tasdiki:** MISA kaydı için yabancı şirketin ticaret sicil kaydı ve son yıl mali tabloları Suudi büyükelçiliği tasdikli olarak isteniyor (MISA, Yatırımcı Rehberi, 13. baskı).",
+      "**Arapça etiket:** Ürününüze ilişkin SASO ya da SFDA teknik düzenlemesini kontrol edin; etiket kuralları ürüne göre değişiyor."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "Kademeli taahhüt merdiveni ve devam/dur kapıları"
+    },
+    {
+     "t": "table",
+     "head": [
+      "Aşama",
+      "Taahhüt",
+      "Bir sonraki aşamaya geçmeden önce aşılması gereken kapı"
+     ],
+     "rows": [
+      [
+       "0. Masa başı test",
+       "Ürün bazında uygunluk haritası; hedef alıcı listesi",
+       "Ürün kaydedilebiliyor; faaliyet yasak listede değil"
+      ],
+      [
+       "1. Talep kanıtı",
+       "Fuar ziyareti; numune; distribütör üzerinden ilk siparişler",
+       "Hedef marjda tekrar eden sipariş"
+      ],
+      [
+       "2. Ortak kanıtı",
+       "Performans hedefli distribütörlük sözleşmesi; marka ve izinler kendi adınıza",
+       "Ortak iki-üç çeyrek hedefleri tutturuyor"
+      ],
+      [
+       "3. Hafif varlık",
+       "Bölgesel satış ve hizmet için BAE serbest bölge ya da ana kara şirketi",
+       "Bölgesel gelir sabit maliyeti karşılıyor; RHQ ve serbest bölge testleri geçildi"
+      ],
+      [
+       "4. Suudi varlığı",
+       "MISA kaydı; tek başına ya da ortakla Suudi şirketi",
+       "Suudi geliri, yerli katkı ya da kamu alıcısı bunu gerektiriyor"
+      ],
+      [
+       "5. RHQ",
+       "Yalnızca kamu sözleşmeleri ana işse",
+       "1 milyon riyalin üzerindeki kamu sözleşmeleri ana iş ve iş planı RHQ'nun gerçek faaliyet şartlarını (15 çalışan, 3 üst düzey yönetici) karşılıyor"
+      ]
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Bu, [pazara giriş bir taahhütler dizisidir](/tr/icgoruler/pazara-giris-taahhutler-dizisidir) yaklaşımımızın mantığı ve [pazara giriş](/tr/uzmanlik/pazara-giris) çalışmalarımızın özü. Giriş modelleri için: [pazara giriş modeli](/tr/icgoruler/pazara-giris-modeli). İki yönlü sermaye akışının Körfezli ortaklarla görüşmeleri nasıl değiştirdiğini [Türkiye–Körfez sermaye koridoru](/tr/icgoruler/turkiye-korfez-sermaye-koridoru) yazımızda ele aldık."
+    },
+    {
+     "t": "h2",
+     "text": "Sıkça sorulan sorular"
+    },
+    {
+     "t": "faq",
+     "items": [
+      [
+       "Satış yapmak için yerel şirket kurmam gerekir mi?",
+       "Hayır. İthalatçı ya da distribütör üzerinden satabilirsiniz. Şirket; ithalat yapmanız, stok tutmanız, yerel fatura kesmeniz ya da yerel varlık isteyen kamu ihalelerine girmeniz gerektiğinde zorunlu hâle geliyor."
+      ],
+      [
+       "BAE'deki %9 kurumlar vergisi serbest bölge şirketi için ne anlama geliyor?",
+       "Nitelikli Serbest Bölge Kişisi nitelikli gelirinde %0, diğer vergilendirilebilir gelirinde ise 375.000 dirhemlik %0 dilimi olmadan %9 öder. Nitelikli olmayan gelir toplam gelirin %5'ini ya da 5 milyon dirhemi (hangisi düşükse) aşarsa %0 rejimi beş vergi dönemi için kaybedilir. Şirketlerin çoğu bu kurala ana kara satışlarında takılır; bölge seçmeden önce bunları bir vergi danışmanıyla modelleyin. Genel bilgidir, vergi danışmanlığı değildir; kurallar değişebilir ve somut duruma göre farklılaşır."
+      ]
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "Sonraki adım"
+    },
+    {
+     "t": "p",
+     "text": "Körfez senaryonuzu bu kapılarla [Pazara Giriş Pusulası](/tr/karar-laboratuvari/pazara-giris-pusulasi) ile test edin. Diğer araçlar [Karar Laboratuvarı](/tr/karar-laboratuvari)'nda, hizmetlerimiz [Çözümler](/tr/cozumler) sayfasında."
+    },
+    {
+     "t": "p",
+     "text": "*Bilgiler 9 Kasım 2026 itibarıyla. Kurallar faaliyete ve emirliğe göre değişir; bu yazı hukuki ya da vergisel danışmanlık değildir.*"
+    }
+   ]
+  }
+ },
+ {
   "key": "guideCraReporting",
   "solution": "solutionCra",
   "date": "2026-11-05",
