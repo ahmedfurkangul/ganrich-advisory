@@ -7,7 +7,22 @@ import { PdfInsightReport, PdfInsightStudio } from "./pdf-insights";
 import { SiteLayout } from "./site";
 import { absoluteUrl, metaDescription, SITE_NAME, SITE_ORIGIN } from "./site-config";
 import { reportSeo, reportSocialCards } from "./report-seo";
-import { reportTranslation } from "./solutions-content";
+import { reportTranslation, solutions } from "./solutions-content";
+import { guideIndex } from "./guides-index";
+
+const readinessChecks: Record<string, string> = { solutionCbam: "cbamCheck", solutionCra: "craCheck", solutionEudr: "eudrCheck" };
+
+// Topic links for a programme report: its programme page, the readiness check and up to three guides on the same programme.
+export function reportRelatedLinks(lang: Lang, slug: string): { href: string; label: string }[] {
+  const solution = solutions[lang].find(s => s.paper?.slug === slug || s.update?.slug === slug);
+  if (!solution) return [];
+  const en = lang === "en";
+  const links = [{ href: `/${lang}/${routeMap[lang][solution.key]}`, label: solution.title }];
+  const check = readinessChecks[solution.key];
+  if (check) links.push({ href: `/${lang}/${routeMap[lang][check]}`, label: en ? "Take the 2-minute readiness check" : "2 dakikalık hazırlık testini yapın" });
+  for (const g of guideIndex.filter(g => g.solution === solution.key).slice(0, 3)) links.push({ href: `/${lang}/${routeMap[lang][g.key]}`, label: g[lang].h1 });
+  return links;
+}
 
 export async function PdfStudioRoute({ lang }: { lang: Lang }) {
   const user = await requireEditor();
@@ -49,6 +64,7 @@ export async function pdfReportMetadata(lang: Lang, slug: string): Promise<Metad
       url: path,
       siteName: SITE_NAME,
       locale: isEn ? "en_GB" : "tr_TR",
+      ...(pair ? { alternateLocale: isEn ? "tr_TR" : "en_GB" } : {}),
       images: [{ url: socialCard, width: 1200, height: 630, alt: `${insight.title} — Ganrich Advisory` }],
       ...(insight.publicationDate || insight.publishedAt ? { publishedTime: insight.publicationDate || insight.publishedAt || undefined } : {}),
       ...(insight.updatedAt ? { modifiedTime: insight.updatedAt } : {}),
@@ -111,5 +127,7 @@ export async function PdfReportRoute({ lang, slug }: { lang: Lang; slug: string 
     ],
   };
   const structuredData = JSON.stringify(graph).replace(/</g, "\\u003c");
-  return <SiteLayout lang={lang} route={routeMap[lang].insights}><PdfInsightReport lang={lang} insight={insight}/>{publicPage && <script type="application/ld+json" dangerouslySetInnerHTML={{__html: structuredData}}/>}</SiteLayout>;
+  const pairSlug = reportTranslation(lang, insight.slug);
+  const switchTo = pairSlug ? reportPath(lang === "en" ? "tr" : "en", pairSlug) : undefined;
+  return <SiteLayout lang={lang} route={routeMap[lang].insights} switchTo={switchTo}><PdfInsightReport lang={lang} insight={insight} related={reportRelatedLinks(lang, insight.slug)}/>{publicPage && <script type="application/ld+json" dangerouslySetInnerHTML={{__html: structuredData}}/>}</SiteLayout>;
 }

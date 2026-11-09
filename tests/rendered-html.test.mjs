@@ -1021,6 +1021,21 @@ test("links the CBAM actual-vs-default report from the CBAM 2026 guide and the r
   }
 });
 
+test("report pages link their programme, readiness check and guides, and switch language to the paired report", async () => {
+  const [pages, report, site] = await Promise.all([
+    readFile(new URL("../app/pdf-insight-pages.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/pdf-insights.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/site.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(pages, /export function reportRelatedLinks/);
+  assert.match(pages, /guideIndex\.filter\(g => g\.solution === solution\.key\)/);
+  assert.match(pages, /related=\{reportRelatedLinks\(lang, insight\.slug\)\}/);
+  assert.match(pages, /switchTo=\{switchTo\}/);
+  assert.match(pages, /alternateLocale/);
+  assert.match(report, /related\.map\(link =>/);
+  assert.match(site, /href=\{switchTo \?\? switchHref\(lang, route\)\}/);
+});
+
 test("link arrows are SVG icons, not the emoji-prone ↗ character", async () => {
   for (const path of ["/en", "/tr", "/en/solutions", "/tr/cozumler", "/en/about", "/tr/hakkinda"]) {
     const response = await render(path);
