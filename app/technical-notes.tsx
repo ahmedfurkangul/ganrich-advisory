@@ -48,7 +48,7 @@ export function libraryEntries(lang: Lang): Entry[] {
     id: n.key, group: "strategy", type: c.note, topic: c.groups.strategy, title: n.title, summary: n.thesis, href: url(lang, n.key),
   }));
   const guideEntries: Entry[] = guideIndex.map(g => ({
-    id: g.key, group: "eu", type: c.guide, topic: g.topic[lang], title: g[lang].h1, summary: g[lang].description, href: url(lang, g.key), extra: { label: c.programme, href: url(lang, g.solution) },
+    id: g.key, group: g.group ?? "eu", type: c.guide, topic: g.topic[lang], title: g[lang].h1, summary: g[lang].description, href: url(lang, g.key), extra: { label: c.programme, href: url(lang, g.solution) },
   }));
   return [...guideEntries, ...papers, ...articles, ...decisionNotes];
 }
