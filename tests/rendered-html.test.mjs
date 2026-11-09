@@ -1206,3 +1206,14 @@ test("four service model pages render in both languages, link from Solutions and
     await response.arrayBuffer();
   }
 });
+
+test("Solutions explains the three engagement tiers in both languages without prices", async () => {
+  for (const [path, tiers] of [["/en/solutions", ["Diagnosis", "Implementation coordination", "Ongoing support"]], ["/tr/cozumler", ["Teşhis", "Uygulama koordinasyonu", "Sürekli destek"]]]) {
+    const html = await (await render(path)).text();
+    assert.match(html, /id="how"/, `${path} tiers section`);
+    for (const t of tiers) assert.ok(html.includes(`<strong>${t}</strong>`), `${path} ${t}`);
+    assert.ok(html.includes('href="#how"'), `${path} subnav link`);
+    const text = html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
+    assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\bTL\b|₺/, `${path} must not show prices`);
+  }
+});
