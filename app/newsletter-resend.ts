@@ -4,7 +4,8 @@
 //
 // The variables are secrets set with wrangler, so they are not in the generated Env type; routes cast to
 // ResendSyncEnv. Configuration (all optional; without them nothing is synced and nothing fails):
-// - RESEND_API_KEY: the existing sending key (needs access to contacts).
+// - RESEND_CONTACTS_API_KEY: a full-access key used only for contacts. Resend's domain-restricted keys can
+//   only send, so the contact form keeps its restricted RESEND_API_KEY and this key falls back to it.
 // - RESEND_SEGMENT_TR / RESEND_SEGMENT_EN: segment ids created in the Resend dashboard.
 // - RESEND_WEBHOOK_SECRET: signing secret (whsec_…) of the webhook that reports unsubscribes back.
 
@@ -12,11 +13,16 @@ import type { NewsletterLang } from "./newsletter-core";
 
 export type ResendSyncEnv = {
   RESEND_API_KEY?: string;
+  RESEND_CONTACTS_API_KEY?: string;
   RESEND_SEGMENT_TR?: string;
   RESEND_SEGMENT_EN?: string;
 };
 
 const api = "https://api.resend.com";
+
+function contactsKey(env: ResendSyncEnv) {
+  return env.RESEND_CONTACTS_API_KEY || env.RESEND_API_KEY;
+}
 
 function segmentFor(env: ResendSyncEnv, lang: NewsletterLang) {
   return lang === "tr" ? env.RESEND_SEGMENT_TR : env.RESEND_SEGMENT_EN;
@@ -25,8 +31,9 @@ function segmentFor(env: ResendSyncEnv, lang: NewsletterLang) {
 // Adds a confirmed subscriber to the segment for their language and takes them out of the other one.
 export async function syncSubscribed(env: ResendSyncEnv, email: string, lang: NewsletterLang, fetcher: typeof fetch = fetch): Promise<"synced" | "skipped" | "failed"> {
   const segment = segmentFor(env, lang);
-  if (!env.RESEND_API_KEY || !segment) return "skipped";
-  const headers = { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" };
+  const key = contactsKey(env);
+  if (!key || !segment) return "skipped";
+  const headers = { authorization: `Bearer ${key}`, "content-type": "application/json" };
   const contact = encodeURIComponent(email);
   try {
     const created = await fetcher(`${api}/contacts`, { method: "POST", headers, body: JSON.stringify({ email, unsubscribed: false, segments: [{ id: segment }] }) });
@@ -53,11 +60,12 @@ export async function syncSubscribed(env: ResendSyncEnv, email: string, lang: Ne
 
 // Marks an address as unsubscribed from all broadcasts in Resend.
 export async function syncUnsubscribed(env: ResendSyncEnv, email: string, fetcher: typeof fetch = fetch): Promise<"synced" | "skipped" | "failed"> {
-  if (!env.RESEND_API_KEY || (!env.RESEND_SEGMENT_TR && !env.RESEND_SEGMENT_EN)) return "skipped";
+  const key = contactsKey(env);
+  if (!key || (!env.RESEND_SEGMENT_TR && !env.RESEND_SEGMENT_EN)) return "skipped";
   try {
     const response = await fetcher(`${api}/contacts/${encodeURIComponent(email)}`, {
       method: "PATCH",
-      headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
+      headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
       body: JSON.stringify({ unsubscribed: true }),
     });
     // 404: the address never reached Resend, so there is nothing to unsubscribe.
