@@ -9,7 +9,7 @@ export const homePapers: Record<Lang, { key: string; title: string; slug: string
     { key: "solutionOrderDesk", title: "Human-approved AI at the order desk: where WhatsApp orders meet the ERP", slug: "ai-at-the-order-desk-a49ad275" },
   ],
   tr: [
-    { key: "solutionCbam", title: "Gerçek mi, varsayılan mı? Türk metal ihracatçıları için CBAM veri kararı", slug: "cbam-gercek-mi-varsayilan-mi-ef31215c" },
+    { key: "solutionCbam", title: "Gerçek emisyon mu, varsayılan değer mi? Türk metal ihracatçıları için SKDM veri kararı", slug: "cbam-gercek-mi-varsayilan-mi-ef31215c" },
     { key: "solutionCra", title: "24 saat testi: AB’ye satış yapan üreticiler için CRA olay hazırlığı", slug: "cra-24-saat-testi-37aca9ad" },
     { key: "solutionOrderDesk", title: "Sipariş masasında insan onaylı yapay zekâ: WhatsApp siparişleri ERP ile buluştuğunda", slug: "siparis-masasinda-yapay-zeka-ba6a12f4" },
   ],
