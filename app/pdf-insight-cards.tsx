@@ -1,5 +1,6 @@
 "use client";
 
+import { reportCover } from "./report-covers";
 import { useEffect, useState } from "react";
 import type { PdfInsight } from "../db/pdf-insights";
 import type { Lang } from "./content";
@@ -41,7 +42,7 @@ export function PdfInsightHubCards({ lang, exclude = [] }: { lang: Lang; exclude
               {lang === "en" && item.language === "tr" ? "Explore the Turkish report" : lang === "en" ? "Explore the report" : "Raporu inceleyin"} <Arrow/>
             </a>
           </div>
-          <div className="mini-art report-art" aria-hidden="true"><span>PDF</span><i/><b/></div>
+          {reportCover(item.slug) ? <div className="mini-art report-art has-image" aria-hidden="true"><img src={reportCover(item.slug)} alt="" width={960} height={1200} loading="lazy" decoding="async"/></div> : <div className="mini-art report-art" aria-hidden="true"><span>PDF</span><i/><b/></div>}
         </article>
       ))}
     </section>
