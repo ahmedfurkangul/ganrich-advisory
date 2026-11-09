@@ -3,6 +3,7 @@ import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } fr
 import handler from "vinext/server/app-router-entry";
 import { logLeadEvent, logTraffic } from "./traffic";
 import { servePage } from "./edge-cache";
+import { goneResponse, isGonePath } from "./gone";
 
 interface Env {
   ASSETS: Fetcher;
@@ -69,6 +70,11 @@ const worker = {
     }
 
     const startedAt = Date.now();
+    if (isGonePath(url.pathname)) {
+      const response = goneResponse(url.pathname);
+      ctx.waitUntil(logTraffic(request, response, env, startedAt).catch(() => undefined));
+      return response;
+    }
     const edgeCache = (globalThis as unknown as { caches?: { default?: Parameters<typeof servePage>[2] } }).caches?.default;
     const response = await servePage(request, env.CF_VERSION_METADATA?.id, edgeCache,
       () => handler.fetch(withoutUntrustedIdentity(request, env), env, ctx), promise => ctx.waitUntil(promise));
