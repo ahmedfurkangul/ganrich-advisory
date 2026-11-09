@@ -661,6 +661,13 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .readiness-ask { grid-column: 1 / -1; border-top: 1px solid var(--sand); padding-top: 28px; }
 .readiness-ask h3, .readiness-result h3 { font: 400 1.5rem/1.2 var(--serif); margin: 0 0 14px; }
 @media (max-width: 760px) { .readiness-result { grid-template-columns: 1fr; } }
+.scope-result { display: grid; gap: 24px; }
+.scope-result > h2 { font: 400 clamp(1.6rem, 2.6vw, 2.3rem)/1.15 var(--serif); margin: 0; }
+.scope-rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+.scope-rules li { border: 1px solid var(--sand); background: var(--white); padding: 20px; display: grid; gap: 8px; align-content: start; }
+.scope-rules h3 { font: 400 1.35rem/1.2 var(--serif); margin: 0; }
+.scope-rules p { margin: 0; line-height: 1.5; color: var(--slate); }
+.scope-next .button { margin-right: 8px; }
 .pdf-studio-hero > div:last-child .text-link { display: block; width: fit-content; margin-top: 12px; }
 .email-gate form { margin-top: 24px; max-width: 900px; }
 .trust-part { padding-top: 72px; scroll-margin-top: 80px; }.trust-part > header { max-width: 760px; margin-bottom: 28px; }.trust-part > header h2 { margin: 10px 0 12px; font-size: clamp(30px,3.4vw,48px); }.trust-part > header p { color: var(--slate); }
