@@ -961,6 +961,29 @@ test("publishes the CRA reporting (refrigeration) guide in both languages with F
   assert.match(await (await render("/tr/icgoruler")).text(), /CRA Bildirimi: Beyaz Eşya ve Soğutma İhracatçısı/);
 });
 
+test("publishes the Gulf market entry guide in both languages with FAQ markup, sitemap entries and a strategy library card", async () => {
+  const pages = [
+    ["/en/insights/gulf-market-entry-framework-turkish-companies", "Gulf Market Entry: UAE or Saudi Arabia First? A Framework", "/tr/icgoruler/korfez-pazara-giris-karar-cercevesi", /Cabinet Resolution No\. 55 of 2021/],
+    ["/tr/icgoruler/korfez-pazara-giris-karar-cercevesi", "Körfez&#x27;e Giriş: Önce BAE mi, Suudi Arabistan mı?", "/en/insights/gulf-market-entry-framework-turkish-companies", /Kademeli taahhüt merdiveni/],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, body] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.match(html, body);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guideGulfEntry\.png/);
+    assert.doesNotMatch(html, /\b(Draft|Taslak)\b/, "no draft wording");
+    assert.match(html, /(not legal or tax advice|hukuki ya da vergisel danışmanlık değildir)/);
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+  }
+  assert.match(await (await render("/en/insights")).text(), /Gulf market entry: UAE or Saudi Arabia first\?/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /Körfez pazarına giriş: Önce BAE mi, Suudi Arabistan mı\?/);
+});
+
 test("publishes the UK CBAM 2027 guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
   const pages = [
     ["/en/insights/uk-cbam-2027-turkish-exporters", "UK CBAM 2027: What Turkish Steel and Aluminium Must Do", "/tr/icgoruler/ingiltere-skdm-2027-ihracatci", /<strong>£9\.69 per tCO2e for iron and steel<\/strong>/],
