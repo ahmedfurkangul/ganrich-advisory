@@ -505,7 +505,7 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   const org = graph(home).find(node => node["@id"] === "https://ganrichadvisory.com/#organization");
   assert.equal(org.email, "furkangul@ganrichadvisory.com");
   assert.ok(org.sameAs.includes("https://www.linkedin.com/company/135278307/"));
-  assert.equal(org.hasOfferCatalog.itemListElement.length, 25); // 21 programmes, 2 strategy services, the EU Buyer Request Desk and AI Decisions
+  assert.equal(org.hasOfferCatalog.itemListElement.length, 29); // 21 programmes, 2 strategy services, 5 service models and AI Decisions
   assert.ok(types(hub).includes("ItemList") && types(hub).includes("CollectionPage"));
   assert.ok(types(service).includes("Service"));
   const crumbs = graph(solution).find(node => node["@type"] === "BreadcrumbList").itemListElement.map(item => item.name);
@@ -1100,8 +1100,49 @@ test("EU Buyer Request Desk page renders in both languages, is linked from home 
     }
     assert.ok((await (await render(home)).text()).includes(`href="${path}"`), `${home} links the desk`);
   }
-  const contact = await readFile(new URL("../app/contact-experience.tsx", import.meta.url), "utf8");
+  const contact = await (await render("/en/contact")).text();
   assert.match(contact, /value="buyerDesk"/);
   const llms = await (await render("/llms.txt")).text();
   assert.match(llms, /\/en\/expertise\/eu-buyer-request-desk/);
+});
+
+test("four service model pages render in both languages, link from Solutions and contact, and show no prices", async () => {
+  const pages = [
+    ["toolSelection", "/en/expertise/compliance-tool-and-verifier-selection", "/tr/uzmanlik/uyum-yazilimi-ve-dogrulayici-secimi", /without a sales pitch/, /yazılım satmıyor/i],
+    ["incentiveFile", "/en/expertise/green-transition-incentive-file", "/tr/uzmanlik/yesil-donusum-tesvik-dosyasi", /cannot guarantee approval/, /Onay garantisi veremeyiz/],
+    ["cohortProgramme", "/en/expertise/exporter-cohort-programme", "/tr/uzmanlik/ihracatci-kohort-programi", /anonymous summary/, /anonim özet/],
+    ["marketAccessDirector", "/en/expertise/part-time-eu-market-access-director", "/tr/uzmanlik/yari-zamanli-ab-pazar-erisimi-direktoru", /Decisions stay with the board/, /Kararlar yönetim kurulunda kalır/],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  const llms = await (await render("/llms.txt")).text();
+  const hubs = { en: await (await render("/en/solutions")).text(), tr: await (await render("/tr/cozumler")).text() };
+  const contacts = { en: await (await render("/en/contact")).text(), tr: await (await render("/tr/iletisim")).text() };
+  const checked = new Set();
+  for (const [key, enPath, trPath, enMark, trMark] of pages) {
+    for (const [lang, path, pair, mark] of [["en", enPath, trPath, enMark], ["tr", trPath, enPath, trMark]]) {
+      const response = await render(path);
+      assert.equal(response.status, 200, path);
+      const html = await response.text();
+      assert.match(html, mark, `${path} boundary text`);
+      assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+      assert.match(html, /"@type":"Service"/);
+      assert.match(html, /"@type":"FAQPage"/);
+      assert.doesNotMatch(html, /AggregateRating|"@type":"Review"|"price"/, `${path} has no ratings, reviews or prices`);
+      const text = html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
+      assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\bTL\b|₺/, `${path} must not show prices`);
+      assert.ok(html.includes(`/og/${lang}/${key}.png`), `${path} OG card`);
+      assert.ok(html.includes(`?service=${key}`), `${path} contact link preselects the service`);
+      assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+      assert.ok(llms.includes(path), `${path} in llms.txt`);
+      assert.ok(hubs[lang].includes(`href="${path}"`), `Solutions links ${path}`);
+      assert.match(contacts[lang], new RegExp(`value="${key}"`), `contact topic ${key}`);
+      const body = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
+      for (const link of body.matchAll(/href="(\/(?:en|tr)\/[^"#?]+)/g)) checked.add(link[1]);
+    }
+  }
+  for (const link of checked) {
+    const response = await render(link);
+    assert.equal(response.status, 200, `service pages link ${link}`);
+    await response.arrayBuffer();
+  }
 });

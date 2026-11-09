@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { isServicePageKey } from "./service-page-index";
 import { insightArticles, Lang, routeMap } from "./content";
 import { absoluteUrl } from "./site-config";
 
@@ -17,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const otherRoute = key === "home" ? "" : routeMap[other][key];
     const isArticle = key.startsWith("article");
     const isCategory = key.startsWith("category");
-    const isOffering = key === "solutions" || key.startsWith("solution") || key.startsWith("service") || key === "aiDecisions" || key === "buyerDesk" || key === "expertise";
+    const isOffering = key === "solutions" || key.startsWith("solution") || key.startsWith("service") || key === "aiDecisions" || isServicePageKey(key) || key === "expertise";
     const articleIndex = ["article", "articleTransformation", "articleMarketEntry", "articleCorridor", "articleFamilyHoldings", "articleIndustrialAi"].indexOf(key);
     return {
       url: absoluteUrl(path),

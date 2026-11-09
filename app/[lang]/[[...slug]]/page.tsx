@@ -15,6 +15,10 @@ const metaCopy = {
   en: {
     home: ["CBAM, CRA & EU Readiness for Turkish Industry | Ganrich", "Independent decision partner for Turkish exporters facing CBAM, the Cyber Resilience Act, EUDR and other EU buyer requirements: what to do, when and at what cost."],
     buyerDesk: ["EU Buyer Request Desk | Ganrich Advisory", "One independent desk for the CBAM, EUDR, packaging, forced labour and cyber questions your EU buyers send: sorted, decided with you and answered consistently."],
+    toolSelection: ["Compliance Tool and Verifier Selection | Ganrich Advisory", "A short, vendor-neutral sprint to choose CBAM, EUDR or product passport software and a verifier. No vendor fees, no commissions, a written recommendation."],
+    incentiveFile: ["Green Transition Incentive and Finance File | Ganrich", "Turn the EU compliance work you must do anyway into a credible application for Turkish green transition support or bank green finance."],
+    cohortProgramme: ["Exporter Cohort Programme | Ganrich Advisory", "A group EU readiness programme run with an exporter association, industrial zone or chamber: shared sessions and company-by-company decisions."],
+    marketAccessDirector: ["Part-time EU Market Access Director | Ganrich Advisory", "Senior, part-time ownership of EU rules and buyer requirements for mid-sized Turkish exporters: board priorities, partners and contracts."],
     aiDecisions: ["AI Decisions: Independent AI Advisory | Ganrich Advisory", "Independent of AI vendors: we help boards decide where AI is worth doing, choose and govern the partner who builds it, and check that the value arrives."],
     expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
     markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
@@ -44,6 +48,10 @@ const metaCopy = {
   tr: {
     home: ["Ganrich Advisory | Türk Sanayisi için AB Uyumu ve Strateji", "SKDM (CBAM), CRA, EUDR ve diğer AB alıcı talepleriyle karşılaşan Türk ihracatçılar için bağımsız karar ortağı: neyi, ne zaman ve ne kadara yapacağınız."],
     buyerDesk: ["AB Alıcı Talep Masası | Ganrich Advisory", "AB alıcılarınızın gönderdiği SKDM, EUDR, ambalaj, zorla çalıştırma ve siber güvenlik soruları için tek bağımsız masa: sınıflandırılır, sizinle karar verilir."],
+    toolSelection: ["Uyum Yazılımı ve Doğrulayıcı Seçimi | Ganrich Advisory", "SKDM, EUDR veya ürün pasaportu yazılımı ve doğrulayıcı seçmek için kısa, tarafsız bir çalışma. Satıcıdan ücret ve komisyon yok, yazılı öneri var."],
+    incentiveFile: ["Yeşil Dönüşüm Teşvik ve Finansman Dosyası | Ganrich", "Zaten yapmanız gereken AB uyum çalışmasını yeşil dönüşüm desteği veya banka yeşil finansmanı için güçlü bir başvuru dosyasına dönüştürün."],
+    cohortProgramme: ["İhracatçı Kohort Programı | Ganrich Advisory", "İhracatçı birliği, OSB veya oda ile yürütülen grup AB hazırlık programı: ortak oturumlar ve her şirket için ayrı karar oturumları."],
+    marketAccessDirector: ["Yarı Zamanlı AB Pazar Erişimi Direktörü | Ganrich", "Orta ölçekli ihracatçılar için AB kuralları ve alıcı taleplerinde yarı zamanlı üst düzey sahiplik: öncelikler, iş ortakları ve sözleşmeler."],
     aiDecisions: ["Yapay Zekâ Kararları: Bağımsız Danışmanlık | Ganrich Advisory", "Tedarikçiden bağımsız yapay zekâ kararları: yapay zekânın nerede değer yarattığına karar verin, onu kuracak ortağı seçin ve değerin gelip gelmediğini izleyin."],
     expertise: ["Uzmanlık | Ganrich Advisory", "Strateji, büyüme, işletim modeli, yapay zekâ, organizasyon ve uygulama için karar odaklı uzmanlık."],
     markets: ["Coğrafyalar | Ganrich Advisory", "Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika için pazara özgü kanıtlara dayalı bölgesel bakışlar."],
