@@ -36,3 +36,6 @@ export const reportSeo: Record<string, [title: string, description: string]> = {
   'eudr-checklist-turkish-wood-furniture-204bc82e': ['EUDR Checklist for Wood and Furniture Exporters', 'EUDR applies from 30 December 2026. An 8-point checklist for Turkish wood and furniture exporters: scope, country of harvest, geolocation, legality, handover.'],
   'eudr-kontrol-listesi-ahsap-mobilya-a607fc4b': ['EUDR Kontrol Listesi: Ahşap ve Mobilya', 'EUDR 30 Aralık 2026’dan itibaren uygulanıyor. Türk ahşap ve mobilya ihracatçıları için 8 maddelik liste: kapsam, kesim ülkesi, konum, yasallık ve teslim.'],
 };
+
+// Report pages with their own social card in public/og/{lang}/report-{slug}.png; others use the insights card.
+export const reportSocialCards = new Set(["cbam-actual-or-default-e9f664d8", "cbam-gercek-mi-varsayilan-mi-ef31215c"]);
