@@ -213,6 +213,7 @@ test("publishes production-safe bilingual SEO, taxonomy, feeds, and discovery fi
   assert.match(reportSitemapResponse.headers.get("content-type") ?? "", /^application\/xml/);
   assert.match(reportSitemap, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
   assert.match(robots, /Disallow: \/api\//);
+  assert.match(robots, /Allow: \/api\/pdf-insights\/\*\/document/);
   assert.match(robots, /Sitemap: https:\/\/ganrichadvisory\.com\/sitemap\.xml/);
   assert.match(robots, /Sitemap: https:\/\/ganrichadvisory\.com\/reports-sitemap\.xml/);
 });
