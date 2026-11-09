@@ -1047,6 +1047,14 @@ test("every published programme report has an editorial cover image on disk", as
   for (const file of ["pdf-insights.tsx", "pdf-insight-cards.tsx"]) assert.match(await readFile(new URL(`../app/${file}`, import.meta.url), "utf8"), /reportCover\(/);
 });
 
+test("the sitemap lists no noindex utility pages", async () => {
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const path of ["/en/cookie-preferences", "/tr/cerez-tercihleri"]) {
+    assert.ok(!sitemap.includes(`https://ganrichadvisory.com${path}<`), `${path} not in sitemap`);
+    assert.match(await (await render(path)).text(), /<meta name="robots" content="noindex/);
+  }
+});
+
 test("link arrows are SVG icons, not the emoji-prone ↗ character", async () => {
   for (const path of ["/en", "/tr", "/en/solutions", "/tr/cozumler", "/en/about", "/tr/hakkinda"]) {
     const response = await render(path);
