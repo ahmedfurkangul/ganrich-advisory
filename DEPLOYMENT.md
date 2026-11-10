@@ -1,90 +1,56 @@
-# Yayın (Deployment)
+# Deployment
 
-Site, Furkan'ın kendi Cloudflare hesabında Cloudflare Workers üzerinde çalışır (devir belgesindeki **B yolu**). Bu belge, bir sonraki güncellemenin nasıl yayınlanacağını anlatır. Geri dönüş için [ROLLBACK.md](ROLLBACK.md), alan adı için [GODADDY-DNS.md](GODADDY-DNS.md) dosyasına bakın.
+The site runs on Cloudflare Workers in Furkan's Cloudflare account. ganrichadvisory.com has been served by the Worker `ganrich-advisory` since 22 October 2026; `www` redirects to the apex. For going back, see [ROLLBACK.md](ROLLBACK.md). The DNS move from GoDaddy is recorded in [docs/GODADDY-DNS.md](docs/GODADDY-DNS.md).
 
-## Ortamlar
+## Environments
 
-| Ortam | Worker | Adres | D1 | R2 | Durum |
-|---|---|---|---|---|---|
-| Yerel / test | `ganrich-advisory` | `npm run start` → localhost:3000 | yer tutucu (`site-creator-d1`) | yerel | Testler bununla çalışır |
-| `preview` | `ganrich-preview` | https://ganrich-preview.ahmedfurkangul.workers.dev | `ganrich-preview-db` | `ganrich-preview-docs` | Yayında, üretim verisi yok |
-| `production` | `ganrich-advisory` | ganrichadvisory.com (geçişten sonra) | `ganrich-prod-db` | `ganrich-prod-docs` | Yapılandırıldı; alan adı 2. aşamada bağlanacak |
+| Environment | Worker | Address | D1 | R2 |
+|---|---|---|---|---|
+| Local / tests | `ganrich-advisory` | `npm test` | placeholder (`site-creator-d1`) | local |
+| `preview` | `ganrich-preview` | https://ganrich-preview.ahmedfurkangul.workers.dev (behind Access) | `ganrich-preview-db` | `ganrich-preview-docs` |
+| `production` | `ganrich-advisory` | https://ganrichadvisory.com | `ganrich-prod-db` | `ganrich-prod-docs` |
 
-Bütün bağlamalar (D1, R2, değişkenler) kaynakta, [`wrangler.jsonc`](wrangler.jsonc) içindedir. Build sırasında `CLOUDFLARE_ENV` ortamı seçer; `dist/` dosyaları elle düzenlenmez.
+All bindings and variables are in [`wrangler.jsonc`](wrangler.jsonc). `CLOUDFLARE_ENV` picks the environment at build time; never edit `dist/` by hand.
 
-Mevcut canlı site hâlâ ChatGPT Sites'tadır (proje `appgprj_6a6132c161908191b86ae822e996775e`). Bu repo o yayını değiştirmez.
+## Production: automatic deploys (Cloudflare Workers Builds, since 7 Nov 2026)
 
-## Gereksinimler
+The production Worker is connected to this repository (Workers & Pages → ganrich-advisory → Settings → Builds). **Every push to `main` builds and deploys production**, so a pull request is merged only after Furkan's go-live.
 
-- Node 22.13 veya üstü, `npm ci`.
-- Cloudflare girişi: `npx wrangler login` (tarayıcıda onay) ya da `CLOUDFLARE_API_TOKEN` ve `CLOUDFLARE_ACCOUNT_ID` ortam değişkenleri. Token'ı repoya veya sohbete yazmayın.
+- Build command: `npm test && CLOUDFLARE_ENV=production npm run build`. If a test fails, nothing deploys.
+- Deploy command: `bash scripts/deploy-if-latest.sh` (recommended; until it is set in the dashboard it is still `npx wrangler deploy`). The script deploys only if the built commit is still the tip of `main`. Workers Builds can finish builds out of order or rebuild an older commit later; on 9 Nov 2026 a late build of an older `main` replaced newer live changes.
+- Preview builds for other branches are off.
+- D1 migrations are **not** applied automatically. Before merging a PR that adds a file in `drizzle/`, apply it: `npx wrangler d1 migrations apply DB --env production --remote --config wrangler.jsonc`.
+- R2 uploads for new whitepapers are a separate step too. Do them before merging the PR that links to them.
+- After merging several PRs, check that the live version is the build of the newest `main` commit (Deployments tab, or the Cloudflare API). If a merge did not start a build, start one from the Builds tab.
 
-## Önizlemeyi güncelleme
+On Furkan's Mac, the wrangler login sees more than one Cloudflare account. Run wrangler from the repository folder and set `CLOUDFLARE_ACCOUNT_ID` for non-interactive commands; running it from the home folder can pick the wrong account.
+
+## Preview
 
 ```bash
-git checkout <yayınlanacak dal>
+git checkout <branch>
 npm ci
-scripts/deploy.sh preview      # veya: npm run deploy:preview
+scripts/deploy.sh preview      # or: npm run deploy:preview
 ```
 
-Script sırasıyla şunları yapar ve herhangi biri başarısız olursa durur:
+The script checks the working tree is clean, runs `npm test` and `npm run typecheck`, builds for preview, applies D1 migrations to the preview database and deploys with the commit id as the version message. Preview pages are behind Cloudflare Access, so only signed-in editors can see them.
 
-1. Çalışma alanının temiz olduğunu kontrol eder (her yayın bir commit'e karşılık gelir).
-2. `npm test`: build ve otomatik testler.
-3. `npm run typecheck`: TypeScript kontrolü (Worker tipleri `worker-configuration.d.ts` içinde).
-4. `CLOUDFLARE_ENV=preview npm run build`.
-5. `wrangler d1 migrations apply DB --env preview --remote`: `drizzle/` içindeki yeni migration'lar.
-6. `wrangler deploy`: Worker sürümünü commit kısa kimliğiyle etiketleyerek yayınlar.
+## Secrets
 
-Çıktıdaki **Version ID**'yi yayın notuna yazın; geri dönüşte bu kimlik kullanılır.
+Secrets are set with `npx wrangler secret put NAME --env production` (or `--env preview`); names and descriptions are in [`.env.example`](.env.example). Production uses the Resend keys for inquiry alerts and newsletter confirmations, the newsletter contacts key, the Resend segment ids and the Resend webhook secret. Never write secret values into the repository or a chat.
 
-## Editör (PDF stüdyosu) kimliği
+## Email
 
-Editör yalnızca imzası doğrulanan bir Cloudflare Access oturumuyla tanınır ([`app/editor-auth.ts`](app/editor-auth.ts)):
+- Contact, download and readiness-check forms write to D1 (`inquiries`) and send an alert through Resend to `INQUIRY_NOTIFY_TO`.
+- The weekly newsletter (Pazar Notu / Sunday Brief) uses double opt-in (`subscribers`), syncs confirmed subscribers to Resend segments and receives unsubscribes through the signed webhook `/api/newsletter/resend-webhook`.
 
-- `EDITOR_AUTH=access`
-- `ACCESS_TEAM_DOMAIN`: hesabın Access ekip alanı (`fse2-planlar-pages.cloudflareaccess.com`).
-- `ACCESS_AUD`: siteyi veya stüdyoyu koruyan Access uygulamasının AUD etiketi. Boşsa editörlük kapalıdır.
-- `EDITOR_EMAILS`: virgülle ayrılmış izinli e-postalar.
+## Traffic analytics
 
-`oai-authenticated-user-*` başlıkları Worker'da silinir; istemci bunları gönderse bile kimlik sayılmaz. Access uygulaması yoksa veya e-posta listede değilse stüdyo 404, editör API'leri 401 döner.
+- The Worker logs each page view to D1 `page_views` after responding (`worker/traffic.ts`). No cookies and no IP addresses; the visitor code rotates daily (`analytics_salts`). The browser beacon `/api/lead-event` records `seen`, CTA, form and readiness-check events.
+- Retention is enforced by `purgeExpiredRecords` in `worker/traffic.ts`.
+- Dashboard: `/en/insights/pdf-studio/analytics` and `/tr/icgoruler/pdf-studyosu/analitik`, behind the same Access app as the PDF studio.
+- To stop logging, set the Worker variable `ANALYTICS_LOGGING=off`.
 
-## Sırlar
+## Editor identity
 
-Sır değerleri `npx wrangler secret put AD --env preview` ile girilir; isimler ve açıklamalar [`.env.example`](.env.example) dosyasındadır. Şu an kullanılan sırlar: `ANALYTICS_TOKEN` (isteğe bağlı), `PDF_INGEST_KEY` (isteğe bağlı). Hiçbiri önizlemede tanımlı değildir.
-
-## Bilinen sınırlar
-
-- **İletişim formu e-posta bildirimi yok.** Form talebi D1'deki `inquiries` tablosuna yazar; kimseye e-posta gitmez. Bildirim için sağlayıcı ve alıcı adresi seçildikten sonra ayrıca kurulacak.
-- **Üretim verisi taşınmadı.** ChatGPT Sites'taki D1 kayıtlarına (talepler, PDF metadata) ve R2 dosyalarına bu ortamdan erişim yok. Taşıma, Sites'tan dışa aktarma alınabilirse planlanır; alınamazsa bu bir taşıma engelidir.
-- Önizleme veritabanındaki ilk iki migration elle uygulanmıştı. `deploy.sh` ilk çalıştığında wrangler bunları yeniden uygulamaya çalışırsa (`table already exists`), `d1_migrations` tablosuna iki satırı işaretlemek gerekir (bkz. ROLLBACK.md, "Migration kaydı").
-
-## Üretime geçiş (henüz yapılmadı)
-
-Ayrı ve açık onay gerektirir. Sıra:
-
-1. v23 kaynağı (PR #3), editör kimliği (PR #2) ve bu yayın yapılandırmasının `main`'e birleştirilmesi.
-2. Üretim D1/R2 kaynaklarının oluşturulması ve `wrangler.jsonc` içine `production` ortamının eklenmesi.
-3. Sites verisinin dışa aktarılıp aktarılması ve sayıların, anahtarların, sağlama toplamlarının karşılaştırılması.
-4. GODADDY-DNS.md'deki plana göre DNS yönetiminin Cloudflare'e alınması ve Workers Custom Domain bağlanması.
-5. `scripts/deploy.sh production --confirm`.
-
-## Trafik analitiği
-
-- Worker her sayfa görüntülemesini yanıt gönderildikten sonra D1'deki `page_views` tablosuna yazar (`worker/traffic.ts`). Çerez yok, IP adresi saklanmaz; ziyaretçi kodu her gün değişen rastgele bir değerle (`analytics_salts`) üretilir. Kayıtlar 13 ay tutulur.
-- Panel: `/en/insights/pdf-studio/analytics` ve `/tr/icgoruler/pdf-studyosu/analitik`. PDF stüdyosuyla aynı Cloudflare Access uygulamasının kapsamındadır ve `requireEditor()` ile ayrıca korunur.
-- Yayın öncesi `drizzle/0002_dusty_micromacro.sql` migration'ı uygulanmalıdır: `npx wrangler d1 migrations apply DB --env production --remote`. Tablo yoksa kayıt sessizce atlanır, site çalışmaya devam eder.
-- Kaydı kapatmak için Worker değişkeni: `ANALYTICS_LOGGING=off`.
-
-## Automatic deploys (Cloudflare Workers Builds, since 2026-11-07)
-
-The production Worker `ganrich-advisory` is connected to this repository in Cloudflare (Workers & Pages → ganrich-advisory → Settings → Builds). **Every push to `main` builds and deploys production**, so a PR is merged only after Furkan's go-live.
-
-- Build command: `npm test && CLOUDFLARE_ENV=production npm run build`. If a test fails, the build stops and nothing deploys.
-- Deploy command: `npx wrangler deploy`
-- Preview builds for other branches are off.
-- D1 migrations are **not** applied automatically. Before merging a PR that adds a file in `drizzle/`, apply it first, for example with `npx wrangler d1 migrations apply DB --env production --remote --config wrangler.jsonc`.
-- R2 uploads for new whitepapers are still a separate step. Do them before merging the PR that links to them.
-- Build logs: Workers & Pages → ganrich-advisory → Deployments. To roll back, use "Rollback" on an earlier version there.
-
-`scripts/deploy.sh` still works for a manual deploy from a laptop.
+The editor is recognised only by a verified Cloudflare Access session ([`app/editor-auth.ts`](app/editor-auth.ts)): `EDITOR_AUTH=access`, `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD` (the Access app protecting the studio paths) and `EDITOR_EMAILS`. Without a valid token the studio answers 404 and the editor APIs 401.

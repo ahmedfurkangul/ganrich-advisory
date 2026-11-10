@@ -1,5 +1,5 @@
 "use client";
-import { lazy, useState } from "react";
+import { useState } from "react";
 import { ServiceList, FounderWorking } from "./advisory";
 import { EngagementFormats } from "./advisory-details";
 import { expertise, Lang, routeMap } from "./content";
@@ -23,7 +23,7 @@ function ExpertiseRow({ lang, item, index }: { lang: Lang; item: (typeof experti
   const panelId = `expertise-${lang}-${index + 1}`;
   return <details open={open} onToggle={(event) => setOpen(event.currentTarget.open)} className="expertise-row">
     <summary aria-expanded={open} aria-controls={panelId}><span className="index">0{index + 1}</span><h3>{item[0]}</h3><p>{item[1]}</p><span className="plus" aria-hidden="true">+</span></summary>
-    <div id={panelId} className="expertise-detail"><p><strong>{lang === "en" ? "Decision question" : "Karar sorusu"}</strong>{item[2]}</p><p><strong>{lang === "en" ? "Typical work" : "Çalışma alanları"}</strong>{item[3]}</p><A href={`/${lang}/${routeMap[lang][["serviceMarket","serviceMarket","serviceOperating","serviceAI","serviceOperating","serviceOperating"][index]]}`}>{lang === "en" ? "See the related engagement" : "İlgili çalışmayı inceleyin"}</A></div>
+    <div id={panelId} className="expertise-detail"><p><strong>{lang === "en" ? "Decision question" : "Karar sorusu"}</strong>{item[2]}</p><p><strong>{lang === "en" ? "Typical work" : "Çalışma alanları"}</strong>{item[3]}</p><A href={`/${lang}/${routeMap[lang][["serviceMarket","serviceMarket","serviceOperating","aiDecisions","serviceOperating","serviceOperating"][index]]}`}>{lang === "en" ? "See the related engagement" : "İlgili çalışmayı inceleyin"}</A></div>
   </details>;
 }
 

@@ -51,7 +51,7 @@
       }
     },
     // ganrichadvisory.com. The custom domains are attached in Cloudflare
-    // (Workers > Settings > Domains) during the cutover in GODADDY-DNS.md, so
+    // (Workers > Settings > Domains) during the cutover in docs/GODADDY-DNS.md, so
     // no routes are declared here. ACCESS_AUD belongs to the "ganrich-advisory
     // PDF studio" Access app (studio pages and chunked uploads).
     "production": {

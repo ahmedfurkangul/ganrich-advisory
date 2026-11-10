@@ -358,7 +358,7 @@ test("includes the governed PDF insight ingestion system", async () => {
     readFile(new URL("../app/pdf-insights.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/api/pdf-insights/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/pdf-insights/[id]/document/route.ts", import.meta.url), "utf8"),
-    readFile(new URL("../PDF-INSIGHT-SYSTEM.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/PDF-INSIGHT-SYSTEM.md", import.meta.url), "utf8"),
     readFile(new URL("../drizzle/0000_volatile_skin.sql", import.meta.url), "utf8"),
   ]);
 
@@ -384,8 +384,8 @@ test("prepares governed report syndication and an explicit production sign-off g
     readFile(new URL("../app/[lang]/feed.xml/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../scripts/release-preflight.mjs", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
-    readFile(new URL("../RELEASE-SIGN-OFF.md", import.meta.url), "utf8"),
-    readFile(new URL("../RELEASE-OPERATIONS.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/archive/RELEASE-SIGN-OFF.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/archive/RELEASE-OPERATIONS.md", import.meta.url), "utf8"),
   ]);
 
   assert.match(rss, /listPdfInsights\(\{ status: "published", language: lang \}\)/);
@@ -407,8 +407,8 @@ test("removes starter-only infrastructure and keeps production system assets", a
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
-    readFile(new URL("../SITE-SYSTEM.md", import.meta.url), "utf8"),
-    readFile(new URL("../STRATEGIC-INTELLIGENCE-SYSTEM.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/SITE-SYSTEM.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/STRATEGIC-INTELLIGENCE-SYSTEM.md", import.meta.url), "utf8"),
   ]);
 
   assert.match(page, /redirect\("\/en"\)/);
@@ -603,7 +603,14 @@ test("publishes the regulation newsletter page in both languages and offers sign
     assert.match(html, /rel="canonical"/);
   }
   const eu = await (await render("/tr/cozumler/eudr-izlenebilirlik")).text();
-  assert.match(eu, /Mevzuat güncellemelerini e-postayla alın/);
+  assert.match(eu, /Pazar Notu.{0,8}nu e-postayla alın/);
+  // The list is weekly now; the old "only when something changes" promise must not come back.
+  const tr = await (await render("/tr/icgoruler/mevzuat-bulteni")).text();
+  assert.match(tr, /her Pazar 08:00/);
+  assert.doesNotMatch(tr, /Yalnızca bilinmeye değer bir gelişme olduğunda/);
+  const en = await (await render("/en/insights/regulation-updates")).text();
+  assert.match(en, /every Sunday at 08:00 Istanbul time/);
+  assert.doesNotMatch(en, /Sent only when there is something worth knowing/);
   assert.match(await (await render("/en")).text(), /href="\/en\/insights\/regulation-updates"/);
   assert.match(await (await render("/tr/gizlilik")).text(), /E-postayla mevzuat bülteni/);
 });
@@ -1008,6 +1015,31 @@ test("publishes the UK CBAM 2027 guide in both languages with FAQ markup, sitema
   assert.match(await (await render("/tr/icgoruler")).text(), /İngiltere SKDM&#x27;si 1 Ocak 2027&#x27;de başlıyor/);
 });
 
+test("publishes the Türkiye ETS market guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
+  const pages = [
+    ["/en/insights/turkiye-ets-market-registry-cbam", "Türkiye ETS Market Rules: Registry, 2026 and CBAM", "/tr/icgoruler/tr-ets-piyasasi-iks-hesabi-skdm", /<strong>may<\/strong>/],
+    ["/tr/icgoruler/tr-ets-piyasasi-iks-hesabi-skdm", "TR ETS Piyasası: İKS Hesabı, 2026 ve SKDM İndirimi", "/en/insights/turkiye-ets-market-registry-cbam", /<strong>uygulanabilir<\/strong>/],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, body] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.match(html, body);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"Article"/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guideTrEtsMarket\.png/);
+    assert.match(html, /\/guides\/guideTrEtsMarket-(en|tr)\.webp/);
+    assert.match(html, /SEC%282026%29275/);
+    assert.match(html, /(not legal advice|hukuki görüş değildir)/);
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+  }
+  assert.match(await (await render("/en/insights")).text(), /Türkiye&#x27;s ETS Market Rules: Registry Account, 2026 Top-Up and CBAM/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /TR ETS Piyasa Yönetmeliği: İKS Hesabı, 2026 Tamamlayıcı Tahsisat ve SKDM İndirimi/);
+});
+
 test("links the CBAM actual-vs-default report from the CBAM 2026 guide and the readiness check intro", async () => {
   const pairs = [
     ["/en/insights/cbam-2026-update-tr-ets-cop31", "/en/insights/report/cbam-actual-or-default-e9f664d8"],
@@ -1250,6 +1282,16 @@ test("Solutions explains the three engagement tiers in both languages without pr
     const text = html.replace(/<script[\s\S]*?<\/script>/g, "").replace(/<[^>]+>/g, " ");
     assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\bTL\b|₺/, `${path} must not show prices`);
   }
+});
+
+test("decision notes and llms.txt point at live pages, not the retired AI value address", async () => {
+  for (const [path, target] of [["/en/insights/ai-pilot-or-process", "/en/expertise/ai-decisions#aiDiagnostic"], ["/tr/icgoruler/yapay-zeka-pilotu-ve-surec", "/tr/uzmanlik/yapay-zeka-kararlari#aiDiagnostic"]]) {
+    const html = await (await render(path)).text();
+    assert.ok(html.includes(`href="${target}"`), `${path} links ${target}`);
+    assert.doesNotMatch(html, /href="\/(en\/expertise\/ai-value|tr\/uzmanlik\/yapay-zeka-degeri)"/, `${path} has no link to the redirected AI value page`);
+  }
+  const llms = await (await render("/llms.txt")).text();
+  assert.match(llms, /independent decision partner for Turkish exporters facing EU buyer requirements/);
 });
 
 test("EU rule scope scanner maps answers to known rules and is linked from the lab and the homepage", async () => {

@@ -13,5 +13,7 @@
   Cache-Control: public, max-age=604800
 /favicon.svg
   Cache-Control: public, max-age=604800
+/newsletter/*
+  Cache-Control: public, max-age=2592000
 /reports/*
   Cache-Control: public, max-age=604800
