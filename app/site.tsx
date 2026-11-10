@@ -52,9 +52,6 @@ const ui = {
 // from the footer, the solutions catalogue and internal links, so nothing is lost for search engines.
 const navKeys = ["solutions", "insights", "about", "contact"] as const;
 
-function A({ href, children, className = "", dataEvent }: { href: string; children: React.ReactNode; className?: string; dataEvent?: string }) {
-  return <a href={href} className={className} data-analytics-event={dataEvent}>{children}<Arrow className="arrow"/></a>;
-}
 
 function Wordmark() {
   return <span className="wordmark"><Image src="/brand/ganrich-advisory-threshold.webp" width={1260} height={260} alt="Ganrich Advisory" priority unoptimized/></span>;

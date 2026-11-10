@@ -1258,3 +1258,13 @@ test("Solutions explains the three engagement tiers in both languages without pr
     assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\bTL\b|₺/, `${path} must not show prices`);
   }
 });
+
+test("decision notes and llms.txt point at live pages, not the retired AI value address", async () => {
+  for (const [path, target] of [["/en/insights/ai-pilot-or-process", "/en/expertise/ai-decisions#aiDiagnostic"], ["/tr/icgoruler/yapay-zeka-pilotu-ve-surec", "/tr/uzmanlik/yapay-zeka-kararlari#aiDiagnostic"]]) {
+    const html = await (await render(path)).text();
+    assert.ok(html.includes(`href="${target}"`), `${path} links ${target}`);
+    assert.doesNotMatch(html, /href="\/(en\/expertise\/ai-value|tr\/uzmanlik\/yapay-zeka-degeri)"/, `${path} has no link to the redirected AI value page`);
+  }
+  const llms = await (await render("/llms.txt")).text();
+  assert.match(llms, /independent decision partner for Turkish exporters facing EU buyer requirements/);
+});
