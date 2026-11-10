@@ -35,6 +35,7 @@ const metaCopy = {
     studio: ["Opportunity Studio | Ganrich Advisory", "Five working tools behind our programmes: emissions records, order approval, incident response, accessibility fixes and product data, with human approval."],
     regulationCalendar: ["EU Regulation Calendar | Ganrich Advisory", "When CBAM, the Cyber Resilience Act, EUDR, PPWR, the Machinery and Battery Regulations and other EU rules apply to Turkish exporters, with official links."],
     newsletter: ["Sunday Brief: EU Regulation Updates | Ganrich Advisory", "A five-minute email every Sunday at 08:00 for Turkish exporters: what changed in CBAM, the CRA, EUDR and other EU rules, and what to check first."],
+    scopeScanner: ["EU Rule Scope Scanner | Ganrich Advisory", "Five questions on what you sell into the EU and how, then the EU rules worth a closer look, with dates and where to start."],
     eudrCheck: ["EUDR Readiness Check | Ganrich Advisory", "Eight questions on whether your origin, geolocation and legality data is ready for your EU importer’s EUDR due-diligence statement, with an instant result."],
     craCheck: ["CRA Readiness Check | Ganrich Advisory", "Eight questions on whether you could report an actively exploited vulnerability under the Cyber Resilience Act within 24 hours, with an instant result."],
     cbamCheck: ["CBAM Readiness Check | Ganrich Advisory", "Eight questions on whether your CBAM emissions data is ready for an EU buyer, with an instant result and the gaps to close first."],
@@ -68,6 +69,7 @@ const metaCopy = {
     studio: ["Opportunity Studio: Beş Çalışma Aracı | Ganrich Advisory", "Programlarımızın arkasındaki beş çalışma aracı: emisyon kaydı, sipariş onayı, olay müdahalesi, erişilebilirlik ve ürün verisi; insan onayıyla."],
     regulationCalendar: ["AB Mevzuat Takvimi | Ganrich Advisory", "AB Yeşil Mutabakat ve dijital kurallarının Türk ihracatçılara uygulandığı tarihler: SKDM, CRA, EUDR, PPWR, Makine ve Batarya Tüzükleri; resmî kaynaklarla."],
     newsletter: ["Pazar Notu: Haftalık Mevzuat Bülteni | Ganrich Advisory", "Her Pazar 08:00'de ihracatçılar için 5 dakikalık e-posta: SKDM (CBAM), CRA, EUDR ve diğer AB kurallarında ne değişti, önce neye bakmalı."],
+    scopeScanner: ["AB Kural Kapsam Tarayıcısı | Ganrich Advisory", "AB'ye ne sattığınızı ve nasıl sattığınızı beş soruda yanıtlayın; yakından bakmaya değer AB kurallarını tarihleriyle görün."],
     eudrCheck: ["EUDR Hazırlık Testi | Ganrich Advisory", "Menşe, coğrafi konum ve yasallık verinizin AB ithalatçınızın EUDR durum tespiti beyanına hazır olup olmadığını sekiz soruda görün; sonuç hemen ekranda."],
     craCheck: ["CRA Hazırlık Testi | Ganrich Advisory", "Siber Dayanıklılık Yasası kapsamında istismar edilen bir açığı 24 saat içinde bildirebilir misiniz? Sekiz soruda görün; sonuç ve boşluklar hemen ekranda."],
     cbamCheck: ["SKDM (CBAM) Hazırlık Testi | Ganrich Advisory", "SKDM (CBAM) emisyon verinizin AB alıcınız için hazır olup olmadığını sekiz soruda görün; sonuç ve önce kapatılması gereken boşluklar hemen ekranda."],
@@ -192,7 +194,7 @@ export default async function LocalizedPage({ params }: Props) {
   const title = article?.title ?? category?.label ?? trustMeta[lang][kind as keyof typeof trustMeta.en]?.[0]?.split("|")[0].trim() ?? advisoryMeta(lang, kind)?.[0]?.split("|")[0].trim() ?? (metaCopy[lang][kind as keyof typeof metaCopy.en]?.[0]?.split("|")[0].trim() || SITE_NAME);
   const parent = article || category
     ? { name: lang === "en" ? "Insights" : "İçgörüler", url: absoluteUrl(`/${lang}/${routeMap[lang].insights}`) }
-    : kind.startsWith("decision") || ["marketCompass", "boardBriefBuilder", "aiValueLens", "cbamCheck", "craCheck", "eudrCheck"].includes(kind)
+    : kind.startsWith("decision") || ["marketCompass", "boardBriefBuilder", "aiValueLens", "cbamCheck", "craCheck", "eudrCheck", "scopeScanner"].includes(kind)
       ? { name: lang === "en" ? "Decision Lab" : "Karar Laboratuvarı", url: absoluteUrl(`/${lang}/${routeMap[lang].decisionLab}`) }
       : breadcrumbParent(lang, kind);
   const description = article?.thesis ?? category?.description ?? (advisoryMeta(lang, kind) ?? metaCopy[lang][kind as keyof typeof metaCopy.en] ?? metaCopy[lang].home)[1];

@@ -19,6 +19,7 @@ const CraReadinessCheck = lazy(() => import("./readiness-check").then(m => ({def
 const RegulationCalendarPage = lazy(() => import("./regulation-calendar-page").then(m => ({default:m.RegulationCalendarPage})));
 const NewsletterPage = lazy(() => import("./newsletter").then(m => ({default:m.NewsletterPage})));
 const EudrReadinessCheck = lazy(() => import("./readiness-check").then(m => ({default:m.EudrReadinessCheck})));
+const ScopeScanner = lazy(() => import("./scope-scanner").then(m => ({default:m.ScopeScanner})));
 const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.NotePage})));
 const AiDecisionsPage = lazy(() => import("./ai-decisions").then(m => ({default:m.AiDecisionsPage})));
 const ServiceModelPage = lazy(() => import("./service-page").then(m => ({default:m.ServiceModelPage})));
@@ -130,6 +131,7 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "cbamCheck") page = <CbamReadinessCheck lang={lang}/>;
   if (kind === "craCheck") page = <CraReadinessCheck lang={lang}/>;
   if (kind === "eudrCheck") page = <EudrReadinessCheck lang={lang}/>;
+  if (kind === "scopeScanner") page = <ScopeScanner lang={lang}/>;
   if (kind === "newsletter") page = <NewsletterPage lang={lang}/>;
   if (kind === "regulationCalendar") page = <RegulationCalendarPage lang={lang}/>;
   if (kind === "decisionLabChangelog") page = <DecisionLabChangelogPage lang={lang}/>;

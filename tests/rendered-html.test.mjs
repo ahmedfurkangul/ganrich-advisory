@@ -1293,3 +1293,26 @@ test("decision notes and llms.txt point at live pages, not the retired AI value 
   const llms = await (await render("/llms.txt")).text();
   assert.match(llms, /independent decision partner for Turkish exporters facing EU buyer requirements/);
 });
+
+test("EU rule scope scanner maps answers to known rules and is linked from the lab and the homepage", async () => {
+  const { scopeQuestions, scopeRuleIds, scopeExtras, scopeCopy } = await import("../app/scope-scanner-content.ts");
+  const { ruleCalendar } = await import("../app/regulation-calendar.ts");
+  const known = new Set([...ruleCalendar.map(r => r.id), ...scopeExtras.map(e => e.id)]);
+  for (const q of scopeQuestions) for (const o of q.options) for (const r of o.rules) assert.ok(known.has(r), `${q.id}/${o.id}: ${r}`);
+  assert.deepEqual(scopeRuleIds({ products: ["metals", "digital"], packaging: ["no"], online: ["yes"] }),
+    ["cbam", "tr-ets", "cra-reporting", "cra-full", "eaa", "low-value-duty", "product-identifiers"]);
+  assert.deepEqual(scopeRuleIds({ products: ["none"], packaging: ["no"], online: ["no"], brands: ["no"], critical: ["no"] }), []);
+  // Indicative wording only: the scanner never tells a visitor they comply.
+  for (const lang of ["en", "tr"]) assert.doesNotMatch(JSON.stringify(scopeCopy[lang]), /you (are|comply)|compliant|uyumlusunuz|uyumludur/i);
+  for (const [path, title] of [["/en/decision-lab/eu-rule-scope-scanner", /EU Rule Scope Scanner \| Ganrich Advisory/], ["/tr/karar-laboratuvari/ab-kural-kapsam-tarayicisi", /AB Kural Kapsam Tarayıcısı \| Ganrich Advisory/]]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, title);
+    const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? "";
+    const length = [...description.replace(/&#x27;|&quot;|&amp;|&lt;|&gt;|&#39;/g, "x")].length;
+    assert.ok(length >= 70 && length <= 160, `${path}: ${length}`);
+  }
+  assert.match(await (await render("/en/decision-lab")).text(), /href="\/en\/decision-lab\/eu-rule-scope-scanner"/);
+  assert.match(await (await render("/tr")).text(), /href="\/tr\/karar-laboratuvari\/ab-kural-kapsam-tarayicisi"/);
+});
