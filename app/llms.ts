@@ -20,7 +20,7 @@ const oneLine = (value: string) => value.replace(/\s+/g, " ").trim();
 const intro = [
   "# Ganrich Advisory",
   "",
-  "> Ganrich Advisory is an independent strategy, transformation and applied-AI advisory based in Istanbul, Türkiye. It helps businesses entering new markets, founder-led companies building stronger organisations, and industrial and export teams facing new EU rules decide what to do next and turn that decision into execution. The site is bilingual (English at /en, Turkish at /tr).",
+  "> Ganrich Advisory is an independent decision partner for Turkish exporters facing EU buyer requirements (CBAM, the Cyber Resilience Act, EUDR and related rules), based in Istanbul, Türkiye. It also advises on market entry, operating models and AI decisions, helping leadership teams decide what to do next and turn that decision into execution. The site is bilingual (English at /en, Turkish at /tr).",
   "",
   "- Founder: Ahmed Furkan Gul, previously Chief Strategy and Business Development Officer at Tay Group; Assistant Professor at İstanbul Kent University.",
   "- Regions: Türkiye, Middle East and North Africa, Europe, Africa.",
