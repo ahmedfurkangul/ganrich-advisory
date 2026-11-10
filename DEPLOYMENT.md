@@ -17,7 +17,7 @@ All bindings and variables are in [`wrangler.jsonc`](wrangler.jsonc). `CLOUDFLAR
 The production Worker is connected to this repository (Workers & Pages → ganrich-advisory → Settings → Builds). **Every push to `main` builds and deploys production**, so a pull request is merged only after Furkan's go-live.
 
 - Build command: `npm test && CLOUDFLARE_ENV=production npm run build`. If a test fails, nothing deploys.
-- Deploy command: `bash scripts/deploy-if-latest.sh` (recommended; until it is set in the dashboard it is still `npx wrangler deploy`). The script deploys only if the built commit is still the tip of `main`. Workers Builds can finish builds out of order or rebuild an older commit later; on 9 Nov 2026 a late build of an older `main` replaced newer live changes.
+- Deploy command: `bash scripts/deploy-if-latest.sh` (recommended; until it is set in the dashboard it is still `npx wrangler deploy`). The script deploys only if the built commit is still the tip of `main`, and only if the build targets the production Worker and database. Workers Builds can finish builds out of order or rebuild an older commit later; on 9 Nov 2026 a late build of an older `main` replaced newer live changes.
 - Preview builds for other branches are off.
 - D1 migrations are **not** applied automatically. Before merging a PR that adds a file in `drizzle/`, apply it: `npx wrangler d1 migrations apply DB --env production --remote --config wrangler.jsonc`.
 - R2 uploads for new whitepapers are a separate step too. Do them before merging the PR that links to them.
@@ -33,7 +33,7 @@ npm ci
 scripts/deploy.sh preview      # or: npm run deploy:preview
 ```
 
-The script checks the working tree is clean, runs `npm test` and `npm run typecheck`, builds for preview, applies D1 migrations to the preview database and deploys with the commit id as the version message. Preview pages are behind Cloudflare Access, so only signed-in editors can see them.
+The script checks the working tree is clean, runs `npm test` and `npm run typecheck`, builds for preview, applies D1 migrations to the preview database, checks that the build really targets `ganrich-preview` (`scripts/check-deploy-target.mjs`) and deploys with the commit id as the version message. If your login sees more than one Cloudflare account, prefix the command with `CLOUDFLARE_ACCOUNT_ID=a4d8a0e65453f07a52484688f6dbbaa5`. Never run a bare `npx wrangler deploy` after `npm test`: that build carries the production Worker name with a placeholder database, and the check exists to stop exactly that. Preview pages are behind Cloudflare Access, so only signed-in editors can see them.
 
 ## Secrets
 

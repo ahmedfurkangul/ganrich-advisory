@@ -44,6 +44,9 @@ CLOUDFLARE_ENV="$target" npm run build
 echo "==> D1 migrations for $target"
 npx wrangler d1 migrations apply DB --env "$target" --remote --config wrangler.jsonc
 
+echo "==> Check that the build targets $target"
+node scripts/check-deploy-target.mjs "$target"
+
 echo "==> Deploy"
 npx wrangler deploy --message "$(git rev-parse --short HEAD) $target"
 
