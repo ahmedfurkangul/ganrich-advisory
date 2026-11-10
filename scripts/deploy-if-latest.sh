@@ -26,4 +26,7 @@ if [[ -z "$tip" ]]; then
   echo "Could not read the tip of $branch; deploying ${built:0:7} as before."
 fi
 
+# Never let a build without CLOUDFLARE_ENV=production reach the live Worker.
+node scripts/check-deploy-target.mjs production || exit 1
+
 exec npx wrangler deploy --message "${built:0:7} workers-builds"
