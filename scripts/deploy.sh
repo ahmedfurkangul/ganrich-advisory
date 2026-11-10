@@ -11,8 +11,9 @@ target="${1:-}"
 confirm="${2:-}"
 
 case "$target" in
-  preview) ;;
+  preview) expected_worker="ganrich-preview" ;;
   production)
+    expected_worker="ganrich-advisory"
     if [[ "$confirm" != "--confirm" ]]; then
       echo "Production deploys need --confirm and Furkan's go-live (DEPLOYMENT.md)." >&2
       exit 1
@@ -40,6 +41,23 @@ npm run typecheck
 
 echo "==> Build for $target"
 CLOUDFLARE_ENV="$target" npm run build
+
+# `wrangler deploy` below has no --env: it follows the redirect that the
+# CLOUDFLARE_ENV build writes to .wrangler/deploy/config.json. The top-level
+# name in wrangler.jsonc is the production Worker, so a missing or stale build
+# could send a preview deploy to production. Check the built target first.
+echo "==> Check deploy target"
+built_worker="$(node -e '
+  const fs = require("fs");
+  const redirect = JSON.parse(fs.readFileSync(".wrangler/deploy/config.json", "utf8"));
+  const path = require("path").resolve(".wrangler/deploy", redirect.configPath);
+  process.stdout.write(String(JSON.parse(fs.readFileSync(path, "utf8")).name || ""));
+' 2>/dev/null)" || built_worker=""
+if [[ "$built_worker" != "$expected_worker" ]]; then
+  echo "Built Worker is '${built_worker:-unknown}', expected '$expected_worker' for $target. Not deploying." >&2
+  exit 1
+fi
+echo "    $built_worker"
 
 echo "==> D1 migrations for $target"
 npx wrangler d1 migrations apply DB --env "$target" --remote --config wrangler.jsonc
