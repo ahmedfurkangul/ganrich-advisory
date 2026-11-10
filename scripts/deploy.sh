@@ -41,11 +41,11 @@ npm run typecheck
 echo "==> Build for $target"
 CLOUDFLARE_ENV="$target" npm run build
 
+echo "==> Check that the build targets $target"
+node scripts/check-deploy-target.mjs "$target"   # before migrations, so a wrong build changes nothing remote
+
 echo "==> D1 migrations for $target"
 npx wrangler d1 migrations apply DB --env "$target" --remote --config wrangler.jsonc
-
-echo "==> Check that the build targets $target"
-node scripts/check-deploy-target.mjs "$target"
 
 echo "==> Deploy"
 npx wrangler deploy --message "$(git rev-parse --short HEAD) $target"
