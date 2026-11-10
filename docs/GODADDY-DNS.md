@@ -1,6 +1,6 @@
 # GoDaddy ve DNS
 
-**Durum (22 Ekim 2026): hiçbir DNS kaydı, nameserver veya alan adı ayarı değiştirilmedi.** Bu belge mevcut durumun kaydı ve onaylanırsa uygulanacak planıdır.
+**Durum (güncel):** Plan 22 Ekim 2026'da uygulandı. Nameserver'lar Cloudflare'de (nelci/quincy.ns.cloudflare.com), site `ganrich-advisory` Worker'ından sunuluyor, Microsoft 365 e-posta kayıtları değişmedi. Aşağıdaki metin geçiş öncesi kaydı ve geri dönüş için gereken bilgileri tutar.
 
 ## Kaynak ve kapsam
 

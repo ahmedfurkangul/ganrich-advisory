@@ -47,8 +47,8 @@ const requiredFiles = [
   "app/[lang]/feed.xml/route.ts",
   "app/not-found.tsx",
   "app/error.tsx",
-  "LAUNCH-READINESS.md",
-  "RELEASE-SIGN-OFF.md",
+  "docs/archive/LAUNCH-READINESS.md",
+  "docs/archive/RELEASE-SIGN-OFF.md",
   "drizzle/0000_volatile_skin.sql",
   "drizzle/0001_lonely_sauron.sql",
 ];
@@ -84,5 +84,5 @@ if (failures.length) {
   for (const failure of failures) console.error(`  FAIL  ${failure}`);
   process.exitCode = 1;
 } else {
-  console.log("Owner, counsel, accessibility, and production-operation approvals remain governed by RELEASE-SIGN-OFF.md.");
+  console.log("Owner, counsel, accessibility, and production-operation approvals remain governed by docs/archive/RELEASE-SIGN-OFF.md.");
 }
