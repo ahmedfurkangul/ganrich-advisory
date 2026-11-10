@@ -358,7 +358,7 @@ test("includes the governed PDF insight ingestion system", async () => {
     readFile(new URL("../app/pdf-insights.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/api/pdf-insights/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/api/pdf-insights/[id]/document/route.ts", import.meta.url), "utf8"),
-    readFile(new URL("../PDF-INSIGHT-SYSTEM.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/PDF-INSIGHT-SYSTEM.md", import.meta.url), "utf8"),
     readFile(new URL("../drizzle/0000_volatile_skin.sql", import.meta.url), "utf8"),
   ]);
 
@@ -384,8 +384,8 @@ test("prepares governed report syndication and an explicit production sign-off g
     readFile(new URL("../app/[lang]/feed.xml/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../scripts/release-preflight.mjs", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
-    readFile(new URL("../RELEASE-SIGN-OFF.md", import.meta.url), "utf8"),
-    readFile(new URL("../RELEASE-OPERATIONS.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/archive/RELEASE-SIGN-OFF.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/archive/RELEASE-OPERATIONS.md", import.meta.url), "utf8"),
   ]);
 
   assert.match(rss, /listPdfInsights\(\{ status: "published", language: lang \}\)/);
@@ -407,8 +407,8 @@ test("removes starter-only infrastructure and keeps production system assets", a
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
-    readFile(new URL("../SITE-SYSTEM.md", import.meta.url), "utf8"),
-    readFile(new URL("../STRATEGIC-INTELLIGENCE-SYSTEM.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/SITE-SYSTEM.md", import.meta.url), "utf8"),
+    readFile(new URL("../docs/STRATEGIC-INTELLIGENCE-SYSTEM.md", import.meta.url), "utf8"),
   ]);
 
   assert.match(page, /redirect\("\/en"\)/);

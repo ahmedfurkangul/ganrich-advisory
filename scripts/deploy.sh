@@ -2,7 +2,7 @@
 # Builds, tests and deploys Ganrich Advisory to a named Cloudflare environment.
 #
 #   scripts/deploy.sh preview              # workers.dev review address
-#   scripts/deploy.sh production --confirm # only after the cutover is approved
+#   scripts/deploy.sh production --confirm # manual production deploy; normally Workers Builds deploys main
 #
 # Requires `npx wrangler login` (or CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID).
 set -euo pipefail
@@ -14,7 +14,7 @@ case "$target" in
   preview) ;;
   production)
     if [[ "$confirm" != "--confirm" ]]; then
-      echo "Production deploys need --confirm and an approved cutover (DEPLOYMENT.md)." >&2
+      echo "Production deploys need --confirm and Furkan's go-live (DEPLOYMENT.md)." >&2
       exit 1
     fi
     ;;
