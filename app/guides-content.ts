@@ -13,6 +13,444 @@ export type Guide = { key: string; solution: string; date: string; checked: Reco
 
 export const guides: Guide[] = [
  {
+  "key": "guideTrEtsMarket",
+  "solution": "solutionTrEts",
+  "date": "2026-11-10",
+  "checked": {
+   "en": "10 November 2026",
+   "tr": "10 Kasım 2026"
+  },
+  "image": "guideTrEtsMarket",
+  "readingTime": {
+   "en": "10 min",
+   "tr": "10 dk"
+  },
+  "topic": {
+   "en": "Türkiye ETS",
+   "tr": "TR ETS"
+  },
+  "en": {
+   "path": "insights/turkiye-ets-market-registry-cbam",
+   "title": "Türkiye ETS Market Rules: Registry, 2026 and CBAM",
+   "description": "Türkiye's ETS market regulation is in force: EPİAŞ, the İKS registry account, the 2026 top-up mechanism and what the CBAM Article 9 deduction may mean.",
+   "h1": "Türkiye's ETS Market Rules: Registry Account, 2026 Top-Up and CBAM",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Türkiye's emissions trading system is no longer just a reporting timetable: its market rules are now published. The Energy Market Regulatory Authority's (EPDK) regulation on operating the Türkiye ETS market appeared in the Official Gazette on 21 October 2026 (No. 33407) and took effect the same day ([Official Gazette, 21.10.2026](https://www.resmigazete.gov.tr/eskiler/2026/10/20261021.htm); Art. 54). It sets out who runs the market, where allowances are held, how they trade, and one transitional mechanism for 2026 that matters to anyone exporting to the EU. Real trading has not started yet."
+    },
+    {
+     "t": "p",
+     "text": "For a plant in the pilot, the question has moved on from \"when is our monitoring plan due?\" to \"how do we register, and would buying allowances for 2026 reduce what our EU customers pay under CBAM?\" This piece answers both from the official texts and keeps the law separate from our interpretation."
+    },
+    {
+     "t": "h2",
+     "text": "The pilot in brief"
+    },
+    {
+     "t": "p",
+     "text": "According to the Climate Change Presidency's announcement of 1 October 2026, the pilot covers emissions for the 2026 and 2027 system years. Installations above the set emissions threshold in power generation, cement, iron and steel, aluminium and fertilisers are in. 2026 is reporting only; the first surrender obligation applies to 2027 emissions. The detail sits in the Procedures and Principles approved on 30 September 2026 (Approval No. 18626) ([Climate Change Presidency, 01.10.2026](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-iliskin-usul-ve-esaslar-yayimlandi-duyuru-1045))."
+    },
+    {
+     "t": "p",
+     "text": "The deadline for first monitoring methodology plans was extended to 27 January 2027 by Approval No. 18814 of 13 October 2026 ([Climate Change Presidency, 14.10.2026](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemi-izleme-metodolojisi-planlarinin-sunulma-suresinin-uzatilmasi-hakkinda-duyuru-1046)). We covered that side in our [Türkiye ETS pilot monitoring plan report](/en/insights/report/turkiye-ets-pilot-monitoring-plan-8fa4535e). Here we focus on the market."
+    },
+    {
+     "t": "h2",
+     "text": "Who runs the market and where allowances sit"
+    },
+    {
+     "t": "p",
+     "text": "The market operator is EPİAŞ, Türkiye's energy exchange operator. Trading runs through its ETS Market Management System (ETSPYS) (Arts. 3 and 4). Issuing, holding, transferring, cancelling and surrendering allowances happens in the Transaction Registry System (İKS), in accounts opened in the operator's name; free allocations are credited to those accounts plant by plant (Art. 6)."
+    },
+    {
+     "t": "p",
+     "text": "The market has two layers:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**Primary market:** allowances sold for the first time at auction. The lira price set at auction is the Allowance Reference Price (TRF).",
+      "**Secondary market:** a spot allowance market and, if one is set up, a futures market."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Bids are made in lots of 100 allowances (Arts. 3 and 12), each allowance being one tonne of CO2 equivalent, with prices in TRY per tCO2e in steps of 50 kuruş. Cash settlement and collateral go through a central clearing house established under Capital Markets Law No. 6362."
+    },
+    {
+     "t": "p",
+     "text": "Until the registry and the primary and spot markets go live, ETSPYS will run a virtual trial with no delivery, invoicing or payment obligations (Provisional Art. 1). That is a cheap way for compliance and treasury teams to learn the bid, collateral and settlement flow before real money is involved."
+    },
+    {
+     "t": "h2",
+     "text": "Opening a registry account"
+    },
+    {
+     "t": "p",
+     "text": "Covered operators must open an İKS account (Art. 7). It is held in the operator's name, and the operator transacts for each of its installations. Operator data flows into ETSPYS from the Climate Change Presidency's monitoring, reporting and verification (MRV) system, so errors in MRV records carry straight into market registration."
+    },
+    {
+     "t": "p",
+     "text": "Three steps are mandatory:"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "Sign a participant agreement with the central clearing house.",
+      "Apply to EPİAŞ through ETSPYS.",
+      "Sign the İKS participation agreement."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "The file includes a registration form, original or notarised proof of signing authority, a Trade Registry Gazette extract and the İKS agreement. EPİAŞ reviews the application within 10 business days of filing, then allows 10 business days to fix any gaps; if they are not fixed in time, registration does not go ahead (Art. 8)."
+    },
+    {
+     "t": "p",
+     "text": "In practice, if signing authorities, registry records and MRV plant data don't match, these two windows alone can cost about four weeks. It makes sense to build this file alongside the monitoring plan."
+    },
+    {
+     "t": "h2",
+     "text": "The extra reserve and its price floor"
+    },
+    {
+     "t": "p",
+     "text": "The regulation (Art. 19) provides for an \"extra reserve\" auction for plants that cannot cover their surrender obligation. It can be used only for compliance, only by decision of the Carbon Market Board, and only up to each plant's shortfall; allowances bought go straight to the plant's surrender account."
+    },
+    {
+     "t": "p",
+     "text": "That auction has a floor price: 50% above the higher of the three-month weighted average primary price and the three-month weighted average spot price, measured on the last business day of November (if there is no primary price in that window, the spot average is used). The cap is set by EPDK after consulting the Climate Change Presidency. Our reading: a plant that leaves its shortfall to the last minute pays well above the market, so forecasting 2027 allowance needs early is worth real money."
+    },
+    {
+     "t": "h2",
+     "text": "The 2026 top-up price mechanism"
+    },
+    {
+     "t": "p",
+     "text": "Provisional Article 2 opens a separate door for 2026 emissions. If participants request allowances equal to their verified 2026 emissions, plant by plant, a top-up allowance price **may** apply. In these auctions each participant pays its own bid and no TRF is calculated. The allowances go to the plant's surrender account but **are not counted toward meeting the obligation** (Provisional Art. 2(3))."
+    },
+    {
+     "t": "p",
+     "text": "The text says the mechanism \"may\" apply, not that it will; application, issuance and auction dates are to be set by the Climate Change Presidency (Provisional Art. 2(2)). As of 7 November 2026 the Presidency's announcements list shows none. The Carbon Market Board decision announced on 3 September 2026 says that in 2026 a method for applying the top-up price will be developed and the price mechanism will start from the 2027 system year ([Climate Change Presidency, KPK/2026/1](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-yonelik-karbon-piyasasi-kurulu-toplanti-kararlarina-kpk-2026-1-iliskin-duyuru-duyuru-45)). Whether, and when, an auction for 2026 emissions will be held is therefore unclear. A separate, permanent top-up mechanism for allowances that must be surrendered sits in Art. 20."
+    },
+    {
+     "t": "p",
+     "text": "So a 2026 purchase satisfies no obligation under Turkish law. Why would a company make one?"
+    },
+    {
+     "t": "p",
+     "text": "**Ganrich interpretation:** in our view the most plausible reason is CBAM. Neither the regulation nor the authorities say so; it is our reading of how the text is built."
+    },
+    {
+     "t": "h2",
+     "text": "Would that payment reduce CBAM costs?"
+    },
+    {
+     "t": "p",
+     "text": "**The law (current consolidated text):** under Article 9(1) of the CBAM Regulation (EU) 2023/956, as amended by (EU) 2025/2083 (EUR-Lex consolidated text of 20.10.2025), where embedded emissions are determined on the basis of **actual emissions**, an authorised CBAM declarant may claim a reduction in certificates for the carbon price effectively paid in a third country, taking into account any rebate or compensation there. Article 9(2) requires the documentation to be certified by a person independent of the declarant and of the third country's authorities, plus evidence of actual payment. Under Article 9(4), goods declared on default values can only claim a reduction by reference to yearly default carbon prices. Article 3(29) defines the carbon price to include amounts paid in the form of emission allowances under an emissions trading system ([EUR-Lex, consolidated text 20.10.2025](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02023R0956-20251020))."
+    },
+    {
+     "t": "p",
+     "text": "**The implementing act: adopted, Official Journal text not yet confirmed.** The draft act on calculating the deduction was opened for feedback on 13 May 2026 as Ares(2026)4841230 ([EUR-Lex draft](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=PI_COM%3AAres%282026%294841230); [Commission, 13.05.2026](https://taxation-customs.ec.europa.eu/news/carbon-price-paid-third-countries-2026-05-13_en)). A Commission Secretariat-General day note records that the College adopted the act by written procedure on 5 November 2026 as C(2026) 7665 (procedure PE/2026/7507). The title is still \"Commission Implementing Regulation (EU) …/...\", and the note marks it as an act deemed signed for publication ([SEC(2026) 275/3, 05.11.2026](https://ec.europa.eu/transparency/documents-register/api/files/SEC%282026%29275?ersIds=090166e5365a76ee)). EUR-Lex holds a matching record, \"C/2026/7665 final\", form \"implementing regulation\", document date 05.11.2026 ([EUR-Lex record](https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=PI_COM:C%282026%297665)). As of 10 November 2026, however, the full text still cannot be viewed on EUR-Lex, no Official Journal or CELEX number has been found, and the Commission's [CBAM legislation page](https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-legislation-and-guidance_en) still does not list the act (the latest implementing act there remains (EU) 2026/1740). Until the authentic Official Journal text is readable, details on calculation, evidence and start of application should be read as proposals in the May 2026 draft, not as settled rules."
+    },
+    {
+     "t": "p",
+     "text": "**Ganrich interpretation: open questions.**"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Voluntary purchases.** We found no EU text that squarely addresses whether a purchase that doesn't count toward domestic compliance is a carbon price \"effectively paid\".",
+      "**The price itself.** A price set by each participant's own bid may draw extra scrutiny on the EU side.",
+      "**Compensation.** The Carbon Market Board set free allocation at 100% for the pilot ([Climate Change Presidency, KPK/2026/1, 03.09.2026](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-yonelik-karbon-piyasasi-kurulu-toplanti-kararlarina-kpk-2026-1-iliskin-duyuru-duyuru-45)). How that is netted off can't be settled until the final implementing text is readable."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "So it is too early to plan 2026 allowance purchases as a CBAM saving. The sound move is to prepare the data that would let you decide: product-level actual emissions, verification, proof of payment and independent certification. For 2026 certificate prices and the wider picture, see our [CBAM 2026 update](/en/insights/cbam-2026-update-tr-ets-cop31)."
+    },
+    {
+     "t": "h2",
+     "text": "What covered plants should do now"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**Start the İKS file.** Make sure signing authority, registry records and MRV plant data agree.",
+      "**Join the virtual trial.** Learn bids, collateral and settlement in ETSPYS without financial risk.",
+      "**Forecast your 2027 shortfall.** The extra-reserve floor makes late buying expensive.",
+      "**Tie any 2026 purchase to CBAM data.** Don't buy until your EU customers' import volumes, your actual emissions data and its verification, and the final implementing act are clear.",
+      "**Put the decision in one place.** Compliance, finance and export teams should work from the same numbers."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Our [Türkiye ETS readiness](/en/solutions/turkiye-ets-readiness) work turns these steps into a plant-level roadmap. [CBAM data readiness](/en/solutions/cbam-data-readiness) covers the EU evidence side and [measured energy retrofit](/en/solutions/measured-energy-retrofit) the abatement side. Take the [CBAM readiness check](/en/decision-lab/cbam-readiness-check) to see where you stand, and follow EU dates in our [EU regulation calendar](/en/insights/eu-regulation-calendar)."
+    },
+    {
+     "t": "h2",
+     "text": "Frequently asked questions"
+    },
+    {
+     "t": "faq",
+     "items": [
+      [
+       "When does the Türkiye ETS market start trading?",
+       "The regulation took effect on 21 October 2026. Until the primary and spot markets go live, ETSPYS runs a virtual trial with no payments. Real trading dates will be announced by the authorities."
+      ],
+      [
+       "Is a registry (İKS) account mandatory?",
+       "Yes. Covered operators must open one. It is held in the operator's name, and the operator transacts for each installation."
+      ],
+      [
+       "Do plants surrender allowances for 2026?",
+       "No. 2026 is reporting only and surrender starts with 2027 emissions. Allowances bought under the 2026 top-up mechanism don't count toward compliance either."
+      ],
+      [
+       "Will 2026 allowance purchases reduce CBAM certificates?",
+       "Not yet. Article 9 allows a deduction for a carbon price effectively paid where emissions are declared on actual values. The Commission adopted an implementing regulation on this as C(2026) 7665 on 5 November 2026 ([SEC(2026) 275/3, 05.11.2026](https://ec.europa.eu/transparency/documents-register/api/files/SEC%282026%29275?ersIds=090166e5365a76ee)), but as of 10 November 2026 the Official Journal text has not been confirmed and it is unclear whether voluntary purchases qualify."
+      ],
+      [
+       "What is the monitoring plan deadline?",
+       "27 January 2027 (Approval No. 18814 of 13 October 2026)."
+      ]
+     ]
+    },
+    {
+     "t": "p",
+     "text": "*This article is general information, not legal advice. Regulatory status checked on 10 November 2026.*"
+    },
+    {
+     "t": "sources",
+     "title": "Sources",
+     "items": [
+      "Official Gazette of Türkiye, 21.10.2026, No. 33407, Regulation on Operating the Türkiye ETS Market: [index](https://www.resmigazete.gov.tr/eskiler/2026/10/20261021.htm), [PDF](https://www.resmigazete.gov.tr/eskiler/2026/10/20261021-4.pdf). Accessed 7 November 2026.",
+      "Official Gazette of Türkiye, 27.08.2026, No. 33353, Türkiye ETS Regulation: [text](https://www.resmigazete.gov.tr/eskiler/2026/08/20260827-7.htm). Accessed 7 November 2026.",
+      "Climate Change Presidency, pilot Procedures and Principles published, 01.10.2026: [announcement](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-iliskin-usul-ve-esaslar-yayimlandi-duyuru-1045). Accessed 7 November 2026.",
+      "Climate Change Presidency, monitoring plan deadline extension, 14.10.2026: [announcement](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemi-izleme-metodolojisi-planlarinin-sunulma-suresinin-uzatilmasi-hakkinda-duyuru-1046). Accessed 7 November 2026.",
+      "Regulation (EU) 2023/956 (CBAM), consolidated text of 20.10.2025 incl. (EU) 2025/2083, Articles 3(29) and 9: [EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02023R0956-20251020). Accessed 7 November 2026.",
+      "European Commission, draft implementing act on carbon price deduction, Ares(2026)4841230, 13.05.2026: [EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=PI_COM%3AAres%282026%294841230). Accessed 7 November 2026.",
+      "European Commission, SEC(2026) 275/3, day note of decisions adopted by written procedure on 5 November 2026, entry PE/2026/7507 – C(2026) 7665: [PDF](https://ec.europa.eu/transparency/documents-register/api/files/SEC%282026%29275?ersIds=090166e5365a76ee). Accessed 10 November 2026.",
+      "EUR-Lex record, C/2026/7665 final, document date 05.11.2026 (full Official Journal text not confirmed): [record](https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=PI_COM:C%282026%297665). Accessed 10 November 2026.",
+      "Climate Change Presidency, KPK/2026/1 decisions, 03.09.2026: [announcement](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-yonelik-karbon-piyasasi-kurulu-toplanti-kararlarina-kpk-2026-1-iliskin-duyuru-duyuru-45). Accessed 7 November 2026.",
+      "European Commission, CBAM legislation and guidance: [page](https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-legislation-and-guidance_en). Accessed 10 November 2026."
+     ]
+    }
+   ]
+  },
+  "tr": {
+   "path": "icgoruler/tr-ets-piyasasi-iks-hesabi-skdm",
+   "title": "TR ETS Piyasası: İKS Hesabı, 2026 ve SKDM İndirimi",
+   "description": "TR ETS piyasa yönetmeliği yürürlükte: EPİAŞ, İKS hesabı, 2026 tamamlayıcı tahsisat mekanizması ve SKDM Madde 9 indirimine olası etkisi; tesisler için rehber.",
+   "h1": "TR ETS Piyasa Yönetmeliği: İKS Hesabı, 2026 Tamamlayıcı Tahsisat ve SKDM İndirimi",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Türkiye'nin emisyon ticaret sistemi artık yalnızca bir izleme takviminden ibaret değil; piyasa kuralları da yayımlandı. Enerji Piyasası Düzenleme Kurumu'nun (EPDK) hazırladığı \"Türkiye Emisyon Ticaret Sistemi Piyasasının İşletilmesine İlişkin Yönetmelik\", 21 Ekim 2026 tarihli ve 33407 sayılı Resmî Gazete'de yayımlanarak aynı gün yürürlüğe girdi ([Resmî Gazete, 21.10.2026](https://www.resmigazete.gov.tr/eskiler/2026/10/20261021.htm); Madde 54). Yönetmelik, tahsisatların nerede tutulacağını, piyasayı kimin işleteceğini, nasıl alınıp satılacağını ve 2026 için dikkat çekici bir geçiş mekanizmasını düzenliyor. Gerçek işlemler ise henüz başlamadı."
+    },
+    {
+     "t": "p",
+     "text": "Pilot kapsamındaki bir tesis için soru artık \"İzleme planını ne zaman sunacağız?\" sorusunu aşıyor: \"Piyasaya nasıl kaydolacağız ve 2026'da tahsisat almak AB'deki SKDM yükümlülüğümüzü azaltır mı?\" Bu yazıda iki soruyu resmî metinlere dayanarak yanıtlıyor, mevzuatı ve bizim yorumumuzu ayrı tutuyoruz."
+    },
+    {
+     "t": "h2",
+     "text": "TR ETS pilot dönemi: kısa hatırlatma"
+    },
+    {
+     "t": "p",
+     "text": "İklim Değişikliği Başkanlığı'nın 1 Ekim 2026 tarihli duyurusuna göre pilot uygulama dönemi 2026 ve 2027 sistem yıllarının emisyonlarını kapsıyor. Elektrik üretimi, çimento, demir-çelik, alüminyum ve gübre sektörlerinde belirlenen emisyon eşiğinin üzerindeki tesisler pilota dahil. 2026'da yalnızca raporlama yükümlülüğü var; tahsisat teslim yükümlülüğü ilk kez 2027 emisyonları için başlıyor. Ayrıntılar 30 Eylül 2026 tarihli ve 18626 sayılı Olur ile yayımlanan Usul ve Esaslar'da ([İklim Değişikliği Başkanlığı, 01.10.2026](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-iliskin-usul-ve-esaslar-yayimlandi-duyuru-1045))."
+    },
+    {
+     "t": "p",
+     "text": "İlk İzleme Metodolojisi Planlarının sunulma süresi, 13 Ekim 2026 tarihli ve 18814 sayılı Olur ile 27 Ocak 2027'ye uzatıldı ([İklim Değişikliği Başkanlığı, 14.10.2026](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemi-izleme-metodolojisi-planlarinin-sunulma-suresinin-uzatilmasi-hakkinda-duyuru-1046)). İzleme planı boyutunu [TR ETS pilotu izleme planı raporumuzda](/tr/icgoruler/rapor/turkiye-ets-pilotu-izleme-plani-98334c09) ele aldık; burada piyasa boyutuna odaklanıyoruz."
+    },
+    {
+     "t": "h2",
+     "text": "Piyasayı kim işletiyor, tahsisatlar nerede tutuluyor?"
+    },
+    {
+     "t": "p",
+     "text": "Yönetmeliğe göre piyasa işletmecisi Enerji Piyasaları İşletme A.Ş. (EPİAŞ). İşlemler EPİAŞ'ın işlettiği ETS Piyasası Yönetim Sistemi (ETSPYS) üzerinden yürüyor (Madde 3 ve 4). Tahsisatların ihracı, elde tutulması, transferi, iptali ve itfası İşlem Kayıt Sistemi'nde (İKS) işletme adına açılan hesaplarda kayden izleniyor; ücretsiz tahsisatlar işletme hesaplarına tesis bazında aktarılıyor (Madde 6)."
+    },
+    {
+     "t": "p",
+     "text": "Piyasa iki katmanlı:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**Birincil piyasa:** tahsisatların ihale ile ilk kez satıldığı yer. İhalede oluşan Türk lirası fiyatı Tahsisat Referans Fiyatı (TRF) olarak adlandırılıyor.",
+      "**İkincil piyasa:** spot tahsisat piyasası ve, kurulması halinde, vadeli tahsisat piyasası."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Teklifler lot üzerinden veriliyor (Madde 3 ve 12): 1 lot 100 tahsisat, 1 tahsisat 1 ton CO2 eşdeğeri. Fiyatlar TL/tCO2e cinsinden, 50 kuruş ve katları şeklinde giriliyor. Nakit takas ve teminat işlemleri, 6362 sayılı Sermaye Piyasası Kanunu'na göre kurulmuş merkezi uzlaştırma kuruluşu üzerinden yürüyor."
+    },
+    {
+     "t": "p",
+     "text": "İKS ile birincil ve spot piyasalar faaliyete geçene kadar ETSPYS'de teslimat, faturalama ve ödeme yükümlülüğü doğurmayan bir \"sanal uygulama\" yapılacak (Geçici Madde 1). Bu, ekiplerin sistemi gerçek para riskine girmeden öğrenmesi için iyi bir fırsat."
+    },
+    {
+     "t": "h2",
+     "text": "İKS hesabı nasıl açılır?"
+    },
+    {
+     "t": "p",
+     "text": "ETS kapsamındaki işletmeler İKS'de hesap açtırmak zorunda (Madde 7). Hesap işletme adına açılıyor ve işletme bağlı tesisleri adına işlem yapıyor. İşletme bilgileri İklim Değişikliği Başkanlığı'nın izleme, raporlama ve doğrulama (MRV) sisteminden ETSPYS'ye aktarılıyor; dolayısıyla MRV kayıtlarındaki hatalar piyasa kaydına da yansır."
+    },
+    {
+     "t": "p",
+     "text": "Hesap için üç adım zorunlu:"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "Merkezi uzlaştırma kuruluşu ile katılımcı anlaşması imzalamak,",
+      "ETSPYS üzerinden EPİAŞ'a başvurmak,",
+      "İKS katılım anlaşmasını imzalamak."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Başvuru dosyasında işletme kayıt formu, imza yetkililerinin yetki belgesinin aslı ya da noter onaylı sureti, Türkiye Ticaret Sicili Gazetesi örneği ve İKS katılım anlaşması yer alıyor. EPİAŞ başvuruyu, başvuru tarihini izleyen 10 iş günü içinde inceliyor; eksiklik varsa giderilmesi için 10 iş günü süre veriliyor. Eksikler süresinde tamamlanmazsa kayıt yapılmıyor (Madde 8)."
+    },
+    {
+     "t": "p",
+     "text": "Pratik sonuç: imza yetkisi, sicil kayıtları ve MRV sistemindeki tesis bilgileri tutarlı değilse yalnızca bu iki süre yaklaşık dört haftalık bir gecikme yaratabilir. Dosyayı izleme planıyla eş zamanlı hazırlamak yerinde olur."
+    },
+    {
+     "t": "h2",
+     "text": "Ek rezerv ve fiyat sınırları"
+    },
+    {
+     "t": "p",
+     "text": "Yönetmelik (Madde 19), teslim yükümlülüğünü karşılayamayan tesisler için bir \"ek rezerv\" ihalesi öngörüyor. Ek rezerv yalnızca teslim yükümlülüğü için, Karbon Piyasası Kurulu kararıyla ve her tesisin tahsisat açığıyla sınırlı kullanılabiliyor; alınan tahsisatlar doğrudan tesisin itfa hesabına gidiyor."
+    },
+    {
+     "t": "p",
+     "text": "Bu ihalede bir taban fiyat var: Kasım ayının son iş günü itibarıyla son 3 ayın birincil piyasa ağırlıklı ortalaması ile spot piyasa ağırlıklı ortalamasından yüksek olanının yüzde 50 fazlası (son 3 ayda birincil piyasa fiyatı yoksa spot ortalaması esas alınıyor). Azami fiyatı EPDK, İklim Değişikliği Başkanlığı'nın görüşünü alarak belirliyor. Bizim okumamıza göre mesaj açık: açığını son dakikada kapatmaya çalışan tesis piyasa fiyatının belirgin biçimde üzerinde öder. Tahsisat ihtiyacını erken öngörmek doğrudan paraya dönüşüyor."
+    },
+    {
+     "t": "h2",
+     "text": "2026 tamamlayıcı tahsisat fiyatı mekanizması"
+    },
+    {
+     "t": "p",
+     "text": "Geçici Madde 2, 2026 emisyonları için ayrı bir kapı açıyor. Piyasa katılımcıları tesis bazında doğrulanmış 2026 emisyonlarına eşdeğer miktarda tahsisat talep ederse tamamlayıcı tahsisat fiyatı **uygulanabilir**. Bu ihalelerde eşleşme fiyatı her katılımcının kendi alış teklifi; TRF hesaplanmıyor. Alınan tahsisatlar tesisin itfa hesabına aktarılıyor ama **yükümlülüğün yerine getirilmesinde dikkate alınmıyor** (Geçici Madde 2(3))."
+    },
+    {
+     "t": "p",
+     "text": "Metin mekanizmanın uygulanacağını değil, \"uygulanabilir\" olduğunu söylüyor; başvuru, ihraç ve ihale tarihlerini İklim Değişikliği Başkanlığı belirleyecek (Geçici Madde 2(2)). İDB'nin duyuru listesinde 7 Kasım 2026 itibarıyla bu tarihlere ilişkin bir duyuru yok. Karbon Piyasası Kurulu'nun 3 Eylül 2026'da duyurulan kararına göre ise 2026'da tamamlayıcı tahsisat fiyatının uygulanmasına yönelik yöntem geliştirilecek, fiyat mekanizması 2027 sistem yılı itibarıyla başlatılacak ([İDB, KPK/2026/1](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-yonelik-karbon-piyasasi-kurulu-toplanti-kararlarina-kpk-2026-1-iliskin-duyuru-duyuru-45)). Dolayısıyla 2026 emisyonları için bir ihalenin yapılıp yapılmayacağı ve ne zaman yapılacağı belirsiz. Teslim edilmesi gereken tahsisatlar için kalıcı bir tamamlayıcı mekanizma ise ayrıca Madde 20'de düzenleniyor."
+    },
+    {
+     "t": "p",
+     "text": "Kısacası 2026 alımı Türk mevzuatı açısından hiçbir yükümlülüğü karşılamıyor. Peki bir şirket bunu neden yapsın?"
+    },
+    {
+     "t": "p",
+     "text": "**Ganrich yorumu:** bize göre en makul gerekçe SKDM. Bunu ne yönetmelik ne de ilgili kurumlar açıkça söylüyor; bu, metnin kurgusundan çıkardığımız bir okuma."
+    },
+    {
+     "t": "h2",
+     "text": "Bu ödeme SKDM'de indirim sağlar mı?"
+    },
+    {
+     "t": "p",
+     "text": "**Mevzuat (güncel konsolide metin):** SKDM Tüzüğü ((AB) 2023/956, (AB) 2025/2083 ile değişik; EUR-Lex konsolide metni 20.10.2025) Madde 9(1)'e göre, gömülü emisyonlar **gerçek emisyonlara** göre belirlenmişse yetkili SKDM beyancısı üçüncü ülkede fiilen ödenmiş karbon fiyatı için sertifika sayısında indirim talep edebilir; o ülkedeki her türlü iade veya telafi hesaba katılır. Madde 9(2), belgelerin beyancıdan ve üçüncü ülke makamlarından bağımsız bir kişi tarafından onaylanmasını ve fiilî ödeme kanıtını istiyor. Madde 9(4)'e göre varsayılan değerlerle beyan edilen ürünlerde indirim yalnızca yıllık varsayılan karbon fiyatları üzerinden talep edilebilir. Madde 3(29) karbon fiyatını, bir emisyon ticaret sistemi kapsamında tahsisat biçiminde ödenen tutarı da kapsayacak şekilde tanımlıyor ([EUR-Lex, konsolide metin 20.10.2025](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02023R0956-20251020))."
+    },
+    {
+     "t": "p",
+     "text": "**Uygulama tüzüğü: kabul edildi, Resmî Gazete metni henüz teyit edilemedi.** İndirimin hesaplanmasına ilişkin uygulama tüzüğü taslağı 13 Mayıs 2026'da Ares(2026)4841230 numarasıyla görüşe açıldı ([EUR-Lex taslak](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=PI_COM%3AAres%282026%294841230); [Komisyon, 13.05.2026](https://taxation-customs.ec.europa.eu/news/carbon-price-paid-third-countries-2026-05-13_en)). Komisyon Genel Sekreterliği'nin günlük notuna göre Koleji, 5 Kasım 2026'da yazılı usulle bu tüzüğü C(2026) 7665 olarak kabul etti (usul PE/2026/7507). Başlık hâlâ \"Komisyon Uygulama Tüzüğü (AB) …/...\" biçiminde; not, tüzüğü yayımlanmak üzere imzalanmış sayılan işlemler arasında gösteriyor ([SEC(2026) 275/3, 05.11.2026](https://ec.europa.eu/transparency/documents-register/api/files/SEC%282026%29275?ersIds=090166e5365a76ee)). EUR-Lex'te buna uyan, \"C/2026/7665 final\" başlıklı, biçimi \"uygulama tüzüğü\", belge tarihi 05.11.2026 olan bir kayıt bulunuyor ([EUR-Lex kaydı](https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=PI_COM:C%282026%297665)). Ancak 10 Kasım 2026 itibarıyla tam metin EUR-Lex'te hâlâ görüntülenemiyor; AB Resmî Gazetesi veya CELEX numarası bulunamadı ve Komisyon'un [SKDM mevzuat sayfası](https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-legislation-and-guidance_en) tüzüğü hâlâ listelemiyor (listedeki en yeni uygulama tüzüğü (AB) 2026/1740). Nihai Resmî Gazete metni okunana kadar hesaplama, kanıt ve uygulama başlangıcına ilişkin ayrıntıları kesin kural olarak değil, Mayıs 2026 taslağının önerileri olarak okumak gerekiyor."
+    },
+    {
+     "t": "p",
+     "text": "**Ganrich yorumu: açık kalan sorular.**"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Gönüllü alımın niteliği.** Yükümlülüğe sayılmayan bir alımın \"fiilen ödenmiş karbon fiyatı\" kabul edilip edilmeyeceğini açıkça ele alan bir AB metni bulamadık.",
+      "**Fiyatın kendisi.** Fiyatın katılımcının kendi teklifiyle oluşması AB tarafında ayrıca sorgulanabilir.",
+      "**Telafi etkisi.** Karbon Piyasası Kurulu pilot dönemde ücretsiz tahsisat oranını yüzde 100 olarak belirledi ([İDB, KPK/2026/1 duyurusu, 03.09.2026](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-yonelik-karbon-piyasasi-kurulu-toplanti-kararlarina-kpk-2026-1-iliskin-duyuru-duyuru-45)). Ücretsiz tahsisatın indirim hesabında nasıl düşüleceği nihai uygulama metni okunmadan netleşmez."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Bu nedenle 2026 tahsisat alımını bugünden bir SKDM indirimi olarak planlamak erken. Doğru hamle, kararı verdirecek veriyi şimdiden hazırlamak: ürün bazında gerçek emisyon, doğrulama, ödeme kanıtı ve bağımsız onay. 2026 SKDM sertifika fiyatları ve genel tablo için [SKDM 2026 güncellememize](/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets) bakabilirsiniz."
+    },
+    {
+     "t": "h2",
+     "text": "Tesisler şimdi ne yapmalı?"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**İKS dosyasını başlatın.** Yetki belgeleri, sicil kayıtları ve MRV sistemindeki tesis bilgileri tutarlı olsun.",
+      "**Sanal uygulamaya katılın.** ETSPYS'deki deneme döneminde teklif, teminat ve uzlaştırma akışını gerçek para riskine girmeden öğrenin.",
+      "**2027 tahsisat açığınızı tahmin edin.** Ek rezerv taban fiyatı geç kalanı pahalıya getirecek biçimde kurgulanmış.",
+      "**2026 kararını SKDM verisine bağlayın.** AB müşterilerinizin ithalat hacmi, gerçek emisyon verisi ve doğrulama durumu ile uygulama tüzüğünün nihai metni netleşmeden 2026 tamamlayıcı mekanizmasından alım yapmayın.",
+      "**Kararı tek yerde toplayın.** Uyum, finans ve ihracat ekipleri aynı rakamlar üzerinden çalışmalı."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "[Türkiye ETS hazırlık hizmetimiz](/tr/cozumler/turkiye-ets-hazirligi) bu adımları tesis bazında bir yol haritasına çeviriyor. SKDM veri boyutunda [SKDM veri hazırlığı](/tr/cozumler/cbam-veri-hazirligi), emisyon azaltımı boyutunda ise [ölçüme dayalı enerji iyileştirmesi](/tr/cozumler/olcume-dayali-enerji-iyilestirmesi) devreye giriyor. Nerede durduğunuzu görmek için [SKDM hazırlık testini](/tr/karar-laboratuvari/cbam-hazirlik-testi) yapabilir, AB tarihlerini [AB mevzuat takviminde](/tr/icgoruler/ab-mevzuat-takvimi) izleyebilirsiniz."
+    },
+    {
+     "t": "h2",
+     "text": "Sıkça sorulan sorular"
+    },
+    {
+     "t": "faq",
+     "items": [
+      [
+       "TR ETS piyasası ne zaman işlemeye başlıyor?",
+       "Yönetmelik 21 Ekim 2026'da yürürlüğe girdi. Birincil ve spot piyasa faaliyete geçene kadar ETSPYS'de ödeme doğurmayan bir sanal uygulama yapılacak. Gerçek işlem tarihleri ilgili kurumlarca duyurulacak."
+      ],
+      [
+       "İKS hesabı açmak zorunlu mu?",
+       "Evet. ETS kapsamındaki işletmeler İKS'de hesap açtırmak zorunda. Hesap işletme adına açılıyor ve işletme bağlı tesisleri adına işlem yapıyor."
+      ],
+      [
+       "2026'da tahsisat teslim etmem gerekiyor mu?",
+       "Hayır. 2026'da yalnızca raporlama yükümlülüğü var; teslim yükümlülüğü 2027 emisyonları için başlıyor. 2026 tamamlayıcı mekanizmasıyla alınan tahsisatlar da yükümlülüğe sayılmıyor."
+      ],
+      [
+       "2026'da aldığım tahsisatlar SKDM'de indirim sağlar mı?",
+       "Henüz değil. Madde 9, gerçek emisyonlara dayalı beyanlarda fiilen ödenen karbon fiyatı için indirime izin veriyor. Komisyon, 5 Kasım 2026'da bu konuda C(2026) 7665 sayılı uygulama tüzüğünü kabul etti ([SEC(2026) 275/3, 05.11.2026](https://ec.europa.eu/transparency/documents-register/api/files/SEC%282026%29275?ersIds=090166e5365a76ee)); ancak 10 Kasım 2026 itibarıyla AB Resmî Gazetesi metni teyit edilemedi. Gönüllü alımların kabul edilip edilmeyeceği de netleşmedi."
+      ],
+      [
+       "İzleme planı için son tarih ne?",
+       "27 Ocak 2027 (13 Ekim 2026 tarihli ve 18814 sayılı Olur)."
+      ]
+     ]
+    },
+    {
+     "t": "p",
+     "text": "*Bu yazı genel bilgilendirme amaçlıdır, hukuki görüş değildir. Mevzuat durumu 10 Kasım 2026 itibarıyla kontrol edilmiştir.*"
+    },
+    {
+     "t": "sources",
+     "title": "Kaynaklar",
+     "items": [
+      "Resmî Gazete, 21.10.2026, Sayı 33407, Türkiye Emisyon Ticaret Sistemi Piyasasının İşletilmesine İlişkin Yönetmelik: [fihrist](https://www.resmigazete.gov.tr/eskiler/2026/10/20261021.htm), [PDF](https://www.resmigazete.gov.tr/eskiler/2026/10/20261021-4.pdf). Erişim: 7 Kasım 2026.",
+      "Resmî Gazete, 27.08.2026, Sayı 33353, Türkiye Emisyon Ticaret Sistemi Yönetmeliği: [metin](https://www.resmigazete.gov.tr/eskiler/2026/08/20260827-7.htm). Erişim: 7 Kasım 2026.",
+      "İklim Değişikliği Başkanlığı, \"TR ETS Pilot Uygulama Dönemine İlişkin Usul ve Esaslar Yayımlandı\", 01.10.2026: [duyuru](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-iliskin-usul-ve-esaslar-yayimlandi-duyuru-1045). Erişim: 7 Kasım 2026.",
+      "İklim Değişikliği Başkanlığı, izleme metodolojisi planı süre uzatımı, 14.10.2026: [duyuru](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemi-izleme-metodolojisi-planlarinin-sunulma-suresinin-uzatilmasi-hakkinda-duyuru-1046). Erişim: 7 Kasım 2026.",
+      "(AB) 2023/956 sayılı SKDM Tüzüğü, konsolide metin 20.10.2025 ((AB) 2025/2083 dahil), Madde 3(29) ve 9: [EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02023R0956-20251020). Erişim: 7 Kasım 2026.",
+      "Avrupa Komisyonu, karbon fiyatı indirimine ilişkin uygulama tüzüğü taslağı, Ares(2026)4841230, 13.05.2026: [EUR-Lex](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=PI_COM%3AAres%282026%294841230). Erişim: 7 Kasım 2026.",
+      "Avrupa Komisyonu, SEC(2026) 275/3, 5 Kasım 2026 tarihinde yazılı usulle kabul edilen kararlara ilişkin günlük not, madde PE/2026/7507 – C(2026) 7665: [PDF](https://ec.europa.eu/transparency/documents-register/api/files/SEC%282026%29275?ersIds=090166e5365a76ee). Erişim: 10 Kasım 2026.",
+      "EUR-Lex kaydı, C/2026/7665 final, belge tarihi 05.11.2026 (Resmî Gazete tam metni teyit edilemedi): [kayıt](https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=PI_COM:C%282026%297665). Erişim: 10 Kasım 2026.",
+      "İklim Değişikliği Başkanlığı, KPK/2026/1 kararlarına ilişkin duyuru, 03.09.2026: [duyuru](https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-yonelik-karbon-piyasasi-kurulu-toplanti-kararlarina-kpk-2026-1-iliskin-duyuru-duyuru-45). Erişim: 7 Kasım 2026.",
+      "Avrupa Komisyonu, SKDM mevzuat ve kılavuz sayfası: [sayfa](https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism/cbam-legislation-and-guidance_en). Erişim: 10 Kasım 2026."
+     ]
+    }
+   ]
+  }
+ },
+ {
   "key": "guideCbamDefaults",
   "solution": "solutionCbam",
   "date": "2026-11-09",

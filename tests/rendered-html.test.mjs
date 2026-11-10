@@ -1015,6 +1015,31 @@ test("publishes the UK CBAM 2027 guide in both languages with FAQ markup, sitema
   assert.match(await (await render("/tr/icgoruler")).text(), /İngiltere SKDM&#x27;si 1 Ocak 2027&#x27;de başlıyor/);
 });
 
+test("publishes the Türkiye ETS market guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
+  const pages = [
+    ["/en/insights/turkiye-ets-market-registry-cbam", "Türkiye ETS Market Rules: Registry, 2026 and CBAM", "/tr/icgoruler/tr-ets-piyasasi-iks-hesabi-skdm", /<strong>may<\/strong>/],
+    ["/tr/icgoruler/tr-ets-piyasasi-iks-hesabi-skdm", "TR ETS Piyasası: İKS Hesabı, 2026 ve SKDM İndirimi", "/en/insights/turkiye-ets-market-registry-cbam", /<strong>uygulanabilir<\/strong>/],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, body] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.match(html, body);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"Article"/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guideTrEtsMarket\.png/);
+    assert.match(html, /\/guides\/guideTrEtsMarket-(en|tr)\.webp/);
+    assert.match(html, /SEC%282026%29275/);
+    assert.match(html, /(not legal advice|hukuki görüş değildir)/);
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+  }
+  assert.match(await (await render("/en/insights")).text(), /Türkiye&#x27;s ETS Market Rules: Registry Account, 2026 Top-Up and CBAM/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /TR ETS Piyasa Yönetmeliği: İKS Hesabı, 2026 Tamamlayıcı Tahsisat ve SKDM İndirimi/);
+});
+
 test("links the CBAM actual-vs-default report from the CBAM 2026 guide and the readiness check intro", async () => {
   const pairs = [
     ["/en/insights/cbam-2026-update-tr-ets-cop31", "/en/insights/report/cbam-actual-or-default-e9f664d8"],
