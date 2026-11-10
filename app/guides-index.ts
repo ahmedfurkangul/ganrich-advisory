@@ -4,6 +4,22 @@ import type { Lang } from "./content";
 export type GuideIndexEntry = { key: string; solution: string; group?: "strategy"; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
  {
+  "key": "guideTrEtsMarket",
+  "solution": "solutionTrEts",
+  "topic": {
+   "en": "Türkiye ETS",
+   "tr": "TR ETS"
+  },
+  "en": {
+   "h1": "Türkiye's ETS Market Rules: Registry Account, 2026 Top-Up and CBAM",
+   "description": "Türkiye's ETS market regulation is in force: EPİAŞ, the İKS registry account, the 2026 top-up mechanism and what the CBAM Article 9 deduction may mean."
+  },
+  "tr": {
+   "h1": "TR ETS Piyasa Yönetmeliği: İKS Hesabı, 2026 Tamamlayıcı Tahsisat ve SKDM İndirimi",
+   "description": "TR ETS piyasa yönetmeliği yürürlükte: EPİAŞ, İKS hesabı, 2026 tamamlayıcı tahsisat mekanizması ve SKDM Madde 9 indirimine olası etkisi; tesisler için rehber."
+  }
+ },
+ {
   "key": "guideCbamDefaults",
   "solution": "solutionCbam",
   "topic": {
