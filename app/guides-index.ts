@@ -4,6 +4,22 @@ import type { Lang } from "./content";
 export type GuideIndexEntry = { key: string; solution: string; group?: "strategy"; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
  {
+  "key": "guideGreenDeal",
+  "solution": "solutionCbam",
+  "topic": {
+   "en": "Green Deal",
+   "tr": "Yeşil Mutabakat"
+  },
+  "en": {
+   "h1": "Türkiye's Green Deal Action Plan 2026–2030: what changes for exporters to the EU",
+   "description": "Türkiye's Green Deal Action Plan 2026-2030 is out. What its CBAM, TR ETS, national CBAM, Digital Product Passport and EUDR actions mean for exporters to the EU."
+  },
+  "tr": {
+   "h1": "Yeşil Mutabakat Eylem Planı (2026–2030): ihracatçı için ne değişiyor, ne değişmiyor?",
+   "description": "Yeşil Mutabakat Eylem Planı (2026-2030) yayımlandı. SKDM, Türkiye ETS, ulusal SKDM, Dijital Ürün Pasaportu ve EUDR eylemleri ihracatçı için ne anlama geliyor?"
+  }
+ },
+ {
   "key": "guideTrEtsMarket",
   "solution": "solutionTrEts",
   "topic": {

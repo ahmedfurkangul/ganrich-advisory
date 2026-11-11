@@ -1040,6 +1040,33 @@ test("publishes the Türkiye ETS market guide in both languages with FAQ markup,
   assert.match(await (await render("/tr/icgoruler")).text(), /TR ETS Piyasa Yönetmeliği: İKS Hesabı, 2026 Tamamlayıcı Tahsisat ve SKDM İndirimi/);
 });
 
+test("publishes the Green Deal Action Plan guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
+  const pages = [
+    ["/en/insights/turkiye-green-deal-action-plan-2026-2030-exporters", "Türkiye Green Deal Action Plan 2026-2030: Exporter Guide", "/tr/icgoruler/yesil-mutabakat-eylem-plani-2026-2030-ihracatci", /exports of CBAM-covered steel products to the EU fell 1\.7%/, /href="\/en\/insights\/cbam-2026-update-tr-ets-cop31"/, /Green%20Deal%20Action%20Plan%20%282026-2030%29\.pdf/],
+    ["/tr/icgoruler/yesil-mutabakat-eylem-plani-2026-2030-ihracatci", "Yeşil Mutabakat Eylem Planı 2026-2030: İhracatçıya Etkisi", "/en/insights/turkiye-green-deal-action-plan-2026-2030-exporters", /SKDM kapsamındaki çelik ürünlerinde AB(?:'|&#x27;)ye ihracat %1,7 azaldı/, /href="\/tr\/icgoruler\/skdm-2026-guncel-sertifika-fiyati-tr-ets"/, /Yeşil%20Mutabakat%20Eylem%20Planı%20%282026%20-%202030%29_Son\.pdf/],
+  ];
+  const sitemap = await (await render("/sitemap.xml")).text();
+  for (const [path, title, pair, body, link, pdf] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.match(html, body, `${path} steel figures`);
+    assert.match(html, link, `${path} internal update link`);
+    assert.match(html, pdf, `${path} encoded plan PDF`);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"Article"/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guideGreenDeal\.png/);
+    assert.match(html, /\/guides\/guideGreenDeal-(en|tr)\.webp/);
+    assert.match(html, /(not legal advice|hukuki görüş değildir)/);
+    assert.doesNotMatch(html, /Red Team|DRAFT|Visual brief|Ganrich Design Studio|not part of the article/i, `${path} has no editor notes`);
+    assert.ok(sitemap.includes(`https://ganrichadvisory.com${path}`), `${path} in sitemap`);
+  }
+  assert.match(await (await render("/en/insights")).text(), /Türkiye&#x27;s Green Deal Action Plan 2026–2030: what changes for exporters to the EU/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /Yeşil Mutabakat Eylem Planı \(2026–2030\): ihracatçı için ne değişiyor, ne değişmiyor\?/);
+});
+
 test("links the CBAM actual-vs-default report from the CBAM 2026 guide and the readiness check intro", async () => {
   const pairs = [
     ["/en/insights/cbam-2026-update-tr-ets-cop31", "/en/insights/report/cbam-actual-or-default-e9f664d8"],
