@@ -1,6 +1,7 @@
 import { notes } from './advisory-note-content';
 import { listPdfInsights } from "../db/pdf-insights";
 import { insightArticles, insightHref, Lang, routeMap } from "./content";
+import { guides, guideLastmod } from "./guides-content";
 import { absoluteUrl } from "./site-config";
 
 function escapeXml(value: string) {
@@ -65,7 +66,27 @@ export async function renderInsightFeed(lang: Lang) {
     const published = validDate('2026-10-22');
     return {published, xml: `<item><title>${escapeXml(note.title)}</title><link>${escapeXml(link)}</link><guid isPermaLink="true">${escapeXml(link)}</guid><description>${escapeXml(note.thesis)}</description><category>Decision notes</category><pubDate>${published!.toUTCString()}</pubDate></item>`};
   });
-  const feedItems = [...noteItems, ...articleItems, ...reportItems].sort((a, b) => (b.published?.getTime() ?? 0) - (a.published?.getTime() ?? 0));
+  const guideItems = guides.map((guide) => {
+    const text = guide[lang];
+    const link = absoluteUrl(`/${lang}/${routeMap[lang][guide.key]}`);
+    const published = validDate(guide.date);
+    // Sort and lastBuildDate follow a later revision. pubDate stays the publication date.
+    const updated = validDate(guideLastmod(guide)) ?? published;
+    return {
+      published: updated,
+      xml: `<item>
+      <title>${escapeXml(text.title)}</title>
+      <link>${escapeXml(link)}</link>
+      <guid isPermaLink="true">${escapeXml(link)}</guid>
+      <description>${escapeXml(text.description)}</description>
+      <author>furkangul@ganrichadvisory.com (${escapeXml(isEn ? "Ahmed Furkan Gul" : "Ahmed Furkan Gül")})</author>
+      <category>${escapeXml(guide.topic[lang])}</category>
+      ${published ? `<pubDate>${published.toUTCString()}</pubDate>` : ""}
+      <source url="${feedUrl}">${isEn ? "The Ganrich Brief" : "Ganrich Bülteni"}</source>
+    </item>`,
+    };
+  });
+  const feedItems = [...noteItems, ...articleItems, ...reportItems, ...guideItems].sort((a, b) => (b.published?.getTime() ?? 0) - (a.published?.getTime() ?? 0));
   const items = feedItems.map(item => item.xml).join("\n");
   const lastBuildDate = feedItems[0]?.published?.toUTCString() ?? new Date().toUTCString();
 

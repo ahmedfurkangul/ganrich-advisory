@@ -192,7 +192,7 @@ export const routeMap: Record<Lang, Record<string, string>> = {
   },
 };
 
-const insightRouteKeys = [
+export const insightRouteKeys = [
   "article",
   "articleTransformation",
   "articleMarketEntry",
