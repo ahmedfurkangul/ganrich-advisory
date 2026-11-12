@@ -9,7 +9,7 @@ export type GuideBlock =
   | { t: "faq"; items: [string, string][] }
   | { t: "sources"; title: string; items: string[] };
 export type GuideText = { path: string; title: string; description: string; h1: string; blocks: GuideBlock[] };
-export type Guide = { key: string; solution: string; date: string; checked: Record<Lang, string>; image: string; readingTime: Record<Lang, string>; topic: Record<Lang, string> } & Record<Lang, GuideText>;
+export type Guide = { key: string; solution: string; date: string; dateModified?: string; checked: Record<Lang, string>; image: string; readingTime: Record<Lang, string>; topic: Record<Lang, string> } & Record<Lang, GuideText>;
 
 export const guides: Guide[] = [
  {
@@ -2144,6 +2144,7 @@ export const guides: Guide[] = [
   "key": "guideCraReporting",
   "solution": "solutionCra",
   "date": "2026-11-05",
+  "dateModified": "2026-11-07",
   "checked": {
    "en": "7 November 2026",
    "tr": "7 Kasım 2026"
@@ -3529,6 +3530,7 @@ export const guides: Guide[] = [
   "key": "guideCbam2026",
   "solution": "solutionCbam",
   "date": "2026-11-03",
+  "dateModified": "2026-11-09",
   "checked": {
    "en": "3 November 2026",
    "tr": "3 Kasım 2026"
@@ -4474,3 +4476,8 @@ export const guides: Guide[] = [
 ];
 
 export const guideByKey = (key: string) => guides.find(g => g.key === key);
+
+/** Publication date, or a later content-revision date when one was set. Never `checked` or the build clock. */
+export function guideLastmod(guide: Guide): string {
+  return guide.dateModified ?? guide.date;
+}

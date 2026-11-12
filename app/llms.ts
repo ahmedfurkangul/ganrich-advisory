@@ -4,6 +4,7 @@ import { aiDecisions } from "./ai-decisions-content";
 import { servicePages, SERVICE_PAGE_KEYS } from "./service-pages-content";
 import { notes } from "./advisory-note-content";
 import { insightArticles, insightHref, Lang, routeMap } from "./content";
+import { guides, type GuideBlock } from "./guides-content";
 import { absoluteUrl } from "./site-config";
 import { solutions, solutionTags, solutionThemes } from "./solutions-content";
 import { CONTACT_EMAIL, COMPANY_LINKEDIN } from "./structured-data";
@@ -16,6 +17,34 @@ const langs: Lang[] = ["en", "tr"];
 const url = (lang: Lang, key: string) => absoluteUrl(`/${lang}/${routeMap[lang][key]}`);
 const reportUrl = (r: PdfInsight) => absoluteUrl(r.language === "en" ? `/en/insights/report/${r.slug}` : `/tr/icgoruler/rapor/${r.slug}`);
 const oneLine = (value: string) => value.replace(/\s+/g, " ").trim();
+
+function guideBlocksToMarkdown(blocks: GuideBlock[]): string[] {
+  const out: string[] = [];
+  for (const block of blocks) {
+    switch (block.t) {
+      case "h2": out.push(`### ${block.text}`, ""); break;
+      case "h3": out.push(`#### ${block.text}`, ""); break;
+      case "p": out.push(block.text, ""); break;
+      case "ul": out.push(...block.items.map(item => `- ${item}`), ""); break;
+      case "ol": out.push(...block.items.map((item, i) => `${i + 1}. ${item}`), ""); break;
+      case "table":
+        out.push(
+          `| ${block.head.join(" | ")} |`,
+          `| ${block.head.map(() => "---").join(" | ")} |`,
+          ...block.rows.map(row => `| ${row.join(" | ")} |`),
+          "",
+        );
+        break;
+      case "faq": out.push(...block.items.flatMap(([q, a]) => [`### ${q}`, "", a, ""])); break;
+      case "sources": out.push(`### ${block.title}`, "", ...block.items.map(item => `- ${item}`), ""); break;
+      default: {
+        const unreachable: never = block;
+        void unreachable;
+      }
+    }
+  }
+  return out;
+}
 
 const intro = [
   "# Ganrich Advisory",
@@ -49,6 +78,11 @@ export async function renderLlmsTxt() {
     out.push("", `## ${en ? "Insights (English)" : "İçgörüler (Türkçe)"}`, "");
     insightArticles[lang].forEach((a, i) => out.push(`- [${a.title}](${absoluteUrl(insightHref(lang, i))}): ${oneLine(a.thesis)}`));
     for (const n of notes[lang]) out.push(`- [${n.title}](${url(lang, n.key)}): ${oneLine(n.thesis)}`);
+    out.push("", `## ${en ? "Guides (English)" : "Rehber yazıları (Türkçe)"}`, "");
+    for (const guide of guides) {
+      const text = guide[lang];
+      out.push(`- [${text.title}](${url(lang, guide.key)}): ${oneLine(text.description)}`);
+    }
     const own = reports.filter(r => r.language === lang);
     if (own.length) {
       out.push("", `## ${en ? "Whitepapers and reports (English)" : "Teknik notlar ve raporlar (Türkçe)"}`, "");
@@ -90,6 +124,21 @@ export async function renderLlmsFullTxt() {
     }
     for (const n of notes[lang]) {
       out.push(`## ${n.title}`, "", `URL: ${url(lang, n.key)}`, "", n.thesis, "", ...n.sections.flatMap(([h, p]) => [`### ${h}`, "", p, ""]));
+    }
+    for (const guide of guides) {
+      const text = guide[lang];
+      out.push(
+        `## ${text.title}`,
+        "",
+        `URL: ${url(lang, guide.key)}`,
+        `${en ? "Published" : "Yayın"}: ${guide.date} · ${guide.topic[lang]}`,
+        "",
+        text.h1,
+        "",
+        text.description,
+        "",
+        ...guideBlocksToMarkdown(text.blocks),
+      );
     }
     insightArticles[lang].forEach((a, i) => {
       out.push(`## ${a.title}`, "", `URL: ${absoluteUrl(insightHref(lang, i))}`, `${en ? "Published" : "Yayın"}: ${a.date} · ${a.topic}`, "", a.thesis, "",

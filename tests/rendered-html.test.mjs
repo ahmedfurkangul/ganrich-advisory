@@ -1343,3 +1343,181 @@ test("EU rule scope scanner maps answers to known rules and is linked from the l
   assert.match(await (await render("/en/decision-lab")).text(), /href="\/en\/decision-lab\/eu-rule-scope-scanner"/);
   assert.match(await (await render("/tr")).text(), /href="\/tr\/karar-laboratuvari\/ab-kural-kapsam-tarayicisi"/);
 });
+
+function escapeFeedXml(value) {
+  return value.replace(/[<>&"']/g, (character) => ({
+    "<": "&lt;",
+    ">": "&gt;",
+    "&": "&amp;",
+    "\"": "&quot;",
+    "'": "&apos;",
+  })[character] ?? character);
+}
+
+function feedItems(xml) {
+  return [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(match => match[1]);
+}
+
+test("publishes every guide in both feeds and llms files, and dates every sitemap URL", async () => {
+  const [{ guides, guideLastmod }, { notes }, { phaseTwoInsightArticles }, { advisoryRoutes }, { updatedAt, SITEMAP_LASTMOD_EXCLUSIONS }] = await Promise.all([
+    import("../app/guides-content.ts"),
+    import("../app/advisory-note-content.ts"),
+    import("../app/phase-two-insights.ts"),
+    import("../app/advisory-routes.ts"),
+    import("../app/content-dates.ts"),
+  ]);
+
+  const today = new Date().toISOString().slice(0, 10);
+  const assertIsoDate = (value, label) => {
+    assert.match(value, /^\d{4}-\d{2}-\d{2}$/, label);
+    const [year, month, day] = value.split("-").map(Number);
+    assert.equal(new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10), value, label);
+    assert.ok(value <= today, `${label} is in the future (${value})`);
+  };
+  for (const [key, date] of Object.entries(updatedAt)) assertIsoDate(date, key);
+  for (const guide of guides) {
+    assertIsoDate(guide.date, `${guide.key} published`);
+    assertIsoDate(guideLastmod(guide), `${guide.key} lastmod`);
+    assert.ok(guideLastmod(guide) >= guide.date, guide.key);
+  }
+
+  // Pages whose paths live in content.ts rather than advisory-routes.ts.
+  const extraPaths = {
+    home: ["", ""],
+    insights: ["insights", "icgoruler"],
+    decisionLab: ["decision-lab", "karar-laboratuvari"],
+    about: ["about", "hakkimizda"],
+    contact: ["contact", "iletisim"],
+    newsletter: ["insights/regulation-updates", "icgoruler/mevzuat-bulteni"],
+    regulationCalendar: ["insights/eu-regulation-calendar", "icgoruler/ab-mevzuat-takvimi"],
+    privacy: ["privacy", "gizlilik"],
+    kvkk: ["turkiye-data-protection-notice", "kvkk-aydinlatma-metni"],
+    legal: ["legal", "yasal-bilgilendirme"],
+    decisionAtlas: ["decision-lab/decision-atlas", "karar-laboratuvari/karar-atlasi"],
+    decisionFramer: ["decision-lab/decision-framer", "karar-laboratuvari/karar-cerceveleyici"],
+    marketCompass: ["decision-lab/market-entry-compass", "karar-laboratuvari/pazara-giris-pusulasi"],
+    boardBriefBuilder: ["decision-lab/board-brief-builder", "karar-laboratuvari/yonetim-kurulu-brifingi"],
+    aiValueLens: ["decision-lab/ai-value-lens", "karar-laboratuvari/yapay-zeka-deger-mercegi"],
+    cbamCheck: ["decision-lab/cbam-readiness-check", "karar-laboratuvari/cbam-hazirlik-testi"],
+    craCheck: ["decision-lab/cra-readiness-check", "karar-laboratuvari/cra-hazirlik-testi"],
+    eudrCheck: ["decision-lab/eudr-readiness-check", "karar-laboratuvari/eudr-hazirlik-testi"],
+    scopeScanner: ["decision-lab/eu-rule-scope-scanner", "karar-laboratuvari/ab-kural-kapsam-tarayicisi"],
+    decisionLabChangelog: ["decision-lab/changelog", "karar-laboratuvari/degisiklik-gunlugu"],
+  };
+  const expected = new Map();
+  const add = (path, date) => {
+    assert.ok(!expected.has(path), `duplicate dated path ${path}`);
+    expected.set(path, date);
+  };
+  for (const guide of guides) {
+    add(`/en/${guide.en.path}`, guideLastmod(guide));
+    add(`/tr/${guide.tr.path}`, guideLastmod(guide));
+  }
+  for (const article of phaseTwoInsightArticles.en) add(`/en/insights/${article.slug}`, article.date);
+  for (const article of phaseTwoInsightArticles.tr) add(`/tr/icgoruler/${article.slug}`, article.date);
+  for (const [key, date] of Object.entries(updatedAt)) {
+    const enRoute = advisoryRoutes.en[key];
+    const trRoute = advisoryRoutes.tr[key];
+    if (enRoute && trRoute) {
+      add(`/en/${enRoute}`, date);
+      add(`/tr/${trRoute}`, date);
+    } else {
+      const pair = extraPaths[key];
+      assert.ok(pair, `${key} has no path`);
+      add(pair[0] ? `/en/${pair[0]}` : "/en", date);
+      add(pair[1] ? `/tr/${pair[1]}` : "/tr", date);
+    }
+  }
+  assert.equal(expected.size, 142);
+
+  const [enFeed, trFeed, llms, llmsFull, sitemap, greenDeal, cbamGuide, craGuide, home, solution] = await Promise.all([
+    render("/en/feed.xml").then(response => response.text()),
+    render("/tr/feed.xml").then(response => response.text()),
+    render("/llms.txt").then(response => response.text()),
+    render("/llms-full.txt").then(response => response.text()),
+    render("/sitemap.xml").then(response => response.text()),
+    render("/en/insights/turkiye-green-deal-action-plan-2026-2030-exporters").then(response => response.text()),
+    render("/en/insights/cbam-2026-update-tr-ets-cop31").then(response => response.text()),
+    render("/en/insights/cra-reporting-white-goods-refrigeration").then(response => response.text()),
+    render("/en").then(response => response.text()),
+    render("/en/solutions/cbam-data-readiness").then(response => response.text()),
+  ]);
+
+  const enItems = feedItems(enFeed);
+  const trItems = feedItems(trFeed);
+  const reportLinks = (items) => items.filter(item => /<link>[^<]*\/(?:insights\/report|icgoruler\/rapor)\//.test(item)).length;
+  assert.equal(enItems.length, notes.en.length + phaseTwoInsightArticles.en.length + guides.length + reportLinks(enItems));
+  assert.equal(trItems.length, notes.tr.length + phaseTwoInsightArticles.tr.length + guides.length + reportLinks(trItems));
+  assert.equal(guides.length, 10);
+
+  const guideNewest = guides.reduce((max, guide) => guideLastmod(guide) > max ? guideLastmod(guide) : max, "0000-00-00");
+  const articleNewest = phaseTwoInsightArticles.en.reduce((max, article) => article.date > max ? article.date : max, "0000-00-00");
+  const noteDate = "2026-10-22";
+  const feedNewest = [guideNewest, articleNewest, noteDate].reduce((max, date) => date > max ? date : max);
+  for (const [feed, reports] of [[enFeed, reportLinks(enItems)], [trFeed, reportLinks(trItems)]]) {
+    const lastBuild = feed.match(/<lastBuildDate>([^<]+)<\/lastBuildDate>/)?.[1];
+    assert.ok(lastBuild, "lastBuildDate");
+    assert.ok(new Date(lastBuild).getTime() <= Date.now(), lastBuild);
+    if (reports === 0) assert.equal(lastBuild, new Date(`${feedNewest}T12:00:00Z`).toUTCString());
+  }
+
+  for (const guide of guides) {
+    for (const [feed, lang] of [[enFeed, "en"], [trFeed, "tr"]]) {
+      const path = `/${lang}/${guide[lang].path}`;
+      const link = `https://ganrichadvisory.com${path}`;
+      const item = feedItems(feed).find(block => block.includes(`<link>${link}</link>`));
+      assert.ok(item, `${path} in ${lang} feed`);
+      assert.ok(item.includes(`<title>${escapeFeedXml(guide[lang].title)}</title>`), `${path} title`);
+      assert.ok(item.includes(`<description>${escapeFeedXml(guide[lang].description)}</description>`), `${path} description`);
+      assert.ok(item.includes(`<pubDate>${new Date(`${guide.date}T12:00:00Z`).toUTCString()}</pubDate>`), `${path} pubDate`);
+      assert.ok(llms.includes(`[${guide[lang].title}](${link})`), `${path} in llms.txt`);
+      assert.ok(llms.includes(guide[lang].description), `${path} description in llms.txt`);
+      assert.ok(llmsFull.includes(`URL: ${link}`), `${path} in llms-full.txt`);
+      assert.ok(llmsFull.includes(guide[lang].h1), `${path} body in llms-full.txt`);
+      assert.ok(llmsFull.includes(`${lang === "en" ? "Published" : "Yayın"}: ${guide.date}`), `${path} publication date in llms-full.txt`);
+    }
+  }
+
+  const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
+  assert.equal(blocks.length, 142);
+  const seen = new Set();
+  const excluded = new Set(SITEMAP_LASTMOD_EXCLUSIONS);
+  for (const block of blocks) {
+    const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
+    assert.ok(loc, block.slice(0, 80));
+    const path = new URL(loc).pathname;
+    assert.ok(!seen.has(path), `duplicate sitemap URL ${path}`);
+    seen.add(path);
+    const value = block.match(/<lastmod>([^<]*)<\/lastmod>/)?.[1];
+    if (!value) {
+      assert.ok(excluded.has(path), `${path} has no lastmod and is not in SITEMAP_LASTMOD_EXCLUSIONS`);
+      continue;
+    }
+    assert.ok(!excluded.has(path), `${path} is excluded but still has lastmod`);
+    assertIsoDate(value.slice(0, 10), path);
+    assert.ok(new Date(value).getTime() <= Date.now(), value);
+    assert.equal(value, expected.get(path), `${path} lastmod`);
+  }
+  for (const path of expected.keys()) assert.ok(seen.has(path), `${path} missing from sitemap`);
+  for (const path of excluded) assert.ok(seen.has(path), `${path} is excluded but not in the sitemap`);
+
+  const dated = (path) => blocks.find(block => block.includes(`https://ganrichadvisory.com${path}</loc>`)).match(/<lastmod>([^<]+)/)[1];
+  assert.ok(dated("/en/insights") >= dated("/en/insights/turkiye-green-deal-action-plan-2026-2030-exporters"));
+  assert.ok(dated("/en/solutions") >= dated("/en/solutions/cbam-data-readiness"));
+  assert.ok(dated("/en/decision-lab") >= dated("/en/decision-lab/eu-rule-scope-scanner"));
+
+  // Visible publication dates stay the editorial date. JSON-LD dateModified follows the revision.
+  assert.match(greenDeal, /<time dateTime="2026-11-11">/);
+  assert.match(greenDeal, /"datePublished":"2026-11-11"/);
+  assert.match(greenDeal, /"dateModified":"2026-11-11"/);
+  assert.match(cbamGuide, /<time dateTime="2026-11-03">/);
+  assert.match(cbamGuide, /"datePublished":"2026-11-03"/);
+  assert.match(cbamGuide, /"dateModified":"2026-11-09"/);
+  assert.match(craGuide, /<time dateTime="2026-11-05">/);
+  assert.match(craGuide, /"datePublished":"2026-11-05"/);
+  assert.match(craGuide, /"dateModified":"2026-11-07"/);
+  assert.match(home, /"dateModified":"2026-11-09"/);
+  assert.match(solution, /"dateModified":"2026-11-09"/);
+  assert.match(greenDeal, /rel="canonical" href="https:\/\/ganrichadvisory\.com\/en\/insights\/turkiye-green-deal-action-plan-2026-2030-exporters"/);
+  assert.match(greenDeal, /hrefLang="tr"/);
+});
