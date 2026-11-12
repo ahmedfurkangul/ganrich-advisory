@@ -1358,13 +1358,11 @@ function feedItems(xml) {
   return [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(match => match[1]);
 }
 
-test("publishes every guide in both feeds and llms files, and dates every sitemap URL", async () => {
-  const [{ guides, guideLastmod }, { notes }, { phaseTwoInsightArticles }, { advisoryRoutes }, { updatedAt, SITEMAP_LASTMOD_EXCLUSIONS }] = await Promise.all([
+test("publishes every guide in both feeds and llms files, and dates only editorially dated sitemap URLs", async () => {
+  const [{ guides, guideLastmod }, { notes }, { phaseTwoInsightArticles }] = await Promise.all([
     import("../app/guides-content.ts"),
     import("../app/advisory-note-content.ts"),
     import("../app/phase-two-insights.ts"),
-    import("../app/advisory-routes.ts"),
-    import("../app/content-dates.ts"),
   ]);
 
   const today = new Date().toISOString().slice(0, 10);
@@ -1374,36 +1372,12 @@ test("publishes every guide in both feeds and llms files, and dates every sitema
     assert.equal(new Date(Date.UTC(year, month - 1, day)).toISOString().slice(0, 10), value, label);
     assert.ok(value <= today, `${label} is in the future (${value})`);
   };
-  for (const [key, date] of Object.entries(updatedAt)) assertIsoDate(date, key);
   for (const guide of guides) {
     assertIsoDate(guide.date, `${guide.key} published`);
     assertIsoDate(guideLastmod(guide), `${guide.key} lastmod`);
     assert.ok(guideLastmod(guide) >= guide.date, guide.key);
   }
 
-  // Pages whose paths live in content.ts rather than advisory-routes.ts.
-  const extraPaths = {
-    home: ["", ""],
-    insights: ["insights", "icgoruler"],
-    decisionLab: ["decision-lab", "karar-laboratuvari"],
-    about: ["about", "hakkimizda"],
-    contact: ["contact", "iletisim"],
-    newsletter: ["insights/regulation-updates", "icgoruler/mevzuat-bulteni"],
-    regulationCalendar: ["insights/eu-regulation-calendar", "icgoruler/ab-mevzuat-takvimi"],
-    privacy: ["privacy", "gizlilik"],
-    kvkk: ["turkiye-data-protection-notice", "kvkk-aydinlatma-metni"],
-    legal: ["legal", "yasal-bilgilendirme"],
-    decisionAtlas: ["decision-lab/decision-atlas", "karar-laboratuvari/karar-atlasi"],
-    decisionFramer: ["decision-lab/decision-framer", "karar-laboratuvari/karar-cerceveleyici"],
-    marketCompass: ["decision-lab/market-entry-compass", "karar-laboratuvari/pazara-giris-pusulasi"],
-    boardBriefBuilder: ["decision-lab/board-brief-builder", "karar-laboratuvari/yonetim-kurulu-brifingi"],
-    aiValueLens: ["decision-lab/ai-value-lens", "karar-laboratuvari/yapay-zeka-deger-mercegi"],
-    cbamCheck: ["decision-lab/cbam-readiness-check", "karar-laboratuvari/cbam-hazirlik-testi"],
-    craCheck: ["decision-lab/cra-readiness-check", "karar-laboratuvari/cra-hazirlik-testi"],
-    eudrCheck: ["decision-lab/eudr-readiness-check", "karar-laboratuvari/eudr-hazirlik-testi"],
-    scopeScanner: ["decision-lab/eu-rule-scope-scanner", "karar-laboratuvari/ab-kural-kapsam-tarayicisi"],
-    decisionLabChangelog: ["decision-lab/changelog", "karar-laboratuvari/degisiklik-gunlugu"],
-  };
   const expected = new Map();
   const add = (path, date) => {
     assert.ok(!expected.has(path), `duplicate dated path ${path}`);
@@ -1415,20 +1389,8 @@ test("publishes every guide in both feeds and llms files, and dates every sitema
   }
   for (const article of phaseTwoInsightArticles.en) add(`/en/insights/${article.slug}`, article.date);
   for (const article of phaseTwoInsightArticles.tr) add(`/tr/icgoruler/${article.slug}`, article.date);
-  for (const [key, date] of Object.entries(updatedAt)) {
-    const enRoute = advisoryRoutes.en[key];
-    const trRoute = advisoryRoutes.tr[key];
-    if (enRoute && trRoute) {
-      add(`/en/${enRoute}`, date);
-      add(`/tr/${trRoute}`, date);
-    } else {
-      const pair = extraPaths[key];
-      assert.ok(pair, `${key} has no path`);
-      add(pair[0] ? `/en/${pair[0]}` : "/en", date);
-      add(pair[1] ? `/tr/${pair[1]}` : "/tr", date);
-    }
-  }
-  assert.equal(expected.size, 142);
+  // Only guides and legacy articles carry an editorial date; every other page omits lastmod.
+  assert.equal(expected.size, 32);
 
   const [enFeed, trFeed, llms, llmsFull, sitemap, greenDeal, cbamGuide, craGuide, home, solution] = await Promise.all([
     render("/en/feed.xml").then(response => response.text()),
@@ -1481,7 +1443,6 @@ test("publishes every guide in both feeds and llms files, and dates every sitema
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
   assert.equal(blocks.length, 142);
   const seen = new Set();
-  const excluded = new Set(SITEMAP_LASTMOD_EXCLUSIONS);
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
     assert.ok(loc, block.slice(0, 80));
@@ -1490,21 +1451,20 @@ test("publishes every guide in both feeds and llms files, and dates every sitema
     seen.add(path);
     const value = block.match(/<lastmod>([^<]*)<\/lastmod>/)?.[1];
     if (!value) {
-      assert.ok(excluded.has(path), `${path} has no lastmod and is not in SITEMAP_LASTMOD_EXCLUSIONS`);
+      assert.ok(!expected.has(path), `${path} has an editorial date but no lastmod`);
       continue;
     }
-    assert.ok(!excluded.has(path), `${path} is excluded but still has lastmod`);
     assertIsoDate(value.slice(0, 10), path);
     assert.ok(new Date(value).getTime() <= Date.now(), value);
     assert.equal(value, expected.get(path), `${path} lastmod`);
   }
   for (const path of expected.keys()) assert.ok(seen.has(path), `${path} missing from sitemap`);
-  for (const path of excluded) assert.ok(seen.has(path), `${path} is excluded but not in the sitemap`);
-
-  const dated = (path) => blocks.find(block => block.includes(`https://ganrichadvisory.com${path}</loc>`)).match(/<lastmod>([^<]+)/)[1];
-  assert.ok(dated("/en/insights") >= dated("/en/insights/turkiye-green-deal-action-plan-2026-2030-exporters"));
-  assert.ok(dated("/en/solutions") >= dated("/en/solutions/cbam-data-readiness"));
-  assert.ok(dated("/en/decision-lab") >= dated("/en/decision-lab/eu-rule-scope-scanner"));
+  assert.equal(blocks.filter(block => block.includes("<lastmod>")).length, 32);
+  for (const path of ["/en", "/tr", "/en/solutions", "/en/solutions/cbam-data-readiness", "/en/decision-lab", "/en/insights"]) {
+    const block = blocks.find(item => item.includes(`https://ganrichadvisory.com${path}</loc>`));
+    assert.ok(block, `${path} in sitemap`);
+    assert.ok(!block.includes("<lastmod>"), `${path} has no editorial date and must omit lastmod`);
+  }
 
   // Visible publication dates stay the editorial date. JSON-LD dateModified follows the revision.
   assert.match(greenDeal, /<time dateTime="2026-11-11">/);
@@ -1516,8 +1476,8 @@ test("publishes every guide in both feeds and llms files, and dates every sitema
   assert.match(craGuide, /<time dateTime="2026-11-05">/);
   assert.match(craGuide, /"datePublished":"2026-11-05"/);
   assert.match(craGuide, /"dateModified":"2026-11-07"/);
-  assert.match(home, /"dateModified":"2026-11-09"/);
-  assert.match(solution, /"dateModified":"2026-11-09"/);
+  assert.doesNotMatch(home, /"dateModified"/);
+  assert.doesNotMatch(solution, /"dateModified"/);
   assert.match(greenDeal, /rel="canonical" href="https:\/\/ganrichadvisory\.com\/en\/insights\/turkiye-green-deal-action-plan-2026-2030-exporters"/);
   assert.match(greenDeal, /hrefLang="tr"/);
 });

@@ -1,6 +1,6 @@
 import { advisoryMeta } from "../../advisory-meta";
 import { guideByKey } from "../../guides-content";
-import { pathLastModified } from "../../content-updated";
+import { routeLastModified } from "../../content-updated";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import Site from "../../site";
@@ -199,7 +199,7 @@ export default async function LocalizedPage({ params }: Props) {
       ? { name: lang === "en" ? "Decision Lab" : "Karar Laboratuvarı", url: absoluteUrl(`/${lang}/${routeMap[lang].decisionLab}`) }
       : breadcrumbParent(lang, kind);
   const description = article?.thesis ?? category?.description ?? (advisoryMeta(lang, kind) ?? metaCopy[lang][kind as keyof typeof metaCopy.en] ?? metaCopy[lang].home)[1];
-  const modified = pathLastModified(kind, `/${lang}${route ? `/${route}` : ""}`);
+  const modified = routeLastModified(kind);
   const socialCard = absoluteUrl(article ? `/og/${lang}/article-${article.slug}.png` : `/og/${lang}/${category ? category.key : kind.startsWith("solution") || kind.startsWith("service") || kind.startsWith("guide") || kind === "sampleWork" ? kind : kind in metaCopy[lang] ? kind : "home"}.png`);
   const breadcrumbItems = [
     { "@type": "ListItem", position: 1, name: lang === "en" ? "Home" : "Ana sayfa", item: absoluteUrl(`/${lang}`) },
