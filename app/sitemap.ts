@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { isServicePageKey } from "./service-page-index";
 import { Lang, routeMap } from "./content";
-import { pathLastModified } from "./content-updated";
+import { routeLastModified } from "./content-updated";
 import { absoluteUrl } from "./site-config";
 
 // Redirected addresses stay out of the sitemap.
@@ -29,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const isOffering = key === "solutions" || key.startsWith("solution") || key.startsWith("service") || key === "aiDecisions" || isServicePageKey(key) || key === "expertise";
     return {
       url: absoluteUrl(path),
-      lastModified: pathLastModified(key, path),
+      lastModified: routeLastModified(key),
       changeFrequency: isArticle || isCategory || key === "insights" || key === "solutions" ? "weekly" as const : "monthly" as const,
       priority: key === "home" ? 1 : isOffering || isArticle ? .8 : isCategory || key === "insights" ? .75 : .7,
       alternates: {
