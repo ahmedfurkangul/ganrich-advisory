@@ -1419,7 +1419,8 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   for (const [feed, reports] of [[enFeed, reportLinks(enItems)], [trFeed, reportLinks(trItems)]]) {
     const lastBuild = feed.match(/<lastBuildDate>([^<]+)<\/lastBuildDate>/)?.[1];
     assert.ok(lastBuild, "lastBuildDate");
-    assert.ok(new Date(lastBuild).getTime() <= Date.now(), lastBuild);
+    // Date-only editorial values are stamped at noon UTC, so a same-day revision is not a future date.
+    assert.ok(new Date(lastBuild).toISOString().slice(0, 10) <= today, lastBuild);
     if (reports === 0) assert.equal(lastBuild, new Date(`${feedNewest}T12:00:00Z`).toUTCString());
   }
 
@@ -1472,7 +1473,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   assert.match(greenDeal, /"dateModified":"2026-11-11"/);
   assert.match(cbamGuide, /<time dateTime="2026-11-03">/);
   assert.match(cbamGuide, /"datePublished":"2026-11-03"/);
-  assert.match(cbamGuide, /"dateModified":"2026-11-09"/);
+  assert.match(cbamGuide, /"dateModified":"2026-11-13"/);
   assert.match(craGuide, /<time dateTime="2026-11-05">/);
   assert.match(craGuide, /"datePublished":"2026-11-05"/);
   assert.match(craGuide, /"dateModified":"2026-11-07"/);

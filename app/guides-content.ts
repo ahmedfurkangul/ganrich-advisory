@@ -3530,7 +3530,7 @@ export const guides: Guide[] = [
   "key": "guideCbam2026",
   "solution": "solutionCbam",
   "date": "2026-11-03",
-  "dateModified": "2026-11-09",
+  "dateModified": "2026-11-13",
   "checked": {
    "en": "3 November 2026",
    "tr": "3 Kasım 2026"
@@ -3550,6 +3550,10 @@ export const guides: Guide[] = [
    "description": "CBAM 2026 for Turkish producers: Q1–Q3 certificate prices, the 30 Sep 2027 declaration, verification, the 50-tonne rule and how the new TR ETS pilot fits in.",
    "h1": "CBAM 2026 update: what Turkish producers should know before COP31 in Antalya",
    "blocks": [
+    {
+     "t": "p",
+     "text": "12 November 2026: The Court of Justice of the European Union dismissed Poland's action for annulment in Case C-512/23 against the CBAM Regulation (EU) 2023/956 (Court of Justice, press release No 163/26, 12 Nov 2026)."
+    },
     {
      "t": "p",
      "text": "From 9 to 20 November 2026, Antalya hosts COP31, the UN Climate Change Conference (UNFCCC, accessed 3 Nov 2026). Carbon pricing will be in the air. For Turkish exporters of steel, aluminium, cement and fertilisers, though, the most concrete carbon price is not one being negotiated in Antalya. It is the EU's CBAM certificate price, and three of its four 2026 quarters are already published."
@@ -3789,7 +3793,8 @@ export const guides: Guide[] = [
       "T.C. Ticaret Bakanlığı, \"AB SKDM Hakkında Genel Bilgiler ve Uygulama Mevzuatı\": https://ticaret.gov.tr/dis-iliskiler/yesil-mutabakat/sinirda-karbon-duzenleme-mekanizmalari/avrupa-birligi-sinirda-karbon-duzenleme-mekanizmasi/ab-skdm-hakkinda-genel-bilgiler-ve-uygulama-mevzuati",
       "T.C. Ticaret Bakanlığı, \"Ticaret Bakanı Ömer Bolat, Steel Networking Summits 2026'da Konuştu\", 26 Oct 2026: https://ticaret.gov.tr/haberler/ticaret-bakani-omer-bolat-steel-networking-summits-2026da-konustu",
       "Resmî Gazete, Türkiye Emisyon Ticaret Sistemi Yönetmeliği, 27 Aug 2026, No. 33353: https://www.resmigazete.gov.tr/eskiler/2026/08/20260827-7.htm",
-      "İklim Değişikliği Başkanlığı, \"TR ETS Pilot Uygulama Dönemine İlişkin Usul ve Esaslar Yayımlandı\", 1 Oct 2026: https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-iliskin-usul-ve-esaslar-yayimlandi-duyuru-1045"
+      "İklim Değişikliği Başkanlığı, \"TR ETS Pilot Uygulama Dönemine İlişkin Usul ve Esaslar Yayımlandı\", 1 Oct 2026: https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-iliskin-usul-ve-esaslar-yayimlandi-duyuru-1045",
+      "Court of Justice of the European Union, Press release No 163/26, Luxembourg, 12 November 2026, \"Greenhouse gas emissions: the Court dismisses seven actions brought by Poland against various measures of the 'Fit for 55' legislative package\", including Case C-512/23 (CBAM Regulation (EU) 2023/956): https://curia.europa.eu/site/upload/docs/application/pdf/2026-11/cp260163en.pdf"
      ]
     }
    ]
@@ -3800,6 +3805,10 @@ export const guides: Guide[] = [
    "description": "SKDM 2026'da neler değişti? 1.-3. çeyrek sertifika fiyatları, 30 Eylül 2027 beyanı, doğrulama, 50 ton eşiği ve yeni TR ETS pilot dönemi ihracatçıya tek yazıda.",
    "h1": "SKDM 2026 güncellemesi: COP31 öncesinde Türk sanayicisinin bilmesi gerekenler",
    "blocks": [
+    {
+     "t": "p",
+     "text": "12 Kasım 2026: AB Adalet Divanı, Polonya'nın SKDM Tüzüğü'ne ((AB) 2023/956) karşı açtığı C-512/23 sayılı iptal davasını reddetti (AB Adalet Divanı, basın açıklaması No 163/26, 12 Kasım 2026)."
+    },
     {
      "t": "p",
      "text": "9-20 Kasım 2026'da Antalya, BM İklim Değişikliği Konferansı COP31'e ev sahipliği yapıyor (UNFCCC, erişim 3 Kasım 2026). Karbon fiyatlaması bu iki hafta boyunca gündemin merkezinde olacak. Ne var ki çelik, alüminyum, çimento ve gübre ihracatçısı için en somut karbon fiyatı Antalya'daki müzakerelerden çıkmayacak; o fiyat, AB'nin SKDM sertifika fiyatı. Üstelik 2026'nın dört çeyreğinden üçünün fiyatı açıklandı bile."
@@ -4039,7 +4048,8 @@ export const guides: Guide[] = [
       "T.C. Ticaret Bakanlığı, \"AB SKDM Hakkında Genel Bilgiler ve Uygulama Mevzuatı\": https://ticaret.gov.tr/dis-iliskiler/yesil-mutabakat/sinirda-karbon-duzenleme-mekanizmalari/avrupa-birligi-sinirda-karbon-duzenleme-mekanizmasi/ab-skdm-hakkinda-genel-bilgiler-ve-uygulama-mevzuati",
       "T.C. Ticaret Bakanlığı, Bakan Bolat'ın Steel Networking Summits 2026 konuşması, 26 Ekim 2026: https://ticaret.gov.tr/haberler/ticaret-bakani-omer-bolat-steel-networking-summits-2026da-konustu",
       "Resmî Gazete, Türkiye Emisyon Ticaret Sistemi Yönetmeliği, 27 Ağustos 2026, sayı 33353: https://www.resmigazete.gov.tr/eskiler/2026/08/20260827-7.htm",
-      "İklim Değişikliği Başkanlığı, TR ETS pilot dönem usul ve esasları duyurusu, 1 Ekim 2026: https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-iliskin-usul-ve-esaslar-yayimlandi-duyuru-1045"
+      "İklim Değişikliği Başkanlığı, TR ETS pilot dönem usul ve esasları duyurusu, 1 Ekim 2026: https://www.iklim.gov.tr/tr-ets-pilot-uygulama-donemine-iliskin-usul-ve-esaslar-yayimlandi-duyuru-1045",
+      "Avrupa Birliği Adalet Divanı, basın açıklaması No 163/26, Lüksemburg, 12 Kasım 2026, \"Greenhouse gas emissions: the Court dismisses seven actions brought by Poland against various measures of the 'Fit for 55' legislative package\", C-512/23 sayılı dava ((AB) 2023/956 sayılı SKDM Tüzüğü) dahil: https://curia.europa.eu/site/upload/docs/application/pdf/2026-11/cp260163en.pdf"
      ]
     }
    ]
