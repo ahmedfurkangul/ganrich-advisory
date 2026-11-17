@@ -4059,9 +4059,10 @@ export const guides: Guide[] = [
   "key": "guideCraStandards",
   "solution": "solutionCra",
   "date": "2026-11-03",
+  "dateModified": "2026-11-17",
   "checked": {
-   "en": "3 November 2026",
-   "tr": "3 Kasım 2026"
+   "en": "17 November 2026",
+   "tr": "17 Kasım 2026"
   },
   "image": "guideCraStandards",
   "readingTime": {
@@ -4107,8 +4108,12 @@ export const guides: Guide[] = [
      "text": "The first two dates have passed. According to Standards Drift, a standards-tracking site, as at 30 October 2026 no harmonised standard had been cited in the Official Journal for the CRA, ETSI had 18 work items (EN 304 617 to EN 304 642), and CEN-CENELEC's prEN 40000-1-1 and -1-2 had been at formal vote since 1 October 2026 (Standards Drift, 2 Nov 2026). We have not independently verified those status points; the deadline figures in that piece match the Commission's documents."
     },
     {
+     "t": "p",
+     "text": "**Update, 17 November 2026:** CEN-CENELEC ratified EN 40000-1-1 and EN 40000-1-2 on 2 November 2026. Neither has been cited in the Official Journal, so neither yet gives a presumption of conformity under Article 27(1) (CEN-CENELEC project pages, accessed 17 Nov 2026)."
+    },
+    {
      "t": "h2",
-     "text": "The new deadlines: agreed by Member States, not yet adopted"
+     "text": "The new deadlines: adopted on 10 November 2026"
     },
     {
      "t": "p",
@@ -4129,6 +4134,10 @@ export const guides: Guide[] = [
     {
      "t": "p",
      "text": "On 13 October 2026 the committee gave a positive opinion: 26 Member States in favour, none against, one abstention (voting sheet, registered 28 October 2026). A positive opinion is not adoption. On 3 November 2026 the register showed no adopted act."
+    },
+    {
+     "t": "p",
+     "text": "**Update, 17 November 2026:** The Commission adopted the amendment on 10 November 2026 (Implementing Decision C(2026) 7861). It extends the deadlines for items 1 and 15 and for items 16 to 41 by three months, to the dates listed above; items 2 to 14 stay at 30 October 2027. Under its Article 2, the amendment stops applying if CEN, CENELEC or ETSI indicate within a month of receiving it that they do not accept it."
     },
     {
      "t": "p",
@@ -4225,7 +4234,7 @@ export const guides: Guide[] = [
       "**Map Annex I** to your design, tests and processes, product by product.",
       "**Write the technical documentation as if no standard will arrive in time,** following Annex VII, point 5.",
       "**For class I and above, contact notified bodies** and plan for a third-party assessment.",
-      "**Track the dates:** 30 November 2026 and 31 January 2027 for the standards organisations, if the amendment is adopted; and 11 December 2027 for the CRA itself."
+      "**Track the dates:** 30 November 2026 and 31 January 2027 for the standards organisations, under the amendment adopted on 10 November 2026; and 11 December 2027 for the CRA itself."
      ]
     },
     {
@@ -4241,15 +4250,15 @@ export const guides: Guide[] = [
      "items": [
       [
        "Are there harmonised standards for the CRA yet?",
-       "According to Standards Drift (2 Nov 2026), none had been cited in the Official Journal as at 30 October 2026. Only cited standards give a presumption of conformity (Art. 27(1))."
+       "CEN-CENELEC ratified EN 40000-1-1 and EN 40000-1-2 on 2 November 2026, but as at 17 November 2026 neither has been cited in the Official Journal. Only cited standards give a presumption of conformity (Art. 27(1))."
       ],
       [
        "Did the CRA deadlines move?",
-       "No. The CRA applies from 11 December 2027; reporting has applied since 11 September 2026. Only the deadlines for the standards organisations are being amended, and that amendment is not yet adopted."
+       "No. The CRA applies from 11 December 2027; reporting has applied since 11 September 2026. Only the deadlines for the standards organisations changed, by a Commission decision of 10 November 2026."
       ],
       [
-       "What are the proposed new standards deadlines?",
-       "30 November 2026 for items 1 and 15, and 31 January 2027 for items 16 to 41; items 2 to 14 stay at 30 October 2027 (draft, positive committee opinion 13 Oct 2026)."
+       "What are the new standards deadlines?",
+       "30 November 2026 for items 1 and 15, and 31 January 2027 for items 16 to 41; items 2 to 14 stay at 30 October 2027 (Implementing Decision C(2026) 7861, adopted 10 Nov 2026)."
       ],
       [
        "Can we self-assess without a harmonised standard?",
@@ -4263,13 +4272,15 @@ export const guides: Guide[] = [
     },
     {
      "t": "sources",
-     "title": "Sources (accessed 3 Nov 2026)",
+     "title": "Sources (accessed 3 Nov 2026; updates checked 17 Nov 2026)",
      "items": [
       "Regulation (EU) 2024/2847 (Cyber Resilience Act), OJ L, 20.11.2024 (Art. 14, 27, 32, 69, 71; Annex VII): https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng",
       "European Commission, Implementing Decision C(2025) 618 of 3 Feb 2025 (standardisation request, Annex I): https://ec.europa.eu/transparency/documents-register/api/files/C%282025%29618%5F1/de00000001069729?rendition=false",
       "Comitology register, CMTD(2026)1607, Committee on Standards: draft implementing decision (Ares(2026)9002280, 23 Sep 2026) and voting sheet (Ares(2026)10140870, 28 Oct 2026): https://ec.europa.eu/transparency/comitology-register/screen/documents/D118113/1?lang=en (draft; voting sheet ref. V118783/01)",
       "European Commission, Cyber Resilience Act standardisation (last update 31 Jul 2026): https://digital-strategy.ec.europa.eu/en/policies/cra-standardisation",
       "European Commission, Harmonised standards: https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards_en",
+      "European Commission, Implementing Decision C(2026) 7861 of 10 Nov 2026 amending C(2025) 618 (Annex I replaced; Art. 2): https://ec.europa.eu/transparency/documents-register/detail?ref=C(2026)7861&lang=en",
+      "CEN-CENELEC, project pages for EN 40000-1-1:2026 and EN 40000-1-2:2026 (date of ratification 2 Nov 2026), via CEN/CLC/JTC 13 published standards: https://standards.cencenelec.eu/ords/f?p=205:22:::::FSP_ORG_ID,FSP_LANG_ID:2307986,25",
       "Secondary: Standards Drift, \"Cyber Resilience Act: the second harmonised standards deadline (30 October 2026) has passed\", 2 Nov 2026: https://standardsdrift.com/analysis/the-second-cra-deadline/"
      ]
     }
@@ -4310,8 +4321,12 @@ export const guides: Guide[] = [
      "text": "İlk iki tarih geçti. Standartları takip eden Standards Drift sitesine göre 30 Ekim 2026 itibarıyla CRA için AB Resmî Gazetesi'nde atıf yapılmış uyumlaştırılmış standart yoktu; ETSI'de 18 iş kalemi (EN 304 617 – EN 304 642) bulunuyordu; CEN-CENELEC'in prEN 40000-1-1 ve -1-2 taslakları 1 Ekim 2026'dan beri resmî oylamadaydı (Standards Drift, 2 Kasım 2026). Bu durum bilgilerini bağımsız olarak doğrulamadık; yazıdaki tarih bilgileri ise Komisyon belgeleriyle örtüşüyor."
     },
     {
+     "t": "p",
+     "text": "**Güncelleme, 17 Kasım 2026:** CEN-CENELEC, EN 40000-1-1 ve EN 40000-1-2 standartlarını 2 Kasım 2026'da onayladı. İkisinin de atfı henüz AB Resmî Gazetesi'nde yayımlanmadı; bu nedenle md. 27(1) kapsamındaki uygunluk varsayımı henüz doğmuyor (CEN-CENELEC proje sayfaları, erişim 17 Kasım 2026)."
+    },
+    {
      "t": "h2",
-     "text": "Yeni tarihler: üye devletlerden olumlu görüş var, kabul henüz yok"
+     "text": "Yeni tarihler: 10 Kasım 2026'da kabul edildi"
     },
     {
      "t": "p",
@@ -4335,6 +4350,10 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
+     "text": "**Güncelleme, 17 Kasım 2026:** Komisyon değişikliği 10 Kasım 2026'da kabul etti (C(2026) 7861 sayılı Uygulama Kararı). Karar, 1 ve 15 numaralı kalemlerle 16-41 numaralı kalemlerin tarihlerini üç ay uzatarak yukarıdaki tarihlere çekiyor; 2-14 numaralı kalemler 30 Ekim 2027'de kalıyor. Kararın 2. maddesine göre CEN, CENELEC ya da ETSI kararı aldıktan sonra bir ay içinde değişikliği kabul etmediklerini bildirirse karar uygulanmayacak."
+    },
+    {
+     "t": "p",
      "text": "Planlama için iki nokta önemli. Bu tarihler standardizasyon kuruluşlarının standartları kabul etmesine ilişkin; AB Resmî Gazetesi'nde yayıma ilişkin değil. Hiçbiri de CRA'nın kendi uygulama tarihlerini değiştirmiyor."
     },
     {
@@ -4350,16 +4369,12 @@ export const guides: Guide[] = [
      ]
     },
     {
-     "t": "ol",
-     "items": [
-      "madde geriye de uzanıyor: 11 Aralık 2027'den önce piyasaya sunulmuş olanlar dahil kapsamdaki tüm ürünlere uygulanıyor (md. 69(3)). Diğer gereklilikler bu eski ürünlere ancak o tarihten sonra esaslı bir değişiklik geçirirlerse uygulanıyor (md. 69(2))."
-     ]
+     "t": "p",
+     "text": "14. madde geriye de uzanıyor: 11 Aralık 2027'den önce piyasaya sunulmuş olanlar dahil kapsamdaki tüm ürünlere uygulanıyor (md. 69(3)). Diğer gereklilikler bu eski ürünlere ancak o tarihten sonra esaslı bir değişiklik geçirirlerse uygulanıyor (md. 69(2))."
     },
     {
-     "t": "ol",
-     "items": [
-      "maddenin şimdiden istedikleri: Aktif olarak istismar edilen bir açığı öğrendikten sonra 24 saat içinde erken uyarı, 72 saat içinde açık bildirimi ve düzeltici ya da hafifletici önlem kullanıma sunulduktan sonra en geç 14 gün içinde nihai rapor. Bildirimler, tek raporlama platformu üzerinden koordinatör CSIRT'e ve ENISA'ya yapılıyor (md. 14(1)-(2))."
-     ]
+     "t": "p",
+     "text": "14. maddenin şimdiden istedikleri: Aktif olarak istismar edilen bir açığı öğrendikten sonra 24 saat içinde erken uyarı, 72 saat içinde açık bildirimi ve düzeltici ya da hafifletici önlem kullanıma sunulduktan sonra en geç 14 gün içinde nihai rapor. Bildirimler, tek raporlama platformu üzerinden koordinatör CSIRT'e ve ENISA'ya yapılıyor (md. 14(1)-(2))."
     },
     {
      "t": "h2",
@@ -4432,7 +4447,7 @@ export const guides: Guide[] = [
       "**Ek I'i ürün ürün** tasarımınıza, testlerinize ve süreçlerinize eşleyin.",
       "**Teknik dosyayı standart zamanında gelmeyecekmiş gibi yazın;** Ek VII'nin 5. bendini izleyin.",
       "**I. sınıf ve üzerindeki ürünler için onaylanmış kuruluşlarla görüşün** ve üçüncü taraf değerlendirmesini planlayın.",
-      "**Tarihleri izleyin:** değişiklik kabul edilirse standardizasyon kuruluşları için 30 Kasım 2026 ve 31 Ocak 2027; CRA'nın kendisi için 11 Aralık 2027."
+      "**Tarihleri izleyin:** 10 Kasım 2026'da kabul edilen değişiklikle standardizasyon kuruluşları için 30 Kasım 2026 ve 31 Ocak 2027; CRA'nın kendisi için 11 Aralık 2027."
      ]
     },
     {
@@ -4448,15 +4463,15 @@ export const guides: Guide[] = [
      "items": [
       [
        "CRA için uyumlaştırılmış standart var mı?",
-       "Standards Drift'e göre (2 Kasım 2026) 30 Ekim 2026 itibarıyla AB Resmî Gazetesi'nde atıf yapılmış bir standart yoktu. Uygunluk varsayımını yalnızca atıf yapılmış standartlar sağlıyor (md. 27(1))."
+       "CEN-CENELEC, EN 40000-1-1 ve EN 40000-1-2'yi 2 Kasım 2026'da onayladı; ancak 17 Kasım 2026 itibarıyla ikisinin de atfı AB Resmî Gazetesi'nde yayımlanmadı. Uygunluk varsayımını yalnızca atıf yapılmış standartlar sağlıyor (md. 27(1))."
       ],
       [
        "CRA'nın tarihleri ertelendi mi?",
-       "Hayır. CRA 11 Aralık 2027'den itibaren uygulanıyor; raporlama 11 Eylül 2026'dan beri yürürlükte. Değiştirilen yalnızca standardizasyon kuruluşlarının tarihleri ve bu değişiklik henüz kabul edilmedi."
+       "Hayır. CRA 11 Aralık 2027'den itibaren uygulanıyor; raporlama 11 Eylül 2026'dan beri yürürlükte. Değişen yalnızca standardizasyon kuruluşlarının tarihleri; Komisyon bunu 10 Kasım 2026 tarihli kararla yaptı."
       ],
       [
-       "Önerilen yeni standart tarihleri neler?",
-       "1 ve 15 numaralı kalemler için 30 Kasım 2026, 16-41 için 31 Ocak 2027; 2-14 numaralı kalemler 30 Ekim 2027'de kalıyor (taslak; komite olumlu görüşü 13 Ekim 2026)."
+       "Yeni standart tarihleri neler?",
+       "1 ve 15 numaralı kalemler için 30 Kasım 2026, 16-41 için 31 Ocak 2027; 2-14 numaralı kalemler 30 Ekim 2027'de kalıyor (C(2026) 7861 sayılı Uygulama Kararı, 10 Kasım 2026)."
       ],
       [
        "Standart olmadan öz değerlendirme yapabilir miyiz?",
@@ -4470,13 +4485,15 @@ export const guides: Guide[] = [
     },
     {
      "t": "sources",
-     "title": "Kaynaklar (erişim 3 Kasım 2026)",
+     "title": "Kaynaklar (erişim 3 Kasım 2026; güncellemeler 17 Kasım 2026)",
      "items": [
       "(AB) 2024/2847 sayılı Tüzük (Siber Dayanıklılık Yasası), AB Resmî Gazetesi L, 20.11.2024 (md. 14, 27, 32, 69, 71; Ek VII): https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng",
       "Avrupa Komisyonu, 3 Şubat 2025 tarihli C(2025) 618 sayılı Uygulama Kararı (standardizasyon talebi, Ek I): https://ec.europa.eu/transparency/documents-register/api/files/C%282025%29618%5F1/de00000001069729?rendition=false",
       "Komitoloji sicili, CMTD(2026)1607, Standartlar Komitesi: taslak uygulama kararı (Ares(2026)9002280, 23 Eylül 2026) ve oylama tutanağı (Ares(2026)10140870, 28 Ekim 2026): https://ec.europa.eu/transparency/comitology-register/screen/documents/D118113/1?lang=en (draft; voting sheet ref. V118783/01)",
       "Avrupa Komisyonu, CRA standardizasyonu (son güncelleme 31 Temmuz 2026): https://digital-strategy.ec.europa.eu/en/policies/cra-standardisation",
       "Avrupa Komisyonu, Uyumlaştırılmış standartlar: https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards_en",
+      "Avrupa Komisyonu, C(2025) 618'i değiştiren 10 Kasım 2026 tarihli C(2026) 7861 sayılı Uygulama Kararı (Ek I yenilendi; md. 2): https://ec.europa.eu/transparency/documents-register/detail?ref=C(2026)7861&lang=en",
+      "CEN-CENELEC, EN 40000-1-1:2026 ve EN 40000-1-2:2026 proje sayfaları (onay tarihi 2 Kasım 2026), CEN/CLC/JTC 13 yayımlanmış standartlar listesi üzerinden: https://standards.cencenelec.eu/ords/f?p=205:22:::::FSP_ORG_ID,FSP_LANG_ID:2307986,25",
       "İkincil kaynak: Standards Drift, \"Cyber Resilience Act: the second harmonised standards deadline (30 October 2026) has passed\", 2 Kasım 2026: https://standardsdrift.com/analysis/the-second-cra-deadline/"
      ]
     }
