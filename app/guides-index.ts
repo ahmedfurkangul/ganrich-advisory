@@ -4,6 +4,22 @@ import type { Lang } from "./content";
 export type GuideIndexEntry = { key: string; solution: string; group?: "strategy"; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
  {
+  "key": "guideCbamVerifier",
+  "solution": "solutionCbam",
+  "topic": {
+   "en": "CBAM",
+   "tr": "SKDM (CBAM)"
+  },
+  "en": {
+   "h1": "Choosing a CBAM verifier in 2026: a guide for Turkish installations",
+   "description": "Your EU importer needs a verification report for actual emissions. How Turkish installations can pick an accredited CBAM verifier and plan 2026 verification."
+  },
+  "tr": {
+   "h1": "2026 gerçek emisyonları için SKDM doğrulayıcısı: Türk tesisi neye bakmalı?",
+   "description": "AB ithalatçınız gerçek emisyon için doğrulama raporu isteyecek. Türk tesisleri akredite SKDM doğrulayıcısını nasıl seçer, 2026 doğrulamasını nasıl planlar?"
+  }
+ },
+ {
   "key": "guideGreenDeal",
   "solution": "solutionCbam",
   "topic": {

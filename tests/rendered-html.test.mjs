@@ -1358,6 +1358,69 @@ function feedItems(xml) {
   return [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].map(match => match[1]);
 }
 
+test("publishes the CBAM verifier 2026 guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
+  const pages = [
+    ["/en/insights/cbam-verifier-turkish-installations-2026", "CBAM Verifier 2026: A Guide for Turkish Installations", "Your EU importer needs a verification report for actual emissions. How Turkish installations can pick an accredited CBAM verifier and plan 2026 verification.", "/tr/icgoruler/skdm-dogrulayici-secimi-2026", "Choosing a CBAM verifier in 2026: a guide for Turkish installations", /href="\/en\/insights\/cbam-default-values-2026-turkish-steel-aluminium"/, /Facts as of 18 November 2026\. This article is not legal advice\. Ganrich Advisory is not a CBAM verification body\./, "en-post"],
+    ["/tr/icgoruler/skdm-dogrulayici-secimi-2026", "SKDM Doğrulayıcı Seçimi 2026: Türk Tesisleri İçin Rehber", "AB ithalatçınız gerçek emisyon için doğrulama raporu isteyecek. Türk tesisleri akredite SKDM doğrulayıcısını nasıl seçer, 2026 doğrulamasını nasıl planlar?", "/en/insights/cbam-verifier-turkish-installations-2026", "2026 gerçek emisyonları için SKDM doğrulayıcısı: Türk tesisi neye bakmalı?", /href="\/tr\/icgoruler\/skdm-varsayilan-degerler-2026-gercek-emisyon"/, /Bilgiler 18 Kasım 2026 itibarıyladır\. Bu yazı hukuki danışmanlık değildir\. Ganrich Advisory bir SKDM doğrulama kuruluşu değildir\./, "tr-post"],
+  ];
+  const [sitemap, enFeed, trFeed] = await Promise.all([
+    render("/sitemap.xml").then(response => response.text()),
+    render("/en/feed.xml").then(response => response.text()),
+    render("/tr/feed.xml").then(response => response.text()),
+  ]);
+  const internal = new Set();
+  for (const [path, title, description, pair, h1, link, footer, utm] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.ok(html.includes(`<meta name="description" content="${description}"`), `${path} description`);
+    assert.ok(html.includes(`<h1>${h1}</h1>`), `${path} h1`);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /"@type":"Article"/);
+    assert.match(html, /"datePublished":"2026-11-18"/);
+    assert.match(html, /"dateModified":"2026-11-18"/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guideCbamVerifier\.png/);
+    assert.match(html, /\/guides\/guideCbamVerifier-(en|tr)\.webp/);
+    assert.match(html, link, `${path} default-values link`);
+    assert.match(html, footer, `${path} footer`);
+    assert.doesNotMatch(html, /Yayın öncesi editör notları|Editor notes before go-live|Durum: TASLAK|Status: DRAFT|Birincil sorgu|Primary query|TR taslak|EN draft|brief_v3|Red Team|not part of the article/i, `${path} has no editor notes`);
+    assert.doesNotMatch(html, /\*?(Taslak|Draft)\. /, `${path} has no draft label`);
+    const block = sitemap.split("<url>").find(part => part.includes(`https://ganrichadvisory.com${path}</loc>`));
+    assert.ok(block, `${path} in sitemap`);
+    assert.equal(block.match(/<lastmod>([^<]*)<\/lastmod>/)?.[1], "2026-11-18", `${path} lastmod`);
+    const feed = path.startsWith("/en/") ? enFeed : trFeed;
+    assert.ok(feed.includes(`<link>https://ganrichadvisory.com${path}</link>`), `${path} in feed`);
+    assert.ok(feed.includes(`<title>${escapeFeedXml(title)}</title>`), `${path} feed title`);
+    const withQuery = await render(`${path}?utm_source=linkedin&utm_medium=social&utm_campaign=skdm-dogrulayici&utm_content=${utm}`);
+    assert.equal(withQuery.status, 200, `${path} utm`);
+    assert.ok((await withQuery.text()).includes(`<title>${title}</title>`), `${path} utm title`);
+    const article = html.slice(html.indexOf("<article"), html.indexOf("</article>"));
+    for (const match of article.matchAll(/href="(\/(?:en|tr)\/[^"#?]+)"/g)) internal.add(match[1]);
+  }
+  for (const link of [
+    "/en/insights/cbam-default-values-2026-turkish-steel-aluminium",
+    "/en/insights/cbam-2026-update-tr-ets-cop31",
+    "/en/insights/turkiye-ets-market-registry-cbam",
+    "/en/decision-lab/cbam-readiness-check",
+    "/en/solutions/cbam-data-readiness",
+    "/en/insights/uk-cbam-2027-turkish-exporters",
+    "/tr/icgoruler/skdm-varsayilan-degerler-2026-gercek-emisyon",
+    "/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets",
+    "/tr/icgoruler/tr-ets-piyasasi-iks-hesabi-skdm",
+    "/tr/karar-laboratuvari/cbam-hazirlik-testi",
+    "/tr/cozumler/cbam-veri-hazirligi",
+    "/tr/icgoruler/ingiltere-skdm-2027-ihracatci",
+  ]) assert.ok(internal.has(link), `article links ${link}`);
+  for (const link of internal) {
+    if (link.endsWith("/feed.xml")) continue;
+    assert.equal((await render(link)).status, 200, `internal link ${link}`);
+  }
+  assert.match(await (await render("/en/insights")).text(), /Choosing a CBAM verifier in 2026: a guide for Turkish installations/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /2026 gerçek emisyonları için SKDM doğrulayıcısı: Türk tesisi neye bakmalı\?/);
+});
+
 test("publishes every guide in both feeds and llms files, and dates only editorially dated sitemap URLs", async () => {
   const [{ guides, guideLastmod }, { notes }, { phaseTwoInsightArticles }] = await Promise.all([
     import("../app/guides-content.ts"),
@@ -1390,7 +1453,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   for (const article of phaseTwoInsightArticles.en) add(`/en/insights/${article.slug}`, article.date);
   for (const article of phaseTwoInsightArticles.tr) add(`/tr/icgoruler/${article.slug}`, article.date);
   // Only guides and legacy articles carry an editorial date; every other page omits lastmod.
-  assert.equal(expected.size, 32);
+  assert.equal(expected.size, 34);
 
   const [enFeed, trFeed, llms, llmsFull, sitemap, greenDeal, cbamGuide, craGuide, home, solution] = await Promise.all([
     render("/en/feed.xml").then(response => response.text()),
@@ -1410,7 +1473,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   const reportLinks = (items) => items.filter(item => /<link>[^<]*\/(?:insights\/report|icgoruler\/rapor)\//.test(item)).length;
   assert.equal(enItems.length, notes.en.length + phaseTwoInsightArticles.en.length + guides.length + reportLinks(enItems));
   assert.equal(trItems.length, notes.tr.length + phaseTwoInsightArticles.tr.length + guides.length + reportLinks(trItems));
-  assert.equal(guides.length, 10);
+  assert.equal(guides.length, 11);
 
   const guideNewest = guides.reduce((max, guide) => guideLastmod(guide) > max ? guideLastmod(guide) : max, "0000-00-00");
   const articleNewest = phaseTwoInsightArticles.en.reduce((max, article) => article.date > max ? article.date : max, "0000-00-00");
@@ -1442,7 +1505,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 142);
+  assert.equal(blocks.length, 144);
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1460,7 +1523,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
     assert.equal(value, expected.get(path), `${path} lastmod`);
   }
   for (const path of expected.keys()) assert.ok(seen.has(path), `${path} missing from sitemap`);
-  assert.equal(blocks.filter(block => block.includes("<lastmod>")).length, 32);
+  assert.equal(blocks.filter(block => block.includes("<lastmod>")).length, 34);
   for (const path of ["/en", "/tr", "/en/solutions", "/en/solutions/cbam-data-readiness", "/en/decision-lab", "/en/insights"]) {
     const block = blocks.find(item => item.includes(`https://ganrichadvisory.com${path}</loc>`));
     assert.ok(block, `${path} in sitemap`);
