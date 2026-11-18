@@ -4059,10 +4059,10 @@ export const guides: Guide[] = [
   "key": "guideCraStandards",
   "solution": "solutionCra",
   "date": "2026-11-03",
-  "dateModified": "2026-11-17",
+  "dateModified": "2026-11-18",
   "checked": {
-   "en": "17 November 2026",
-   "tr": "17 Kasım 2026"
+   "en": "18 November 2026",
+   "tr": "18 Kasım 2026"
   },
   "image": "guideCraStandards",
   "readingTime": {
@@ -4088,6 +4088,10 @@ export const guides: Guide[] = [
      "text": "The usual way to show compliance with an EU product law is a harmonised standard. For the CRA, those standards are late. This article sets out what the primary texts say about the delay, the new dates, and the routes a manufacturer can use while the standards are not there."
     },
     {
+     "t": "p",
+     "text": "**Update, 18 November 2026.** The Commission's guidance on the application of the Cyber Resilience Act was published in the Official Journal on 17 November 2026 as C/2026/6013. It addresses, among other things, the Act's scope, the concept of «substantial modification», the support period and reporting obligations, and is not binding for economic operators. The Commission first published the guidance on its website on 27 July 2026."
+    },
+    {
      "t": "h2",
      "text": "The standards are late: what the record shows"
     },
@@ -4109,7 +4113,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "**Update, 17 November 2026:** CEN-CENELEC ratified EN 40000-1-1 and EN 40000-1-2 on 2 November 2026. Neither has been cited in the Official Journal, so neither yet gives a presumption of conformity under Article 27(1) (CEN-CENELEC project pages, accessed 17 Nov 2026)."
+     "text": "**Update, 17 November 2026.** CEN-CENELEC ratified EN 40000-1-1 and EN 40000-1-2 on 2 November 2026. Neither has been cited in the Official Journal, so neither yet gives a presumption of conformity under Article 27(1) (CEN-CENELEC project pages, accessed 17 Nov 2026)."
     },
     {
      "t": "h2",
@@ -4137,7 +4141,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "**Update, 17 November 2026:** The Commission adopted the amendment on 10 November 2026 (Implementing Decision C(2026) 7861). It extends the deadlines for items 1 and 15 and for items 16 to 41 by three months, to the dates listed above; items 2 to 14 stay at 30 October 2027. Under its Article 2, the amendment stops applying if CEN, CENELEC or ETSI indicate within a month of receiving it that they do not accept it."
+     "text": "**Update, 17 November 2026.** The Commission adopted the amendment on 10 November 2026 (Implementing Decision C(2026) 7861). It extends the deadlines for items 1 and 15 and for items 16 to 41 by three months, to the dates listed above; items 2 to 14 stay at 30 October 2027. Under its Article 2, the amendment stops applying if CEN, CENELEC or ETSI indicate within a month of receiving it that they do not accept it."
     },
     {
      "t": "p",
@@ -4272,7 +4276,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "sources",
-     "title": "Sources (accessed 3 Nov 2026; updates checked 17 Nov 2026)",
+     "title": "Sources (accessed 18 November 2026)",
      "items": [
       "Regulation (EU) 2024/2847 (Cyber Resilience Act), OJ L, 20.11.2024 (Art. 14, 27, 32, 69, 71; Annex VII): https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng",
       "European Commission, Implementing Decision C(2025) 618 of 3 Feb 2025 (standardisation request, Annex I): https://ec.europa.eu/transparency/documents-register/api/files/C%282025%29618%5F1/de00000001069729?rendition=false",
@@ -4281,6 +4285,8 @@ export const guides: Guide[] = [
       "European Commission, Harmonised standards: https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards_en",
       "European Commission, Implementing Decision C(2026) 7861 of 10 Nov 2026 amending C(2025) 618 (Annex I replaced; Art. 2): https://ec.europa.eu/transparency/documents-register/detail?ref=C(2026)7861&lang=en",
       "CEN-CENELEC, project pages for EN 40000-1-1:2026 and EN 40000-1-2:2026 (date of ratification 2 Nov 2026), via CEN/CLC/JTC 13 published standards: https://standards.cencenelec.eu/ords/f?p=205:22:::::FSP_ORG_ID,FSP_LANG_ID:2307986,25",
+      "Commission guidance on the application of the CRA, OJ C/2026/6013, 17.11.2026: https://eur-lex.europa.eu/eli/C/2026/6013/oj",
+      "European Commission, publication of the CRA guidance, 27.07.2026: https://digital-strategy.ec.europa.eu/en/library/commission-publishes-new-guidance-support-timely-cyber-resilience-act-implementation",
       "Secondary: Standards Drift, \"Cyber Resilience Act: the second harmonised standards deadline (30 October 2026) has passed\", 2 Nov 2026: https://standardsdrift.com/analysis/the-second-cra-deadline/"
      ]
     }
@@ -4299,6 +4305,10 @@ export const guides: Guide[] = [
     {
      "t": "p",
      "text": "Bir AB ürün mevzuatına uyumu göstermenin olağan yolu uyumlaştırılmış standarttır. CRA'da bu standartlar gecikti. Bu yazıda gecikme, yeni tarihler ve standartlar yokken üreticinin başvurabileceği yollar konusunda birincil metinlerin ne söylediğini derliyoruz."
+    },
+    {
+     "t": "p",
+     "text": "**Güncelleme, 18 Kasım 2026.** Komisyon'un Siber Dayanıklılık Yasası'nın uygulanmasına ilişkin rehberi, 17 Kasım 2026'da AB Resmî Gazetesi'nde C/2026/6013 olarak yayımlandı. Metin, diğer konuların yanı sıra kapsamı, «esaslı değişiklik» kavramını, destek süresini ve raporlama yükümlülüklerini ele alıyor; ekonomik operatörler için bağlayıcı değil. Komisyon rehberi ilk olarak 27 Temmuz 2026'da kendi internet sitesinde yayımlamıştı."
     },
     {
      "t": "h2",
@@ -4322,7 +4332,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "**Güncelleme, 17 Kasım 2026:** CEN-CENELEC, EN 40000-1-1 ve EN 40000-1-2 standartlarını 2 Kasım 2026'da onayladı. İkisinin de atfı henüz AB Resmî Gazetesi'nde yayımlanmadı; bu nedenle md. 27(1) kapsamındaki uygunluk varsayımı henüz doğmuyor (CEN-CENELEC proje sayfaları, erişim 17 Kasım 2026)."
+     "text": "**Güncelleme, 17 Kasım 2026.** CEN-CENELEC, EN 40000-1-1 ve EN 40000-1-2 standartlarını 2 Kasım 2026'da onayladı. İkisinin de atfı henüz AB Resmî Gazetesi'nde yayımlanmadı; bu nedenle md. 27(1) kapsamındaki uygunluk varsayımı henüz doğmuyor (CEN-CENELEC proje sayfaları, erişim 17 Kasım 2026)."
     },
     {
      "t": "h2",
@@ -4350,7 +4360,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "**Güncelleme, 17 Kasım 2026:** Komisyon değişikliği 10 Kasım 2026'da kabul etti (C(2026) 7861 sayılı Uygulama Kararı). Karar, 1 ve 15 numaralı kalemlerle 16-41 numaralı kalemlerin tarihlerini üç ay uzatarak yukarıdaki tarihlere çekiyor; 2-14 numaralı kalemler 30 Ekim 2027'de kalıyor. Kararın 2. maddesine göre CEN, CENELEC ya da ETSI kararı aldıktan sonra bir ay içinde değişikliği kabul etmediklerini bildirirse karar uygulanmayacak."
+     "text": "**Güncelleme, 17 Kasım 2026.** Komisyon değişikliği 10 Kasım 2026'da kabul etti (C(2026) 7861 sayılı Uygulama Kararı). Karar, 1 ve 15 numaralı kalemlerle 16-41 numaralı kalemlerin tarihlerini üç ay uzatarak yukarıdaki tarihlere çekiyor; 2-14 numaralı kalemler 30 Ekim 2027'de kalıyor. Kararın 2. maddesine göre CEN, CENELEC ya da ETSI kararı aldıktan sonra bir ay içinde değişikliği kabul etmediklerini bildirirse karar uygulanmayacak."
     },
     {
      "t": "p",
@@ -4485,7 +4495,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "sources",
-     "title": "Kaynaklar (erişim 3 Kasım 2026; güncellemeler 17 Kasım 2026)",
+     "title": "Kaynaklar (erişim 18 Kasım 2026)",
      "items": [
       "(AB) 2024/2847 sayılı Tüzük (Siber Dayanıklılık Yasası), AB Resmî Gazetesi L, 20.11.2024 (md. 14, 27, 32, 69, 71; Ek VII): https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng",
       "Avrupa Komisyonu, 3 Şubat 2025 tarihli C(2025) 618 sayılı Uygulama Kararı (standardizasyon talebi, Ek I): https://ec.europa.eu/transparency/documents-register/api/files/C%282025%29618%5F1/de00000001069729?rendition=false",
@@ -4494,6 +4504,8 @@ export const guides: Guide[] = [
       "Avrupa Komisyonu, Uyumlaştırılmış standartlar: https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards_en",
       "Avrupa Komisyonu, C(2025) 618'i değiştiren 10 Kasım 2026 tarihli C(2026) 7861 sayılı Uygulama Kararı (Ek I yenilendi; md. 2): https://ec.europa.eu/transparency/documents-register/detail?ref=C(2026)7861&lang=en",
       "CEN-CENELEC, EN 40000-1-1:2026 ve EN 40000-1-2:2026 proje sayfaları (onay tarihi 2 Kasım 2026), CEN/CLC/JTC 13 yayımlanmış standartlar listesi üzerinden: https://standards.cencenelec.eu/ords/f?p=205:22:::::FSP_ORG_ID,FSP_LANG_ID:2307986,25",
+      "Commission guidance on the application of the CRA, OJ C/2026/6013, 17.11.2026: https://eur-lex.europa.eu/eli/C/2026/6013/oj",
+      "European Commission, publication of the CRA guidance, 27.07.2026: https://digital-strategy.ec.europa.eu/en/library/commission-publishes-new-guidance-support-timely-cyber-resilience-act-implementation",
       "İkincil kaynak: Standards Drift, \"Cyber Resilience Act: the second harmonised standards deadline (30 October 2026) has passed\", 2 Kasım 2026: https://standardsdrift.com/analysis/the-second-cra-deadline/"
      ]
     }
