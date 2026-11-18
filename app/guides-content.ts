@@ -4059,9 +4059,10 @@ export const guides: Guide[] = [
   "key": "guideCraStandards",
   "solution": "solutionCra",
   "date": "2026-11-03",
+  "dateModified": "2026-11-18",
   "checked": {
-   "en": "3 November 2026",
-   "tr": "3 Kasım 2026"
+   "en": "18 November 2026",
+   "tr": "18 Kasım 2026"
   },
   "image": "guideCraStandards",
   "readingTime": {
@@ -4085,6 +4086,10 @@ export const guides: Guide[] = [
     {
      "t": "p",
      "text": "The usual way to show compliance with an EU product law is a harmonised standard. For the CRA, those standards are late. This article sets out what the primary texts say about the delay, the new dates, and the routes a manufacturer can use while the standards are not there."
+    },
+    {
+     "t": "p",
+     "text": "**Update, 18 November 2026.** The Commission's guidance on the application of the Cyber Resilience Act was published in the Official Journal on 17 November 2026 as C/2026/6013. It addresses, among other things, the Act's scope, the concept of «substantial modification», the support period and reporting obligations, and is not binding for economic operators. The Commission first published the guidance on its website on 27 July 2026."
     },
     {
      "t": "h2",
@@ -4263,13 +4268,15 @@ export const guides: Guide[] = [
     },
     {
      "t": "sources",
-     "title": "Sources (accessed 3 Nov 2026)",
+     "title": "Sources (accessed 18 November 2026)",
      "items": [
       "Regulation (EU) 2024/2847 (Cyber Resilience Act), OJ L, 20.11.2024 (Art. 14, 27, 32, 69, 71; Annex VII): https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng",
       "European Commission, Implementing Decision C(2025) 618 of 3 Feb 2025 (standardisation request, Annex I): https://ec.europa.eu/transparency/documents-register/api/files/C%282025%29618%5F1/de00000001069729?rendition=false",
       "Comitology register, CMTD(2026)1607, Committee on Standards: draft implementing decision (Ares(2026)9002280, 23 Sep 2026) and voting sheet (Ares(2026)10140870, 28 Oct 2026): https://ec.europa.eu/transparency/comitology-register/screen/documents/D118113/1?lang=en (draft; voting sheet ref. V118783/01)",
       "European Commission, Cyber Resilience Act standardisation (last update 31 Jul 2026): https://digital-strategy.ec.europa.eu/en/policies/cra-standardisation",
       "European Commission, Harmonised standards: https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards_en",
+      "Commission guidance on the application of the CRA, OJ C/2026/6013, 17.11.2026: https://eur-lex.europa.eu/eli/C/2026/6013/oj",
+      "European Commission, publication of the CRA guidance, 27.07.2026: https://digital-strategy.ec.europa.eu/en/library/commission-publishes-new-guidance-support-timely-cyber-resilience-act-implementation",
       "Secondary: Standards Drift, \"Cyber Resilience Act: the second harmonised standards deadline (30 October 2026) has passed\", 2 Nov 2026: https://standardsdrift.com/analysis/the-second-cra-deadline/"
      ]
     }
@@ -4288,6 +4295,10 @@ export const guides: Guide[] = [
     {
      "t": "p",
      "text": "Bir AB ürün mevzuatına uyumu göstermenin olağan yolu uyumlaştırılmış standarttır. CRA'da bu standartlar gecikti. Bu yazıda gecikme, yeni tarihler ve standartlar yokken üreticinin başvurabileceği yollar konusunda birincil metinlerin ne söylediğini derliyoruz."
+    },
+    {
+     "t": "p",
+     "text": "**Güncelleme, 18 Kasım 2026.** Komisyon'un Siber Dayanıklılık Yasası'nın uygulanmasına ilişkin rehberi, 17 Kasım 2026'da AB Resmî Gazetesi'nde C/2026/6013 olarak yayımlandı. Metin, diğer konuların yanı sıra kapsamı, «esaslı değişiklik» kavramını, destek süresini ve raporlama yükümlülüklerini ele alıyor; ekonomik operatörler için bağlayıcı değil. Komisyon rehberi ilk olarak 27 Temmuz 2026'da kendi internet sitesinde yayımlamıştı."
     },
     {
      "t": "h2",
@@ -4470,13 +4481,15 @@ export const guides: Guide[] = [
     },
     {
      "t": "sources",
-     "title": "Kaynaklar (erişim 3 Kasım 2026)",
+     "title": "Kaynaklar (erişim 18 Kasım 2026)",
      "items": [
       "(AB) 2024/2847 sayılı Tüzük (Siber Dayanıklılık Yasası), AB Resmî Gazetesi L, 20.11.2024 (md. 14, 27, 32, 69, 71; Ek VII): https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng",
       "Avrupa Komisyonu, 3 Şubat 2025 tarihli C(2025) 618 sayılı Uygulama Kararı (standardizasyon talebi, Ek I): https://ec.europa.eu/transparency/documents-register/api/files/C%282025%29618%5F1/de00000001069729?rendition=false",
       "Komitoloji sicili, CMTD(2026)1607, Standartlar Komitesi: taslak uygulama kararı (Ares(2026)9002280, 23 Eylül 2026) ve oylama tutanağı (Ares(2026)10140870, 28 Ekim 2026): https://ec.europa.eu/transparency/comitology-register/screen/documents/D118113/1?lang=en (draft; voting sheet ref. V118783/01)",
       "Avrupa Komisyonu, CRA standardizasyonu (son güncelleme 31 Temmuz 2026): https://digital-strategy.ec.europa.eu/en/policies/cra-standardisation",
       "Avrupa Komisyonu, Uyumlaştırılmış standartlar: https://single-market-economy.ec.europa.eu/single-market/goods/european-standards/harmonised-standards_en",
+      "Commission guidance on the application of the CRA, OJ C/2026/6013, 17.11.2026: https://eur-lex.europa.eu/eli/C/2026/6013/oj",
+      "European Commission, publication of the CRA guidance, 27.07.2026: https://digital-strategy.ec.europa.eu/en/library/commission-publishes-new-guidance-support-timely-cyber-resilience-act-implementation",
       "İkincil kaynak: Standards Drift, \"Cyber Resilience Act: the second harmonised standards deadline (30 October 2026) has passed\", 2 Kasım 2026: https://standardsdrift.com/analysis/the-second-cra-deadline/"
      ]
     }
