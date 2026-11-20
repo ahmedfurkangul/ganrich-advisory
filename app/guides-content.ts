@@ -13,6 +13,455 @@ export type Guide = { key: string; solution: string; date: string; dateModified?
 
 export const guides: Guide[] = [
  {
+  "key": "guideCbamDownstream",
+  "solution": "solutionCbam",
+  "date": "2026-11-20",
+  "dateModified": "2026-11-20",
+  "checked": {
+   "en": "20 November 2026",
+   "tr": "20 Kasım 2026"
+  },
+  "image": "guideCbamDownstream",
+  "readingTime": {
+   "en": "12 min",
+   "tr": "12 dk"
+  },
+  "topic": {
+   "en": "CBAM",
+   "tr": "SKDM (CBAM)"
+  },
+  "en": {
+   "path": "insights/cbam-downstream-extension-2028-turkish-manufacturers",
+   "title": "CBAM Downstream Extension 2028: Turkish Manufacturers",
+   "description": "From 2028, CBAM may reach steel- and aluminium-intensive goods. What is still open before the 30 Nov trilogue, and what Turkish makers should prepare.",
+   "h1": "CBAM's planned 2028 extension to downstream goods: what Turkish makers of machinery, parts and appliances should prepare",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "On 18 November 2026 the Istanbul think tank EDAM (Centre for Economics and Foreign Policy Studies) published a policy report by Sinan Ülgen on the planned extension of the EU Carbon Border Adjustment Mechanism (CBAM) to steel- and aluminium-intensive downstream goods. EDAM estimates that the share of Türkiye's exports to the EU covered by CBAM could rise from 11.4% today to between 21% and 34%. On a full-implementation basis, it puts the extra cost to Turkish exporters at EUR 210-435 million a year. Which end of that range applies would depend on the product list the EU institutions finally agree, whether at the 30 November 2026 trilogue or later."
+    },
+    {
+     "t": "p",
+     "text": "This piece is not for steel mills. It is for the Turkish maker of fasteners, wire, springs, machinery, auto parts, cables or household appliances who has heard that CBAM will reach finished goods from 2028 and is asking: am I in, and what data will my EU customer need from me?"
+    },
+    {
+     "t": "h2",
+     "text": "What is proposed: COM(2025) 989 and 1 January 2028"
+    },
+    {
+     "t": "p",
+     "text": "On 17 December 2025 the European Commission tabled COM(2025) 989, amending the CBAM Regulation (EU) 2023/956 to extend its scope to downstream goods and add anti-circumvention measures. The Commission says 180 products are added. 94% of them are industrial supply-chain goods used in heavy machinery and specialised equipment, with an average steel and aluminium content of 79% by weight; the remaining 6% are household goods such as washing machines. Under Article 2 of the proposal, the extension applies from 1 January 2028."
+    },
+    {
+     "t": "p",
+     "text": "The proposal also counts pre-consumer steel and aluminium scrap as a precursor and lets the Commission demand extra evidence where it suspects abusive practices. The file is still in the ordinary legislative procedure and EUR-Lex lists it as \"ongoing\". Until a text is adopted and published in the Official Journal, today's scope stands."
+    },
+    {
+     "t": "p",
+     "text": "Screws, bolts and nuts (CN 7318) and \"other articles of iron or steel\" (7326) are already in CBAM today. The proposal adds items such as stranded wire, ropes and cables (7312 10), nails (7317 00), certain springs (7320), certain household articles (7323) and other cast articles (7325), plus a new \"Combined metal products\" table covering washing machines (8450), certain goods vehicles (ex 8704), gearboxes (8708 40), road wheels (8708 70), suspension systems (8708 80) and metal office furniture (9403 10)."
+    },
+    {
+     "t": "h2",
+     "text": "Three positions side by side"
+    },
+    {
+     "t": "p",
+     "text": "The institutions do not disagree on the 2028 start. They disagree on the length of the list."
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**Commission (17 December 2025):** 180 downstream products.",
+      "**Council (general approach, 12 June 2026, ST 10423/26):** keeps the Commission list, adds about 200 eight-digit CN codes and removes three medical-device entries. The largest groups are vehicle parts (8708), electric motors (8501), refrigerators and freezers (8418) and transformers (8504). The Council also asks the Commission for an annual review of further downstream goods.",
+      "**Parliament (15 September 2026, P10_TA(2026)0276):** amendments adopted by 464 votes to 50 with 159 abstentions, and the file referred back to committee for trilogue. Parliament adds the whole of Chapter 73 (articles of iron or steel), about two dozen other full headings and more than 270 eight-digit codes, so there is no single count: Mayer Brown says 457 product types, EDAM 623 CN lines on its widest reading. Parliament also proposes a separate 5-tonne de minimis threshold for aluminium products."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "Under the proposal, only the CBAM inputs would count"
+    },
+    {
+     "t": "p",
+     "text": "The key rule is the calculation boundary. Recital 42 of the proposal limits the emissions attributed to downstream goods to those embedded in the input materials (precursors). Recital 45 says the specific embedded emissions of goods in the \"Iron and steel\", \"Aluminium\" and \"Combined metal goods\" sections are calculated from the precursors the good contains."
+    },
+    {
+     "t": "p",
+     "text": "The Commission and Türkiye's Ministry of Trade use the same example: a car door made outside the EU would face CBAM only for the emissions embedded in the steel sheet used to make it, not for cutting, forming or assembly. So the emissions of your press shop, welding line or paint line would not be counted. What would count is the quantity of each CBAM input in your product, mostly steel and aluminium, and the embedded emissions of that input. Recital 42 and the new Annex VIII add that inputs outside today's Annex II, such as pre-consumer scrap, are also counted."
+    },
+    {
+     "t": "p",
+     "text": "For complex goods built from inputs of several sectors (the Commission's example is the washing machine), actual data will be hard to collect, so the proposal would apply default values without a mark-up. It also adds \"material composition of each downstream good\" to the minimum content of a verification report, and makes registration of the installation in the CBAM Registry a condition for declaring actual emissions."
+    },
+    {
+     "t": "h2",
+     "text": "Still open before the 30 November trilogue"
+    },
+    {
+     "t": "p",
+     "text": "**Status (19 November 2026):** no agreement announced."
+    },
+    {
+     "t": "p",
+     "text": "No EU institution has published a readout of the first political trilogue on 20 October 2026. According to Agence Europe, the two sides presented their mandates and agreed to continue technical work on four issues (positions from the institutions' texts):"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Aluminium de minimis:** today an importer whose CBAM imports stay below 50 tonnes net mass a year is exempt. Parliament wants a 5-tonne threshold for aluminium products; the Commission and Council keep the general 50-tonne threshold.",
+      "**Scrap:** the Commission and Council would count pre-consumer steel and aluminium scrap as a precursor. Parliament would count all aluminium scrap, including post-consumer, drop steel scrap from the precursor list and require scrap content to be reported.",
+      "**Online platforms:** Parliament wants reporting obligations for platforms acting as importers in distance sales.",
+      "**Global default values for the added goods.**"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "cbam.news reported on 18 November that 30 November is the second and possibly final political trilogue. Even after a political deal, the text only takes effect once Parliament and Council formally adopt it and it is published in the Official Journal."
+    },
+    {
+     "t": "h2",
+     "text": "Why Türkiye is more exposed"
+    },
+    {
+     "t": "p",
+     "text": "Citing the Commission's impact assessment, the Ministry of Trade says Türkiye is the second most affected country after China, with Turkish exports of about EUR 8 billion a year brought into scope under the Commission's preferred option. EDAM's figure for the same list, below, is EUR 9.4 billion; data and methods differ."
+    },
+    {
+     "t": "p",
+     "text": "EDAM's 18 November report breaks this down by list (2022–2024 averages, Eurostat data):"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Of Türkiye's average EUR 97.6 billion of annual exports to the EU, EUR 11.2 billion (11.4%) is already covered by CBAM.",
+      "Newly covered exports would be EUR 9.4 billion under the Commission list, EUR 15.7 billion under the Council list and EUR 21.6 billion under Parliament's. The total covered share would rise to 21.1%, 27.6% and 33.5% respectively.",
+      "The estimated extra cost, assuming full implementation, is EUR 210, 332 and 435 million a year.",
+      "Vehicle parts, trucks, refrigerators, washing machines and insulated cables make up about 45% of the estimated cost under the Parliament list. Passenger cars, Türkiye's largest export to the EU, appear in none of the three lists.",
+      "Türkiye supplies 81% of the EU's non-EU imports of steel radiators, 72% of semi-trailers and 55% of household dishwashers."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "EDAM finds that most of Türkiye's newly covered exports are goods where the carbon cost exceeds 1% of the product price. It therefore concludes that a negotiating strategy aimed at shortening the list would offer Türkiye only limited protection. Its priorities are instead the deduction of carbon prices paid in Türkiye (Article 9) and completing installation-level monitoring, reporting and verification before 2028."
+    },
+    {
+     "t": "p",
+     "text": "These are EDAM's estimates, not installation data. The report assumes full implementation, does not deduct any price paid under the Turkish ETS, counts partly covered \"ex\" lines in full, which it says overstates coverage, and itself notes that the gradual phase-out of EU ETS free allocation will significantly reduce the actual burden in the short and medium term."
+    },
+    {
+     "t": "h2",
+     "text": "CN code check: a three-step self-screen"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Getting the code.** The starting point is the eight-digit CN code on the EU customer's import declaration. If it is already in today's Annex I (for example 7318 screws and bolts), this is a 2026 issue, not a 2028 one; the first read is our guide to [default values versus actual emissions](/en/insights/cbam-default-values-2026-turkish-steel-aluminium).",
+      "**Comparing all three texts.** The code is then checked against Annex I of the Commission proposal, Note 1 of the Council general approach and the text adopted by Parliament. Entries marked \"ex\" cover only part of a code, usually goods containing steel or aluminium. A code in all three texts is the most likely to stay; a code only in the Council or Parliament list depends on the final deal, on 30 November or later. Our [EU rule scope scanner](/en/decision-lab/eu-rule-scope-scanner) is a quick first pass.",
+      "**Recording the steel and aluminium content.** This step records the steel and aluminium mass per product and the plant that supplied the metal. The [CBAM readiness check](/en/decision-lab/cbam-readiness-check) helps you gauge where you stand."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "Why supplier emissions data matters now"
+    },
+    {
+     "t": "p",
+     "text": "Because the calculation rests on precursors, most of the data will come from your steel and aluminium suppliers rather than from you. Information to request from suppliers:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "The name, country and CBAM Registry registration of the installation that produced the metal.",
+      "The CN code of the precursor delivered and the quantity per batch.",
+      "The specific embedded emissions of that precursor, and whether an accredited verifier has verified them.",
+      "The scrap content, and whether it is pre-consumer or post-consumer.",
+      "Evidence of any carbon price paid."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "On the manufacturer's side, a bill of materials with the mass of each steel and aluminium part matters, because the proposal would put material composition into the verification report. We cover choosing a verifier in our [CBAM verifier guide](/en/insights/cbam-verifier-turkish-installations-2026) and the logic of asking steel suppliers for data in our piece on the [steel digital product passport](/en/insights/steel-digital-product-passport-espr-turkiye)."
+    },
+    {
+     "t": "p",
+     "text": "EDAM flags one more point: for downstream goods, any carbon price deduction will rest on the price paid by the steel or aluminium supplier, not by the manufacturer of the finished good, and how that passes down the chain into the declaration is not yet clear. Writing into supply contracts now who provides this data, in what format and by when will make the 2028 price conversation with your buyer easier. Our [CBAM data readiness](/en/solutions/cbam-data-readiness) service covers setting up the data flow."
+    },
+    {
+     "t": "h2",
+     "text": "FAQ"
+    },
+    {
+     "t": "faq",
+     "items": [
+      [
+       "Is the product list final?",
+       "No. As of 19 November 2026 trilogue negotiations are ongoing, with the next political round on 30 November. The list is only final once the adopted text is published in the Official Journal."
+      ],
+      [
+       "Will I pay CBAM?",
+       "Not directly. The authorised CBAM declarant in the EU, usually the importer, buys and surrenders the certificates (Regulation (EU) 2023/956, Article 22). Your role is to supply the data behind the declaration. The cost is still likely to come up in price negotiations."
+      ],
+      [
+       "Will default values apply to my product?",
+       "They may. Without actual, verified data, default values apply. The Commission proposes no mark-up for complex goods with inputs from several sectors, while global default values for the added goods are one of the open issues in the negotiations."
+      ],
+      [
+       "Does the 50-tonne threshold protect small exporters?",
+       "The threshold looks at the EU importer's total annual imports, not at you. The Commission says more than 90% of importers in the extension sectors would stay exempt while over 99% of emissions remain covered. Parliament wants a 5-tonne threshold for aluminium products."
+      ],
+      [
+       "Does anything change in 2026 or 2027?",
+       "Under the proposal the downstream extension applies from 1 January 2028. If your product is already in today's scope (screws and bolts, for example), obligations have applied since 2026. Some goods entering the EU in 2028 will be produced in 2027, so in our view it makes sense to set up the data flow during 2027."
+      ],
+      [
+       "Are passenger cars covered?",
+       "According to EDAM's analysis, passenger cars (8703) are in none of the three lists. Certain trucks and vehicle parts are in all three; semi-trailers appear in the Council and Parliament texts."
+      ]
+     ]
+    },
+    {
+     "t": "sources",
+     "title": "Sources",
+     "items": [
+      "European Commission, COM(2025) 989 final, 17 December 2025 (recitals 42–45 and 53, Articles 1 and 2, Annexes I and III), accessed 19 November 2026: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:52025PC0989",
+      "EUR-Lex, Procedure 2025/0419/COD, accessed 19 November 2026: https://eur-lex.europa.eu/procedure/EN/2025_419",
+      "European Commission, \"Commission strengthens the Carbon Border Adjustment Mechanism\", IP/25/3088, 17 December 2025: https://ec.europa.eu/commission/presscorner/api/files/document/print/en/ip_25_3088/IP_25_3088_EN.pdf",
+      "European Commission, \"Questions and answers on the Carbon Border Adjustment Mechanism (CBAM)\", QANDA/25/3089, 17 December 2025: https://ec.europa.eu/commission/presscorner/api/files/document/print/en/qanda_25_3089/QANDA_25_3089_EN.pdf",
+      "Council of the EU, ST 10423/26, general approach, 12 June 2026 (Annex I, Notes 1 and 2): https://data.consilium.europa.eu/doc/document/ST-10423-2026-INIT/en/pdf",
+      "Council of the EU, \"Council moves to strengthen the EU's carbon border adjustment mechanism\", press release, 12 June 2026: https://www.consilium.europa.eu/en/press/press-releases/2026/06/12/council-moves-to-strengthen-the-eu-s-carbon-border-adjustment-mechanism/",
+      "European Parliament, P10_TA(2026)0276, texts adopted, 15 September 2026 (amendments 83, 84, 110 and 135, 112 and 136; Annex IIa, amendments 97, 113 and 133): https://data.europarl.europa.eu/distribution/doc/TA-10-2026-0276_en.pdf",
+      "European Parliament Legislative Observatory, 2025/0419(COD) document summary (vote of 15 September 2026), accessed 19 November 2026: https://oeil.europarl.europa.eu/oeil/en/document-summary?id=1914940",
+      "Regulation (EU) 2023/956, consolidated text of 20 October 2025 (Articles 2a and 22; Annexes I, VI and VII): https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02023R0956-20251020",
+      "Ministry of Trade of Türkiye, \"SKDM Tüzük Değişiklik Teklifi\" (in Turkish), accessed 19 November 2026: https://ticaret.gov.tr/dis-iliskiler/yesil-mutabakat/sinirda-karbon-duzenleme-mekanizmalari/avrupa-birligi-sinirda-karbon-duzenleme-mekanizmasi/skdm-tuzuk-degisiklik-teklifi",
+      "EDAM, Sinan Ülgen, \"Sınırda Karbon Vergisi Kapsamının Genişlemesi: Türkiye'ye Etkileri\" (The expansion of the scope of the carbon border tax: implications for Türkiye; in Turkish), policy report, 18 November 2026: http://www.edam.org.tr/ekonomi-ve-enerji/813787-sinirda-karbon-vergisi-kapsaminin-genislemesi-turkiye-ye-etkileri (PDF: https://edam.org.tr/Uploads/Yukleme_Resim/sinirda-karbon-vergisi-kapsaminin-genislemesi-turkiye-ye-etkileri-18-11-2026-14-52-21.pdf)",
+      "Agence Europe, \"First talks between European Parliament and EU Council on extending Carbon Border Adjustment Mechanism raise no major issues\", Brussels, 21 October 2026, Europe Daily Bulletin No. 13965 of 22 October 2026: https://agenceurope.eu/en/bulletin/article/13965/4/first-talks-between-european-parliament-and-eu-council-on-extending-carbon-border-adjustment-mechanism-raise-no-major-issues",
+      "Mayer Brown, \"EU's CBAM Downstream Extension and Anti-Circumvention Amendments: the Road to Trilogue\", 7 October 2026 (secondary source): https://www.mayerbrown.com/en/insights/publications/2026/10/eus-cbam-downstream-extension-and-anti-circumvention-amendments-the-road-to-trilogue",
+      "cbamguide.com, \"First trilogue on the CBAM downstream extension: no deal, four open issues\", 23 October 2026 (press report based on Agence Europe): https://cbamguide.com/news/2026-10-23-cbam-downstream-first-trilogue-no-deal/",
+      "CBAM.news, \"Countdown to 30 November: CBAM downstream deal enters final stretch on firmer legal ground\", 18 November 2026 (press report): https://cbam.news/countdown-to-30-november-cbam-downstream-deal-enters-final-stretch-on-firmer-legal-ground/"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "*Facts as of 19 November 2026. This article is not legal advice; for your product's scope, the reference is the final adopted text and your customs adviser's view. Ganrich Advisory is not a law firm or a CBAM verification body.*"
+    }
+   ]
+  },
+  "tr": {
+   "path": "icgoruler/skdm-kapsam-genislemesi-2028-mamul-urun",
+   "title": "SKDM Kapsam Genişlemesi 2028: Mamul Ürün İhracatçısı",
+   "description": "SKDM 2028'den itibaren çelik ve alüminyum içeren mamul ürünlere genişleyebilir. 30 Kasım üçlü görüşmesi öncesi makine ve parça üreticisi neyi hazırlamalı?",
+   "h1": "SKDM'nin 2028'de aşağı akış ürünlere genişlemesi: makine, parça ve beyaz eşya üreticisi neyi hazırlamalı?",
+   "blocks": [
+    {
+     "t": "p",
+     "text": "Ekonomi ve Dış Politika Araştırmalar Merkezi (EDAM), 18 Kasım 2026'da Sinan Ülgen imzalı bir politika raporu yayımladı. Rapor, Sınırda Karbon Düzenleme Mekanizması'nın (SKDM) çelik ve alüminyum içeren aşağı akış (downstream) ürünlere genişlemesi hâlinde Türkiye'nin AB ihracatında SKDM'ye tabi payın bugünkü %11,4'ten %21 ile %34 arasına çıkabileceğini hesaplıyor. EDAM'ın tahminine göre ihracatçılara binecek ek yük, tam uygulama varsayımıyla yılda 210 ile 435 milyon avro arasında. Hangi rakamın gerçekleşeceği, AB kurumlarının 30 Kasım 2026'daki üçlü görüşmede ya da daha sonra üzerinde uzlaşacağı ürün listesine bağlı olacak."
+    },
+    {
+     "t": "p",
+     "text": "Bu yazı çelik ya da alüminyum üreticileri için değil; bağlantı elemanı, tel, yay, makine, oto parçası, kablo veya beyaz eşya üreten ve \"2028'de ben de kapsama giriyor muyum, hangi veriyi hazırlamalıyım?\" diye soran Türk üreticiler için."
+    },
+    {
+     "t": "h2",
+     "text": "Ne öneriliyor: COM(2025) 989 ve 1 Ocak 2028"
+    },
+    {
+     "t": "p",
+     "text": "Avrupa Komisyonu 17 Aralık 2025'te COM(2025) 989 sayılı teklifi yayımladı. Teklif, SKDM Tüzüğü'nü ((AB) 2023/956) değiştirerek kapsamı çelik ve alüminyum yoğun aşağı akış ürünlere genişletiyor ve dolanmaya (circumvention) karşı yeni önlemler getiriyor. Komisyon'a göre teklif listeye 180 ürün ekliyor. Bunların %94'ü ağır makine ve özel ekipmanda kullanılan sanayi tedarik zinciri ürünleri; ağırlık bazında ortalama %79'u çelik ve alüminyum. Kalan %6'sı çamaşır makinesi gibi ev ürünleri. Teklifin 2. maddesine göre kapsam genişlemesi 1 Ocak 2028'den itibaren uygulanacak."
+    },
+    {
+     "t": "p",
+     "text": "Teklif ayrıca tüketici öncesi (pre-consumer) çelik ve alüminyum hurdasını öncül (precursor) olarak hesaba katıyor ve Komisyon'a kötüye kullanım şüphesi olan durumlarda ek kanıt isteme yetkisi veriyor. Dosya olağan yasama usulünde ilerliyor; EUR-Lex'te durumu hâlâ \"devam ediyor\" olarak görünüyor. Metin kabul edilip AB Resmî Gazetesi'nde yayımlanmadıkça bugünkü kapsam değişmiyor."
+    },
+    {
+     "t": "p",
+     "text": "Vida, cıvata, somun (KN 7318) ve \"demir veya çelikten diğer eşya\" (7326) zaten bugünkü SKDM kapsamında. Teklif bunlara örgülü tel, halat ve kablo (7312 10), çivi (7317 00), bazı yaylar (7320), bazı ev ve mutfak eşyaları (7323) ve döküm eşya (7325) gibi kalemleri ekliyor. Yeni \"Kombine Metal Ürünler\" tablosuna da çamaşır makinesi (8450), bazı yük taşıtları (ex 8704), şanzıman (8708 40), jant (8708 70), süspansiyon (8708 80) ve metal büro mobilyası (9403 10) gibi kalemler ekleniyor."
+    },
+    {
+     "t": "h2",
+     "text": "Üç tutum yan yana: Komisyon, Konsey, Parlamento"
+    },
+    {
+     "t": "p",
+     "text": "Kurumlar 2028 başlangıç tarihinde ayrışmıyor; ayrıştıkları nokta listenin uzunluğu."
+    },
+    {
+     "t": "ul",
+     "items": [
+      "**Komisyon (17 Aralık 2025):** 180 aşağı akış ürünü.",
+      "**Konsey (genel yaklaşım, 12 Haziran 2026, ST 10423/26):** Komisyon listesini koruyor, yaklaşık 200 adet 8 haneli KN kodu ekliyor ve üç tıbbi cihaz kalemini çıkarıyor. Eklemeler içinde en büyük gruplar taşıt parçaları (8708), elektrik motorları (8501), soğutucu ve dondurucular (8418) ile transformatörler (8504). Konsey ayrıca Komisyon'dan, kapsama alınabilecek yeni aşağı akış ürünleri için yıllık bir gözden geçirme istiyor.",
+      "**Parlamento (15 Eylül 2026, P10_TA(2026)0276):** Değişiklikler 464 evet, 50 hayır ve 159 çekimser oyla kabul edildi; dosya kurumlar arası müzakereler için sorumlu Parlamento komitesine geri gönderildi. Parlamento metni 73. faslın (demir veya çelikten eşya) tamamını, yaklaşık iki düzine başka tam başlığı ve 270'ten fazla 8 haneli kodu ekliyor; bu yüzden tek bir sayı vermek mümkün değil: Mayer Brown 457 ürün tipi, EDAM en geniş okumayla 623 KN satırı sayıyor. Parlamento ayrıca alüminyum ürünler için 5 tonluk ayrı bir asgari eşik (de minimis) öneriyor."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "Teklife göre yalnızca üründeki SKDM girdileri sayılacak"
+    },
+    {
+     "t": "p",
+     "text": "Teklifteki en önemli kural, hesabın sınırı. Gerekçe 42'ye göre aşağı akış ürünlere atfedilen emisyon, öncül malzemelerde gömülü emisyonla sınırlı. Gerekçe 45, \"Demir ve Çelik\", \"Alüminyum\" ve \"Kombine Metal Ürünler\" bölümlerindeki ürünlerin özgül gömülü emisyonunun, ürünün içerdiği öncüllerin emisyonuna göre hesaplanmasını öngörüyor."
+    },
+    {
+     "t": "p",
+     "text": "Komisyon ve Ticaret Bakanlığı aynı örneği veriyor: üçüncü ülkede üretilen bir araba kapısı, yalnızca yapımında kullanılan çelik saçın emisyonu için SKDM'ye tabi olacak. Saçın kesilmesi, şekillendirilmesi ve montajı hesaba girmeyecek. Yani pres, kaynak ya da boya hattınızdaki emisyon sayılmayacak. Sayılacak olan, ürününüzdeki her SKDM girdisinin (çoğunlukla çelik ve alüminyum) miktarı ve o girdinin gömülü emisyonu. Gerekçe 42 ve yeni Ek VIII, bugünkü Ek II dışındaki girdilerin, örneğin tüketici öncesi hurdanın da hesaba katılmasını öngörüyor."
+    },
+    {
+     "t": "p",
+     "text": "Birden fazla sektörden girdi içeren karmaşık ürünlerde (Komisyon çamaşır makinesini örnek veriyor) gerçek emisyon verisi toplamak zor olacağı için teklif bu ürünlerde varsayılan değere artırım (mark-up) eklenmemesini öneriyor. Teklif, doğrulama raporunun asgari içeriğine \"her aşağı akış ürününün malzeme bileşimi\" kalemini de ekliyor ve gerçek emisyonla beyanda bulunabilmek için tesisin SKDM Kayıt Sistemi'ne kayıtlı olmasını şart koşuyor."
+    },
+    {
+     "t": "h2",
+     "text": "30 Kasım üçlü görüşmesi öncesi hâlâ açık olanlar"
+    },
+    {
+     "t": "p",
+     "text": "**Durum (19 Kasım 2026):** Açıklanmış bir uzlaşma yok."
+    },
+    {
+     "t": "p",
+     "text": "20 Ekim 2026'daki ilk siyasi üçlü görüşmeye dair hiçbir AB kurumu yazılı özet yayımlamadı. Agence Europe'un haberine göre taraflar müzakere yetkilerini sundu ve dört konuda teknik düzeyde çalışmayı sürdürme kararı aldı (aşağıdaki tutumlar kurumların kendi metinlerine dayanıyor):"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Alüminyum için asgari eşik:** Bugünkü kural, yılda toplam 50 ton net kütlenin altında kalan ithalatçıyı muaf tutuyor. Parlamento alüminyum ürünler için bu eşiği 5 tona indirmek istiyor; Komisyon ve Konsey genel 50 ton eşiğini koruyor.",
+      "**Hurda:** Komisyon ve Konsey tüketici öncesi çelik ve alüminyum hurdasını öncül saymak istiyor. Parlamento ise tüketici sonrası dâhil tüm alüminyum hurdasını öncül saymayı, çelik hurdasını öncül listesinden çıkarmayı ve üründeki hurda içeriğinin bildirilmesini istiyor.",
+      "**Çevrim içi platformlar:** Parlamento, uzaktan satışlarda ithalatçı sayılan platformlara beyan ve raporlama yükümlülüğü getirmek istiyor.",
+      "**Eklenen ürünler için küresel varsayılan değerler.**"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "cbam.news'in 18 Kasım tarihli haberine göre 30 Kasım'daki toplantı ikinci ve belki de son siyasi üçlü görüşme. Siyasi uzlaşma olsa bile metin, Parlamento ve Konsey tarafından resmen kabul edilip AB Resmî Gazetesi'nde yayımlanmadan yürürlüğe girmez."
+    },
+    {
+     "t": "h2",
+     "text": "Türkiye'nin maruziyeti neden daha yüksek"
+    },
+    {
+     "t": "p",
+     "text": "Ticaret Bakanlığı, Komisyon'un etki analizine atıfla Türkiye'yi genişlemeden Çin'den sonra en çok etkilenecek ikinci ülke olarak gösteriyor. Bakanlığa göre Komisyon'un tercih ettiği seçenekte kapsama girecek Türk ihracatı yılda yaklaşık 8 milyar avro. EDAM ise aynı liste için 9,4 milyar avro hesaplıyor (aşağıda); iki hesabın verisi ve yöntemi farklı."
+    },
+    {
+     "t": "p",
+     "text": "EDAM'ın 18 Kasım raporu tabloyu üç listeye göre ayırıyor (2022–2024 ortalaması, Eurostat verisi):"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Türkiye'nin yıllık ortalama 97,6 milyar avroluk AB ihracatının 11,2 milyar avrosu (%11,4) bugün SKDM kapsamında.",
+      "Yeni kapsama girecek ihracat Komisyon listesinde 9,4, Konsey listesinde 15,7, Parlamento listesinde 21,6 milyar avro. Toplam pay sırasıyla %21,1, %27,6 ve %33,5'e çıkıyor.",
+      "Tahmini ek yük, tam uygulama varsayımıyla yılda sırasıyla 210, 332 ve 435 milyon avro.",
+      "Taşıt parçaları, kamyonlar, buzdolapları, çamaşır makineleri ve yalıtılmış kablolar, Parlamento listesindeki tahmini yükün yaklaşık %45'ini oluşturuyor. Türkiye'nin AB'ye en büyük ihraç kalemi olan binek otomobil ise üç listenin hiçbirinde yok.",
+      "Türkiye, AB'nin AB dışından yaptığı çelik radyatör ithalatının %81'ini, yarı römork ithalatının %72'sini ve bulaşık makinesi ithalatının %55'ini karşılıyor."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "EDAM'a göre yeni kapsama girecek Türk ihracatının büyük kısmı, karbon maliyetinin ürün fiyatının %1'ini aştığı ürünlerde. Rapor bu nedenle listenin daraltılmasına yönelik bir müzakere stratejisinin Türkiye açısından \"sağlayacağı koruma sınırlı kalacaktır\" sonucuna varıyor. Öncelik olarak da Türkiye'de ödenen karbon fiyatının SKDM'den düşülmesini (Madde 9) ve tesis düzeyinde izleme, raporlama ve doğrulama altyapısının 2028'den önce tamamlanmasını öneriyor."
+    },
+    {
+     "t": "p",
+     "text": "Bu rakamlar tesis verisi değil, EDAM'ın tahminleri. Rapor tam uygulamayı varsayıyor, TR-ETS'de ödenecek fiyatı düşmüyor, \"ex\" kaydıyla kısmen kapsanan satırları tümüyle sayıyor (rapora göre bu, kapsamı bir miktar abartıyor) ve AB ETS'de ücretsiz tahsisatın kademeli kaldırılmasının kısa ve orta vadede fiili yükü önemli ölçüde azaltacağını kendisi belirtiyor."
+    },
+    {
+     "t": "h2",
+     "text": "KN kodu kontrolü: üç adımlı ön tarama"
+    },
+    {
+     "t": "ol",
+     "items": [
+      "**Kodun teyidi.** Başlangıç noktası, AB'deki müşterinin ithalat beyannamesinde kullandığı 8 haneli KN kodu. Kod bugünkü SKDM Ek I'inde geçiyorsa (örneğin 7318 vida ve cıvata) mesele 2028'in değil bugünün meselesi; bu durumdaki ihracatçılar için ilk okuma [varsayılan değer ile gerçek emisyon arasındaki tercih](/tr/icgoruler/skdm-varsayilan-degerler-2026-gercek-emisyon) yazımız.",
+      "**Üç metinle karşılaştırma.** Ardından kod, Komisyon teklifinin Ek I'i, Konsey genel yaklaşımının Not 1'i ve Parlamento'nun kabul ettiği metinle karşılaştırılır. \"ex\" ile başlayan kalemler kodun yalnızca bir kısmını, çoğunlukla çelik veya alüminyum içeren ürünleri kapsıyor. Üç metinde de geçen kodun kalma olasılığı en yüksek; yalnızca Konsey veya Parlamento listesinde yer alan kodun durumu ise 30 Kasım'da ya da sonrasında varılacak nihai uzlaşmaya bağlı. İlk eleme için [AB kural kapsam tarayıcısı](/tr/karar-laboratuvari/ab-kural-kapsam-tarayicisi) pratik bir başlangıç olabilir.",
+      "**Çelik ve alüminyum payının kaydı.** Bu adımda ürün başına çelik ve alüminyum kütlesi ile malzemenin hangi tesisten alındığı kayda geçer. Hazırlık düzeyi [SKDM hazırlık testi](/tr/karar-laboratuvari/cbam-hazirlik-testi) ile ölçülebilir."
+     ]
+    },
+    {
+     "t": "h2",
+     "text": "Tedarikçi emisyon verisi neden şimdiden önemli?"
+    },
+    {
+     "t": "p",
+     "text": "Hesap öncüle dayandığı için verinin çoğu sizden değil, çelik ve alüminyum tedarikçinizden gelecek. Tedarikçiden istenebilecek bilgiler:"
+    },
+    {
+     "t": "ul",
+     "items": [
+      "Malzemeyi üreten tesisin adı, ülkesi ve SKDM Kayıt Sistemi'ndeki kaydı.",
+      "Size teslim edilen öncülün KN kodu ve parti bazında miktarı.",
+      "Bu öncülün özgül gömülü emisyonu ve bu değerin akredite bir doğrulayıcı tarafından doğrulanıp doğrulanmadığı.",
+      "Hurda içeriği ve bunun tüketici öncesi mi, tüketici sonrası mı olduğu.",
+      "Ödenmiş bir karbon fiyatı varsa buna ilişkin belge."
+     ]
+    },
+    {
+     "t": "p",
+     "text": "Üretici tarafında ise çelik ve alüminyum parçaların kütlesini gösteren bir ürün ağacının (BOM) hazır olması önem kazanıyor; çünkü teklif, malzeme bileşiminin doğrulama raporuna girmesini öngörüyor. Doğrulayıcı seçimini [SKDM doğrulayıcı rehberimizde](/tr/icgoruler/skdm-dogrulayici-secimi-2026), çelik tedarikçisinden veri isteme mantığını [çelik dijital ürün pasaportu](/tr/icgoruler/celik-dijital-urun-pasaportu-espr) yazımızda ele aldık."
+    },
+    {
+     "t": "p",
+     "text": "EDAM bir noktaya da dikkat çekiyor: Aşağı akış üründe karbon fiyatı mahsubu, ürünün üreticisinin değil, çelik ve alüminyum tedarikçisinin ödediği fiyata dayanacak ve bunun tedarik zinciri boyunca beyana nasıl aktarılacağı henüz net değil. Bu verinin kim tarafından, hangi formatta ve ne zaman sağlanacağını tedarik sözleşmelerine şimdiden yazmak, 2028'de alıcıyla yapılacak fiyat görüşmesini kolaylaştırır. Veri akışının nasıl kurulabileceğini [SKDM veri hazırlığı](/tr/cozumler/cbam-veri-hazirligi) sayfamızda ele aldık."
+    },
+    {
+     "t": "h2",
+     "text": "Sıkça sorulan sorular"
+    },
+    {
+     "t": "faq",
+     "items": [
+      [
+       "Ürün listesi kesinleşti mi?",
+       "Hayır. 19 Kasım 2026 itibarıyla üçlü görüşmeler sürüyor; bir sonraki siyasi tur 30 Kasım'da. Liste ancak kabul edilen metin AB Resmî Gazetesi'nde yayımlanınca kesinleşir."
+      ],
+      [
+       "SKDM bedelini ben mi ödeyeceğim?",
+       "Doğrudan değil. Sertifikaları AB'deki yetkilendirilmiş SKDM beyancısı (genellikle ithalatçı) satın alıp teslim eder ((AB) 2023/956, madde 22). Sizden beklenen, beyana esas veriyi sağlamanız. Yine de maliyetin fiyat görüşmesine yansımasını beklemek gerçekçi olur."
+      ],
+      [
+       "Ürünüme varsayılan değer mi uygulanacak?",
+       "Olabilir. Gerçek, doğrulanmış veri yoksa varsayılan değer kullanılır. Komisyon, birden fazla sektörden girdi içeren karmaşık ürünlerde artırım uygulanmamasını öneriyor. Eklenen ürünler için küresel varsayılan değerler ise müzakerede hâlâ açık olan konulardan biri."
+      ],
+      [
+       "50 tonluk eşik küçük ihracatçıyı korur mu?",
+       "Eşik ihracatçıya değil, AB'deki ithalatçının yıllık toplam ithalatına bakar. Komisyon'a göre genişleme sektörlerindeki ithalatçıların %90'ından fazlası bu eşikle muaf olurken emisyonların %99'undan fazlası kapsamda kalıyor. Parlamento alüminyum ürünler için eşiği 5 tona indirmek istiyor."
+      ],
+      [
+       "2026 ve 2027'de bir şey değişiyor mu?",
+       "Teklife göre aşağı akış genişlemesi 1 Ocak 2028'den itibaren uygulanacak. Ürününüz zaten bugünkü kapsamdaysa (örneğin vida ve cıvata) yükümlülükler 2026'dan beri işliyor. 2028'de AB'ye girecek ürünlerin bir kısmı 2027'de üretileceği için veri akışının 2027 içinde kurulması bizce mantıklı."
+      ],
+      [
+       "Binek otomobiller kapsama giriyor mu?",
+       "EDAM'ın analizine göre binek otomobiller (8703) üç listenin hiçbirinde yok. Bazı kamyonlar ve taşıt parçaları üç listede de var; yarı römorklar Konsey ve Parlamento metinlerinde yer alıyor."
+      ]
+     ]
+    },
+    {
+     "t": "sources",
+     "title": "Kaynaklar",
+     "items": [
+      "Avrupa Komisyonu, COM(2025) 989 final, 17 Aralık 2025 (gerekçe 42–45 ve 53, madde 1 ve 2, Ek I ve III), 19 Kasım 2026'da erişildi: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:52025PC0989",
+      "EUR-Lex, Usul 2025/0419/COD, 19 Kasım 2026'da erişildi: https://eur-lex.europa.eu/procedure/EN/2025_419",
+      "Avrupa Komisyonu, \"Commission strengthens the Carbon Border Adjustment Mechanism\", IP/25/3088, 17 Aralık 2025: https://ec.europa.eu/commission/presscorner/api/files/document/print/en/ip_25_3088/IP_25_3088_EN.pdf",
+      "Avrupa Komisyonu, \"Questions and answers on the Carbon Border Adjustment Mechanism (CBAM)\", QANDA/25/3089, 17 Aralık 2025: https://ec.europa.eu/commission/presscorner/api/files/document/print/en/qanda_25_3089/QANDA_25_3089_EN.pdf",
+      "AB Konseyi, ST 10423/26, genel yaklaşım, 12 Haziran 2026 (Ek I, Not 1 ve Not 2): https://data.consilium.europa.eu/doc/document/ST-10423-2026-INIT/en/pdf",
+      "AB Konseyi, \"Council moves to strengthen the EU's carbon border adjustment mechanism\", basın bülteni, 12 Haziran 2026: https://www.consilium.europa.eu/en/press/press-releases/2026/06/12/council-moves-to-strengthen-the-eu-s-carbon-border-adjustment-mechanism/",
+      "Avrupa Parlamentosu, P10_TA(2026)0276, kabul edilen metinler, 15 Eylül 2026 (değişiklik 83, 84, 110 ve 135, 112 ve 136; Ek IIa, değişiklik 97, 113 ve 133): https://data.europarl.europa.eu/distribution/doc/TA-10-2026-0276_en.pdf",
+      "Avrupa Parlamentosu Yasama Gözlemevi, 2025/0419(COD) belge özeti (15 Eylül 2026 oylaması), 19 Kasım 2026'da erişildi: https://oeil.europarl.europa.eu/oeil/en/document-summary?id=1914940",
+      "(AB) 2023/956 sayılı Tüzük, 20 Ekim 2025 tarihli konsolide metin (madde 2a, 22; Ek I, VI, VII): https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02023R0956-20251020",
+      "T.C. Ticaret Bakanlığı, \"SKDM Tüzük Değişiklik Teklifi\", 19 Kasım 2026'da erişildi: https://ticaret.gov.tr/dis-iliskiler/yesil-mutabakat/sinirda-karbon-duzenleme-mekanizmalari/avrupa-birligi-sinirda-karbon-duzenleme-mekanizmasi/skdm-tuzuk-degisiklik-teklifi",
+      "EDAM, Sinan Ülgen, \"Sınırda Karbon Vergisi Kapsamının Genişlemesi: Türkiye'ye Etkileri\", politika raporu, 18 Kasım 2026: http://www.edam.org.tr/ekonomi-ve-enerji/813787-sinirda-karbon-vergisi-kapsaminin-genislemesi-turkiye-ye-etkileri (PDF: https://edam.org.tr/Uploads/Yukleme_Resim/sinirda-karbon-vergisi-kapsaminin-genislemesi-turkiye-ye-etkileri-18-11-2026-14-52-21.pdf)",
+      "Agence Europe, \"First talks between European Parliament and EU Council on extending Carbon Border Adjustment Mechanism raise no major issues\", Brüksel, 21 Ekim 2026, Europe Daily Bulletin No. 13965 (22 Ekim 2026 tarihli sayı): https://agenceurope.eu/en/bulletin/article/13965/4/first-talks-between-european-parliament-and-eu-council-on-extending-carbon-border-adjustment-mechanism-raise-no-major-issues",
+      "Mayer Brown, \"EU's CBAM Downstream Extension and Anti-Circumvention Amendments: the Road to Trilogue\", 7 Ekim 2026 (ikincil kaynak): https://www.mayerbrown.com/en/insights/publications/2026/10/eus-cbam-downstream-extension-and-anti-circumvention-amendments-the-road-to-trilogue",
+      "cbamguide.com, \"First trilogue on the CBAM downstream extension: no deal, four open issues\", 23 Ekim 2026 (Agence Europe'a dayanan basın haberi): https://cbamguide.com/news/2026-10-23-cbam-downstream-first-trilogue-no-deal/",
+      "CBAM.news, \"Countdown to 30 November: CBAM downstream deal enters final stretch on firmer legal ground\", 18 Kasım 2026 (basın haberi): https://cbam.news/countdown-to-30-november-cbam-downstream-deal-enters-final-stretch-on-firmer-legal-ground/"
+     ]
+    },
+    {
+     "t": "p",
+     "text": "*Bilgiler 19 Kasım 2026 itibarıyladır. Bu yazı hukuki danışmanlık değildir; ürün bazında kapsam için esas alınacak olan, kabul edilen nihai metin ve gümrük müşavirinizin görüşüdür. Ganrich Advisory bir hukuk bürosu ya da SKDM doğrulama kuruluşu değildir.*"
+    }
+   ]
+  }
+ },
+ {
   "key": "guideCbamVerifier",
   "solution": "solutionCbam",
   "date": "2026-11-18",
