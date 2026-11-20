@@ -4,6 +4,22 @@ import type { Lang } from "./content";
 export type GuideIndexEntry = { key: string; solution: string; group?: "strategy"; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
  {
+  "key": "guideCbamDownstream",
+  "solution": "solutionCbam",
+  "topic": {
+   "en": "CBAM",
+   "tr": "SKDM (CBAM)"
+  },
+  "en": {
+   "h1": "CBAM's planned 2028 extension to downstream goods: what Turkish makers of machinery, parts and appliances should prepare",
+   "description": "From 2028, CBAM may reach steel- and aluminium-intensive goods. What is still open before the 30 Nov trilogue, and what Turkish makers should prepare."
+  },
+  "tr": {
+   "h1": "SKDM'nin 2028'de aşağı akış ürünlere genişlemesi: makine, parça ve beyaz eşya üreticisi neyi hazırlamalı?",
+   "description": "SKDM 2028'den itibaren çelik ve alüminyum içeren mamul ürünlere genişleyebilir. 30 Kasım üçlü görüşmesi öncesi makine ve parça üreticisi neyi hazırlamalı?"
+  }
+ },
+ {
   "key": "guideCbamVerifier",
   "solution": "solutionCbam",
   "topic": {
