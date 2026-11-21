@@ -96,7 +96,7 @@ export const guideIndex: GuideIndexEntry[] = [
   },
   "tr": {
    "h1": "İngiltere SKDM'si 1 Ocak 2027'de başlıyor: Türk çelik ve alüminyum ihracatçısı neyi hazırlamalı?",
-   "description": "İngiltere SKDM'si 1 Ocak 2027'de başlıyor. Türk çelik ve alüminyum ihracatçısı için AB SKDM'den farkları, İngiliz alıcının isteyeceği veri ve 7 haftalık plan."
+   "description": "İngiltere SKDM'si 1 Ocak 2027'de başlıyor. Türk çelik ve alüminyum ihracatçısı için AB SKDM'den farkları, İngiliz alıcının isteyeceği veri ve eylem planı."
   }
  },
  {
