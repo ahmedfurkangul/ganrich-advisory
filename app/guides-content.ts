@@ -2145,8 +2145,8 @@ export const guides: Guide[] = [
   "solution": "solutionCbam",
   "date": "2026-11-09",
   "checked": {
-   "en": "9 November 2026",
-   "tr": "9 Kasım 2026"
+   "en": "21 November 2026",
+   "tr": "21 Kasım 2026"
   },
   "image": "guideUkCbam",
   "readingTime": {
@@ -2165,7 +2165,7 @@ export const guides: Guide[] = [
    "blocks": [
     {
      "t": "p",
-     "text": "Turkish steel and aluminium exporters spent 2026 on EU CBAM data. A second CBAM starts in seven weeks: the UK's applies to aluminium, iron and steel, cement, fertiliser and hydrogen goods imported into the UK on or after 1 January 2027 (HMRC, CBAM policy summary, updated 2 Nov 2026)."
+     "text": "Turkish steel and aluminium exporters spent 2026 on EU CBAM data. A second CBAM starts on 1 January 2027: the UK's applies to aluminium, iron and steel, cement, fertiliser and hydrogen goods imported into the UK on or after 1 January 2027 (HMRC, CBAM policy summary, updated 2 Nov 2026)."
     },
     {
      "t": "p",
@@ -2296,7 +2296,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "Our reading: for 2027 imports, relief from TR ETS is likely to be zero. The verification form must cover 2025 or 2026, and TR ETS required no allowances to be surrendered for either year. HMRC's guidance sets criteria for a qualifying scheme rather than listing approved ones, and the importer must show that the scheme meets them. For later years, TR ETS will have to be tested against those criteria. Even then, the pilot rules provide for free allocation, which HMRC counts at zero. Plan for the full charge and treat any relief as upside."
+     "text": "Our reading: for 2027 imports, relief from TR ETS is likely to be zero. The verification form must cover 2025 or 2026, and TR ETS required no allowances to be surrendered for either year. HMRC's provisional list of qualifying carbon pricing schemes (27 August 2026) names 16 schemes, including the EU ETS, China's national ETS and the Kazakh ETS, but not TR ETS. The list is not exhaustive, and the importer must still show that a scheme meets the criteria. For later years, TR ETS will have to be tested against them. Even then, the pilot rules provide for free allocation, which HMRC counts at zero. Plan for the full charge and treat any relief as upside."
     },
     {
      "t": "h2",
@@ -2316,7 +2316,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "h2",
-     "text": "A seven-week action list before 1 January 2027"
+     "text": "An action list before 1 January 2027"
     },
     {
      "t": "ol",
@@ -2340,7 +2340,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "Two things to watch. First, HMRC will publish the first actual sector rates, for 1 January to 31 March 2027, before the end of 2026. They will be based on the average UK ETS auction price in the last quarter of 2026, so they will differ from the illustrative figures above. Second, press reports (Euronews, 6 November 2026; Bloomberg, 8 November 2026) say the UK and EU have concluded, or nearly concluded, talks to link their emissions trading systems, with an announcement expected at an EU–UK summit on 20 November. A draft text seen by Euronews says linking would exempt EU and UK goods from each other's CBAMs \"subject to respective laws and procedures\". Nothing is agreed or in force yet: the deal needs approval on both sides, Bloomberg reports that it is tied to separate agri-food and youth-mobility agreements, and any exemption would not be automatic. If it goes ahead, EU mills selling into the UK could eventually face no UK CBAM while Turkish mills still would. Better data is a lever a Turkish exporter controls."
+     "text": "Two things to watch. First, HMRC will publish the first actual sector rates, for 1 January to 31 March 2027, before the end of 2026. They will be based on the average UK ETS auction price in the last quarter of 2026, so they will differ from the illustrative figures above. Second, at their summit on 20 November 2026 the UK and EU welcomed the conclusion of negotiations to link their emissions trading systems. The joint statement says the link would provide a basis for \"exempting EU and UK goods from respective Carbon Border Adjustment Mechanisms subject to respective laws and procedures\", and both sides aim to apply it from 2028 (UK–EU Summit Joint Statement, para 49). The UK government's explainer says legislation will pass in 2027 and the link will apply from 1 January 2028; the legal text is not yet published, and the agreement still has to complete each side's procedures, together with the agri-food and youth-mobility agreements (Joint Statement, para 50). So for goods imported in 2027, EU mills still face UK CBAM like everyone else. From 2028, if the exemption takes effect, EU mills selling into the UK would face no UK CBAM while Turkish mills still would. Better data is a lever a Turkish exporter controls."
     },
     {
      "t": "h2",
@@ -2373,19 +2373,19 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "*Facts as of 9 November 2026; HMRC is still publishing guidance. This article is not legal or tax advice.*"
+     "text": "*Facts as of 21 November 2026; HMRC is still publishing guidance. This article is not legal or tax advice.*"
     }
    ]
   },
   "tr": {
    "path": "icgoruler/ingiltere-skdm-2027-ihracatci",
    "title": "İngiltere SKDM 2027: Türk Çelik ve Alüminyum İhracatçısı",
-   "description": "İngiltere SKDM'si 1 Ocak 2027'de başlıyor. Türk çelik ve alüminyum ihracatçısı için AB SKDM'den farkları, İngiliz alıcının isteyeceği veri ve 7 haftalık plan.",
+   "description": "İngiltere SKDM'si 1 Ocak 2027'de başlıyor. Türk çelik ve alüminyum ihracatçısı için AB SKDM'den farkları, İngiliz alıcının isteyeceği veri ve eylem planı.",
    "h1": "İngiltere SKDM'si 1 Ocak 2027'de başlıyor: Türk çelik ve alüminyum ihracatçısı neyi hazırlamalı?",
    "blocks": [
     {
      "t": "p",
-     "text": "Çelik ve alüminyum ihracatçılarımız 2026'yı AB'nin Sınırda Karbon Düzenleme Mekanizması (SKDM) verisiyle geçirdi. Yedi hafta sonra ikincisi başlıyor: Birleşik Krallık'ın (İngiltere) SKDM'si (UK CBAM), 1 Ocak 2027 ve sonrasında ithal edilen alüminyum, demir-çelik, çimento, gübre ve hidrojen ürünlerine uygulanacak (HMRC, CBAM policy summary, güncelleme 2 Kasım 2026)."
+     "text": "Çelik ve alüminyum ihracatçılarımız 2026'yı AB'nin Sınırda Karbon Düzenleme Mekanizması (SKDM) verisiyle geçirdi. 1 Ocak 2027'de ikincisi başlıyor: Birleşik Krallık'ın (İngiltere) SKDM'si (UK CBAM), 1 Ocak 2027 ve sonrasında ithal edilen alüminyum, demir-çelik, çimento, gübre ve hidrojen ürünlerine uygulanacak (HMRC, CBAM policy summary, güncelleme 2 Kasım 2026)."
     },
     {
      "t": "p",
@@ -2516,7 +2516,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "Bizim okumamız şu: 2027'de ithal edilen mallar için TR ETS'den mahsup büyük olasılıkla sıfır olacak. Doğrulama formu 2025 ya da 2026'yı kapsamalı; TR ETS'de bu iki yılın hiçbiri için izin teslim yükümlülüğü yok. HMRC'nin rehberi onaylı sistemleri listelemiyor, nitelikli sistem için kriter koyuyor; sistemin bu kriterleri karşıladığını göstermek ithalatçıya düşüyor. Sonraki yıllar için TR ETS'nin bu kriterlere uyup uymadığının ayrıca değerlendirilmesi gerekecek. O durumda bile pilot dönem kuralları ücretsiz tahsisat öngörüyor ve HMRC ücretsiz tahsisatı sıfır fiyatla sayıyor. 2027 için İngiltere SKDM yükünün tamamını planlayın; mahsup çıkarsa bunu ek kazanç olarak görün."
+     "text": "Bizim okumamız şu: 2027'de ithal edilen mallar için TR ETS'den mahsup büyük olasılıkla sıfır olacak. Doğrulama formu 2025 ya da 2026'yı kapsamalı; TR ETS'de bu iki yılın hiçbiri için izin teslim yükümlülüğü yok. HMRC'nin nitelikli karbon fiyatlandırma sistemleri için yayımladığı geçici liste (27 Ağustos 2026) aralarında AB ETS, Çin ulusal ETS'si ve Kazakistan ETS'sinin de bulunduğu 16 sistemi sayıyor; TR ETS listede yok. Liste kapsayıcı değil ve sistemin kriterleri karşıladığını göstermek yine ithalatçıya düşüyor. Sonraki yıllar için TR ETS'nin bu kriterlere uyup uymadığının ayrıca değerlendirilmesi gerekecek. O durumda bile pilot dönem kuralları ücretsiz tahsisat öngörüyor ve HMRC ücretsiz tahsisatı sıfır fiyatla sayıyor. 2027 için İngiltere SKDM yükünün tamamını planlayın; mahsup çıkarsa bunu ek kazanç olarak görün."
     },
     {
      "t": "h2",
@@ -2536,7 +2536,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "h2",
-     "text": "1 Ocak 2027'ye kadar yedi haftalık eylem listesi"
+     "text": "1 Ocak 2027'ye kadar eylem listesi"
     },
     {
      "t": "ol",
@@ -2560,7 +2560,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "İzlenmesi gereken iki konu var. Birincisi, HMRC ilk gerçek sektör oranlarını (1 Ocak–31 Mart 2027) 2026 sonundan önce yayımlayacak. Bu oranlar 2026'nın son çeyreğindeki ortalama İngiltere ETS ihale fiyatına dayanacağı için yukarıdaki örnek rakamlardan farklı olacak. İkincisi, basın haberlerine göre (Euronews, 6 Kasım 2026; Bloomberg, 8 Kasım 2026) İngiltere ve AB emisyon ticaret sistemlerini bağlama müzakerelerini tamamladı ya da tamamlamak üzere; duyurunun 20 Kasım'daki AB–İngiltere zirvesinde yapılması bekleniyor. Euronews'un gördüğü taslak metne göre bağlantı, AB ve İngiliz mallarını \"her iki tarafın ilgili mevzuat ve usullerine tabi olarak\" birbirlerinin SKDM'sinden muaf tutacak. Henüz kesinleşmiş ya da yürürlüğe girmiş bir şey yok: anlaşmanın iki tarafta da onaylanması gerekiyor, Bloomberg'e göre ayrı tarım-gıda ve gençlik hareketliliği anlaşmalarına bağlı ve muafiyet otomatik olmayacak. Gerçekleşirse İngiltere'ye satan AB'li üreticiler zamanla İngiltere SKDM'sinden kurtulabilir, Türk üreticiler ise kurtulamaz. Daha iyi veri, Türk ihracatçının kontrol edebildiği bir kaldıraç."
+     "text": "İzlenmesi gereken iki konu var. Birincisi, HMRC ilk gerçek sektör oranlarını (1 Ocak–31 Mart 2027) 2026 sonundan önce yayımlayacak. Bu oranlar 2026'nın son çeyreğindeki ortalama İngiltere ETS ihale fiyatına dayanacağı için yukarıdaki örnek rakamlardan farklı olacak. İkincisi, İngiltere ve AB 20 Kasım 2026'daki zirvede emisyon ticaret sistemlerini bağlama müzakerelerinin tamamlandığını açıkladı. Ortak bildiriye göre bağlantı, AB ve İngiliz mallarını \"her iki tarafın ilgili mevzuat ve usullerine tabi olarak\" birbirlerinin SKDM'sinden muaf tutmanın zeminini oluşturacak; iki taraf da anlaşmayı 2028'den itibaren uygulamayı hedefliyor (AB–İngiltere Zirvesi Ortak Bildirisi, 49. madde). İngiltere hükümetinin açıklamasına göre gerekli mevzuat 2027'de çıkacak ve bağlantı 1 Ocak 2028'de devreye girecek. Hukuki metin henüz yayımlanmadı; anlaşmanın tarım-gıda ve gençlik hareketliliği anlaşmalarıyla birlikte iki tarafın onay süreçlerini tamamlaması gerekiyor (Ortak Bildiri, 50. madde). Yani 2027'de ithal edilen mallarda AB'li üreticiler de İngiltere SKDM'sine tabi. 2028'den itibaren muafiyet yürürlüğe girerse İngiltere'ye satan AB'li üreticiler İngiltere SKDM'si ödemeyecek, Türk üreticiler ise ödemeye devam edecek. Daha iyi veri, Türk ihracatçının kontrol edebildiği bir kaldıraç."
     },
     {
      "t": "h2",
@@ -2593,7 +2593,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "*Bilgiler 9 Kasım 2026 itibarıyla; HMRC rehber yayımlamaya devam ediyor. Bu yazı hukuki ya da vergisel danışmanlık değildir.*"
+     "text": "*Bilgiler 21 Kasım 2026 itibarıyla; HMRC rehber yayımlamaya devam ediyor. Bu yazı hukuki ya da vergisel danışmanlık değildir.*"
     }
    ]
   }
