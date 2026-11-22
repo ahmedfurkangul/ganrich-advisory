@@ -1573,7 +1573,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 130); // +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
+  assert.equal(blocks.length, 132); // +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1739,4 +1739,16 @@ test("publishes the CRA rule hub with both CRA guides", async () => {
     assert.match(html, /"@type":"FAQPage"/, p);
   }
   assert.match(await (await render("/en/solutions/cra-incident-readiness")).text(), /href="\/en\/insights\/cra"/);
+});
+
+test("publishes the Türkiye ETS rule hub and links it from the programme", async () => {
+  for (const [p, h1] of [["/en/insights/turkiye-ets", /Türkiye ETS for covered plants/], ["/tr/icgoruler/tr-ets", /Kapsamdaki tesisler için Türkiye ETS/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.match(html, /27 (January|Ocak) 2027/, p);
+    assert.match(html, /"@type":"FAQPage"/, p);
+  }
+  assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /href="\/en\/insights\/turkiye-ets"/);
 });
