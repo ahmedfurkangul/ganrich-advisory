@@ -77,6 +77,7 @@ const cards = {
     ["hubCra", "INSIGHTS · CYBER RESILIENCE ACT", "CRA: what applies now"],
     ["hubEudr", "INSIGHTS · EUDR", "EUDR: what your buyer will ask for"],
     ["hubTrEts", "INSIGHTS · TÜRKİYE ETS", "Türkiye ETS: what the pilot asks"],
+    ["hubPpwr", "INSIGHTS · PACKAGING (PPWR)", "PPWR: the packaging file"],
   ],
   tr: [
     ["home", "STRATEJİK DANIŞMANLIK", "Sonraki adım. Sağlam bir kararla."],
@@ -144,6 +145,7 @@ const cards = {
     ["hubCra", "İÇGÖRÜLER · SİBER DAYANIKLILIK", "CRA: şimdi ne geçerli?"],
     ["hubEudr", "İÇGÖRÜLER · EUDR", "EUDR: alıcınız ne isteyecek?"],
     ["hubTrEts", "İÇGÖRÜLER · TÜRKİYE ETS", "TR ETS: pilot ne istiyor?"],
+    ["hubPpwr", "İÇGÖRÜLER · AMBALAJ (PPWR)", "PPWR: ambalaj dosyası"],
   ],
 };
 
