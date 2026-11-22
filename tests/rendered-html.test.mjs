@@ -202,9 +202,9 @@ test("publishes production-safe bilingual SEO, taxonomy, feeds, and discovery fi
   assert.match(article, /"Organization","ProfessionalService"/);
   assert.doesNotMatch(article, /localhost:3000/);
   assert.match(feedResponse.headers.get("content-type") ?? "", /^application\/rss\+xml/);
-  assert.match(feed, /<title>The Ganrich Brief<\/title>/);
+  assert.match(feed, /<title>Ganrich Advisory Insights<\/title>/);
   assert.match(feed, /decision-quality-applied-ai/);
-  assert.match(turkishFeed, /<title>Ganrich Bülteni<\/title>/);
+  assert.match(turkishFeed, /<title>Ganrich Advisory İçgörüler<\/title>/);
   assert.doesNotMatch(sitemap, /\/insights\/category\//);
   assert.match(sitemap, /https:\/\/ganrichadvisory\.com\/en\/insights\/decision-quality-applied-ai/);
   assert.match(sitemap, /hreflang="tr"/);
@@ -430,7 +430,7 @@ test("returns 404 for paths outside the /en and /tr trees", async () => {
 
 test("publishes the solutions programmes in both languages without prices or durations", async () => {
   const { routeMap } = await import("../app/content.ts").catch(() => ({ routeMap: null }));
-  const paths = ["/en/solutions", "/tr/cozumler", "/en/solutions/cbam-data-readiness", "/en/solutions/cra-incident-readiness", "/en/solutions/ai-order-desk-assistant", "/tr/cozumler/cbam-veri-hazirligi", "/tr/cozumler/sanayide-su-dengesi"];
+  const paths = ["/en/solutions", "/tr/cozumler", "/en/solutions/cbam-data-readiness", "/en/solutions/cra-incident-readiness", "/tr/cozumler/cbam-veri-hazirligi", "/tr/cozumler/turkiye-ets-hazirligi"];
   for (const path of paths) {
     const response = await render(path);
     assert.equal(response.status, 200, path);
@@ -440,7 +440,7 @@ test("publishes the solutions programmes in both languages without prices or dur
     assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\d+\s?(weeks?|months?|hafta|ay)\b/i, `${path} must not show prices or durations`);
   }
   const hub = await (await render("/en/solutions")).text();
-  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "AI Order Desk Assistant", "Industrial Water Balance"]) assert.match(hub, new RegExp(title));
+  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "Supplier Sustainability Data", "Türkiye ETS Readiness"]) assert.match(hub, new RegExp(title));
   const home = await (await render("/en")).text();
   assert.match(home, /href="\/en\/solutions"/);
   // Batch 2 (October 2026): each new programme renders in both languages and links its own whitepaper.
@@ -506,7 +506,7 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   const org = graph(home).find(node => node["@id"] === "https://ganrichadvisory.com/#organization");
   assert.equal(org.email, "furkangul@ganrichadvisory.com");
   assert.ok(org.sameAs.includes("https://www.linkedin.com/company/135278307/"));
-  assert.equal(org.hasOfferCatalog.itemListElement.length, 29); // 21 programmes, 2 strategy services, 5 service models and AI Decisions
+  assert.equal(org.hasOfferCatalog.itemListElement.length, 24); // 16 programmes (5 retired on 22 Nov 2026), 2 strategy services, 5 service models and AI Decisions
   assert.ok(types(hub).includes("ItemList") && types(hub).includes("CollectionPage"));
   assert.ok(types(service).includes("Service"));
   const crumbs = graph(solution).find(node => node["@type"] === "BreadcrumbList").itemListElement.map(item => item.name);
@@ -540,7 +540,7 @@ test("homepage whitepapers match the solutions catalogue", async () => {
     readFile(new URL("../app/solutions-content.ts", import.meta.url), "utf8"),
   ]);
   const entries = [...home.matchAll(/key: "(\w+)", title: "([^"]+)", slug: "([^"]+)"/g)];
-  assert.equal(entries.length, 6);
+  assert.equal(entries.length, 4); // the Order Desk paper left the homepage with its programme (22 Nov 2026)
   for (const [, key, title, slug] of entries) {
     const line = catalogue.split("\n").find(l => l.includes(`key: '${key}'`) && l.includes(`slug: '${slug}'`));
     assert.ok(line, `${key} ${slug} is in solutions-content.ts`);
@@ -633,10 +633,10 @@ test("keeps the Opportunity Studio showcase reachable but unlinked and noindex, 
     assert.doesNotMatch(await (await render(path)).text(), /href="\/(en|tr)\/opportunity-studio|value="studio"/, `${path} links the Studio`);
   }
   assert.doesNotMatch(await (await render("/sitemap.xml")).text(), /opportunity-studio/);
-  const desk = await (await render("/en/solutions/ai-order-desk-assistant")).text();
-  assert.match(desk, /We do not build, resell or operate the software/);
-  assert.match(desk, /Do you build the assistant\?/);
-  assert.match(await (await render("/tr/cozumler/yapay-zeka-siparis-masasi")).text(), /Yazılımı geliştirmiyor, satmıyor veya işletmiyoruz/);
+  // The Order Desk programme was retired on 22 Nov 2026; its address now leads to AI Decisions.
+  const desk = await render("/en/solutions/ai-order-desk-assistant");
+  assert.equal(desk.status, 308);
+  assert.match(desk.headers.get("location") ?? "", /\/en\/expertise\/ai-decisions$/);
   await access(new URL("../public/studio/carbon-en.webp", import.meta.url));
 });
 
@@ -695,11 +695,11 @@ test("folds the trust pages into privacy, KVKK and legal, and redirects the old 
   assert.doesNotMatch(sitemap, /privacy-center|\/en\/cookies<|data-rights|ai-transparency|\/en\/terms<|policy-updates|\/en\/vendors</);
 });
 
-test("turns the Decision Lab into a readiness-check hub with the decision tools below", async () => {
+test("turns the Decision Lab into a readiness-check hub without the generic decision tools", async () => {
   const [en, tr] = await Promise.all(["/en/decision-lab", "/tr/karar-laboratuvari"].map(path => render(path).then(response => response.text())));
   for (const href of ["/en/decision-lab/cbam-readiness-check", "/en/decision-lab/cra-readiness-check", "/en/decision-lab/eudr-readiness-check"]) assert.match(en, new RegExp(`href="${href}"`));
   assert.equal((en.match(/Start the check/g) ?? []).length, 3);
-  assert.match(en, /href="\/en\/decision-lab\/decision-framer"/);
+  assert.doesNotMatch(en, /href="\/en\/decision-lab\/decision-framer"|lab-tools-archive/);
   assert.doesNotMatch(en, /Five instruments|tool-need/);
   assert.match(tr, /Hazırlık testleri/);
 });
@@ -707,11 +707,11 @@ test("turns the Decision Lab into a readiness-check hub with the decision tools 
 test("leads the solutions hub with the four flagship programmes and lists the rest below", async () => {
   const hub = await (await render("/en/solutions")).text();
   const flagship = hub.slice(hub.indexOf('id="flagship"'), hub.indexOf('id="more"'));
-  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "EUDR Traceability File", "AI Order Desk Assistant"]) assert.match(flagship, new RegExp(title));
+  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "EUDR Traceability File", "Supplier Sustainability Data"]) assert.match(flagship, new RegExp(title));
   assert.doesNotMatch(flagship, /Industrial Water Balance|PFAS Substitution/);
   assert.equal((flagship.match(/Take the 2-minute check/g) ?? []).length, 3);
   const more = hub.slice(hub.indexOf('id="more"'), hub.indexOf('id="strategy"'));
-  for (const title of ["PFAS Substitution Programme", "Industrial Water Balance", "E-commerce Margin Clarity"]) assert.match(more, new RegExp(title));
+  for (const title of ["PFAS Substitution Programme", "Türkiye ETS Readiness", "NIS2 Supplier Security Evidence"]) assert.match(more, new RegExp(title));
   assert.doesNotMatch(more, /CBAM Data Readiness/);
   assert.doesNotMatch(hub, /aria-pressed/);
 });
@@ -766,8 +766,8 @@ test("keeps the header call to action sized to its label", async () => {
 
 test("lists whitepapers, articles and decision notes in one technical-notes library", async () => {
   for (const [path, title, paper, article] of [
-    ["/en/insights", /Technical Notes \| Ganrich Advisory/, /href="\/en\/insights\/report\/cbam-actual-or-default-e9f664d8"/, /href="\/en\/insights\/decision-quality-applied-ai"/],
-    ["/tr/icgoruler", /Teknik Notlar \| Ganrich Advisory/, /href="\/tr\/icgoruler\/rapor\/cbam-gercek-mi-varsayilan-mi-ef31215c"/, /href="\/tr\/icgoruler\/uygulamali-yapay-zeka-karar-kalitesi"/],
+    ["/en/insights", /Insights \| Ganrich Advisory/, /href="\/en\/insights\/report\/cbam-actual-or-default-e9f664d8"/, /href="\/en\/insights\/decision-quality-applied-ai"/],
+    ["/tr/icgoruler", /İçgörüler \| Ganrich Advisory/, /href="\/tr\/icgoruler\/rapor\/cbam-gercek-mi-varsayilan-mi-ef31215c"/, /href="\/tr\/icgoruler\/uygulamali-yapay-zeka-karar-kalitesi"/],
   ]) {
     const response = await render(path);
     assert.equal(response.status, 200, path);
@@ -1573,7 +1573,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 146);
+  assert.equal(blocks.length, 124); // 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1652,4 +1652,31 @@ test("renders page content inside <main> without a loading fallback", async () =
     assert.doesNotMatch(html, /<div hidden id="S:\d+">/, `${path}: no hidden streamed content`);
     assert.doesNotMatch(html, /route-loading|Loading…|Yükleniyor…/, `${path}: no loading fallback`);
   }
+});
+
+test("uses one name per section: Insights for the library, Guide for long-form notes, Readiness checks for the tools", async () => {
+  const [guide, lib, check] = await Promise.all(["/en/insights/cbam-verifier-turkish-installations-2026", "/tr/icgoruler", "/en/decision-lab/cbam-readiness-check"].map(p => render(p).then(r => r.text())));
+  assert.match(guide, /<p class="kicker">Guide(<!-- -->)? · /);
+  assert.match(guide, /All insights/);
+  assert.doesNotMatch(guide, /Technical note ·|All technical notes/);
+  assert.match(lib, /İÇGÖRÜLER/);
+  assert.doesNotMatch(lib, /TEKNİK NOTLAR/);
+  assert.match(check, /"name":"Readiness checks"/);
+  const feed = await (await render("/en/feed.xml")).text();
+  assert.doesNotMatch(feed, /The Ganrich Brief/);
+});
+
+test("retires off-positioning programmes with a 308 and keeps generic decision tools out of the index", async () => {
+  for (const [path, target] of [["/en/solutions/measured-energy-retrofit", /\/en\/solutions$/], ["/tr/cozumler/gunes-ve-depolama-karari", /\/tr\/cozumler$/], ["/en/solutions/industrial-water-balance", /\/en\/solutions$/], ["/tr/cozumler/yapay-zeka-siparis-masasi", /\/tr\/uzmanlik\/yapay-zeka-kararlari$/], ["/en/solutions/e-commerce-margin-clarity", /\/en\/solutions$/]]) {
+    const response = await render(path);
+    assert.equal(response.status, 308, path);
+    assert.match(response.headers.get("location") ?? "", target, path);
+  }
+  const tool = await render("/en/decision-lab/decision-framer");
+  assert.equal(tool.status, 200);
+  assert.match(await tool.text(), /<meta name="robots" content="noindex, follow"/);
+  const sitemap = await (await render("/sitemap.xml")).text();
+  assert.doesNotMatch(sitemap, /measured-energy-retrofit|ai-order-desk|decision-framer|decision-atlas|ai-value-lens|board-brief|market-entry-compass|changelog/);
+  const [hub, contact, llms] = await Promise.all(["/en/solutions", "/en/contact", "/llms.txt"].map(path => render(path).then(r => r.text())));
+  for (const html of [hub, contact, llms]) assert.doesNotMatch(html, /Measured Energy Retrofit|Solar and Storage Decision|Industrial Water Balance|AI Order Desk Assistant|E-commerce Margin Clarity/);
 });

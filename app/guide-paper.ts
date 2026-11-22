@@ -1,5 +1,5 @@
 import type { Lang } from "./content";
-import { solutions } from "./solutions-content";
+import { allSolutions as solutions } from "./solutions-content";
 
 // The PDF whitepaper of a guide's programme, if it has one (same report routes as the solution pages).
 export function solutionPaperPath(lang: Lang, solution: string) {
