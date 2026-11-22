@@ -388,7 +388,6 @@ summary, button, select, input:not([type="checkbox"]):not([type="radio"]):not([t
 }
 [role="tabpanel"]:focus-visible { outline-offset: 6px; }
 .command-backdrop, .tray-backdrop, .privacy-modal-backdrop { overscroll-behavior: contain; }
-.route-loading { min-height: 62vh; display: grid; place-items: center; color: var(--stone); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
 .error-page { min-height: 100vh; display: grid; grid-template-columns: minmax(180px,.7fr) minmax(320px,1.6fr) minmax(280px,1fr); gap: clamp(35px,7vw,120px); align-items: end; padding: clamp(32px,6vw,90px) var(--gutter); background: var(--forest); color: var(--white); }.error-brand { align-self: start; font-size: 12px; font-weight: 700; letter-spacing: .14em; }.error-page h1, .error-page h2 { margin: 28px 0; font-size: clamp(48px,7vw,96px); }.error-page h2 { font-size: clamp(36px,4.5vw,64px); }.error-page p { max-width: 660px; color: rgba(251,250,247,.7); }.error-page .button { margin-top: 24px; border-color: var(--ivory); background: var(--ivory); color: var(--ink); }.error-page .text-link { display: inline-flex; margin-top: 22px; padding-bottom: 8px; border-bottom: 1px solid rgba(251,250,247,.45); }
 
 @media (max-width: 800px) {

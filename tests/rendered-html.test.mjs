@@ -1627,3 +1627,16 @@ test("long-form guides end with a topic-specific next step", async () => {
   const { guideNextSteps } = await import("../app/guide-next-steps.ts");
   for (const g of guides) assert.ok(guideNextSteps[g.key], `${g.key} has a next step`);
 });
+
+test("renders page content inside <main> without a loading fallback", async () => {
+  for (const path of ["/en", "/tr", "/en/contact", "/tr/cozumler", "/en/insights/cbam-verifier-turkish-installations-2026", "/en/decision-lab/eu-rule-scope-scanner"]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    const main = html.match(/<main id="content">([\s\S]*?)<\/main>/);
+    assert.ok(main, `${path}: <main> is present`);
+    assert.match(main[1], /<h1[\s>]/, `${path}: the H1 is server-rendered inside <main>`);
+    assert.doesNotMatch(html, /<div hidden id="S:\d+">/, `${path}: no hidden streamed content`);
+    assert.doesNotMatch(html, /route-loading|Loading…|Yükleniyor…/, `${path}: no loading fallback`);
+  }
+});
