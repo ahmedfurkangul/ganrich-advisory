@@ -49,6 +49,6 @@ export const guideShortAnswers: Record<string, Record<Lang, string>> = {
   },
   guideCraStandards: {
     en: "No CRA harmonised standard is cited yet, and the main obligations apply from 11 December 2027. Most products are in the default category and can self-assess under module A without a standard, if the technical documentation shows how each essential requirement is met. Important class I products without an applied standard need a notified body, so check capacity early.",
-    tr: "Henüz yayımlanmış bir CRA uyumlaştırılmış standardı yok ve ana yükümlülükler 11 Aralık 2027'den itibaren uygulanıyor. Ürünlerin çoğu varsayılan kategoride ve teknik dosya her temel gerekliliğin nasıl karşılandığını gösterirse standart olmadan modül A ile öz değerlendirme yapabilir. Standart uygulanmayan önemli sınıf I ürünler onaylanmış kuruluş gerektirir; kapasiteyi erkenden kontrol edin.",
+    tr: "Henüz yayımlanmış bir CRA uyumlaştırılmış standardı yok ve ana yükümlülükler 11 Aralık 2027'den itibaren uygulanıyor. Ürünlerin çoğu varsayılan kategoride ve teknik dosya her temel gerekliliğin nasıl karşılandığını gösterirse standart olmadan modül A ile öz değerlendirme yapabilir. Standart uygulanmayan I. sınıf önemli ürünler onaylanmış kuruluş gerektirir; kapasiteyi erkenden kontrol edin.",
   },
 };

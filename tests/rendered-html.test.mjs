@@ -1573,7 +1573,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 128); // +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
+  assert.equal(blocks.length, 130); // +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1728,4 +1728,15 @@ test("publishes the CBAM rule hub with all CBAM guides and links it from the pro
     assert.match(html, /"@type":"FAQPage"/, p);
   }
   assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/insights\/cbam"/);
+});
+
+test("publishes the CRA rule hub with both CRA guides", async () => {
+  for (const [p, h1] of [["/en/insights/cra", /Cyber Resilience Act for Turkish manufacturers/], ["/tr/icgoruler/cra", /Türk üreticiler için Siber Dayanıklılık Yasası/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.match(html, /"@type":"FAQPage"/, p);
+  }
+  assert.match(await (await render("/en/solutions/cra-incident-readiness")).text(), /href="\/en\/insights\/cra"/);
 });
