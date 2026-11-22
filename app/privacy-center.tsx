@@ -238,7 +238,7 @@ const pages: Record<Lang, Record<TrustKind, {
       label: "PRIVACY NOTICE",
       title: "Privacy, explained in plain language.",
       intro: "A factual account of the public website, its limited data surface, and the choices available to visitors.",
-      status: "Controller: Ahmed Furkan Gül (Ganrich Advisory) · furkangul@ganrichadvisory.com · Last updated 9 November 2026.",
+      status: "Controller: Ahmed Furkan Gül (Ganrich Advisory) · furkangul@ganrichadvisory.com · Last updated 22 November 2026.",
       sections: [
         ["Who is responsible", "Ahmed Furkan Gül publishes this site and offers advisory work under the name Ganrich Advisory, and is the controller of the personal data described here. Ganrich Advisory is not yet a registered company; this notice will be updated when one is formed. Contact: furkangul@ganrichadvisory.com."],
         ["What the public site handles", "Language choice, consent choice, and optional interface preferences may be stored locally on your device. Contact, briefing and whitepaper download details are transmitted securely and stored to review and respond to your request. What we receive is what you type: usually your name, email address, organisation and message, and for a check result or document request also the check or document concerned."],
@@ -329,6 +329,7 @@ const pages: Record<Lang, Record<TrustKind, {
       title: "A visible record of meaningful changes.",
       intro: "Material changes will be dated and summarized here rather than silently folded into long text.",
       sections: [
+        ["22 November 2026 · Version 1.4", "The privacy bar that appeared on every first visit is removed. Nothing changes in what is collected: optional local preferences stay off until you switch them on under Cookie preferences in the footer."],
         ["9 November 2026 · Version 1.3", "The regulation newsletter becomes the weekly Sunday Brief. Resend now also sends the newsletter and keeps the list of confirmed addresses and their language for that purpose."],
         ["24 October 2026 · Version 1.2", "Merged the privacy, cookie, provider, data-rights and change-log pages into one privacy notice, and the terms and AI transparency into the legal notice. Old addresses redirect to the matching section."],
         ["24 October 2026 · Version 1.1", "Named the data controller (Ahmed Furkan Gül, Ganrich Advisory), published the KVKK notice with purposes, legal bases, transfers and rights, listed the service providers, and set retention periods that the site now enforces automatically."],
@@ -355,7 +356,7 @@ const pages: Record<Lang, Record<TrustKind, {
       label: "GİZLİLİK BİLDİRİMİ",
       title: "Gizlilik, açık bir dille.",
       intro: "Kamuya açık sitenin sınırlı veri yüzeyini ve ziyaretçilere sunulan tercihleri olgulara dayalı olarak açıklar.",
-      status: "Veri sorumlusu: Ahmed Furkan Gül (Ganrich Advisory) · furkangul@ganrichadvisory.com · Son güncelleme 9 Kasım 2026.",
+      status: "Veri sorumlusu: Ahmed Furkan Gül (Ganrich Advisory) · furkangul@ganrichadvisory.com · Son güncelleme 22 Kasım 2026.",
       sections: [
         ["Sorumlu kişi", "Bu siteyi Ganrich Advisory adıyla yayımlayan ve bu adla danışmanlık hizmeti sunan Ahmed Furkan Gül, burada açıklanan kişisel verilerin veri sorumlusudur. Ganrich Advisory henüz tescilli bir şirket değildir; şirket kurulduğunda bu bildirim güncellenecektir. İletişim: furkangul@ganrichadvisory.com."],
         ["Kamuya açık sitede işlenenler", "Dil seçimi, gizlilik tercihi ve isteğe bağlı arayüz ayarları cihazınızda yerel olarak saklanabilir. İletişim, brifing ve teknik not indirme bilgileri, talebinizi incelemek ve yanıtlamak amacıyla güvenli biçimde iletilir ve saklanır. Bize ulaşan bilgiler yazdıklarınızdır: genellikle adınız, e-posta adresiniz, kurumunuz ve mesajınız; test sonucu veya belge talebinde ayrıca ilgili test ya da belge."],
@@ -446,6 +447,7 @@ const pages: Record<Lang, Record<TrustKind, {
       title: "Önemli değişiklikler için görünür kayıt.",
       intro: "Esaslı değişiklikler uzun metinlerin içine sessizce eklenmek yerine burada tarih ve özetle yayımlanır.",
       sections: [
+        ["22 Kasım 2026 · Sürüm 1.4", "Her ilk ziyarette görünen gizlilik şeridi kaldırıldı. Toplanan verilerde değişiklik yok: isteğe bağlı yerel tercihler, alt bilgideki Çerez tercihleri bölümünden siz açana kadar kapalı kalır."],
         ["9 Kasım 2026 · Sürüm 1.3", "Mevzuat bülteni haftalık Pazar Notu oldu. Resend artık bülteni de gönderiyor ve bu amaçla onaylı adreslerin listesini ve dillerini saklıyor."],
         ["24 Ekim 2026 · Sürüm 1.2", "Gizlilik, çerez, hizmet sağlayıcı, ilgili kişi hakları ve değişiklik kaydı sayfaları tek gizlilik bildiriminde; kullanım koşulları ve yapay zekâ şeffaflığı yasal bildirimde birleştirildi. Eski adresler ilgili bölüme yönlenir."],
         ["24 Ekim 2026 · Sürüm 1.1", "Veri sorumlusu (Ahmed Furkan Gül, Ganrich Advisory) belirtildi; amaçları, hukuki sebepleri, aktarımları ve hakları içeren KVKK aydınlatma metni yayımlandı; hizmet sağlayıcılar listelendi ve sitenin artık otomatik uyguladığı saklama süreleri belirlendi."],
@@ -498,6 +500,6 @@ export function TrustContentPage({ lang, kind }: { lang: Lang; kind: TrustKind }
   return <TrustShell lang={lang} label={page.label} title={page.title} intro={page.intro}>
     <Sections sections={page.sections}/>
     {(mergedTrustParts[kind] ?? []).map(([part, anchor]) => { const p = pages[lang][part]; return <div key={part} id={anchor} className="trust-part"><header><span className="eyebrow">{p.label}</span><h2>{p.title}</h2><p>{p.intro}</p></header><Sections sections={p.sections}/></div>; })}
-    <p className="policy-version">{lang === "en" ? "Version 1.3 · Reviewed 9 November 2026" : "Sürüm 1.3 · İnceleme tarihi 9 Kasım 2026"}</p>
+    <p className="policy-version">{lang === "en" ? "Version 1.4 · Reviewed 22 November 2026" : "Sürüm 1.4 · İnceleme tarihi 22 Kasım 2026"}</p>
   </TrustShell>;
 }

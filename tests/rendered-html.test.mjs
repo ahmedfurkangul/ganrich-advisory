@@ -1890,3 +1890,13 @@ test("tells visitors what to have to hand for the first review, without asking f
     assert.match(html, wait);
   }
 });
+
+test("shows no privacy bar, and keeps optional local storage off until chosen in Cookie preferences", async () => {
+  const controls = await readFile(new URL("../app/privacy-controls.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(controls, /privacy-banner/);
+  assert.match(controls, /export function optionalPreferencesEnabled\(\) \{\n  return Boolean\(readPreference\(\)\?\.functional\);/);
+  const privacy = await (await render("/en/privacy")).text();
+  assert.match(privacy, /22 November 2026 · Version 1\.4/);
+  const footer = await (await render("/tr")).text();
+  assert.match(footer, /Çerez tercihleri/);
+});
