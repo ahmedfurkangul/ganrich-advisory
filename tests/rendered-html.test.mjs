@@ -1760,3 +1760,12 @@ test("lists the rule hubs at the top of the Insights library", async () => {
     for (const href of hrefs) assert.ok(html.includes(`href="${href}"`), `${p} links ${href}`);
   }
 });
+
+test("sends a trial Content-Security-Policy in report-only mode", async () => {
+  const res = await render("/en");
+  const csp = res.headers.get("content-security-policy-report-only") ?? "";
+  assert.match(csp, /default-src 'self'/);
+  assert.match(csp, /object-src 'none'/);
+  assert.match(csp, /script-src 'self' 'unsafe-inline' https:\/\/static\.cloudflareinsights\.com/);
+  assert.match(res.headers.get("content-security-policy") ?? "", /frame-ancestors 'self'/);
+});
