@@ -1521,7 +1521,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   for (const article of phaseTwoInsightArticles.en) add(`/en/insights/${article.slug}`, article.date);
   for (const article of phaseTwoInsightArticles.tr) add(`/tr/icgoruler/${article.slug}`, article.date);
   // Only guides and legacy articles carry an editorial date; every other page omits lastmod.
-  assert.equal(expected.size, 36);
+  assert.equal(expected.size, 38);
 
   const [enFeed, trFeed, llms, llmsFull, sitemap, greenDeal, cbamGuide, craGuide, home, solution] = await Promise.all([
     render("/en/feed.xml").then(response => response.text()),
@@ -1541,7 +1541,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   const reportLinks = (items) => items.filter(item => /<link>[^<]*\/(?:insights\/report|icgoruler\/rapor)\//.test(item)).length;
   assert.equal(enItems.length, notes.en.length + phaseTwoInsightArticles.en.length + guides.length + reportLinks(enItems));
   assert.equal(trItems.length, notes.tr.length + phaseTwoInsightArticles.tr.length + guides.length + reportLinks(trItems));
-  assert.equal(guides.length, 12);
+  assert.equal(guides.length, 13);
 
   const guideNewest = guides.reduce((max, guide) => guideLastmod(guide) > max ? guideLastmod(guide) : max, "0000-00-00");
   const articleNewest = phaseTwoInsightArticles.en.reduce((max, article) => article.date > max ? article.date : max, "0000-00-00");
@@ -1573,7 +1573,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 140); // +2 accessibility statement, +2 rule terms page, +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
+  assert.equal(blocks.length, 142); // +2 accessibility statement, +2 supplier data guide, +2 rule terms page, +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1591,7 +1591,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
     assert.equal(value, expected.get(path), `${path} lastmod`);
   }
   for (const path of expected.keys()) assert.ok(seen.has(path), `${path} missing from sitemap`);
-  assert.equal(blocks.filter(block => block.includes("<lastmod>")).length, 36);
+  assert.equal(blocks.filter(block => block.includes("<lastmod>")).length, 38);
   for (const path of ["/en", "/tr", "/en/solutions", "/en/solutions/cbam-data-readiness", "/en/decision-lab", "/en/insights"]) {
     const block = blocks.find(item => item.includes(`https://ganrichadvisory.com${path}</loc>`));
     assert.ok(block, `${path} in sitemap`);
@@ -1825,5 +1825,29 @@ test("publishes an accessibility statement in both languages, linked from every 
     assert.match(html, /furkangul@ganrichadvisory\.com/);
     assert.match(html, /22 (November|Kasım) 2026/);
     assert.ok((await (await render(home)).text()).includes(`href="${path}"`), `${home} footer links ${path}`);
+  }
+});
+
+test("publishes the supplier sustainability data guide with the Omnibus cap and the product-rule split", async () => {
+  const pages = [
+    ["/en/insights/supplier-sustainability-data-omnibus-2027", "/tr/icgoruler/tedarikci-surdurulebilirlik-verisi-omnibus-2027", /Directive \(EU\) 2026\/470/, /up to 1,000 employees/, ["/en/insights/cbam", "/en/insights/eudr", "/en/insights/ppwr", "/en/insights/eu-buyer-questions", "/en/solutions/supplier-sustainability-data"]],
+    ["/tr/icgoruler/tedarikci-surdurulebilirlik-verisi-omnibus-2027", "/en/insights/supplier-sustainability-data-omnibus-2027", /\(AB\) 2026\/470/, /1\.000&#x27;e kadar çalışanı|1\.000'e kadar çalışanı/, ["/tr/icgoruler/skdm", "/tr/icgoruler/eudr", "/tr/icgoruler/ppwr", "/tr/icgoruler/ab-alici-sorulari", "/tr/cozumler/tedarikci-surdurulebilirlik-verisi"]],
+  ];
+  for (const [path, pair, directive, cap, links] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, directive, `${path} cites Omnibus I`);
+    assert.match(html, /2026\/1560/, `${path} cites the voluntary standard`);
+    assert.match(html, cap, `${path} states the cap`);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guideSupplierData\.png/);
+    assert.match(html, /\/guides\/guideSupplierData-(en|tr)\.webp/);
+    assert.doesNotMatch(html, /€|EUR \d|\d+ (million|billion|milyon|milyar)/, `${path} has no amounts`);
+    for (const link of links) {
+      assert.ok(html.includes(`href="${link}"`), `${path} links ${link}`);
+      assert.equal((await render(link)).status, 200, link);
+    }
   }
 });
