@@ -1890,3 +1890,10 @@ test("tells visitors what to have to hand for the first review, without asking f
     assert.match(html, wait);
   }
 });
+
+test("states the Article 9 transfer mechanism in the KVKK notice", async () => {
+  const tr = await (await render("/tr/kvkk-aydinlatma-metni")).text();
+  assert.match(tr, /9\. maddesi uyarınca Kişisel Verileri Koruma Kurulu(?:'|&#x27;)nun ilan ettiği standart sözleşmelere dayanır/);
+  const en = await (await render("/en/turkiye-data-protection-notice")).text();
+  assert.match(en, /standard contracts announced by the Personal Data Protection Board under Article 9/);
+});
