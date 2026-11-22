@@ -1,6 +1,6 @@
 "use client";
 
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { isServicePageKey } from "./service-page-index";
 import Image from "next/image";
 import { BoutiqueHome } from "./advisory";
@@ -141,5 +141,8 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "cookiePreferences") page = <CookiePreferencesPage lang={lang}/>;
   if (["privacy", "kvkk", "legal"].includes(kind)) page = <TrustContentPage lang={lang} kind={kind as "privacy" | "kvkk" | "legal"}/>;
   if (kind === "notFound") page = <PageHero eyebrow="404" title={lang === "en" ? "This page is not available." : "Bu sayfa mevcut değil."} intro={lang === "en" ? "Return to the Ganrich Advisory home page." : "Ganrich Advisory ana sayfasına dönün."}/>;
-  return <SiteLayout lang={lang} route={route}><Suspense fallback={<div className="route-loading" role="status">{lang === "en" ? "Loading…" : "Yükleniyor…"}</div>}>{page}</Suspense></SiteLayout>;
+  // No Suspense boundary around the page: the server waits for the lazy page
+  // module and streams the content inside <main>, so crawlers that do not run
+  // JavaScript (and readers with it off) get the full page, not a fallback.
+  return <SiteLayout lang={lang} route={route}>{page}</SiteLayout>;
 }
