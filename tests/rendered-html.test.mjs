@@ -1653,3 +1653,12 @@ test("renders page content inside <main> without a loading fallback", async () =
     assert.doesNotMatch(html, /route-loading|Loading…|Yükleniyor…/, `${path}: no loading fallback`);
   }
 });
+
+test("opens every guide with a short answer box in both languages", async () => {
+  const { guides } = await import("../app/guides-content.ts");
+  const paths = guides.flatMap(g => [`/en/${g.en.path}`, `/tr/${g.tr.path}`]);
+  for (const p of paths) {
+    const html = await (await render(p)).text();
+    assert.match(html, /<aside class="guide-short-answer" aria-label="(Short answer|Kısa cevap)">/, p);
+  }
+});
