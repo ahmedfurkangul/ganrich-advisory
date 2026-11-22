@@ -41,6 +41,8 @@ export type InsightArticle = {
   slug: string;
   type: string;
   title: string;
+  // Shorter title for search results when `title` is over 70 characters; the page heading keeps `title`.
+  seoTitle?: string;
   thesis: string;
   applicability: string;
   author: string;
