@@ -20,8 +20,8 @@ type PreferenceState = {
 
 const copy = {
   en: {
-    bannerTitle: "Your privacy, without the theatre.",
-    bannerBody: "This site uses essential technology, optional first-party preferences, and a cookieless count of visits and contact steps that stores no IP address. No advertising cookies, cross-site tracking, or third-party media are active.",
+    bannerTitle: "Privacy:",
+    bannerBody: "no advertising cookies or cross-site tracking. A cookieless visit count stores no IP address.",
     accept: "Accept optional", reject: "Essential only", manage: "Manage choices", dialogTitle: "Cookie preferences",
     dialogIntro: "Choose whether this site may remember optional interface settings. Your choice can be changed at any time.",
     save: "Save preferences", close: "Close", necessary: "Essential",
@@ -31,8 +31,8 @@ const copy = {
     saved: "Preferences saved", on: "On", off: "Off",
   },
   tr: {
-    bannerTitle: "Gizliliğiniz için sade ve açık kurallar.",
-    bannerBody: "Bu site zorunlu teknolojileri, isteğe bağlı birinci taraf tercihlerini ve IP adresi saklamayan çerezsiz bir ziyaret ve iletişim adımı sayımını kullanır. Reklam çerezleri, siteler arası izleme veya üçüncü taraf medya etkin değildir.",
+    bannerTitle: "Gizlilik:",
+    bannerBody: "reklam çerezi ve siteler arası izleme yok. Çerezsiz ziyaret sayımı IP adresi saklamaz.",
     accept: "İsteğe bağlıları kabul et", reject: "Yalnızca zorunlu", manage: "Tercihleri yönet", dialogTitle: "Çerez tercihleri",
     dialogIntro: "Sitenin isteğe bağlı arayüz ayarlarını hatırlayıp hatırlamayacağını seçin. Tercihinizi dilediğiniz zaman değiştirebilirsiniz.",
     save: "Tercihleri kaydet", close: "Kapat", necessary: "Zorunlu",
@@ -145,7 +145,7 @@ export function PrivacyControls({ lang }: { lang: Lang }) {
 
   return <>
     {ready && !preference && !open && <section className="privacy-banner" aria-labelledby="privacy-banner-title">
-      <div><strong id="privacy-banner-title">{t.bannerTitle}</strong><p>{t.bannerBody}</p></div>
+      <p><strong id="privacy-banner-title">{t.bannerTitle}</strong> {t.bannerBody}</p>
       <div className="privacy-banner-actions">
         <button type="button" onClick={() => choose(true)}>{t.accept}</button>
         <button type="button" onClick={() => choose(false)}>{t.reject}</button>
