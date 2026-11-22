@@ -42,6 +42,7 @@ export function RuleHubPage({ lang, kind }: { lang: Lang; kind: string }) {
       <h2>{en ? "Frequently asked questions" : "Sıkça sorulan sorular"}</h2>
       <div className="guide-faq">{t.faq.map(([q, a]) => <details key={q}><summary>{q}<span className="plus" aria-hidden="true">+</span></summary><p>{a}</p></details>)}</div>
       <h2>{en ? "Terms in English and Turkish" : "Türkçe ve İngilizce terimler"}</h2>
+      <p><a className="text-link" href={url(lang, "ruleGlossary")}>{en ? "All EU rule terms" : "Tüm AB kural terimleri"} <Arrow/></a></p>
       <div className="guide-table"><table><thead><tr><th>{en ? "English" : "Türkçe"}</th><th>{en ? "Turkish" : "İngilizce"}</th></tr></thead><tbody>{t.glossary.map(([a, b]) => <tr key={a}><td>{a}</td><td lang={en ? "tr" : "en"}>{b}</td></tr>)}</tbody></table></div>
       <p className="note-status">{t.checked}</p>
     </article>
