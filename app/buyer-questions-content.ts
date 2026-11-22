@@ -27,7 +27,7 @@ export const BUYER_QUESTIONS_CHECKED = "2026-11-22";
 
 export const buyerQuestionsCopy = {
   en: {
-    title: "EU Buyer Question Bank: 20 questions EU customers ask Turkish suppliers | Ganrich Advisory",
+    title: "EU Buyer Question Bank: 20 questions for Turkish suppliers",
     description: "Short, sourced answers to the questions EU buyers send Turkish exporters on CBAM, EUDR, the Cyber Resilience Act and Türkiye ETS, and what to prepare.",
     label: "Insights · EU Buyer Question Bank",
     h1: "The questions your EU buyer will ask, answered in plain terms",
@@ -42,7 +42,7 @@ export const buyerQuestionsCopy = {
     askCta: "Send the request",
   },
   tr: {
-    title: "AB Alıcı Soru Bankası: AB müşterilerinin Türk tedarikçilere sorduğu 20 soru | Ganrich Advisory",
+    title: "AB Alıcı Soru Bankası: Türk tedarikçilere sorulan 20 soru",
     description: "AB alıcılarının SKDM, EUDR, Siber Dayanıklılık Yasası ve Türkiye ETS hakkında Türk ihracatçılara sorduğu sorulara kısa, kaynaklı cevaplar ve hazırlık listesi.",
     label: "İçgörüler · AB Alıcı Soru Bankası",
     h1: "AB alıcınızın soracağı sorular, sade cevaplarla",

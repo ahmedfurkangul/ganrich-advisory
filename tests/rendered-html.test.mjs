@@ -1870,3 +1870,11 @@ test("publishes the supplier data rule hub with its guide and paper and links it
   assert.match(await (await render("/en/solutions/supplier-sustainability-data")).text(), /href="\/en\/insights\/supplier-data"/);
   assert.match(await (await render("/tr/icgoruler")).text(), /href="\/tr\/icgoruler\/tedarikci-verisi"/);
 });
+
+test("keeps rule hub, question bank and terms page titles short enough for search results", async () => {
+  for (const p of ["/en/insights/cbam", "/tr/icgoruler/skdm", "/en/insights/cra", "/tr/icgoruler/cra", "/en/insights/eudr", "/tr/icgoruler/eudr", "/en/insights/turkiye-ets", "/tr/icgoruler/tr-ets", "/en/insights/ppwr", "/tr/icgoruler/ppwr", "/en/insights/supplier-data", "/tr/icgoruler/tedarikci-verisi", "/en/insights/eu-buyer-questions", "/tr/icgoruler/ab-alici-sorulari", "/en/insights/eu-rule-terms", "/tr/icgoruler/ab-kural-terimleri"]) {
+    const html = await (await render(p)).text();
+    const title = html.match(/<title>([^<]*)<\/title>/)?.[1]?.replace(/&amp;/g, "&") ?? "";
+    assert.ok(title.length > 20 && title.length <= 70, `${p} title length ${title.length}: ${title}`);
+  }
+});

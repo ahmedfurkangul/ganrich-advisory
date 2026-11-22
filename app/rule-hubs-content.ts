@@ -40,7 +40,7 @@ export const ruleHubs: RuleHub[] = [
       tr: [{ slug: "ppwr-ambalaj-dosyasi-65f6be90", title: "Ambalaj artık düzenlenmiş bir ürün: AB alıcılarının isteyeceği PPWR dosyası" }],
     },
     en: {
-      title: "PPWR for Turkish exporters: the packaging file EU buyers ask for | Ganrich Advisory",
+      title: "PPWR for Turkish exporters: the packaging file EU buyers ask for",
       description: "The EU Packaging Regulation has applied since 12 August 2026. Who holds the declaration, the PFAS limits for food contact and the 2028 and 2030 dates, on one page.",
       label: "PPWR · Packaging and Packaging Waste Regulation",
       h1: "PPWR for Turkish exporters: the packaging file your EU buyer will ask for",
@@ -87,7 +87,7 @@ export const ruleHubs: RuleHub[] = [
       checked: "Dates and limits as checked against Regulation (EU) 2025/40 and the Commission's packaging pages on 23–24 October 2026. General information, not legal advice.",
     },
     tr: {
-      title: "Türk ihracatçılar için PPWR: AB alıcılarının istediği ambalaj dosyası | Ganrich Advisory",
+      title: "Türk ihracatçılar için PPWR: AB alıcısının istediği ambalaj dosyası",
       description: "AB Ambalaj Tüzüğü 12 Ağustos 2026'dan beri uygulanıyor. Beyanın kimde olduğu, gıda temaslı ambalajda PFAS sınırları ve 2028 ile 2030 tarihleri tek sayfada.",
       label: "PPWR · Ambalaj ve Ambalaj Atıkları Tüzüğü",
       h1: "Türk ihracatçılar için PPWR: AB alıcınızın isteyeceği ambalaj dosyası",
@@ -143,7 +143,7 @@ export const ruleHubs: RuleHub[] = [
       tr: [{ slug: "turkiye-ets-pilotu-izleme-plani-98334c09", title: "Türkiye ETS pilotu: Ocak 2027 izleme planı son tarihi tesisinizden ne istiyor?" }, { slug: "turkiye-ets-paradan-once-olcum-000f6369", title: "Paradan önce ölçüm: Türkiye Emisyon Ticaret Sistemine hazırlık" }],
     },
     en: {
-      title: "Türkiye ETS for covered plants: dates, registry and first steps | Ganrich Advisory",
+      title: "Türkiye ETS for covered plants: dates, registry and first steps",
       description: "The Türkiye ETS pilot covers 2026 and 2027 emissions. The dates, the monitoring plan due 27 January 2027, the İKS registry account and how it links to CBAM, on one page.",
       label: "Türkiye ETS · Emissions Trading System",
       h1: "Türkiye ETS for covered plants: what the pilot asks of you, and how it links to CBAM",
@@ -190,7 +190,7 @@ export const ruleHubs: RuleHub[] = [
       checked: "Dates and sources last checked 10 November 2026 against the Official Gazette, the Climate Change Presidency and EUR-Lex. General information, not legal advice.",
     },
     tr: {
-      title: "Kapsamdaki tesisler için Türkiye ETS: tarihler, İKS hesabı ve ilk adımlar | Ganrich Advisory",
+      title: "Türkiye ETS: tarihler, İKS hesabı ve ilk adımlar | Ganrich Advisory",
       description: "Türkiye ETS pilotu 2026 ve 2027 emisyonlarını kapsıyor. Tarihler, 27 Ocak 2027'ye kadar verilecek izleme planı, İKS hesabı ve SKDM bağlantısı tek sayfada.",
       label: "Türkiye ETS · Emisyon Ticaret Sistemi",
       h1: "Kapsamdaki tesisler için Türkiye ETS: pilot sizden ne istiyor, SKDM ile nasıl bağlanıyor?",
@@ -247,7 +247,7 @@ export const ruleHubs: RuleHub[] = [
       tr: [{ slug: "cra-24-saat-testi-37aca9ad", title: "24 saat testi: AB'ye satış yapan üreticiler için CRA olay hazırlığı" }],
     },
     en: {
-      title: "Cyber Resilience Act for Turkish manufacturers: dates, reporting and first steps | Ganrich Advisory",
+      title: "Cyber Resilience Act for Turkish manufacturers: dates and steps",
       description: "CRA reporting has applied since 11 September 2026 and the main rules apply from 11 December 2027. The dates, the 24-hour clock and first steps for Turkish manufacturers.",
       label: "CRA · Cyber Resilience Act",
       h1: "Cyber Resilience Act for Turkish manufacturers: what applies now, and what comes in 2027",
@@ -293,7 +293,7 @@ export const ruleHubs: RuleHub[] = [
       checked: "Dates and sources last checked 17 November 2026 against Regulation (EU) 2024/2847, the Commission's guidance and ENISA. General information, not legal advice.",
     },
     tr: {
-      title: "Türk üreticiler için Siber Dayanıklılık Yasası (CRA): tarihler, bildirim ve ilk adımlar | Ganrich Advisory",
+      title: "CRA, Türk üreticiler için: tarihler, bildirim ve ilk adımlar",
       description: "CRA bildirim yükümlülüğü 11 Eylül 2026'dan beri uygulanıyor, ana kurallar 11 Aralık 2027'de başlıyor. Türk üreticiler için tarihler, 24 saatlik süre ve ilk adımlar.",
       label: "CRA · Siber Dayanıklılık Yasası",
       h1: "Türk üreticiler için Siber Dayanıklılık Yasası: şimdi ne geçerli, 2027'de ne geliyor?",
@@ -349,7 +349,7 @@ export const ruleHubs: RuleHub[] = [
       tr: [{ slug: "cbam-gercek-mi-varsayilan-mi-ef31215c", title: "Gerçek emisyon mu, varsayılan değer mi? Türk metal ihracatçıları için SKDM veri kararı" }, { slug: "skdm-agustos-rehberleri-turk-ihracatci-1d698fcc", title: "Ağustos rehberleri: SKDM (CBAM) ilk maliyet yılında Türk ihracatçıdan ne istiyor?" }],
     },
     en: {
-      title: "CBAM for Turkish exporters: dates, data and first steps | Ganrich Advisory",
+      title: "CBAM for Turkish exporters: dates, data and first steps",
       description: "CBAM's paying phase began on 1 January 2026. The dates, what your EU importer will ask a Turkish producer for, and the first steps, on one page.",
       label: "CBAM · Carbon Border Adjustment Mechanism",
       h1: "CBAM for Turkish exporters: what your EU importer needs from you, and by when",
@@ -397,7 +397,7 @@ export const ruleHubs: RuleHub[] = [
       checked: "Dates and sources last checked 3 November 2026 against the European Commission's CBAM pages and the Turkish Ministry of Trade. General information, not legal advice.",
     },
     tr: {
-      title: "Türk ihracatçılar için SKDM (CBAM): tarihler, veri ve ilk adımlar | Ganrich Advisory",
+      title: "Türk ihracatçılar için SKDM (CBAM): tarihler, veri, ilk adımlar",
       description: "SKDM'nin ödemeli dönemi 1 Ocak 2026'da başladı. Tarihler, AB ithalatçınızın Türk üreticiden isteyeceği veri ve ilk adımlar tek sayfada.",
       label: "SKDM (CBAM) · Sınırda Karbon Düzenleme Mekanizması",
       h1: "Türk ihracatçılar için SKDM: AB ithalatçınız sizden ne isteyecek, ne zamana kadar?",
@@ -455,7 +455,7 @@ export const ruleHubs: RuleHub[] = [
       tr: [{ slug: "eudr-kontrol-listesi-ahsap-mobilya-a607fc4b", title: "Ahşap ve mobilya ihracatçıları için EUDR kontrol listesi" }],
     },
     en: {
-      title: "EUDR for Turkish exporters: dates, data and first steps | Ganrich Advisory",
+      title: "EUDR for Turkish exporters: dates, data and first steps",
       description: "EUDR applies from 30 December 2026. What your EU buyer will ask a Turkish exporter for, the dates that apply, and the first steps, on one page.",
       label: "EUDR · EU Deforestation Regulation",
       h1: "EUDR for Turkish exporters: what your EU buyer will ask for, and by when",
@@ -501,7 +501,7 @@ export const ruleHubs: RuleHub[] = [
       checked: "Dates and sources last checked 2 November 2026 against the European Commission's EUDR page and EUR-Lex. General information, not legal advice.",
     },
     tr: {
-      title: "Türk ihracatçılar için EUDR: tarihler, veri ve ilk adımlar | Ganrich Advisory",
+      title: "Türk ihracatçılar için EUDR: tarihler, veri ve ilk adımlar",
       description: "EUDR 30 Aralık 2026'da uygulanmaya başlıyor. AB alıcınızın Türk ihracatçıdan isteyeceği veri, geçerli tarihler ve ilk adımlar tek sayfada.",
       label: "EUDR · AB Ormansızlaşma Tüzüğü",
       h1: "Türk ihracatçılar için EUDR: AB alıcınız ne isteyecek, ne zamana kadar?",
@@ -556,7 +556,7 @@ export const ruleHubs: RuleHub[] = [
       tr: [{ slug: "tedarikci-surdurulebilirlik-verisi-omnibus-82382d59", title: "Daha az raporlayan, daha net sorular: AB Omnibus sonrasında sürdürülebilirlik veri talepleri" }],
     },
     en: {
-      "title": "Supplier sustainability data after the EU Omnibus: what EU buyers can ask | Ganrich Advisory",
+      "title": "Supplier sustainability data after the EU Omnibus | Ganrich Advisory",
       "description": "The EU cap on supplier sustainability requests, the voluntary standard behind it and the product-rule data outside it, with the 2027 and 2029 dates.",
       "label": "Supplier data · CSRD, Omnibus I and the voluntary standard",
       "h1": "Supplier sustainability data: what your EU customers can still ask you for",
@@ -658,7 +658,7 @@ export const ruleHubs: RuleHub[] = [
       "checked": "Dates as checked against Directive (EU) 2026/470, Delegated Regulation (EU) 2026/1560 and the Commission's reporting pages on 22 November 2026. General information, not legal advice."
     },
     tr: {
-      "title": "Omnibus sonrası tedarikçi sürdürülebilirlik verisi: AB alıcısı ne isteyebilir? | Ganrich Advisory",
+      "title": "Omnibus sonrası tedarikçi sürdürülebilirlik verisi | Ganrich Advisory",
       "description": "Tedarikçiye yönelik sürdürülebilirlik taleplerindeki AB sınırı, gönüllü standart ve sınır dışındaki ürün kuralı verileri, 2027 ve 2029 tarihleriyle.",
       "label": "Tedarikçi verisi · CSRD, Omnibus I ve gönüllü standart",
       "h1": "Tedarikçi sürdürülebilirlik verisi: AB müşteriniz sizden hâlâ ne isteyebilir?",
