@@ -1654,6 +1654,15 @@ test("renders page content inside <main> without a loading fallback", async () =
   }
 });
 
+test("shows a founder card with photo, name and LinkedIn on the home page", async () => {
+  for (const [p, name] of [["/en", "Ahmed Furkan Gul"], ["/tr", "Ahmed Furkan Gül"]]) {
+    const html = await (await render(p)).text();
+    assert.match(html, /<div class="founder-card"><img src="\/people\/ahmed-furkan-gul-192.webp"/, p);
+    assert.match(html, new RegExp(`<strong>${name}</strong>`), p);
+    assert.match(html, /href="https:\/\/www.linkedin.com\/in\/furkangul\/"/, p);
+  }
+});
+
 test("opens every guide with a short answer box in both languages", async () => {
   const { guides } = await import("../app/guides-content.ts");
   const paths = guides.flatMap(g => [`/en/${g.en.path}`, `/tr/${g.tr.path}`]);
