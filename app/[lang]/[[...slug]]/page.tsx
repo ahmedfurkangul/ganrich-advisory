@@ -140,7 +140,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = kind.startsWith("category") ? insightCategoryForKind(lang, kind) : null;
   const trust = trustMeta[lang][kind as keyof typeof trustMeta.en];
   const [title, fullDescription] = article
-    ? [withBrand(article.title), article.thesis]
+    ? [withBrand(article.seoTitle ?? article.title), article.thesis]
     : category
       ? [`${lang === "en" ? `${category.label} Insights` : `${category.label} üzerine içgörüler`} | Ganrich Advisory`, category.description]
     : (trust ?? advisoryMeta(lang, kind) ?? metaCopy[lang][metaKind] ?? metaCopy[lang].home);

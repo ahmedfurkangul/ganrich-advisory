@@ -10,7 +10,8 @@ async function render(path = "/en") {
 
   return worker.fetch(
     new Request(`http://localhost${path}`, {
-      headers: { accept: "text/html", host: "localhost" },
+      // A browser user agent: vinext streams metadata into the body for requests without one.
+      headers: { accept: "text/html", host: "localhost", "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36" },
     }),
     { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
     { waitUntil() {}, passThroughOnException() {} },
@@ -239,7 +240,7 @@ test("keeps principal internal links inside the published route inventory", asyn
       .map(match => match[1].replace(/&amp;/g, "&").split("?")[0])
       // Whitepaper pages come from D1 and are listed in reports-sitemap.xml, not the static sitemap.
       // Category pages are linked for browsing but are noindex, so they are left out of the sitemap.
-      .filter(path => !path.endsWith("/feed.xml") && !path.startsWith("/assets/") && !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(path) && !/^\/(en\/insights\/category|tr\/icgoruler\/kategori)\//.test(path));
+      .filter(path => !path.endsWith("/feed.xml") && !path.startsWith("/assets/") && !path.startsWith("/_next/") && !/\.(png|ico|svg|webmanifest)$/.test(path) && !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(path) && !/^\/(en\/insights\/category|tr\/icgoruler\/kategori)\//.test(path));
     for (const path of internalLinks) {
       assert.ok(sitemapPaths.has(path), `Internal link ${path} is absent from the canonical route inventory`);
     }
@@ -943,7 +944,8 @@ test("publishes the CBAM 2026 and CRA standards guides with FAQ markup, sitemap 
   assert.equal((tr.match(/<li>Tesisiniz TR ETS pilot/g) ?? []).length, 2, "TR checklist has steps 4 and 6");
   const content = await readFile(new URL("../app/guides-content.ts", import.meta.url), "utf8");
   const links = [...new Set([...content.matchAll(/\]\((\/(?:en|tr)\/[^)]+)\)/g)].map(m => m[1]))];
-  for (const link of links) assert.equal((await render(link)).status, 200, `internal link ${link}`);
+  // Report pages come from D1, which the test worker does not have; reports-sitemap tests cover them.
+  for (const link of links.filter(l => !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(l))) assert.equal((await render(link)).status, 200, `internal link ${link}`);
 });
 
 test("publishes the CRA reporting (refrigeration) guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
@@ -1896,4 +1898,48 @@ test("states the Article 9 transfer mechanism in the KVKK notice", async () => {
   assert.match(tr, /9\. maddesi uyarınca Kişisel Verileri Koruma Kurulu(?:'|&#x27;)nun ilan ettiği standart sözleşmelere dayanır/);
   const en = await (await render("/en/turkiye-data-protection-notice")).text();
   assert.match(en, /standard contracts announced by the Personal Data Protection Board under Article 9/);
+});
+
+test("shows no privacy bar, and keeps optional local storage off until chosen in Cookie preferences", async () => {
+  const controls = await readFile(new URL("../app/privacy-controls.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(controls, /privacy-banner/);
+  assert.match(controls, /export function optionalPreferencesEnabled\(\) \{\n  return Boolean\(readPreference\(\)\?\.functional\);/);
+  const privacy = await (await render("/en/privacy")).text();
+  assert.match(privacy, /22 November 2026 · Version 1\.4/);
+  const footer = await (await render("/tr")).text();
+  assert.match(footer, /Çerez tercihleri/);
+});
+
+test("shows a fictional EU buyer request response file on the sample work page, clearly labelled", async () => {
+  for (const [path, title, label, invented] of [
+    ["/en/sample-work", /CBAM data request from an EU importer/, /Illustrative \/ not client work/, /All names, requests and data in this example are invented/],
+    ["/tr/ornek-calismalar", /AB ithalatçısından SKDM \(CBAM\) veri talebi/, /Temsili \/ müşteri çalışması değildir/, /tüm isimler, talepler ve veriler uydurmadır/],
+  ]) {
+    const html = await (await render(path)).text();
+    assert.match(html, title);
+    assert.match(html, label);
+    assert.match(html, invented);
+    assert.match(html, /<table>/);
+  }
+});
+
+test("keeps long article titles short in search results while the page heading keeps the full title", async () => {
+  for (const [path, full] of [
+    ["/en/insights/turkiye-gulf-capital-corridor", "The Türkiye–Gulf capital corridor: what changed and what it means for operators"],
+    ["/tr/icgoruler/turkiye-korfez-sermaye-koridoru", "Türkiye–Körfez sermaye koridoru: ne değişti, işletmeler için ne anlama geliyor?"],
+    ["/tr/icgoruler/orta-olcekli-sanayide-yapay-zeka-degeri", "Orta ölçekli sanayi şirketlerinde yapay zekâ nerede ölçülebilir değer yaratır?"],
+  ]) {
+    const html = await (await render(path)).text();
+    const title = html.match(/<title>([^<]*)<\/title>/)?.[1] ?? "";
+    assert.ok(title.length <= 70, `${path} title length ${title.length}: ${title}`);
+    assert.ok(html.includes(`<h1>${full}</h1>`) || html.includes(full), `${path} keeps the full heading`);
+  }
+});
+
+test("records the KVKK transfer update as privacy notice version 1.5", async () => {
+  const en = await (await render("/en/privacy")).text();
+  assert.match(en, /22 November 2026 · Version 1\.5/);
+  assert.match(en, /Version 1\.5 · Reviewed 22 November 2026/);
+  const tr = await (await render("/tr/gizlilik")).text();
+  assert.match(tr, /22 Kasım 2026 · Sürüm 1\.5/);
 });
