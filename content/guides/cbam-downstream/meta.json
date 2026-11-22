@@ -1,0 +1,19 @@
+{
+  "key": "guideCbamDownstream",
+  "solution": "solutionCbam",
+  "date": "2026-11-20",
+  "dateModified": "2026-11-20",
+  "checked": {
+    "en": "20 November 2026",
+    "tr": "20 Kasım 2026"
+  },
+  "image": "guideCbamDownstream",
+  "readingTime": {
+    "en": "12 min",
+    "tr": "12 dk"
+  },
+  "topic": {
+    "en": "CBAM",
+    "tr": "SKDM (CBAM)"
+  }
+}

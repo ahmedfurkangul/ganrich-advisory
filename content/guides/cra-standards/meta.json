@@ -1,0 +1,19 @@
+{
+  "key": "guideCraStandards",
+  "solution": "solutionCra",
+  "date": "2026-11-03",
+  "dateModified": "2026-11-18",
+  "checked": {
+    "en": "18 November 2026",
+    "tr": "18 Kasım 2026"
+  },
+  "image": "guideCraStandards",
+  "readingTime": {
+    "en": "9 min",
+    "tr": "9 dk"
+  },
+  "topic": {
+    "en": "CRA",
+    "tr": "CRA"
+  }
+}

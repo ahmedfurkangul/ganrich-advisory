@@ -1,0 +1,19 @@
+{
+  "key": "guideSupplierData",
+  "solution": "solutionSupplierData",
+  "date": "2026-11-22",
+  "dateModified": "2026-11-22",
+  "checked": {
+    "en": "22 November 2026",
+    "tr": "22 Kasım 2026"
+  },
+  "image": "guideSupplierData",
+  "readingTime": {
+    "en": "8 min",
+    "tr": "8 dk"
+  },
+  "topic": {
+    "en": "Supplier data",
+    "tr": "Tedarikçi verisi"
+  }
+}
