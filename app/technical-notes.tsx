@@ -6,6 +6,7 @@ import { allSolutions, retiredSolutions } from "./solutions-content";
 import { PdfInsightHubCards } from "./pdf-insight-cards";
 import { guideIndex } from "./guides-index";
 import { Arrow } from "./arrow-icon";
+import { hubStrip } from "./rule-hub-index";
 
 // The insights hub as one library: whitepapers, articles and decision notes in a single list,
 // filtered by area (EU rules, industry, AI, strategy) and searchable. The old category pages
@@ -72,6 +73,7 @@ export function TechnicalNotesLibrary({ lang }: { lang: Lang }) {
   const knownSlugs = useMemo(() => entries.map(e => e.id), [entries]);
   return <>
     <section className="advisory-hero"><p className="kicker">{c.eyebrow}</p><h1>{c.title}</h1><p className="advisory-lead">{c.intro}</p></section>
+    <section className="section hub-strip" aria-labelledby="hub-strip-title"><h2 id="hub-strip-title">{hubStrip[lang].title}</h2><ul>{hubStrip[lang].items.map(h => <li key={h.key}><a href={"/" + lang + "/" + routeMap[lang][h.key]}><strong>{h.name}</strong><span>{h.line}</span></a></li>)}</ul></section>
     <section className="section filter-row notes-filter">
       <div role="group" aria-label={c.eyebrow}>
         <button type="button" aria-pressed={filter === "all"} className={filter === "all" ? "active" : ""} onClick={() => setFilter("all")}>{c.all} · {entries.length}</button>
