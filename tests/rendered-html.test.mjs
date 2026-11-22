@@ -1573,7 +1573,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 140); // +2 supplier data guide, +2 rule terms page, +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
+  assert.equal(blocks.length, 142); // +2 accessibility statement, +2 supplier data guide, +2 rule terms page, +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1809,6 +1809,23 @@ test("publishes the EU rule terms page built from the hub glossaries", async () 
     assert.equal((html.match(/<table>/g) ?? []).length, 5, p);
   }
   assert.match(await (await render("/en/insights/cbam")).text(), /href="\/en\/insights\/eu-rule-terms"/);
+});
+
+test("publishes an accessibility statement in both languages, linked from every footer", async () => {
+  for (const [path, pair, h1, home] of [
+    ["/en/accessibility", "/tr/erisilebilirlik", "Accessibility statement", "/en"],
+    ["/tr/erisilebilirlik", "/en/accessibility", "Erişilebilirlik beyanı", "/tr"],
+  ]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<h1>${h1}</h1>`), `${path} h1`);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /WCAG\) 2\.1/);
+    assert.match(html, /furkangul@ganrichadvisory\.com/);
+    assert.match(html, /22 (November|Kasım) 2026/);
+    assert.ok((await (await render(home)).text()).includes(`href="${path}"`), `${home} footer links ${path}`);
+  }
 });
 
 test("publishes the supplier sustainability data guide with the Omnibus cap and the product-rule split", async () => {
