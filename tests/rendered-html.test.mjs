@@ -10,7 +10,8 @@ async function render(path = "/en") {
 
   return worker.fetch(
     new Request(`http://localhost${path}`, {
-      headers: { accept: "text/html", host: "localhost" },
+      // A browser user agent: vinext streams metadata into the body for requests without one.
+      headers: { accept: "text/html", host: "localhost", "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36" },
     }),
     { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
     { waitUntil() {}, passThroughOnException() {} },
@@ -239,7 +240,7 @@ test("keeps principal internal links inside the published route inventory", asyn
       .map(match => match[1].replace(/&amp;/g, "&").split("?")[0])
       // Whitepaper pages come from D1 and are listed in reports-sitemap.xml, not the static sitemap.
       // Category pages are linked for browsing but are noindex, so they are left out of the sitemap.
-      .filter(path => !path.endsWith("/feed.xml") && !path.startsWith("/assets/") && !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(path) && !/^\/(en\/insights\/category|tr\/icgoruler\/kategori)\//.test(path));
+      .filter(path => !path.endsWith("/feed.xml") && !path.startsWith("/assets/") && !path.startsWith("/_next/") && !/\.(png|ico|svg|webmanifest)$/.test(path) && !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(path) && !/^\/(en\/insights\/category|tr\/icgoruler\/kategori)\//.test(path));
     for (const path of internalLinks) {
       assert.ok(sitemapPaths.has(path), `Internal link ${path} is absent from the canonical route inventory`);
     }
@@ -943,7 +944,8 @@ test("publishes the CBAM 2026 and CRA standards guides with FAQ markup, sitemap 
   assert.equal((tr.match(/<li>Tesisiniz TR ETS pilot/g) ?? []).length, 2, "TR checklist has steps 4 and 6");
   const content = await readFile(new URL("../app/guides-content.ts", import.meta.url), "utf8");
   const links = [...new Set([...content.matchAll(/\]\((\/(?:en|tr)\/[^)]+)\)/g)].map(m => m[1]))];
-  for (const link of links) assert.equal((await render(link)).status, 200, `internal link ${link}`);
+  // Report pages come from D1, which the test worker does not have; reports-sitemap tests cover them.
+  for (const link of links.filter(l => !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(l))) assert.equal((await render(link)).status, 200, `internal link ${link}`);
 });
 
 test("publishes the CRA reporting (refrigeration) guide in both languages with FAQ markup, sitemap entries and library cards", async () => {

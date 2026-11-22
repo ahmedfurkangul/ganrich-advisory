@@ -16,6 +16,10 @@ const CSP_TRIAL = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  // Render <title>, description, canonical and hreflang in <head> for every request, not streamed
+  // into the body: an empty user agent counts as a browser, and some crawlers and link previews
+  // read only the head. ".*" matches every user agent, including an empty one.
+  htmlLimitedBots: /.*/,
   async headers() {
     const baseline = [
       { key: "X-Content-Type-Options", value: "nosniff" },
