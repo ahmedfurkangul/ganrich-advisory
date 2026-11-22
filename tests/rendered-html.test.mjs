@@ -1752,3 +1752,11 @@ test("publishes the Türkiye ETS rule hub and links it from the programme", asyn
   }
   assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /href="\/en\/insights\/turkiye-ets"/);
 });
+
+test("lists the rule hubs at the top of the Insights library", async () => {
+  for (const [p, hrefs] of [["/en/insights", ["/en/insights/cbam", "/en/insights/eudr", "/en/insights/cra", "/en/insights/turkiye-ets"]], ["/tr/icgoruler", ["/tr/icgoruler/skdm", "/tr/icgoruler/eudr", "/tr/icgoruler/cra", "/tr/icgoruler/tr-ets"]]]) {
+    const html = await (await render(p)).text();
+    assert.match(html, /class="section hub-strip"/, p);
+    for (const href of hrefs) assert.ok(html.includes(`href="${href}"`), `${p} links ${href}`);
+  }
+});

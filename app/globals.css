@@ -703,6 +703,15 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .home-growth-line { margin-top: 36px; }
 /* Technical notes library */
 .notes-filter button { min-height: 44px; }
+.hub-strip { padding-top: 48px; padding-bottom: 8px; }
+.hub-strip h2 { font-size: var(--type-caption); color: var(--bronze); letter-spacing: .12em; text-transform: uppercase; font-family: inherit; margin: 0 0 16px; }
+.hub-strip ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.hub-strip a { display: flex; flex-direction: column; gap: 6px; height: 100%; padding: 18px; background: var(--white); border: 1px solid var(--sand); color: inherit; text-decoration: none; }
+.hub-strip a:hover, .hub-strip a:focus-visible { border-color: var(--forest); }
+.hub-strip strong { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; color: var(--ink); }
+.hub-strip span { font-size: .9rem; color: var(--slate); }
+@media (max-width: 900px) { .hub-strip ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .hub-strip ul { grid-template-columns: 1fr; } }
 .notes-library { padding-top: 24px; }
 .notes-library ol { list-style: none; margin: 0; padding: 0; }
 .notes-library li { padding: 28px 0; border-bottom: 1px solid var(--sand); max-width: 880px; }
