@@ -73,6 +73,7 @@ const cards = {
     ["solutionMdr", "SOLUTIONS · EU MARKET ACCESS", "EU MDR Portfolio Transition"],
     ["solutionSupplierData", "SOLUTIONS · EU MARKET ACCESS", "Supplier Sustainability Data"],
     ["regulationCalendar", "INSIGHTS · EU REGULATION CALENDAR", "EU rules your buyers apply, 2026–2027"],
+    ["hubEudr", "INSIGHTS · EUDR", "EUDR: what your buyer will ask for"],
   ],
   tr: [
     ["home", "STRATEJİK DANIŞMANLIK", "Sonraki adım. Sağlam bir kararla."],
@@ -136,6 +137,7 @@ const cards = {
     ["solutionMdr", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "AB MDR Portföy Geçişi"],
     ["solutionSupplierData", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Tedarikçi Sürdürülebilirlik Verisi"],
     ["regulationCalendar", "İÇGÖRÜLER · AB MEVZUAT TAKVİMİ", "AB alıcınızın uyguladığı kurallar, 2026–2027"],
+    ["hubEudr", "İÇGÖRÜLER · EUDR", "EUDR: alıcınız ne isteyecek?"],
   ],
 };
 

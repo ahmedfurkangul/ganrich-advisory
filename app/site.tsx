@@ -24,6 +24,7 @@ const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.Not
 const AiDecisionsPage = lazy(() => import("./ai-decisions").then(m => ({default:m.AiDecisionsPage})));
 const ServiceModelPage = lazy(() => import("./service-page").then(m => ({default:m.ServiceModelPage})));
 const GuidePage = lazy(() => import("./guides").then(m => ({default:m.GuidePage})));
+const RuleHubPage = lazy(() => import("./rule-hubs").then(m => ({default:m.RuleHubPage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
 import { BriefingTray } from "./intelligence-shell";
@@ -117,6 +118,7 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "sampleWork") page = <SampleWorkPage lang={lang}/>;
   if (kind.startsWith("note")) page = <NotePage lang={lang} kind={kind}/>;
   if (kind.startsWith("guide")) page = <GuidePage lang={lang} kind={kind}/>;
+  if (kind.startsWith("hub")) page = <RuleHubPage lang={lang} kind={kind}/>;
   if (kind === "aiDecisions") page = <AiDecisionsPage lang={lang}/>;
   if (isServicePageKey(kind)) page = <ServiceModelPage lang={lang} kind={kind}/>;
   if (kind === "expertise") page = <ExpertisePage lang={lang}/>;

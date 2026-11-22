@@ -37,7 +37,7 @@ export const guideShortAnswers: Record<string, Record<Lang, string>> = {
   },
   guideEudr2026: {
     en: "EUDR applies to large and medium operators from 30 December 2026 and to micro and small operators from 30 June 2027. Your EU buyer will ask for a due diligence statement reference, the geolocation of the plots where the commodity was produced and proof that it was produced legally. Which products are caught depends on the CN code, not the trade name.",
-    tr: "EUDR büyük ve orta ölçekli işletmelere 30 Aralık 2026'dan, mikro ve küçük işletmelere 30 Haziran 2027'den itibaren uygulanır. AB alıcınız bir durum tespiti beyanı (DDS) referansı, emtianın üretildiği parsellerin coğrafi konumu ve yasal üretim kanıtı isteyecek. Hangi ürünlerin kapsama girdiğini ticari ad değil GTİP kodu belirler.",
+    tr: "EUDR büyük ve orta ölçekli işletmelere 30 Aralık 2026'dan, mikro ve küçük işletmelere 30 Haziran 2027'den itibaren uygulanır. AB alıcınız bir özen yükümlülüğü beyanı (DDS) referansı, emtianın üretildiği parsellerin coğrafi konumu ve yasal üretim kanıtı isteyecek. Hangi ürünlerin kapsama girdiğini ticari ad değil GTİP kodu belirler.",
   },
   guideSteelDpp: {
     en: "Iron and steel is first in line among ESPR product groups: the Commission's timeline lists its ecodesign delegated act for adoption in Q4 2026. The legal basis and the DPP registry are decided; what a steel passport must contain is still open. Much of the data will overlap with what CBAM already asks for, so build one data set for both.",

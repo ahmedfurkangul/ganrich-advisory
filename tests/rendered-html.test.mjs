@@ -1573,7 +1573,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 124); // 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
+  assert.equal(blocks.length, 126); // +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1697,4 +1697,23 @@ test("retires off-positioning programmes with a 308 and keeps generic decision t
   assert.doesNotMatch(sitemap, /measured-energy-retrofit|ai-order-desk|decision-framer|decision-atlas|ai-value-lens|board-brief|market-entry-compass|changelog/);
   const [hub, contact, llms] = await Promise.all(["/en/solutions", "/en/contact", "/llms.txt"].map(path => render(path).then(r => r.text())));
   for (const html of [hub, contact, llms]) assert.doesNotMatch(html, /Measured Energy Retrofit|Solar and Storage Decision|Industrial Water Balance|AI Order Desk Assistant|E-commerce Margin Clarity/);
+});
+
+test("publishes the EUDR rule hub in both languages and links it from the guide, programme and calendar", async () => {
+  for (const [p, h1] of [["/en/insights/eudr", /EUDR for Turkish exporters/], ["/tr/icgoruler/eudr", /Türk ihracatçılar için EUDR/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.match(html, /<aside class="guide-short-answer"/, p);
+    assert.match(html, /<ol class="hub-dates">/, p);
+    assert.match(html, /"@type":"FAQPage"/, p);
+    assert.match(html, /hrefLang="(en|tr)"/, p);
+  }
+  for (const p of ["/en/insights/eudr-30-december-2026-turkish-exporters", "/en/solutions/eudr-traceability", "/en/insights/eu-regulation-calendar"]) {
+    assert.match(await (await render(p)).text(), /href="\/en\/insights\/eudr"/, p);
+  }
+  const sitemap = await (await render("/sitemap.xml")).text();
+  assert.match(sitemap, /https:\/\/ganrichadvisory.com\/tr\/icgoruler\/eudr</);
+  assert.match(await (await render("/llms.txt")).text(), /EU rule hubs/);
 });
