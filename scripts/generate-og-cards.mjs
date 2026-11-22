@@ -74,6 +74,7 @@ const cards = {
     ["solutionSupplierData", "SOLUTIONS · EU MARKET ACCESS", "Supplier Sustainability Data"],
     ["regulationCalendar", "INSIGHTS · EU REGULATION CALENDAR", "EU rules your buyers apply, 2026–2027"],
     ["hubCbam", "INSIGHTS · CBAM", "CBAM: what your importer needs"],
+    ["hubCra", "INSIGHTS · CYBER RESILIENCE ACT", "CRA: what applies now"],
     ["hubEudr", "INSIGHTS · EUDR", "EUDR: what your buyer will ask for"],
   ],
   tr: [
@@ -139,6 +140,7 @@ const cards = {
     ["solutionSupplierData", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Tedarikçi Sürdürülebilirlik Verisi"],
     ["regulationCalendar", "İÇGÖRÜLER · AB MEVZUAT TAKVİMİ", "AB alıcınızın uyguladığı kurallar, 2026–2027"],
     ["hubCbam", "İÇGÖRÜLER · SKDM", "SKDM: ithalatçınız ne isteyecek?"],
+    ["hubCra", "İÇGÖRÜLER · SİBER DAYANIKLILIK", "CRA: şimdi ne geçerli?"],
     ["hubEudr", "İÇGÖRÜLER · EUDR", "EUDR: alıcınız ne isteyecek?"],
   ],
 };
