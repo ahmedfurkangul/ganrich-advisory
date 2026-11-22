@@ -50,7 +50,7 @@ export const ruleHubs: RuleHub[] = [
       dates: [
         ["2025-02-11", "11 February 2025", "Regulation (EU) 2025/40 enters into force."],
         ["2026-08-12", "12 August 2026", "The regulation applies: declaration of conformity, technical documentation, substance limits and food-contact PFAS limits. Packaging placed on the market before this date may stay on the market."],
-        ["2028-08-12", "12 August 2028", "Harmonised labelling of material composition."],
+        ["2028-08-12", "12 August 2028 at the earliest", "Harmonised labelling of material composition. It applies from 12 August 2028 or 24 months after the Commission's labelling implementing act, whichever is later. That act has not been adopted yet, so the date may move later."],
         ["2030-01-01", "2030", "Design-for-recycling criteria, minimum recycled content in plastic packaging and the 50% empty-space ratio."],
       ],
       asksTitle: "What EU buyers ask for",
@@ -67,7 +67,7 @@ export const ruleHubs: RuleHub[] = [
         "Collect supplier declarations for substances of concern; test where risk is high, starting with total fluorine for food-contact packaging.",
         "Agree with each EU customer who is the producer in which member state, and whether you need an authorised representative.",
         "Mark the formats likely to struggle with the 2030 recyclability and empty-space rules, and plan changes on your own schedule.",
-        "Start the artwork changes for harmonised labels well before August 2028.",
+        "Plan the artwork changes for harmonised labels now, and fix the date once the Commission adopts the labelling act.",
       ],
       faq: [
         ["We are not a packaging company. Does PPWR apply to us?", "Yes, to the packaging around the goods you ship into the EU: boxes, films, pallet wraps and retail packs, not only to companies that make packaging."],
@@ -84,7 +84,7 @@ export const ruleHubs: RuleHub[] = [
         ["Authorised representative", "Yetkili temsilci"],
         ["Empty-space ratio", "Boş alan oranı"],
       ],
-      checked: "Dates and limits as checked against Regulation (EU) 2025/40 and the Commission's packaging pages on 23–24 October 2026. General information, not legal advice.",
+      checked: "Dates and limits as checked against Regulation (EU) 2025/40 and the Commission's packaging pages on 23–24 October 2026 and rechecked on 22 November 2026. General information, not legal advice.",
     },
     tr: {
       title: "Türk ihracatçılar için PPWR: AB alıcısının istediği ambalaj dosyası",
@@ -97,7 +97,7 @@ export const ruleHubs: RuleHub[] = [
       dates: [
         ["2025-02-11", "11 Şubat 2025", "(AB) 2025/40 sayılı Tüzük yürürlüğe girdi."],
         ["2026-08-12", "12 Ağustos 2026", "Tüzük uygulanıyor: uygunluk beyanı, teknik dokümantasyon, madde sınırları ve gıda temaslı ambalajda PFAS sınırları. Bu tarihten önce piyasaya arz edilen ambalaj piyasada kalabilir."],
-        ["2028-08-12", "12 Ağustos 2028", "Malzeme bileşiminin uyumlaştırılmış etiketlenmesi."],
+        ["2028-08-12", "En erken 12 Ağustos 2028", "Malzeme bileşiminin uyumlaştırılmış etiketlenmesi. 12 Ağustos 2028 ile Komisyon'un etiketleme uygulama işleminin yürürlüğe girmesinden 24 ay sonrası arasında hangisi daha geç ise o tarihte uygulanır. Bu işlem henüz kabul edilmedi, bu yüzden tarih ileri kayabilir."],
         ["2030-01-01", "2030", "Geri dönüşüm için tasarım kriterleri, plastik ambalajda asgari geri dönüştürülmüş içerik ve yüzde 50 boş alan oranı."],
       ],
       asksTitle: "AB alıcıları ne istiyor?",
@@ -114,7 +114,7 @@ export const ruleHubs: RuleHub[] = [
         "Endişe verici maddeler için tedarikçi beyanlarını toplayın; riskin yüksek olduğu yerlerde test yaptırın, gıda temaslı ambalajda toplam flor testiyle başlayın.",
         "Her AB müşterisiyle hangi üye devlette kimin üretici olduğunu ve yetkili temsilciye ihtiyaç olup olmadığını netleştirin.",
         "2030 geri dönüştürülebilirlik ve boş alan kurallarında zorlanacak formatları işaretleyin ve değişikliği kendi takviminizle planlayın.",
-        "Uyumlaştırılmış etiketler için baskı tasarımı değişikliklerine Ağustos 2028'den çok önce başlayın.",
+        "Uyumlaştırılmış etiketler için baskı tasarımı değişikliklerini şimdiden planlayın; kesin tarihi Komisyon etiketleme işlemini kabul edince netleştirin.",
       ],
       faq: [
         ["Ambalaj şirketi değiliz. PPWR bizi ilgilendiriyor mu?", "Evet; AB'ye sevk ettiğiniz malların ambalajı için: koli, film, palet streçi ve perakende ambalaj. Tüzük yalnızca ambalaj üretenlere uygulanmıyor."],
@@ -131,7 +131,7 @@ export const ruleHubs: RuleHub[] = [
         ["Yetkili temsilci", "Authorised representative"],
         ["Boş alan oranı", "Empty-space ratio"],
       ],
-      checked: "Tarihler ve sınırlar 23–24 Ekim 2026'da (AB) 2025/40 sayılı Tüzük ve Komisyon'un ambalaj sayfalarıyla karşılaştırıldı. Genel bilgidir, hukuki görüş değildir.",
+      checked: "Tarihler ve sınırlar 23–24 Ekim 2026'da (AB) 2025/40 sayılı Tüzük ve Komisyon'un ambalaj sayfalarıyla karşılaştırıldı, 22 Kasım 2026'da yeniden kontrol edildi. Genel bilgidir, hukuki görüş değildir.",
     },
   },
   {
