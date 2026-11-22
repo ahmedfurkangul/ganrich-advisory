@@ -3,6 +3,10 @@ import type { Lang } from "./content";
 // A two- or three-sentence answer at the top of each guide. Every claim here is
 // stated, with its source, in the guide body; update both together.
 export const guideShortAnswers: Record<string, Record<Lang, string>> = {
+  guideSupplierData: {
+    en: "Under the Omnibus I Directive, an EU customer that reports under the CSRD may not require a supplier with up to 1,000 employees to provide more sustainability information than the voluntary standard covers, for financial years from 2027. The cap does not cover data that product rules such as CBAM, EUDR, PPWR or the Battery Regulation require. One base report along the voluntary standard answers most questionnaires.",
+    tr: "Omnibus I Direktifi'ne göre CSRD kapsamında raporlayan bir AB müşterisi, 2027'den itibaren başlayan hesap dönemlerinde 1.000'e kadar çalışanı olan tedarikçiden gönüllü standardın kapsadığından fazla sürdürülebilirlik bilgisi isteyemez. Sınır, SKDM, EUDR, PPWR veya Batarya Tüzüğü gibi ürün kurallarının istediği veriyi kapsamaz. Gönüllü standarda göre hazırlanan tek bir temel rapor anketlerin çoğunu yanıtlar.",
+  },
   guideCbamDownstream: {
     en: "The Commission has proposed (COM(2025) 989) to extend CBAM from 1 January 2028 to steel- and aluminium-intensive downstream goods such as machinery parts, fasteners and appliances. The text is not final: key points were still open before the 30 November trilogue. Makers of these goods should check their CN codes now and start collecting emissions data from their steel and aluminium suppliers.",
     tr: "Komisyon, SKDM'nin 1 Ocak 2028'den itibaren makine parçası, bağlantı elemanı ve beyaz eşya gibi çelik ve alüminyum yoğun alt ürünlere genişletilmesini önerdi (COM(2025) 989). Metin kesinleşmedi: kilit konular 30 Kasım üçlü görüşmesi öncesinde hâlâ açıktı. Bu ürünlerin üreticileri GTİP kodlarını şimdi kontrol etmeli ve çelik ve alüminyum tedarikçilerinden emisyon verisi toplamaya başlamalı.",
