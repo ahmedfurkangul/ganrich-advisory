@@ -1653,3 +1653,12 @@ test("renders page content inside <main> without a loading fallback", async () =
     assert.doesNotMatch(html, /route-loading|Loading…|Yükleniyor…/, `${path}: no loading fallback`);
   }
 });
+
+test("shows a founder card with photo, name and LinkedIn on the home page", async () => {
+  for (const [p, name] of [["/en", "Ahmed Furkan Gul"], ["/tr", "Ahmed Furkan Gül"]]) {
+    const html = await (await render(p)).text();
+    assert.match(html, /<div class="founder-card"><img src="\/people\/ahmed-furkan-gul-192.webp"/, p);
+    assert.match(html, new RegExp(`<strong>${name}</strong>`), p);
+    assert.match(html, /href="https:\/\/www.linkedin.com\/in\/furkangul\/"/, p);
+  }
+});
