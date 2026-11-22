@@ -1878,3 +1878,15 @@ test("keeps rule hub, question bank and terms page titles short enough for searc
     assert.ok(title.length > 20 && title.length <= 70, `${p} title length ${title.length}: ${title}`);
   }
 });
+
+test("tells visitors what to have to hand for the first review, without asking for confidential documents", async () => {
+  for (const [path, heading, codes, wait] of [
+    ["/en/contact", /Helpful to have to hand for the first review/, /CN or HS codes/, /Confidential documents can wait/],
+    ["/tr/iletisim", /Ön görüşmede elinizin altında olması faydalı olanlar/, /GTİP veya KN kodlarıyla/, /Gizli belgeler ilk adımda/],
+  ]) {
+    const html = await (await render(path)).text();
+    assert.match(html, heading);
+    assert.match(html, codes);
+    assert.match(html, wait);
+  }
+});
