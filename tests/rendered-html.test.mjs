@@ -1893,6 +1893,13 @@ test("tells visitors what to have to hand for the first review, without asking f
   }
 });
 
+test("states the Article 9 transfer mechanism in the KVKK notice", async () => {
+  const tr = await (await render("/tr/kvkk-aydinlatma-metni")).text();
+  assert.match(tr, /9\. maddesi uyarınca Kişisel Verileri Koruma Kurulu(?:'|&#x27;)nun ilan ettiği standart sözleşmelere dayanır/);
+  const en = await (await render("/en/turkiye-data-protection-notice")).text();
+  assert.match(en, /standard contracts announced by the Personal Data Protection Board under Article 9/);
+});
+
 test("shows no privacy bar, and keeps optional local storage off until chosen in Cookie preferences", async () => {
   const controls = await readFile(new URL("../app/privacy-controls.tsx", import.meta.url), "utf8");
   assert.doesNotMatch(controls, /privacy-banner/);
@@ -1927,4 +1934,12 @@ test("keeps long article titles short in search results while the page heading k
     assert.ok(title.length <= 70, `${path} title length ${title.length}: ${title}`);
     assert.ok(html.includes(`<h1>${full}</h1>`) || html.includes(full), `${path} keeps the full heading`);
   }
+});
+
+test("records the KVKK transfer update as privacy notice version 1.5", async () => {
+  const en = await (await render("/en/privacy")).text();
+  assert.match(en, /22 November 2026 · Version 1\.5/);
+  assert.match(en, /Version 1\.5 · Reviewed 22 November 2026/);
+  const tr = await (await render("/tr/gizlilik")).text();
+  assert.match(tr, /22 Kasım 2026 · Sürüm 1\.5/);
 });
