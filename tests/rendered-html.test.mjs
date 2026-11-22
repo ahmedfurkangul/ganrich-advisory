@@ -1766,3 +1766,21 @@ test("publishes the EU Buyer Question Bank with 20 sourced answers and links it 
   assert.match(await (await render("/en/insights/cbam")).text(), /href="\/en\/insights\/eu-buyer-questions#cbam"/);
   assert.match(await (await render("/tr/icgoruler/tr-ets")).text(), /href="\/tr\/icgoruler\/ab-alici-sorulari#trets"/);
 });
+
+test("lists the rule hubs at the top of the Insights library", async () => {
+  for (const [p, hrefs] of [["/en/insights", ["/en/insights/cbam", "/en/insights/eudr", "/en/insights/cra", "/en/insights/turkiye-ets"]], ["/tr/icgoruler", ["/tr/icgoruler/skdm", "/tr/icgoruler/eudr", "/tr/icgoruler/cra", "/tr/icgoruler/tr-ets"]]]) {
+    const html = await (await render(p)).text();
+    assert.match(html, /class="section hub-strip"/, p);
+    for (const href of hrefs) assert.ok(html.includes(`href="${href}"`), `${p} links ${href}`);
+    assert.ok(html.includes(p.startsWith("/en") ? `href="/en/insights/eu-buyer-questions"` : `href="/tr/icgoruler/ab-alici-sorulari"`), `${p} links the question bank`);
+  }
+});
+
+test("sends a trial Content-Security-Policy in report-only mode", async () => {
+  const res = await render("/en");
+  const csp = res.headers.get("content-security-policy-report-only") ?? "";
+  assert.match(csp, /default-src 'self'/);
+  assert.match(csp, /object-src 'none'/);
+  assert.match(csp, /script-src 'self' 'unsafe-inline' https:\/\/static\.cloudflareinsights\.com/);
+  assert.match(res.headers.get("content-security-policy") ?? "", /frame-ancestors 'self'/);
+});
