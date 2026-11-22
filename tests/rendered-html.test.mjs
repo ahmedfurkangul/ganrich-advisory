@@ -913,11 +913,14 @@ test("publishes the EUDR and steel passport guides in both languages with full t
     assert.match(html, /\/og\/(en|tr)\/guide(Eudr2026|SteelDpp)\.png/);
     assert.match(html, /\/guides\/guide(Eudr2026|SteelDpp)-(en|tr)\.webp/);
   }
-  const [routes, index, content] = await Promise.all(["advisory-routes.ts", "guides-index.ts", "guides-content.ts"].map(f => readFile(new URL(`../app/${f}`, import.meta.url), "utf8")));
+  const [routes, index] = await Promise.all(["advisory-routes.ts", "guides-index.ts"].map(f => readFile(new URL(`../app/${f}`, import.meta.url), "utf8")));
+  const { guides } = await import("../scripts/load-guides.mjs");
+  const guidePaths = guides.flatMap(g => [g.en.path, g.tr.path]);
+  const guideH1s = guides.flatMap(g => [g.en.h1, g.tr.h1]);
   for (const p of ["insights/eudr-30-december-2026-turkish-exporters", "icgoruler/celik-dijital-urun-pasaportu-espr"]) {
-    assert.ok(routes.includes(`'${p}'`) && content.includes(`"path": "${p}"`), p);
+    assert.ok(routes.includes(`'${p}'`) && guidePaths.includes(p), p);
   }
-  for (const m of index.matchAll(/"h1": "((?:[^"\\]|\\.)*)"/g)) assert.ok(content.includes(`"h1": "${m[1]}"`), "index h1 matches content");
+  for (const m of index.matchAll(/"h1": "((?:[^"\\]|\\.)*)"/g)) assert.ok(guideH1s.includes(JSON.parse(`"${m[1]}"`)), "index h1 matches content");
   assert.match(await (await render("/tr/icgoruler")).text(), /Çelik Dijital Ürün Pasaportu: ESPR Türk çelik üreticisinden/);
 });
 
@@ -942,7 +945,8 @@ test("publishes the CBAM 2026 and CRA standards guides with FAQ markup, sitemap 
   }
   const tr = await (await render("/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets")).text();
   assert.equal((tr.match(/<li>Tesisiniz TR ETS pilot/g) ?? []).length, 2, "TR checklist has steps 4 and 6");
-  const content = await readFile(new URL("../app/guides-content.ts", import.meta.url), "utf8");
+  const { guides } = await import("../scripts/load-guides.mjs");
+  const content = JSON.stringify(guides);
   const links = [...new Set([...content.matchAll(/\]\((\/(?:en|tr)\/[^)]+)\)/g)].map(m => m[1]))];
   // Report pages come from D1, which the test worker does not have; reports-sitemap tests cover them.
   for (const link of links.filter(l => !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(l))) assert.equal((await render(link)).status, 200, `internal link ${link}`);
@@ -1493,7 +1497,7 @@ test("publishes the CBAM verifier 2026 guide in both languages with FAQ markup, 
 
 test("publishes every guide in both feeds and llms files, and dates only editorially dated sitemap URLs", async () => {
   const [{ guides, guideLastmod }, { notes }, { phaseTwoInsightArticles }] = await Promise.all([
-    import("../app/guides-content.ts"),
+    import("../scripts/load-guides.mjs"),
     import("../app/advisory-note-content.ts"),
     import("../app/phase-two-insights.ts"),
   ]);
@@ -1625,7 +1629,7 @@ test("long-form guides end with a topic-specific next step", async () => {
   const tr = await (await render("/tr/icgoruler/skdm-dogrulayici-secimi-2026")).text();
   assert.match(tr, /Doğrulayıcı mı seçiyorsunuz\? Tarafsız bir kısa liste isteyin\./);
   assert.match(tr, /href="\/tr\/iletisim\?service=toolSelection"/);
-  const { guides } = await import("../app/guides-content.ts");
+  const { guides } = await import("../scripts/load-guides.mjs");
   const { guideNextSteps } = await import("../app/guide-next-steps.ts");
   for (const g of guides) assert.ok(guideNextSteps[g.key], `${g.key} has a next step`);
 });
@@ -1666,7 +1670,7 @@ test("shows a founder card with photo, name and LinkedIn on the home page", asyn
 });
 
 test("opens every guide with a short answer box in both languages", async () => {
-  const { guides } = await import("../app/guides-content.ts");
+  const { guides } = await import("../scripts/load-guides.mjs");
   const paths = guides.flatMap(g => [`/en/${g.en.path}`, `/tr/${g.tr.path}`]);
   for (const p of paths) {
     const html = await (await render(p)).text();
@@ -1942,4 +1946,20 @@ test("records the KVKK transfer update as privacy notice version 1.5", async () 
   assert.match(en, /Version 1\.5 · Reviewed 22 November 2026/);
   const tr = await (await render("/tr/gizlilik")).text();
   assert.match(tr, /22 Kasım 2026 · Sürüm 1\.5/);
+});
+
+test("keeps every guide in content/guides as canonical Markdown listed in order.json", async () => {
+  const { readdir } = await import("node:fs/promises");
+  const { formatGuideMarkdown, parseGuideMarkdown } = await import("../app/guide-markdown.ts");
+  const { guideOrder } = await import("../scripts/load-guides.mjs");
+  const root = new URL("../content/guides/", import.meta.url);
+  const dirs = (await readdir(root, { withFileTypes: true })).filter(d => d.isDirectory()).map(d => d.name).sort();
+  assert.deepEqual([...guideOrder].sort(), dirs, "order.json lists every guide folder once");
+  for (const slug of dirs) {
+    for (const lang of ["en", "tr"]) {
+      const source = await readFile(new URL(`${slug}/${lang}.md`, root), "utf8");
+      assert.equal(formatGuideMarkdown(parseGuideMarkdown(source, slug)), source, `${slug}/${lang}.md is canonical`);
+    }
+  }
+  assert.throws(() => parseGuideMarkdown("---\npath: a\ntitle: b\ndescription: c\nh1: d\n---\n\nline one\nline two\n"), /a paragraph is one line/);
 });

@@ -3,7 +3,7 @@
 Source of https://ganrichadvisory.com (English at `/en`, Turkish at `/tr`).
 
 - Stack: React 19 on [vinext](https://github.com/cloudflare/vinext) (Next.js App Router APIs on Vite), Tailwind 4, Cloudflare Workers with D1 (`DB`) and R2 (`DOCUMENTS`).
-- Content lives in TypeScript files under `app/` (for example `guides-content.ts`, `solutions-content.ts`, `regulation-calendar.ts`). Routes are keyed in `app/advisory-routes.ts` and `app/content.ts`.
+- Long-form guides live as Markdown in `content/guides/<slug>/` (`meta.json`, `en.md`, `tr.md`; display order in `content/guides/order.json`; format in `app/guide-markdown.ts`). Other content lives in TypeScript files under `app/` (for example `solutions-content.ts`, `regulation-calendar.ts`). Routes are keyed in `app/advisory-routes.ts` and `app/content.ts`.
 - The Worker entry is `worker/index.ts` (analytics, edge cache, 410 for removed pages, newsletter and lead APIs).
 - Database migrations are in `drizzle/`.
 

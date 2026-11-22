@@ -2,7 +2,7 @@
 // were last checked, oldest first, and flags anything older than the threshold (default 30 days).
 // Usage: node --experimental-strip-types scripts/content-freshness.mjs [days]
 // Exit code is 0 either way: this is a reading list for the weekly review, not a gate.
-import { guides } from "../app/guides-content.ts";
+import { guides } from "./load-guides.mjs";
 import { ruleHubs } from "../app/rule-hubs-content.ts";
 import { CALENDAR_CHECKED } from "../app/regulation-calendar.ts";
 

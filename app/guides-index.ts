@@ -1,6 +1,6 @@
 import type { Lang } from "./content";
 
-// Light index of the long-form guides for client components (the library). Full text lives in guides-content.ts.
+// Light index of the long-form guides for client components (the library). Full text lives in content/guides/ (loaded by guides-content.ts).
 export type GuideIndexEntry = { key: string; solution: string; group?: "strategy"; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
  {
