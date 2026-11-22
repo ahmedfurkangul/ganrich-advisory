@@ -1613,3 +1613,17 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   assert.match(greenDeal, /rel="canonical" href="https:\/\/ganrichadvisory\.com\/en\/insights\/turkiye-green-deal-action-plan-2026-2030-exporters"/);
   assert.match(greenDeal, /hrefLang="tr"/);
 });
+
+test("long-form guides end with a topic-specific next step", async () => {
+  const en = await (await render("/en/insights/cbam-verifier-turkish-installations-2026")).text();
+  assert.match(en, /class="guide-next-step"/);
+  assert.match(en, /Choosing a verifier\? Ask for a neutral shortlist\./);
+  assert.match(en, /href="\/en\/contact\?service=toolSelection"/);
+  assert.ok(en.indexOf("guide-next-step") < en.indexOf("guide-sources"), "next step comes before the source list");
+  const tr = await (await render("/tr/icgoruler/skdm-dogrulayici-secimi-2026")).text();
+  assert.match(tr, /Doğrulayıcı mı seçiyorsunuz\? Tarafsız bir kısa liste isteyin\./);
+  assert.match(tr, /href="\/tr\/iletisim\?service=toolSelection"/);
+  const { guides } = await import("../app/guides-content.ts");
+  const { guideNextSteps } = await import("../app/guide-next-steps.ts");
+  for (const g of guides) assert.ok(guideNextSteps[g.key], `${g.key} has a next step`);
+});

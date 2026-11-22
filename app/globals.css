@@ -771,6 +771,12 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 
 /* Readiness check starter inside a guide */
 .guide-check { margin: 32px 0; padding: 24px; border: 1px solid var(--sand); border-left: 3px solid var(--bronze); background: var(--white); }
+.guide-next-step { margin: 48px 0; padding: 32px; background: var(--forest); color: var(--ivory); }
+.guide-next-step .kicker { color: var(--color-accent-on-dark); }
+.guide-next-step h2 { color: var(--ivory); margin-top: 8px; }
+.guide-next-step p { color: var(--ivory); }
+.guide-next-step .text-link { color: var(--ivory); }
+.guide-next-step a.button { text-decoration: none; }
 .guide-check .kicker { margin: 0 0 8px; }
 .guide-body .guide-check-q { font: 400 1.3rem/1.35 var(--serif); margin: 0 0 16px; }
 .guide-check-options { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
