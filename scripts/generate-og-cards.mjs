@@ -78,6 +78,7 @@ const cards = {
     ["hubEudr", "INSIGHTS · EUDR", "EUDR: what your buyer will ask for"],
     ["hubTrEts", "INSIGHTS · TÜRKİYE ETS", "Türkiye ETS: what the pilot asks"],
     ["hubPpwr", "INSIGHTS · PACKAGING (PPWR)", "PPWR: the packaging file"],
+    ["hubSupplierData", "INSIGHTS · SUPPLIER DATA", "Supplier data after the Omnibus"],
   ],
   tr: [
     ["home", "STRATEJİK DANIŞMANLIK", "Sonraki adım. Sağlam bir kararla."],
@@ -146,6 +147,7 @@ const cards = {
     ["hubEudr", "İÇGÖRÜLER · EUDR", "EUDR: alıcınız ne isteyecek?"],
     ["hubTrEts", "İÇGÖRÜLER · TÜRKİYE ETS", "TR ETS: pilot ne istiyor?"],
     ["hubPpwr", "İÇGÖRÜLER · AMBALAJ (PPWR)", "PPWR: ambalaj dosyası"],
+    ["hubSupplierData", "İÇGÖRÜLER · TEDARİKÇİ VERİSİ", "Omnibus sonrası tedarikçi verisi"],
   ],
 };
 

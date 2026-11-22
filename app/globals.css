@@ -712,7 +712,7 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .notes-filter button { min-height: 44px; }
 .hub-strip { padding-top: 48px; padding-bottom: 8px; }
 .hub-strip h2 { font-size: var(--type-caption); color: var(--bronze); letter-spacing: .12em; text-transform: uppercase; font-family: inherit; margin: 0 0 16px; }
-.hub-strip ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.hub-strip ul { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .hub-strip li a { display: flex; flex-direction: column; gap: 6px; height: 100%; padding: 18px; background: var(--white); border: 1px solid var(--sand); color: inherit; text-decoration: none; }
 .hub-strip li a:hover, .hub-strip li a:focus-visible { border-color: var(--forest); }
 .hub-strip strong { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; color: var(--ink); }

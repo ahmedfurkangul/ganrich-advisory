@@ -547,6 +547,219 @@ export const ruleHubs: RuleHub[] = [
       checked: "Tarihler ve kaynaklar en son 2 Kasım 2026'da Avrupa Komisyonu'nun EUDR sayfası ve EUR-Lex ile karşılaştırıldı. Genel bilgidir, hukuki görüş değildir.",
     },
   },
+  {
+    key: "hubSupplierData",
+    solution: "solutionSupplierData",
+    guides: ["guideSupplierData"],
+    reports: {
+      en: [{ slug: "supplier-sustainability-data-after-omnibus-97a36c53", title: "Fewer reporters, sharper questions: sustainability data requests after the EU Omnibus" }],
+      tr: [{ slug: "tedarikci-surdurulebilirlik-verisi-omnibus-82382d59", title: "Daha az raporlayan, daha net sorular: AB Omnibus sonrasında sürdürülebilirlik veri talepleri" }],
+    },
+    en: {
+      "title": "Supplier sustainability data after the EU Omnibus: what EU buyers can ask | Ganrich Advisory",
+      "description": "The EU cap on supplier sustainability requests, the voluntary standard behind it and the product-rule data outside it, with the 2027 and 2029 dates.",
+      "label": "Supplier data · CSRD, Omnibus I and the voluntary standard",
+      "h1": "Supplier sustainability data: what your EU customers can still ask you for",
+      "lead": "Everything on this site about the sustainability questionnaires EU customers send their suppliers in one place: the Omnibus I cap, the voluntary standard, which requests sit outside the cap, and our guide, paper and programme.",
+      "shortAnswer": "Under Omnibus I (Directive (EU) 2026/470), an EU company that reports under the CSRD may not require a supplier with up to 1,000 employees to give more sustainability information than the voluntary standard covers, for financial years from 2027. The standard was published as Delegated Regulation (EU) 2026/1560. Data that product rules such as CBAM, EUDR, PPWR or the Battery Regulation require sits outside the cap.",
+      "datesTitle": "Dates that apply",
+      "dates": [
+        [
+          "2026-02-26",
+          "26 February 2026",
+          "Omnibus I (Directive (EU) 2026/470) is published; it enters into force on 18 March 2026."
+        ],
+        [
+          "2026-07-03",
+          "3 July 2026",
+          "The Commission adopts the voluntary reporting standard and the revised ESRS."
+        ],
+        [
+          "2026-09-21",
+          "21 September 2026",
+          "The voluntary standard is published as Delegated Regulation (EU) 2026/1560."
+        ],
+        [
+          "2027-01-01",
+          "1 January 2027",
+          "The value-chain cap applies to financial years starting on or after this date."
+        ],
+        [
+          "2027-03-19",
+          "19 March 2027",
+          "Member States must transpose the reporting changes."
+        ],
+        [
+          "2029-07-26",
+          "26 July 2029",
+          "The narrowed due diligence directive (CSDDD) applies to the largest companies."
+        ]
+      ],
+      "asksTitle": "What EU buyers ask for",
+      "asks": [
+        "Energy use and greenhouse gas emissions, usually for the last financial year.",
+        "Workforce figures, health and safety, pay and training.",
+        "Water, waste and pollution figures for your sites.",
+        "Business conduct: anti-corruption and related policies.",
+        "Separately, product-rule data: CBAM emissions, EUDR geolocation, PPWR declarations, battery passport data."
+      ],
+      "stepsTitle": "First steps",
+      "steps": [
+        "List last year's sustainability requests: who asked, in what format, and whether each came from a customer's report or a product rule.",
+        "Check which of your EU customers still report under the CSRD.",
+        "Prepare one base report along the voluntary standard's basic module from the data you already hold.",
+        "Use the same energy and emissions figures in the base report, CBAM data and any TSRS report.",
+        "Name one owner for the file and an owner for each figure."
+      ],
+      "faq": [
+        [
+          "Can we refuse a questionnaire?",
+          "If you have up to 1,000 employees, you may decline the part of a CSRD-related request that goes beyond the voluntary standard, from financial year 2027. A short answer from a ready base report usually serves you better."
+        ],
+        [
+          "Does the cap cover CBAM or EUDR data?",
+          "No. It covers information for sustainability reporting only. Product, import and due diligence rules require their own data."
+        ],
+        [
+          "Do we have to publish a report?",
+          "No. The standard is voluntary. It gives you one file to answer most requests, and you decide whom to share it with."
+        ],
+        [
+          "Does a TSRS report answer EU customers?",
+          "Often in part. Customers may ask in their own format and at product or site level, so build both on the same data."
+        ]
+      ],
+      "glossary": [
+        [
+          "Corporate Sustainability Reporting Directive (CSRD)",
+          "Kurumsal Sürdürülebilirlik Raporlaması Direktifi (CSRD)"
+        ],
+        [
+          "Corporate Sustainability Due Diligence Directive (CSDDD)",
+          "Kurumsal Sürdürülebilirlik Durum Tespiti Direktifi (CSDDD)"
+        ],
+        [
+          "Voluntary standard (VS, based on VSME)",
+          "Gönüllü standart (VSME tabanlı)"
+        ],
+        [
+          "Value-chain cap",
+          "Değer zinciri sınırı"
+        ],
+        [
+          "European Sustainability Reporting Standards (ESRS)",
+          "Avrupa Sürdürülebilirlik Raporlama Standartları (ESRS)"
+        ],
+        [
+          "Turkish Sustainability Reporting Standards (TSRS)",
+          "Türkiye Sürdürülebilirlik Raporlama Standartları (TSRS)"
+        ]
+      ],
+      "checked": "Dates as checked against Directive (EU) 2026/470, Delegated Regulation (EU) 2026/1560 and the Commission's reporting pages on 22 November 2026. General information, not legal advice."
+    },
+    tr: {
+      "title": "Omnibus sonrası tedarikçi sürdürülebilirlik verisi: AB alıcısı ne isteyebilir? | Ganrich Advisory",
+      "description": "Tedarikçiye yönelik sürdürülebilirlik taleplerindeki AB sınırı, gönüllü standart ve sınır dışındaki ürün kuralı verileri, 2027 ve 2029 tarihleriyle.",
+      "label": "Tedarikçi verisi · CSRD, Omnibus I ve gönüllü standart",
+      "h1": "Tedarikçi sürdürülebilirlik verisi: AB müşteriniz sizden hâlâ ne isteyebilir?",
+      "lead": "AB müşterilerinin tedarikçilerine gönderdiği sürdürülebilirlik anketleri üzerine bu sitedeki her şey tek yerde: Omnibus I sınırı, gönüllü standart, sınırın dışında kalan talepler ve rehberimiz, raporumuz ve programımız.",
+      "shortAnswer": "(AB) 2026/470 sayılı Omnibus I Direktifi'ne göre CSRD kapsamında raporlayan bir AB şirketi, 2027'den itibaren başlayan hesap dönemlerinde 1.000'e kadar çalışanı olan tedarikçiden gönüllü standardın kapsadığından fazla sürdürülebilirlik bilgisi isteyemez. Standart (AB) 2026/1560 sayılı Yetki Devrine Dayanan Tüzük olarak yayımlandı. SKDM, EUDR, PPWR veya Batarya Tüzüğü gibi ürün kurallarının istediği veri sınırın dışında.",
+      "datesTitle": "Geçerli tarihler",
+      "dates": [
+        [
+          "2026-02-26",
+          "26 Şubat 2026",
+          "(AB) 2026/470 sayılı Omnibus I Direktifi yayımlandı; 18 Mart 2026'da yürürlüğe girdi."
+        ],
+        [
+          "2026-07-03",
+          "3 Temmuz 2026",
+          "Komisyon gönüllü raporlama standardını ve gözden geçirilmiş ESRS'yi kabul etti."
+        ],
+        [
+          "2026-09-21",
+          "21 Eylül 2026",
+          "Gönüllü standart (AB) 2026/1560 sayılı Yetki Devrine Dayanan Tüzük olarak yayımlandı."
+        ],
+        [
+          "2027-01-01",
+          "1 Ocak 2027",
+          "Değer zinciri sınırı bu tarihte veya sonrasında başlayan hesap dönemlerine uygulanıyor."
+        ],
+        [
+          "2027-03-19",
+          "19 Mart 2027",
+          "Üye devletler raporlama değişikliklerini iç hukuka aktarmalı."
+        ],
+        [
+          "2029-07-26",
+          "26 Temmuz 2029",
+          "Daraltılmış durum tespiti direktifi (CSDDD) en büyük şirketlere uygulanıyor."
+        ]
+      ],
+      "asksTitle": "AB alıcıları ne istiyor?",
+      "asks": [
+        "Enerji kullanımı ve sera gazı emisyonları, genellikle son hesap dönemi için.",
+        "İşgücü rakamları, iş sağlığı ve güvenliği, ücret ve eğitim.",
+        "Tesisleriniz için su, atık ve kirlilik rakamları.",
+        "İş etiği: yolsuzlukla mücadele ve ilgili politikalar.",
+        "Ayrıca ürün kuralı verileri: SKDM emisyonu, EUDR coğrafi konumu, PPWR beyanları, batarya pasaportu verisi."
+      ],
+      "stepsTitle": "İlk adımlar",
+      "steps": [
+        "Geçen yılın sürdürülebilirlik taleplerini listeleyin: kim, hangi biçimde sordu, talep müşterinin raporundan mı yoksa bir ürün kuralından mı geliyor?",
+        "AB müşterilerinizden hangilerinin hâlâ CSRD kapsamında raporladığını kontrol edin.",
+        "Elinizdeki veriyle gönüllü standardın temel modülüne göre tek bir temel rapor hazırlayın.",
+        "Temel raporda, SKDM verisinde ve varsa TSRS raporunda aynı enerji ve emisyon rakamlarını kullanın.",
+        "Dosya için bir sahip, her rakam için bir sorumlu belirleyin."
+      ],
+      "faq": [
+        [
+          "Bir anketi reddedebilir miyiz?",
+          "1.000'e kadar çalışanınız varsa, CSRD kaynaklı bir talebin gönüllü standardı aşan kısmını 2027 hesap döneminden itibaren reddedebilirsiniz. Hazır bir temel rapordan verilen kısa yanıt genellikle daha iyi sonuç verir."
+        ],
+        [
+          "Sınır SKDM veya EUDR verisini kapsıyor mu?",
+          "Hayır. Yalnızca sürdürülebilirlik raporlamasına yönelik bilgiyi kapsar. Ürün, ithalat ve durum tespiti kuralları kendi verilerini ister."
+        ],
+        [
+          "Rapor yayımlamak zorunda mıyız?",
+          "Hayır. Standart gönüllü. Taleplerin çoğunu yanıtlayacak tek bir dosya sağlar; kimle paylaşacağınıza siz karar verirsiniz."
+        ],
+        [
+          "TSRS raporu AB müşterilerine yanıt olur mu?",
+          "Çoğu zaman kısmen. Müşteriler kendi biçimlerinde ve ürün veya tesis düzeyinde sorabilir; ikisini de aynı veriye dayandırın."
+        ]
+      ],
+      "glossary": [
+        [
+          "Kurumsal Sürdürülebilirlik Raporlaması Direktifi (CSRD)",
+          "Corporate Sustainability Reporting Directive (CSRD)"
+        ],
+        [
+          "Kurumsal Sürdürülebilirlik Durum Tespiti Direktifi (CSDDD)",
+          "Corporate Sustainability Due Diligence Directive (CSDDD)"
+        ],
+        [
+          "Gönüllü standart (VSME tabanlı)",
+          "Voluntary standard (VS, based on VSME)"
+        ],
+        [
+          "Değer zinciri sınırı",
+          "Value-chain cap"
+        ],
+        [
+          "Avrupa Sürdürülebilirlik Raporlama Standartları (ESRS)",
+          "European Sustainability Reporting Standards (ESRS)"
+        ],
+        [
+          "Türkiye Sürdürülebilirlik Raporlama Standartları (TSRS)",
+          "Turkish Sustainability Reporting Standards (TSRS)"
+        ]
+      ],
+      "checked": "Tarihler 22 Kasım 2026'da (AB) 2026/470 sayılı Direktif, (AB) 2026/1560 sayılı Yetki Devrine Dayanan Tüzük ve Komisyon'un raporlama sayfalarıyla karşılaştırıldı. Genel bilgidir, hukuki görüş değildir."
+    },
+  },
 ];
 
 export const ruleHubByKey = (key: string) => ruleHubs.find(h => h.key === key);
