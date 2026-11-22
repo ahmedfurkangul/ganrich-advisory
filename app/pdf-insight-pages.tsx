@@ -7,15 +7,17 @@ import { PdfInsightReport, PdfInsightStudio } from "./pdf-insights";
 import { SiteLayout } from "./site";
 import { absoluteUrl, metaDescription, SITE_NAME, SITE_ORIGIN } from "./site-config";
 import { reportSeo, reportSocialCards } from "./report-seo";
-import { reportTranslation, solutions } from "./solutions-content";
+import { allSolutions, reportTranslation, retiredSolutions } from "./solutions-content";
 import { guideIndex } from "./guides-index";
 
 const readinessChecks: Record<string, string> = { solutionCbam: "cbamCheck", solutionCra: "craCheck", solutionEudr: "eudrCheck" };
 
 // Topic links for a programme report: its programme page, the readiness check and up to three guides on the same programme.
 export function reportRelatedLinks(lang: Lang, slug: string): { href: string; label: string }[] {
-  const solution = solutions[lang].find(s => s.paper?.slug === slug || s.update?.slug === slug);
+  const solution = allSolutions[lang].find(s => s.paper?.slug === slug || s.update?.slug === slug);
   if (!solution) return [];
+  const retiredTo = retiredSolutions[solution.key];
+  if (retiredTo) return [{ href: `/${lang}/${routeMap[lang][retiredTo]}`, label: lang === "en" ? (retiredTo === "aiDecisions" ? "AI Decisions" : "All programmes") : (retiredTo === "aiDecisions" ? "Yapay Zekâ Kararları" : "Tüm programlar") }];
   const en = lang === "en";
   const links = [{ href: `/${lang}/${routeMap[lang][solution.key]}`, label: solution.title }];
   const check = readinessChecks[solution.key];

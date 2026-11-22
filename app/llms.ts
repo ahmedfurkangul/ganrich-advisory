@@ -93,7 +93,7 @@ export async function renderLlmsTxt() {
   out.push("## Optional", "",
     `- [Full text for AI assistants](${absoluteUrl("/llms-full.txt")}): services, programmes and notes in full.`,
     `- [About the founder](${url("en", "about")})`,
-    `- [Decision Lab](${url("en", "decisionLab")}): free tools for framing decisions and testing assumptions.`,
+    `- [EU readiness checks](${url("en", "decisionLab")}): the EU rule scope scanner and two-minute CBAM, CRA and EUDR readiness checks.`,
     `- [Sitemap](${absoluteUrl("/sitemap.xml")}) · [Reports sitemap](${absoluteUrl("/reports-sitemap.xml")}) · [RSS](${absoluteUrl("/en/feed.xml")})`,
     "");
   return out.join("\n");
