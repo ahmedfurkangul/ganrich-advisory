@@ -324,11 +324,6 @@ export function DecisionLabPage({ lang }: { lang: Lang }) {
         <div className="section-head-compact"><span className="eyebrow">{isEn ? "START HERE" : "BURADAN BAŞLAYIN"}</span><h2>{isEn ? "Find the rules that reach you, then test the ones EU buyers already enforce." : "Size uzanan kuralları bulun, ardından AB alıcılarının şimdiden uyguladıklarını test edin."}</h2></div>
         <div className="tool-cards">{checks.map((tool, i) => <article key={tool[0]}><span>0{i + 1}</span><h3>{tool[0]}</h3><p>{tool[1]}</p><p className="tool-meta">{i === 0 ? (isEn ? "5 questions · about 1 min · start here" : "5 soru · yaklaşık 1 dk · buradan başlayın") : (isEn ? "8 questions · about 2 min · instant result" : "8 soru · yaklaşık 2 dk · anında sonuç")}</p><a href={`/${lang}/${tool[2]}`}>{i === 0 ? (isEn ? "Start the scan" : "Taramaya başlayın") : (isEn ? "Start the check" : "Teste başlayın")} <i aria-hidden="true"><Arrow/></i></a></article>)}</div>
       </section>
-      <section className="section lab-tools-archive">
-        <div className="section-head-compact"><span className="eyebrow">{isEn ? "DECISION TOOLS" : "KARAR ARAÇLARI"}</span><h2>{isEn ? "For strategy and growth decisions." : "Strateji ve büyüme kararları için."}</h2></div>
-        <ul>{tools.map(tool => <li key={tool[0]}><a href={`/${lang}/${tool[2]}`}>{tool[0]}</a><span>{tool[1]}</span></li>)}</ul>
-        <a className="lab-changelog-link" href={`/${lang}/${m.decisionLabChangelog}`}><span>{isEn ? "CHANGELOG" : "DEĞİŞİKLİK GÜNLÜĞÜ"}</span><strong>{isEn ? "See what is live, what changed, and what remains under evaluation." : "Nelerin yayında, nelerin değiştiğini ve hangi araçların değerlendirmede olduğunu görün."}</strong><i aria-hidden="true"><Arrow/></i></a>
-      </section>
       <section className="limitations-band"><strong>{isEn ? "What these tools do not do" : "Bu araçların yapmadığı şeyler"}</strong><p>{isEn ? "They structure exploration. They do not replace professional judgment, verified evidence, legal review, investment advice, or a decision owner." : "Keşif sürecini yapılandırırlar. Profesyonel muhakemenin, doğrulanmış kanıtın, hukuk incelemesinin, yatırım tavsiyesinin veya karar sahibinin yerine geçmezler."}</p></section>
     </>
   );
