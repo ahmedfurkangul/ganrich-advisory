@@ -1573,7 +1573,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 132); // +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
+  assert.equal(blocks.length, 134); // +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1751,4 +1751,18 @@ test("publishes the Türkiye ETS rule hub and links it from the programme", asyn
     assert.match(html, /"@type":"FAQPage"/, p);
   }
   assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /href="\/en\/insights\/turkiye-ets"/);
+});
+
+test("publishes the EU Buyer Question Bank with 20 sourced answers and links it from the hubs", async () => {
+  for (const [p, h1] of [["/en/insights/eu-buyer-questions", /The questions your EU buyer will ask/], ["/tr/icgoruler/ab-alici-sorulari", /AB alıcınızın soracağı sorular/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.equal((html.match(/class="qb-item"/g) ?? []).length, 20, p);
+    const faq = html.match(/"@type":"FAQPage"[\s\S]*?"mainEntity":\[([\s\S]*?)\]\}/)?.[1] ?? "";
+    assert.equal((faq.match(/"@type":"Question"/g) ?? []).length, 20, p);
+  }
+  assert.match(await (await render("/en/insights/cbam")).text(), /href="\/en\/insights\/eu-buyer-questions#cbam"/);
+  assert.match(await (await render("/tr/icgoruler/tr-ets")).text(), /href="\/tr\/icgoruler\/ab-alici-sorulari#trets"/);
 });

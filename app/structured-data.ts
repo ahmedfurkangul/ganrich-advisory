@@ -6,6 +6,7 @@ import { solutionByKey, solutions, solutionTagList, solutionTags, solutionThemes
 import { absoluteUrl, SITE_NAME } from "./site-config";
 import { faqFor } from "./solution-faq";
 import { ruleHubByKey } from "./rule-hubs-content";
+import { buyerQuestionGroups } from "./buyer-questions-content";
 import { aiDecisions } from "./ai-decisions-content";
 import { servicePages, SERVICE_PAGE_KEYS, isServicePageKey } from "./service-pages-content";
 
@@ -102,7 +103,7 @@ export function breadcrumbParent(lang: Lang, kind: string) {
   const en = lang === "en";
   if (kind.startsWith("solution") && kind !== "solutions") return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
   if (kind.startsWith("service") || kind === "studio" || kind === "aiDecisions" || isServicePageKey(kind)) return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
-  if (kind.startsWith("note") || kind.startsWith("guide") || kind.startsWith("hub")) return { name: en ? "Insights" : "İçgörüler", url: pageUrl(lang, "insights") };
+  if (kind.startsWith("note") || kind.startsWith("guide") || kind.startsWith("hub") || kind === "buyerQuestions") return { name: en ? "Insights" : "İçgörüler", url: pageUrl(lang, "insights") };
   return null;
 }
 
@@ -197,6 +198,13 @@ export function offeringNodes(lang: Lang, kind: string, url: string) {
       mainEntity: c.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
     }];
   }
+  if (kind === "buyerQuestions") return [{
+    "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    inLanguage: inLanguage(lang),
+    isPartOf: { "@id": `${url}#webpage` },
+    mainEntity: buyerQuestionGroups.flatMap(g => g.items).map(i => ({ "@type": "Question", name: i[lang].q, acceptedAnswer: { "@type": "Answer", text: i[lang].a } })),
+  }];
   const hub = ruleHubByKey(kind);
   if (hub) return [{
     "@type": "FAQPage",

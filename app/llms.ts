@@ -1,5 +1,6 @@
 import { listPdfInsights, type PdfInsight } from "../db/pdf-insights";
 import { ruleHubs } from "./rule-hubs-content";
+import { buyerQuestionsCopy } from "./buyer-questions-content";
 import { listedServices as services } from "./advisory-content";
 import { aiDecisions } from "./ai-decisions-content";
 import { servicePages, SERVICE_PAGE_KEYS } from "./service-pages-content";
@@ -72,6 +73,7 @@ export async function renderLlmsTxt() {
     const en = lang === "en";
     out.push(`## ${en ? "EU rule hubs (English)" : "AB kural merkezleri (Türkçe)"}`, "");
     for (const h of ruleHubs) out.push(`- [${h[lang].h1}](${url(lang, h.key)}): ${oneLine(h[lang].shortAnswer)}`);
+    out.push(`- [${buyerQuestionsCopy[lang].h1}](${url(lang, "buyerQuestions")}): ${oneLine(buyerQuestionsCopy[lang].lead)}`);
     out.push("", `## ${en ? "Advisory services (English)" : "Danışmanlık hizmetleri (Türkçe)"}`, "");
     for (const s of services[lang]) out.push(`- [${s.title}](${url(lang, s.key)}): ${oneLine(s.intro)}`);
     for (const key of SERVICE_PAGE_KEYS) out.push(`- [${servicePages[key][lang].title}](${url(lang, key)}): ${oneLine(servicePages[key][lang].lead)}`);

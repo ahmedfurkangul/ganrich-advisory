@@ -32,6 +32,7 @@ export function RuleHubPage({ lang, kind }: { lang: Lang; kind: string }) {
           {hub.check && <li><span>{en ? "Readiness check" : "Hazırlık testi"}</span><a href={url(lang, hub.check)}>{en ? "See where you stand in eight questions" : "Sekiz soruda nerede durduğunuzu görün"}</a></li>}
           {hub.reports[lang].map(r => <li key={r.slug}><span>{en ? "Whitepaper" : "Teknik not"}</span><a href={reportUrl(lang, r.slug)}>{r.title}</a></li>)}
           <li><span>{en ? "Programme" : "Program"}</span><a href={url(lang, hub.solution)}>{en ? "How we work on this with you" : "Bu konuda sizinle nasıl çalışıyoruz"}</a></li>
+          <li><span>{en ? "Buyer questions" : "Alıcı soruları"}</span><a href={`${url(lang, "buyerQuestions")}#${hub.key.slice(3).toLowerCase()}`}>{en ? "What EU buyers ask on this rule, answered" : "AB alıcılarının bu kural hakkında sorduğu sorular ve cevapları"}</a></li>
           <li><span>{en ? "Buyer requests" : "Alıcı talepleri"}</span><a href={url(lang, "buyerDesk")}>{en ? "EU Buyer Request Desk" : "AB Alıcı Talep Masası"}</a></li>
         </ul>
         <p><a className="button light" data-analytics-event="contact_started" href={`${url(lang, "contact")}?service=${hub.solution}`}>{en ? "Ask about this" : "Bunu sorun"}</a></p>
