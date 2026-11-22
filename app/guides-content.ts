@@ -1490,7 +1490,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "Our [Türkiye ETS readiness](/en/solutions/turkiye-ets-readiness) work turns these steps into a plant-level roadmap. [CBAM data readiness](/en/solutions/cbam-data-readiness) covers the EU evidence side and [measured energy retrofit](/en/solutions/measured-energy-retrofit) the abatement side. Take the [CBAM readiness check](/en/decision-lab/cbam-readiness-check) to see where you stand, and follow EU dates in our [EU regulation calendar](/en/insights/eu-regulation-calendar)."
+     "text": "Our [Türkiye ETS readiness](/en/solutions/turkiye-ets-readiness) work turns these steps into a plant-level roadmap. [CBAM data readiness](/en/solutions/cbam-data-readiness) covers the EU evidence side, and our [incentive and finance file](/en/expertise/green-transition-incentive-file) can help fund the abatement side. Take the [CBAM readiness check](/en/decision-lab/cbam-readiness-check) to see where you stand, and follow EU dates in our [EU regulation calendar](/en/insights/eu-regulation-calendar)."
     },
     {
      "t": "h2",
@@ -1700,7 +1700,7 @@ export const guides: Guide[] = [
     },
     {
      "t": "p",
-     "text": "[Türkiye ETS hazırlık hizmetimiz](/tr/cozumler/turkiye-ets-hazirligi) bu adımları tesis bazında bir yol haritasına çeviriyor. SKDM veri boyutunda [SKDM veri hazırlığı](/tr/cozumler/cbam-veri-hazirligi), emisyon azaltımı boyutunda ise [ölçüme dayalı enerji iyileştirmesi](/tr/cozumler/olcume-dayali-enerji-iyilestirmesi) devreye giriyor. Nerede durduğunuzu görmek için [SKDM hazırlık testini](/tr/karar-laboratuvari/cbam-hazirlik-testi) yapabilir, AB tarihlerini [AB mevzuat takviminde](/tr/icgoruler/ab-mevzuat-takvimi) izleyebilirsiniz."
+     "text": "[Türkiye ETS hazırlık hizmetimiz](/tr/cozumler/turkiye-ets-hazirligi) bu adımları tesis bazında bir yol haritasına çeviriyor. SKDM veri boyutunda [SKDM veri hazırlığı](/tr/cozumler/cbam-veri-hazirligi), emisyon azaltımının finansmanında ise [teşvik ve finansman dosyası](/tr/uzmanlik/yesil-donusum-tesvik-dosyasi) devreye giriyor. Nerede durduğunuzu görmek için [SKDM hazırlık testini](/tr/karar-laboratuvari/cbam-hazirlik-testi) yapabilir, AB tarihlerini [AB mevzuat takviminde](/tr/icgoruler/ab-mevzuat-takvimi) izleyebilirsiniz."
     },
     {
      "t": "h2",

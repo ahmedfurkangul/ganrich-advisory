@@ -7,6 +7,7 @@ import { checks, type CheckId } from "./readiness-check-content";
 import { GuideCopy } from "./guide-copy";
 import { solutionPaperPath } from "./guide-paper";
 import { guideNextSteps } from "./guide-next-steps";
+import { guideShortAnswers } from "./guide-short-answers";
 
 // Long-form guides, rendered on the server: the full text is in the first HTML response.
 const url = (l: Lang, k: string) => "/" + l + "/" + routeMap[l][k];
@@ -81,15 +82,16 @@ export function GuidePage({ lang, kind }: { lang: Lang; kind: string }) {
   if (nextAt < 0) nextAt = t.blocks.length;
   const published = new Date(g.date + "T12:00:00Z").toLocaleDateString(en ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" });
   return <>
-    <section className="advisory-hero guide-hero"><p className="kicker">{en ? "Technical note" : "Teknik not"} · {g.topic[lang]}</p><h1>{t.h1}</h1><p className="advisory-lead">{t.description}</p></section>
+    <section className="advisory-hero guide-hero"><p className="kicker">{en ? "Guide" : "Rehber"} · {g.topic[lang]}</p><h1>{t.h1}</h1><p className="advisory-lead">{t.description}</p></section>
     <article className="decision-note-body guide-body">
       <p className="note-byline">{en ? "Ahmed Furkan Gul" : "Ahmed Furkan Gül"} · Ganrich Advisory · <time dateTime={g.date}>{published}</time> · {g.readingTime[lang]}</p>
+      {guideShortAnswers[g.key] && <aside className="guide-short-answer" aria-label={en ? "Short answer" : "Kısa cevap"}><p className="kicker">{en ? "Short answer" : "Kısa cevap"}</p><p>{guideShortAnswers[g.key][lang]}</p></aside>}
       <figure className="guide-cover"><img src={`/guides/${g.image}-${lang}.webp`} width={1600} height={900} alt={t.h1} decoding="async"/></figure>
       {t.blocks.map((b, i) => <Fragment key={i}>{i === checkAt && <CheckStarter lang={lang} solution={g.solution}/>}{i === nextAt && <NextStep lang={lang} guide={g.key}/>}<Block b={b}/></Fragment>)}
       {nextAt === t.blocks.length && <NextStep lang={lang} guide={g.key}/>}
       <GuideCopy lang={lang} guide={g.key} hasPdf={Boolean(solutionPaperPath(lang, g.solution))}/>
       <p className="note-status">{en ? `Dates and sources last checked ${g.checked.en}. General information, not legal advice.` : `Tarihler ve kaynaklar en son ${g.checked.tr} tarihinde kontrol edildi. Genel bilgidir, hukuki görüş değildir.`}</p>
-      <p className="notes-links"><a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All technical notes" : "Tüm teknik notlar"}</a></p>
+      <p className="notes-links"><a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All insights" : "Tüm içgörüler"}</a></p>
     </article>
     <Conversation lang={lang}/>
   </>;
