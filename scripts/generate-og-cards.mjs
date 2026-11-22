@@ -76,6 +76,7 @@ const cards = {
     ["hubCbam", "INSIGHTS · CBAM", "CBAM: what your importer needs"],
     ["hubCra", "INSIGHTS · CYBER RESILIENCE ACT", "CRA: what applies now"],
     ["hubEudr", "INSIGHTS · EUDR", "EUDR: what your buyer will ask for"],
+    ["hubTrEts", "INSIGHTS · TÜRKİYE ETS", "Türkiye ETS: what the pilot asks"],
   ],
   tr: [
     ["home", "STRATEJİK DANIŞMANLIK", "Sonraki adım. Sağlam bir kararla."],
@@ -142,6 +143,7 @@ const cards = {
     ["hubCbam", "İÇGÖRÜLER · SKDM", "SKDM: ithalatçınız ne isteyecek?"],
     ["hubCra", "İÇGÖRÜLER · SİBER DAYANIKLILIK", "CRA: şimdi ne geçerli?"],
     ["hubEudr", "İÇGÖRÜLER · EUDR", "EUDR: alıcınız ne isteyecek?"],
+    ["hubTrEts", "İÇGÖRÜLER · TÜRKİYE ETS", "TR ETS: pilot ne istiyor?"],
   ],
 };
 
