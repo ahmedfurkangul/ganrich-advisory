@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { Lang, routeMap } from './content';
 import { EditorialHero } from './advisory';
 
@@ -75,16 +75,16 @@ export function NewsletterSignup({ lang, source, compact = false }: { lang: Lang
   </section>;
 }
 
+const noSubscribe = () => () => {};
+
 export function NewsletterPage({ lang }: { lang: Lang }) {
   const c = copy[lang];
-  const [outcome, setOutcome] = useState('');
-  const [token, setToken] = useState('');
+  // Read the confirmation link's query on the client only; the server render sees an empty query.
+  const search = useSyncExternalStore(noSubscribe, () => window.location.search, () => '');
+  const params = new URLSearchParams(search);
+  const outcome = params.get('status') ?? '';
+  const token = params.get('unsubscribe') ?? '';
   const [unsubscribed, setUnsubscribed] = useState('');
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setOutcome(params.get('status') ?? '');
-    setToken(params.get('unsubscribe') ?? '');
-  }, []);
   const unsubscribe = async () => {
     try { setUnsubscribed(await post({ action: 'unsubscribe', token, language: lang })); }
     catch (caught) { setUnsubscribed(caught instanceof Error && caught.message ? caught.message : c.error); }

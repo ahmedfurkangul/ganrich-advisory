@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { insightArticles, insightHref, Lang, routeMap } from "./content";
 import { notes } from "./advisory-note-content";
 import { allSolutions, retiredSolutions } from "./solutions-content";
@@ -35,6 +35,8 @@ const copy = {
   },
 };
 
+const noSubscribe = () => () => {};
+
 export function libraryEntries(lang: Lang): Entry[] {
   const c = copy[lang];
   const reportBase = lang === "en" ? "/en/insights/report/" : "/tr/icgoruler/rapor/";
@@ -58,13 +60,11 @@ export function TechnicalNotesLibrary({ lang }: { lang: Lang }) {
   const c = copy[lang];
   const locale = lang === "en" ? "en-GB" : "tr-TR";
   const entries = useMemo(() => libraryEntries(lang), [lang]);
-  const [filter, setFilter] = useState<"all" | Group>("all");
+  const [chosen, setFilter] = useState<"all" | Group | null>(null);
   const [query, setQuery] = useState("");
   // A link such as #strategy (used by the old category pages) opens the library with that filter.
-  useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    if ((groups as string[]).includes(hash)) setFilter(hash as Group);
-  }, []);
+  const hash = useSyncExternalStore(noSubscribe, () => window.location.hash.slice(1), () => "");
+  const filter: "all" | Group = chosen ?? ((groups as string[]).includes(hash) ? hash as Group : "all");
   const list = useMemo(() => {
     const q = query.trim().toLocaleLowerCase(locale);
     return entries.filter(e => (filter === "all" || e.group === filter)
