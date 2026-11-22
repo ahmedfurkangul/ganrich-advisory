@@ -4,7 +4,8 @@ import { routeLastModified } from "../../content-updated";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import Site from "../../site";
-import { insightArticles, insightCategoryForKind, insightIndex, Lang, pageKind, routeMap } from "../../content";
+import { insightArticles, insightCategoryForKind, insightIndex, Lang, NOINDEX_TOOLS, pageKind, routeMap } from "../../content";
+import { retiredSolutions } from "../../solutions-content";
 import { absoluteUrl, metaDescription, SITE_NAME, SITE_ORIGIN } from "../../site-config";
 import { breadcrumbParent, FOUNDER_SAME_AS, founderName, ids, offeringNodes, organizationNode, pageKeywords, webPageNode, websiteNode } from "../../structured-data";
 
@@ -153,7 +154,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       types: { "application/rss+xml": `/${lang}/feed.xml` },
     },
     // Category pages only list a few notes each; the insights hub is the page to index.
-    robots: kind === "cookiePreferences" || kind === "studio" || category
+    robots: kind === "cookiePreferences" || kind === "studio" || category || NOINDEX_TOOLS.includes(kind)
       ? { index: false, follow: true }
       : { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
     openGraph: {
@@ -184,6 +185,8 @@ export default async function LocalizedPage({ params }: Props) {
   if (kind.startsWith("category")) permanentRedirect(`/${lang}/${routeMap[lang].insights}#strategy`);
   // The AI Value Diagnostic became the board diagnostic on the AI Decisions page.
   if (kind === "serviceAI") permanentRedirect(`/${lang}/${routeMap[lang].aiDecisions}#aiDiagnostic`);
+  // Programmes retired on 22 Nov 2026 (outside the EU-buyer positioning).
+  if (kind in retiredSolutions) permanentRedirect(`/${lang}/${routeMap[lang][retiredSolutions[kind]]}`);
   if (kind === "privateBriefing") permanentRedirect(`/${lang}/${routeMap[lang].contact}?service=briefing`);
   const trustTarget: Record<string, string> = { privacyCenter: "privacy", cookies: "privacy#cookies", vendors: "privacy#providers", dataRights: "privacy#rights", policyUpdates: "privacy#changes", terms: "legal#terms", aiTransparency: "legal#ai" };
   if (kind in trustTarget) { const [key, hash] = trustTarget[kind].split("#"); permanentRedirect(`/${lang}/${routeMap[lang][key]}${hash ? `#${hash}` : ""}`); }

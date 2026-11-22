@@ -2,7 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { insightArticles, insightHref, Lang, routeMap } from "./content";
 import { notes } from "./advisory-note-content";
-import { solutions } from "./solutions-content";
+import { allSolutions, retiredSolutions } from "./solutions-content";
 import { PdfInsightHubCards } from "./pdf-insight-cards";
 import { guideIndex } from "./guides-index";
 import { Arrow } from "./arrow-icon";
@@ -37,9 +37,9 @@ const copy = {
 export function libraryEntries(lang: Lang): Entry[] {
   const c = copy[lang];
   const reportBase = lang === "en" ? "/en/insights/report/" : "/tr/icgoruler/rapor/";
-  const papers: Entry[] = solutions[lang].flatMap(s => [s.update, s.paper].filter(p => !!p).map(p => ({
+  const papers: Entry[] = allSolutions[lang].flatMap(s => [s.update, s.paper].filter(p => !!p).map(p => ({
     id: p!.slug, group: s.theme, type: c.paper, topic: s.title, title: p!.title, summary: s.tagline,
-    href: reportBase + p!.slug, extra: { label: c.programme, href: url(lang, s.key) },
+    href: reportBase + p!.slug, extra: s.key in retiredSolutions ? undefined : { label: c.programme, href: url(lang, s.key) },
   })));
   const articles: Entry[] = insightArticles[lang].map((a, i) => ({
     id: a.slug, group: "strategy", type: c.article, topic: a.topic, title: a.title, summary: a.thesis, href: insightHref(lang, i),
