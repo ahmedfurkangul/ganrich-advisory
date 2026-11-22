@@ -1573,7 +1573,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 136); // +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
+  assert.equal(blocks.length, 138); // +2 rule terms page, +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1797,4 +1797,16 @@ test("publishes the PPWR rule hub with the PPWR whitepaper and links it from the
   }
   assert.match(await (await render("/en/solutions/eu-packaging-compliance")).text(), /href="\/en\/insights\/ppwr"/);
   assert.match(await (await render("/en/insights")).text(), /href="\/en\/insights\/ppwr"/);
+});
+
+test("publishes the EU rule terms page built from the hub glossaries", async () => {
+  for (const [p, h1, term] of [["/en/insights/eu-rule-terms", /EU rule terms in English and Turkish/, /Yetkili SKDM beyan sahibi/], ["/tr/icgoruler/ab-kural-terimleri", /AB kural terimleri, Türkçe ve İngilizce/, /Authorised CBAM declarant/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.match(html, term, p);
+    assert.equal((html.match(/<table>/g) ?? []).length, 5, p);
+  }
+  assert.match(await (await render("/en/insights/cbam")).text(), /href="\/en\/insights\/eu-rule-terms"/);
 });

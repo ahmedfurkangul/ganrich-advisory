@@ -24,6 +24,7 @@ const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.Not
 const AiDecisionsPage = lazy(() => import("./ai-decisions").then(m => ({default:m.AiDecisionsPage})));
 const ServiceModelPage = lazy(() => import("./service-page").then(m => ({default:m.ServiceModelPage})));
 const GuidePage = lazy(() => import("./guides").then(m => ({default:m.GuidePage})));
+const RuleGlossaryPage = lazy(() => import("./rule-glossary").then(m => ({default:m.RuleGlossaryPage})));
 const BuyerQuestionsPage = lazy(() => import("./buyer-questions").then(m => ({default:m.BuyerQuestionsPage})));
 const RuleHubPage = lazy(() => import("./rule-hubs").then(m => ({default:m.RuleHubPage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
@@ -121,6 +122,7 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind.startsWith("guide")) page = <GuidePage lang={lang} kind={kind}/>;
   if (kind.startsWith("hub")) page = <RuleHubPage lang={lang} kind={kind}/>;
   if (kind === "buyerQuestions") page = <BuyerQuestionsPage lang={lang}/>;
+  if (kind === "ruleGlossary") page = <RuleGlossaryPage lang={lang}/>;
   if (kind === "aiDecisions") page = <AiDecisionsPage lang={lang}/>;
   if (isServicePageKey(kind)) page = <ServiceModelPage lang={lang} kind={kind}/>;
   if (kind === "expertise") page = <ExpertisePage lang={lang}/>;
