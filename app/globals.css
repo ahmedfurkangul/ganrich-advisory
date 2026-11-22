@@ -699,6 +699,7 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 /* Homepage readiness checks */
 .home-checks .editorial-heading > p:last-child { max-width: 60ch; margin-top: 16px; }
 .home-checks > .text-link { display: inline-block; margin-top: 36px; }
+.home-growth-line { margin-top: 36px; }
 /* Technical notes library */
 .notes-filter button { min-height: 44px; }
 .notes-library { padding-top: 24px; }
