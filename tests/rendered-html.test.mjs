@@ -789,7 +789,7 @@ test("publishes the EU regulation calendar with official sources and feeds the h
     assert.match(html, title);
     assert.match(html, source);
     assert.match(html, /href="https:\/\/eur-lex\.europa\.eu\/eli\/reg\/2024\/2847\/oj"/);
-    assert.match(html, /2026-10-24/);
+    assert.match(html, /2026-11-22/);
   }
   const home = await (await render("/tr")).text();
   assert.match(home, /href="\/tr\/icgoruler\/ab-mevzuat-takvimi"/);
