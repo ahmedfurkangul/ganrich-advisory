@@ -81,7 +81,7 @@ export function GuidePage({ lang, kind }: { lang: Lang; kind: string }) {
   if (nextAt < 0) nextAt = t.blocks.length;
   const published = new Date(g.date + "T12:00:00Z").toLocaleDateString(en ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" });
   return <>
-    <section className="advisory-hero guide-hero"><p className="kicker">{en ? "Technical note" : "Teknik not"} · {g.topic[lang]}</p><h1>{t.h1}</h1><p className="advisory-lead">{t.description}</p></section>
+    <section className="advisory-hero guide-hero"><p className="kicker">{en ? "Guide" : "Rehber"} · {g.topic[lang]}</p><h1>{t.h1}</h1><p className="advisory-lead">{t.description}</p></section>
     <article className="decision-note-body guide-body">
       <p className="note-byline">{en ? "Ahmed Furkan Gul" : "Ahmed Furkan Gül"} · Ganrich Advisory · <time dateTime={g.date}>{published}</time> · {g.readingTime[lang]}</p>
       <figure className="guide-cover"><img src={`/guides/${g.image}-${lang}.webp`} width={1600} height={900} alt={t.h1} decoding="async"/></figure>
@@ -89,7 +89,7 @@ export function GuidePage({ lang, kind }: { lang: Lang; kind: string }) {
       {nextAt === t.blocks.length && <NextStep lang={lang} guide={g.key}/>}
       <GuideCopy lang={lang} guide={g.key} hasPdf={Boolean(solutionPaperPath(lang, g.solution))}/>
       <p className="note-status">{en ? `Dates and sources last checked ${g.checked.en}. General information, not legal advice.` : `Tarihler ve kaynaklar en son ${g.checked.tr} tarihinde kontrol edildi. Genel bilgidir, hukuki görüş değildir.`}</p>
-      <p className="notes-links"><a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All technical notes" : "Tüm teknik notlar"}</a></p>
+      <p className="notes-links"><a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All insights" : "Tüm içgörüler"}</a></p>
     </article>
     <Conversation lang={lang}/>
   </>;
