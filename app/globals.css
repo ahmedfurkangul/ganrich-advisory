@@ -710,6 +710,7 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .hub-strip a:hover, .hub-strip a:focus-visible { border-color: var(--forest); }
 .hub-strip strong { font-family: var(--serif); font-size: 1.3rem; font-weight: 400; color: var(--ink); }
 .hub-strip span { font-size: .9rem; color: var(--slate); }
+.hub-strip-more { margin: 16px 0 0; }
 @media (max-width: 900px) { .hub-strip ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .hub-strip ul { grid-template-columns: 1fr; } }
 .notes-library { padding-top: 24px; }
@@ -767,6 +768,16 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .hub-resources { list-style: none !important; padding: 0 !important; margin: 12px 0 24px !important; }
 .hub-resources li { display: grid; grid-template-columns: 150px 1fr; gap: 12px; margin: 0 !important; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.18); }
 .hub-resources span { font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--color-accent-on-dark); padding-top: 3px; }
+.qb-jump { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; padding: 16px 0 8px; border-bottom: 1px solid var(--sand); margin-bottom: 8px; }
+.qb-jump > span { font-size: var(--type-caption); letter-spacing: .12em; text-transform: uppercase; color: var(--bronze); }
+.qb-jump ul { list-style: none !important; padding: 0 !important; margin: 0 !important; display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.qb-jump li { margin: 0 !important; }
+.qb-group { scroll-margin-top: 96px; }
+.qb-item { padding: 18px 0; border-bottom: 1px solid var(--sand); scroll-margin-top: 96px; }
+.qb-item h3 { margin: 0 0 8px; }
+.qb-item p { margin: 0 0 8px; }
+.qb-prepare { background: var(--white); padding: 12px 14px; border-left: 2px solid var(--bronze); }
+.qb-links { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .9rem; color: var(--slate); }
 .hub-resources a { color: var(--ivory); }
 @media (max-width: 640px) { .hub-dates li, .hub-resources li { grid-template-columns: 1fr; gap: 4px; } }
 .guide-sources a { word-break: break-word; }

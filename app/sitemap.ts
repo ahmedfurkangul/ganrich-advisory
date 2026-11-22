@@ -36,7 +36,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: absoluteUrl(path),
       lastModified: routeLastModified(key),
       changeFrequency: isArticle || isCategory || key === "insights" || key === "solutions" ? "weekly" as const : "monthly" as const,
-      priority: key === "home" ? 1 : isOffering || isArticle || key.startsWith("hub") ? .8 : isCategory || key === "insights" ? .75 : .7,
+      priority: key === "home" ? 1 : isOffering || isArticle || key.startsWith("hub") || key === "buyerQuestions" ? .8 : isCategory || key === "insights" ? .75 : .7,
       alternates: {
         languages: {
           en: absoluteUrl(lang === "en" ? path : `/${other}${otherRoute ? `/${otherRoute}` : ""}`),
