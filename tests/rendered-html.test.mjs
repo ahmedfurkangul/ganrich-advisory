@@ -202,9 +202,9 @@ test("publishes production-safe bilingual SEO, taxonomy, feeds, and discovery fi
   assert.match(article, /"Organization","ProfessionalService"/);
   assert.doesNotMatch(article, /localhost:3000/);
   assert.match(feedResponse.headers.get("content-type") ?? "", /^application\/rss\+xml/);
-  assert.match(feed, /<title>The Ganrich Brief<\/title>/);
+  assert.match(feed, /<title>Ganrich Advisory Insights<\/title>/);
   assert.match(feed, /decision-quality-applied-ai/);
-  assert.match(turkishFeed, /<title>Ganrich Bülteni<\/title>/);
+  assert.match(turkishFeed, /<title>Ganrich Advisory İçgörüler<\/title>/);
   assert.doesNotMatch(sitemap, /\/insights\/category\//);
   assert.match(sitemap, /https:\/\/ganrichadvisory\.com\/en\/insights\/decision-quality-applied-ai/);
   assert.match(sitemap, /hreflang="tr"/);
@@ -766,8 +766,8 @@ test("keeps the header call to action sized to its label", async () => {
 
 test("lists whitepapers, articles and decision notes in one technical-notes library", async () => {
   for (const [path, title, paper, article] of [
-    ["/en/insights", /Technical Notes \| Ganrich Advisory/, /href="\/en\/insights\/report\/cbam-actual-or-default-e9f664d8"/, /href="\/en\/insights\/decision-quality-applied-ai"/],
-    ["/tr/icgoruler", /Teknik Notlar \| Ganrich Advisory/, /href="\/tr\/icgoruler\/rapor\/cbam-gercek-mi-varsayilan-mi-ef31215c"/, /href="\/tr\/icgoruler\/uygulamali-yapay-zeka-karar-kalitesi"/],
+    ["/en/insights", /Insights \| Ganrich Advisory/, /href="\/en\/insights\/report\/cbam-actual-or-default-e9f664d8"/, /href="\/en\/insights\/decision-quality-applied-ai"/],
+    ["/tr/icgoruler", /İçgörüler \| Ganrich Advisory/, /href="\/tr\/icgoruler\/rapor\/cbam-gercek-mi-varsayilan-mi-ef31215c"/, /href="\/tr\/icgoruler\/uygulamali-yapay-zeka-karar-kalitesi"/],
   ]) {
     const response = await render(path);
     assert.equal(response.status, 200, path);
@@ -1652,4 +1652,16 @@ test("renders page content inside <main> without a loading fallback", async () =
     assert.doesNotMatch(html, /<div hidden id="S:\d+">/, `${path}: no hidden streamed content`);
     assert.doesNotMatch(html, /route-loading|Loading…|Yükleniyor…/, `${path}: no loading fallback`);
   }
+});
+
+test("uses one name per section: Insights for the library, Guide for long-form notes, Readiness checks for the tools", async () => {
+  const [guide, lib, check] = await Promise.all(["/en/insights/cbam-verifier-turkish-installations-2026", "/tr/icgoruler", "/en/decision-lab/cbam-readiness-check"].map(p => render(p).then(r => r.text())));
+  assert.match(guide, /<p class="kicker">Guide(<!-- -->)? · /);
+  assert.match(guide, /All insights/);
+  assert.doesNotMatch(guide, /Technical note ·|All technical notes/);
+  assert.match(lib, /İÇGÖRÜLER/);
+  assert.doesNotMatch(lib, /TEKNİK NOTLAR/);
+  assert.match(check, /"name":"Readiness checks"/);
+  const feed = await (await render("/en/feed.xml")).text();
+  assert.doesNotMatch(feed, /The Ganrich Brief/);
 });

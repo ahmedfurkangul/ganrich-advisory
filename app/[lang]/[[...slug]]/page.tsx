@@ -23,7 +23,7 @@ const metaCopy = {
     aiDecisions: ["AI Decisions: Independent AI Advisory | Ganrich Advisory", "Independent of AI vendors: we help boards decide where AI is worth doing, choose and govern the partner who builds it, and check that the value arrives."],
     expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
     markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
-    insights: ["Technical Notes | Ganrich Advisory", "Whitepapers on CBAM, the Cyber Resilience Act, machinery, batteries, packaging, energy and applied AI, plus strategy articles, in one searchable library."],
+    insights: ["Insights | Ganrich Advisory", "Whitepapers on CBAM, the Cyber Resilience Act, machinery, batteries, packaging, energy and applied AI, plus strategy articles, in one searchable library."],
     article: ["Decision Quality in the Age of Applied AI | Ganrich Advisory", "A Ganrich perspective on framing AI value around evidence, judgement, and consequential decisions."],
     articleTransformation: ["From Transformation Activity to Value | Ganrich Advisory", "A practical perspective on using decision cadence, ownership, dependencies, and value signals to move transformation forward."],
     articleMarketEntry: ["Market Entry Is a Sequence of Commitments | Ganrich Advisory", "A framework for separating reversible learning from irreversible investment in market-entry decisions."],
@@ -57,7 +57,7 @@ const metaCopy = {
     aiDecisions: ["Yapay Zekâ Kararları: Bağımsız Danışmanlık | Ganrich Advisory", "Tedarikçiden bağımsız yapay zekâ kararları: yapay zekânın nerede değer yarattığına karar verin, onu kuracak ortağı seçin ve değerin gelip gelmediğini izleyin."],
     expertise: ["Uzmanlık | Ganrich Advisory", "Strateji, büyüme, işletim modeli, yapay zekâ, organizasyon ve uygulama için karar odaklı uzmanlık."],
     markets: ["Coğrafyalar | Ganrich Advisory", "Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika için pazara özgü kanıtlara dayalı bölgesel bakışlar."],
-    insights: ["Teknik Notlar | Ganrich Advisory", "SKDM (CBAM), Siber Dayanıklılık Yasası, makine, batarya, ambalaj, enerji ve uygulamalı yapay zekâ üzerine teknik notlar ve strateji makaleleri tek kütüphanede."],
+    insights: ["İçgörüler | Ganrich Advisory", "SKDM (CBAM), Siber Dayanıklılık Yasası, makine, batarya, ambalaj, enerji ve uygulamalı yapay zekâ üzerine teknik notlar ve strateji makaleleri tek kütüphanede."],
     article: ["Uygulamalı Yapay Zekâ Çağında Karar Kalitesi | Ganrich Advisory", "Yapay zekâ değerini kanıt, muhakeme ve kritik kararlar etrafında çerçeveleyen Ganrich bakışı."],
     articleTransformation: ["Dönüşüm Faaliyetinden Değere | Ganrich Advisory", "Dönüşümü ilerletmek için karar ritmini, sahipliği, bağımlılıkları ve değer göstergelerini ele alan uygulamalı bir bakış."],
     articleMarketEntry: ["Pazara Giriş, Taahhütler Dizisidir | Ganrich Advisory", "Pazara giriş kararlarında geri döndürülebilir öğrenmeyi geri döndürülemez yatırımdan ayıran bir çerçeve."],
@@ -196,7 +196,7 @@ export default async function LocalizedPage({ params }: Props) {
   const parent = article || category
     ? { name: lang === "en" ? "Insights" : "İçgörüler", url: absoluteUrl(`/${lang}/${routeMap[lang].insights}`) }
     : kind.startsWith("decision") || ["marketCompass", "boardBriefBuilder", "aiValueLens", "cbamCheck", "craCheck", "eudrCheck", "scopeScanner"].includes(kind)
-      ? { name: lang === "en" ? "Decision Lab" : "Karar Laboratuvarı", url: absoluteUrl(`/${lang}/${routeMap[lang].decisionLab}`) }
+      ? { name: lang === "en" ? "Readiness checks" : "Hazırlık testleri", url: absoluteUrl(`/${lang}/${routeMap[lang].decisionLab}`) }
       : breadcrumbParent(lang, kind);
   const description = article?.thesis ?? category?.description ?? (advisoryMeta(lang, kind) ?? metaCopy[lang][kind as keyof typeof metaCopy.en] ?? metaCopy[lang].home)[1];
   const modified = routeLastModified(kind);
