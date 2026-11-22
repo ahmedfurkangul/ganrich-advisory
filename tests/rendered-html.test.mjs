@@ -1654,6 +1654,15 @@ test("renders page content inside <main> without a loading fallback", async () =
   }
 });
 
+test("opens every guide with a short answer box in both languages", async () => {
+  const { guides } = await import("../app/guides-content.ts");
+  const paths = guides.flatMap(g => [`/en/${g.en.path}`, `/tr/${g.tr.path}`]);
+  for (const p of paths) {
+    const html = await (await render(p)).text();
+    assert.match(html, /<aside class="guide-short-answer" aria-label="(Short answer|Kısa cevap)">/, p);
+  }
+});
+
 test("uses one name per section: Insights for the library, Guide for long-form notes, Readiness checks for the tools", async () => {
   const [guide, lib, check] = await Promise.all(["/en/insights/cbam-verifier-turkish-installations-2026", "/tr/icgoruler", "/en/decision-lab/cbam-readiness-check"].map(p => render(p).then(r => r.text())));
   assert.match(guide, /<p class="kicker">Guide(<!-- -->)? · /);

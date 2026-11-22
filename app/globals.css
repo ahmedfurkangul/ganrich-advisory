@@ -736,6 +736,9 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .guide-body li { margin: 8px 0; line-height: 1.6; }
 .guide-body a { text-decoration: underline; text-underline-offset: 3px; }
 .guide-cover { margin: 8px 0 32px; }
+.guide-short-answer { margin: 8px 0 32px; padding: 20px 24px; border-left: 3px solid var(--bronze); background: var(--white); }
+.guide-short-answer .kicker { margin: 0 0 8px; }
+.guide-short-answer p:last-child { margin: 0; font-size: 1.05em; line-height: 1.6; }
 .guide-cover img { width: 100%; height: auto; display: block; border: 1px solid var(--sand); }
 .guide-table { overflow-x: auto; margin: 0 0 24px; }
 .guide-table table { width: 100%; border-collapse: collapse; font-size: .95rem; }
