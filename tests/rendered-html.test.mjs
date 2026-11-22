@@ -1573,7 +1573,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 142); // +2 accessibility statement, +2 supplier data guide, +2 rule terms page, +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
+  assert.equal(blocks.length, 144); // +2 supplier data hub, +2 accessibility statement, +2 supplier data guide, +2 rule terms page, +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1806,7 +1806,7 @@ test("publishes the EU rule terms page built from the hub glossaries", async () 
     const html = await res.text();
     assert.match(html, h1, p);
     assert.match(html, term, p);
-    assert.equal((html.match(/<table>/g) ?? []).length, 5, p);
+    assert.equal((html.match(/<table>/g) ?? []).length, 6, p); // one table per rule hub
   }
   assert.match(await (await render("/en/insights/cbam")).text(), /href="\/en\/insights\/eu-rule-terms"/);
 });
@@ -1850,4 +1850,23 @@ test("publishes the supplier sustainability data guide with the Omnibus cap and 
       assert.equal((await render(link)).status, 200, link);
     }
   }
+});
+
+test("publishes the supplier data rule hub with its guide and paper and links it from the programme", async () => {
+  for (const [p, h1, guide, report] of [
+    ["/en/insights/supplier-data", /Supplier sustainability data: what your EU customers can still ask you for/, "/en/insights/supplier-sustainability-data-omnibus-2027", "/en/insights/report/supplier-sustainability-data-after-omnibus-97a36c53"],
+    ["/tr/icgoruler/tedarikci-verisi", /Tedarikçi sürdürülebilirlik verisi: AB müşteriniz sizden hâlâ ne isteyebilir\?/, "/tr/icgoruler/tedarikci-surdurulebilirlik-verisi-omnibus-2027", "/tr/icgoruler/rapor/tedarikci-surdurulebilirlik-verisi-omnibus-82382d59"],
+  ]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.ok(html.includes(`href="${guide}"`), `${p} links the guide`);
+    assert.ok(html.includes(`href="${report}"`), `${p} links the paper`);
+    assert.match(html, /2026\/1560/, p);
+    assert.match(html, /"@type":"FAQPage"/, p);
+    assert.doesNotMatch(html, /€|EUR \d/, p);
+  }
+  assert.match(await (await render("/en/solutions/supplier-sustainability-data")).text(), /href="\/en\/insights\/supplier-data"/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /href="\/tr\/icgoruler\/tedarikci-verisi"/);
 });
