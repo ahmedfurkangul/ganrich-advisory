@@ -1890,3 +1890,16 @@ test("tells visitors what to have to hand for the first review, without asking f
     assert.match(html, wait);
   }
 });
+
+test("shows a fictional EU buyer request response file on the sample work page, clearly labelled", async () => {
+  for (const [path, title, label, invented] of [
+    ["/en/sample-work", /CBAM data request from an EU importer/, /Illustrative \/ not client work/, /All names, requests and data in this example are invented/],
+    ["/tr/ornek-calismalar", /AB ithalatçısından SKDM \(CBAM\) veri talebi/, /Temsili \/ müşteri çalışması değildir/, /tüm isimler, talepler ve veriler uydurmadır/],
+  ]) {
+    const html = await (await render(path)).text();
+    assert.match(html, title);
+    assert.match(html, label);
+    assert.match(html, invented);
+    assert.match(html, /<table>/);
+  }
+});
