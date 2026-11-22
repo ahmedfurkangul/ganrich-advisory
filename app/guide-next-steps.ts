@@ -6,6 +6,9 @@ import type { Lang } from "./content";
 export type GuideNextStep = { target: string } & Record<Lang, { title: string; body: string }>;
 
 export const guideNextSteps: Record<string, GuideNextStep> = {
+  guideSupplierData: { target: "solutionSupplierData",
+    en: { title: "Turn your questionnaires into one base report.", body: "We review the sustainability requests you received, separate reporting requests from product-rule requests and plan one base report along the voluntary standard, with an owner for each figure." },
+    tr: { title: "Anketlerinizi tek bir temel rapora dönüştürün.", body: "Aldığınız sürdürülebilirlik taleplerini inceler, raporlama taleplerini ürün kuralı taleplerinden ayırır ve gönüllü standarda göre, her rakamın bir sahibi olan tek bir temel rapor planlarız." } },
   guideCbamVerifier: { target: "toolSelection",
     en: { title: "Choosing a verifier? Ask for a neutral shortlist.", body: "We turn your installation, products and buyers into selection criteria, compare accredited verifiers on the same terms and give you a written recommendation. We take no fee from any verifier." },
     tr: { title: "Doğrulayıcı mı seçiyorsunuz? Tarafsız bir kısa liste isteyin.", body: "Tesisinizi, ürünlerinizi ve alıcılarınızı seçim ölçütlerine çeviririz, akredite doğrulayıcıları aynı ölçütlerle karşılaştırır ve yazılı bir öneri veririz. Hiçbir doğrulayıcıdan ücret almayız." } },
