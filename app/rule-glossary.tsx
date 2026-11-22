@@ -7,7 +7,7 @@ const url = (l: Lang, k: string) => "/" + l + "/" + routeMap[l][k];
 
 export const ruleGlossaryCopy = {
   en: {
-    title: "EU rule terms in English and Turkish: CBAM, EUDR, CRA, PPWR, ETS | Ganrich Advisory",
+    title: "EU rule terms in English and Turkish | Ganrich Advisory",
     description: "The English and Turkish terms for CBAM, EUDR, the Cyber Resilience Act, PPWR and Türkiye ETS on one page, as used in EU buyer requests and Turkish rules.",
     label: "Insights · Terms",
     h1: "EU rule terms in English and Turkish",
@@ -15,7 +15,7 @@ export const ruleGlossaryCopy = {
     en: "English", tr: "Turkish", rule: "Everything on this rule",
   },
   tr: {
-    title: "AB kural terimleri Türkçe ve İngilizce: SKDM, EUDR, CRA, PPWR, ETS | Ganrich Advisory",
+    title: "AB kural terimleri: Türkçe ve İngilizce | Ganrich Advisory",
     description: "SKDM, EUDR, Siber Dayanıklılık Yasası, PPWR ve Türkiye ETS terimlerinin Türkçe ve İngilizce karşılıkları tek sayfada; AB alıcı taleplerinde ve mevzuatta geçtiği şekliyle.",
     label: "İçgörüler · Terimler",
     h1: "AB kural terimleri, Türkçe ve İngilizce",
