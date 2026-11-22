@@ -1752,3 +1752,12 @@ test("publishes the Türkiye ETS rule hub and links it from the programme", asyn
   }
   assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /href="\/en\/insights\/turkiye-ets"/);
 });
+
+test("sends a trial Content-Security-Policy in report-only mode", async () => {
+  const res = await render("/en");
+  const csp = res.headers.get("content-security-policy-report-only") ?? "";
+  assert.match(csp, /default-src 'self'/);
+  assert.match(csp, /object-src 'none'/);
+  assert.match(csp, /script-src 'self' 'unsafe-inline' https:\/\/static\.cloudflareinsights\.com/);
+  assert.match(res.headers.get("content-security-policy") ?? "", /frame-ancestors 'self'/);
+});
