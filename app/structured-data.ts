@@ -5,6 +5,7 @@ import { notes } from "./advisory-note-content";
 import { solutionByKey, solutions, solutionTagList, solutionTags, solutionThemes } from "./solutions-content";
 import { absoluteUrl, SITE_NAME } from "./site-config";
 import { faqFor } from "./solution-faq";
+import { ruleHubByKey } from "./rule-hubs-content";
 import { aiDecisions } from "./ai-decisions-content";
 import { servicePages, SERVICE_PAGE_KEYS, isServicePageKey } from "./service-pages-content";
 
@@ -101,7 +102,7 @@ export function breadcrumbParent(lang: Lang, kind: string) {
   const en = lang === "en";
   if (kind.startsWith("solution") && kind !== "solutions") return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
   if (kind.startsWith("service") || kind === "studio" || kind === "aiDecisions" || isServicePageKey(kind)) return { name: en ? "Solutions" : "Çözümler", url: pageUrl(lang, "solutions") };
-  if (kind.startsWith("note") || kind.startsWith("guide")) return { name: en ? "Insights" : "İçgörüler", url: pageUrl(lang, "insights") };
+  if (kind.startsWith("note") || kind.startsWith("guide") || kind.startsWith("hub")) return { name: en ? "Insights" : "İçgörüler", url: pageUrl(lang, "insights") };
   return null;
 }
 
@@ -196,6 +197,14 @@ export function offeringNodes(lang: Lang, kind: string, url: string) {
       mainEntity: c.faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
     }];
   }
+  const hub = ruleHubByKey(kind);
+  if (hub) return [{
+    "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    inLanguage: inLanguage(lang),
+    isPartOf: { "@id": `${url}#webpage` },
+    mainEntity: hub[lang].faq.map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+  }];
   if (kind === "solutions") return [{
     "@type": "ItemList",
     "@id": `${url}#programmes`,

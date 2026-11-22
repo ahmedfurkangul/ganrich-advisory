@@ -751,6 +751,15 @@ h1,h2,h3 { hyphens: none; text-wrap: balance; }
 .guide-faq summary { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 16px 0; font: 1.15rem var(--serif); cursor: pointer; list-style: none; }
 .guide-faq summary::-webkit-details-marker { display: none; }
 .guide-sources { margin-top: 36px; font-size: .92rem; }
+.hub-dates { list-style: none !important; padding: 0 !important; border-top: 1px solid var(--sand); }
+.hub-dates li { display: grid; grid-template-columns: 170px 1fr; gap: 16px; margin: 0 !important; padding: 14px 0; border-bottom: 1px solid var(--sand); }
+.hub-dates time { font-weight: 600; color: var(--ink); }
+.hub-calendar-link { margin-top: 12px; }
+.hub-resources { list-style: none !important; padding: 0 !important; margin: 12px 0 24px !important; }
+.hub-resources li { display: grid; grid-template-columns: 150px 1fr; gap: 12px; margin: 0 !important; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.18); }
+.hub-resources span { font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--color-accent-on-dark); padding-top: 3px; }
+.hub-resources a { color: var(--ivory); }
+@media (max-width: 640px) { .hub-dates li, .hub-resources li { grid-template-columns: 1fr; gap: 4px; } }
 .guide-sources a { word-break: break-word; }
 /* Inline SVG link arrow (replaces the emoji-prone "↗" character) */
 .arrow-icon { display: inline-block; width: .72em; height: .72em; vertical-align: -.02em; flex: none; overflow: visible; }

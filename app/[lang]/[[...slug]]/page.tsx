@@ -1,5 +1,6 @@
 import { advisoryMeta } from "../../advisory-meta";
 import { guideByKey } from "../../guides-content";
+import { ruleHubs } from "../../rule-hubs-content";
 import { routeLastModified } from "../../content-updated";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
@@ -36,6 +37,7 @@ const metaCopy = {
     aiValueLens: ["AI Value Lens | Ganrich Advisory", "Assess an AI use case across value, repeatability, readiness, adoption, and risk control."],
     studio: ["Opportunity Studio | Ganrich Advisory", "Five working tools behind our programmes: emissions records, order approval, incident response, accessibility fixes and product data, with human approval."],
     regulationCalendar: ["EU Regulation Calendar | Ganrich Advisory", "When CBAM, the Cyber Resilience Act, EUDR, PPWR, the Machinery and Battery Regulations and other EU rules apply to Turkish exporters, with official links."],
+    ...Object.fromEntries(ruleHubs.map(h => [h.key, [h.en.title, h.en.description]])),
     newsletter: ["Sunday Brief: EU Regulation Updates | Ganrich Advisory", "A five-minute email every Sunday at 08:00 for Turkish exporters: what changed in CBAM, the CRA, EUDR and other EU rules, and what to check first."],
     scopeScanner: ["EU Rule Scope Scanner | Ganrich Advisory", "Five questions on what you sell into the EU and how, then the EU rules worth a closer look, with dates and where to start."],
     eudrCheck: ["EUDR Readiness Check | Ganrich Advisory", "Eight questions on whether your origin, geolocation and legality data is ready for your EU importer’s EUDR due-diligence statement, with an instant result."],
@@ -70,6 +72,7 @@ const metaCopy = {
     aiValueLens: ["Yapay Zekâ Değer Merceği | Ganrich Advisory", "Bir yapay zekâ kullanım alanını değer, tekrarlanabilirlik, hazırlık, benimseme ve risk kontrolü üzerinden değerlendirin."],
     studio: ["Opportunity Studio: Beş Çalışma Aracı | Ganrich Advisory", "Programlarımızın arkasındaki beş çalışma aracı: emisyon kaydı, sipariş onayı, olay müdahalesi, erişilebilirlik ve ürün verisi; insan onayıyla."],
     regulationCalendar: ["AB Mevzuat Takvimi | Ganrich Advisory", "AB Yeşil Mutabakat ve dijital kurallarının Türk ihracatçılara uygulandığı tarihler: SKDM, CRA, EUDR, PPWR, Makine ve Batarya Tüzükleri; resmî kaynaklarla."],
+    ...Object.fromEntries(ruleHubs.map(h => [h.key, [h.tr.title, h.tr.description]])),
     newsletter: ["Pazar Notu: Haftalık Mevzuat Bülteni | Ganrich Advisory", "Her Pazar 08:00'de ihracatçılar için 5 dakikalık e-posta: SKDM (CBAM), CRA, EUDR ve diğer AB kurallarında ne değişti, önce neye bakmalı."],
     scopeScanner: ["AB Kural Kapsam Tarayıcısı | Ganrich Advisory", "AB'ye ne sattığınızı ve nasıl sattığınızı beş soruda yanıtlayın; yakından bakmaya değer AB kurallarını tarihleriyle görün."],
     eudrCheck: ["EUDR Hazırlık Testi | Ganrich Advisory", "Menşe, coğrafi konum ve yasallık verinizin AB ithalatçınızın EUDR durum tespiti beyanına hazır olup olmadığını sekiz soruda görün; sonuç hemen ekranda."],

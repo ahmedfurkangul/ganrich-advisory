@@ -8,6 +8,7 @@ import { GuideCopy } from "./guide-copy";
 import { solutionPaperPath } from "./guide-paper";
 import { guideNextSteps } from "./guide-next-steps";
 import { guideShortAnswers } from "./guide-short-answers";
+import { hubBySolution, hubLabel } from "./rule-hub-index";
 
 // Long-form guides, rendered on the server: the full text is in the first HTML response.
 const url = (l: Lang, k: string) => "/" + l + "/" + routeMap[l][k];
@@ -91,7 +92,7 @@ export function GuidePage({ lang, kind }: { lang: Lang; kind: string }) {
       {nextAt === t.blocks.length && <NextStep lang={lang} guide={g.key}/>}
       <GuideCopy lang={lang} guide={g.key} hasPdf={Boolean(solutionPaperPath(lang, g.solution))}/>
       <p className="note-status">{en ? `Dates and sources last checked ${g.checked.en}. General information, not legal advice.` : `Tarihler ve kaynaklar en son ${g.checked.tr} tarihinde kontrol edildi. Genel bilgidir, hukuki görüş değildir.`}</p>
-      <p className="notes-links"><a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All insights" : "Tüm içgörüler"}</a></p>
+      <p className="notes-links">{hubBySolution[g.solution] && <><a className="text-link" href={url(lang, hubBySolution[g.solution])}>{hubLabel[lang]} <Arrow/></a> </>}<a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All insights" : "Tüm içgörüler"}</a></p>
     </article>
     <Conversation lang={lang}/>
   </>;

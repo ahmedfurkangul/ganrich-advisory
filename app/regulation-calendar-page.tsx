@@ -4,6 +4,7 @@ import { EditorialHero } from './advisory';
 import { NewsletterSignup } from './newsletter';
 import { CALENDAR_CHECKED, RuleDate, ruleCalendar, ruleDateLabel } from './regulation-calendar';
 import { Arrow } from "./arrow-icon";
+import { hubBySolution, hubLabel } from './rule-hub-index';
 
 // EU rule dates with the official source for each, split into what already applies and what is coming.
 
@@ -40,6 +41,7 @@ function RuleItem({ lang, r }: { lang: Lang; r: RuleDate }) {
       <h3>{headline}</h3>
       <p>{detail}</p>
       <p className="calendar-links">
+        {hubBySolution[r.key] && <a href={url(lang, hubBySolution[r.key])}>{hubLabel[lang]} <Arrow/></a>}
         <a href={url(lang, r.key)}>{c.programme} <Arrow/></a>
         {r.check && <a href={url(lang, r.check)}>{c.check} <Arrow/></a>}
         <a href={r.source.url} rel="noopener noreferrer" target="_blank">{`${c.source}: ${r.source.act}`} <Arrow/></a>
