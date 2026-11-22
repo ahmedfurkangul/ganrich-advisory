@@ -1614,6 +1614,19 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   assert.match(greenDeal, /hrefLang="tr"/);
 });
 
+test("home page leads with EU buyer requests and the scope scanner", async () => {
+  const en = await (await render("/en")).text();
+  assert.match(en, /href="\/en\/decision-lab\/eu-rule-scope-scanner"[^>]*>Which EU rules reach your products\?/);
+  assert.ok(en.indexOf("buyer-desk-tile") < en.indexOf("Which request is on your desk?"), "buyer desk comes before the request cards");
+  assert.match(en, /href="\/en\/solutions\/cbam-data-readiness"><h3>Emissions data for each product/);
+  assert.match(en, /href="\/en\/solutions\/supplier-sustainability-data"><h3>Supplier sustainability questionnaires/);
+  assert.doesNotMatch(en, /Energy and water now shape the margin|order desk and online sales need help|New: EU Buyer Request Desk/);
+  const tr = await (await render("/tr")).text();
+  assert.match(tr, /Hangi AB kuralları ürünlerinizi etkiliyor\?/);
+  assert.match(tr, /Masanızda hangi talep var\?/);
+  assert.doesNotMatch(tr, /Enerji ve su marjı belirliyor|Yeni: AB Alıcı Talep Masası/);
+});
+
 test("renders page content inside <main> without a loading fallback", async () => {
   for (const path of ["/en", "/tr", "/en/contact", "/tr/cozumler", "/en/insights/cbam-verifier-turkish-installations-2026", "/en/decision-lab/eu-rule-scope-scanner"]) {
     const response = await render(path);
