@@ -1900,3 +1900,29 @@ test("shows no privacy bar, and keeps optional local storage off until chosen in
   const footer = await (await render("/tr")).text();
   assert.match(footer, /Çerez tercihleri/);
 });
+
+test("shows a fictional EU buyer request response file on the sample work page, clearly labelled", async () => {
+  for (const [path, title, label, invented] of [
+    ["/en/sample-work", /CBAM data request from an EU importer/, /Illustrative \/ not client work/, /All names, requests and data in this example are invented/],
+    ["/tr/ornek-calismalar", /AB ithalatçısından SKDM \(CBAM\) veri talebi/, /Temsili \/ müşteri çalışması değildir/, /tüm isimler, talepler ve veriler uydurmadır/],
+  ]) {
+    const html = await (await render(path)).text();
+    assert.match(html, title);
+    assert.match(html, label);
+    assert.match(html, invented);
+    assert.match(html, /<table>/);
+  }
+});
+
+test("keeps long article titles short in search results while the page heading keeps the full title", async () => {
+  for (const [path, full] of [
+    ["/en/insights/turkiye-gulf-capital-corridor", "The Türkiye–Gulf capital corridor: what changed and what it means for operators"],
+    ["/tr/icgoruler/turkiye-korfez-sermaye-koridoru", "Türkiye–Körfez sermaye koridoru: ne değişti, işletmeler için ne anlama geliyor?"],
+    ["/tr/icgoruler/orta-olcekli-sanayide-yapay-zeka-degeri", "Orta ölçekli sanayi şirketlerinde yapay zekâ nerede ölçülebilir değer yaratır?"],
+  ]) {
+    const html = await (await render(path)).text();
+    const title = html.match(/<title>([^<]*)<\/title>/)?.[1] ?? "";
+    assert.ok(title.length <= 70, `${path} title length ${title.length}: ${title}`);
+    assert.ok(html.includes(`<h1>${full}</h1>`) || html.includes(full), `${path} keeps the full heading`);
+  }
+});

@@ -4,6 +4,7 @@ import handler from "vinext/server/app-router-entry";
 import { logLeadEvent, logTraffic } from "./traffic";
 import { servePage } from "./edge-cache";
 import { goneResponse, isGonePath } from "./gone";
+import { rootRedirect } from "./root-lang";
 
 interface Env {
   ASSETS: Fetcher;
@@ -70,6 +71,11 @@ const worker = {
     }
 
     const startedAt = Date.now();
+    if (url.pathname === "/" && (request.method === "GET" || request.method === "HEAD")) {
+      const response = rootRedirect(request);
+      ctx.waitUntil(logTraffic(request, response, env, startedAt).catch(() => undefined));
+      return response;
+    }
     if (isGonePath(url.pathname)) {
       const response = goneResponse(url.pathname);
       ctx.waitUntil(logTraffic(request, response, env, startedAt).catch(() => undefined));
