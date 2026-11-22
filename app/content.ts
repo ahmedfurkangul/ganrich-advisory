@@ -101,6 +101,9 @@ export const insightCategories: Record<Lang, InsightCategory[]> = {
   ],
 };
 
+// Generic decision tools kept for existing links but noindex and out of the sitemap since 22 Nov 2026.
+export const NOINDEX_TOOLS: string[] = ["decisionAtlas", "decisionFramer", "marketCompass", "boardBriefBuilder", "aiValueLens", "decisionLabChangelog"];
+
 export const routeMap: Record<Lang, Record<string, string>> = {
   en: {
     ...advisoryRoutes.en,
