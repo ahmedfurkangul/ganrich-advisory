@@ -1,11 +1,11 @@
 ---
 path: icgoruler/ingiltere-skdm-2027-ihracatci
 title: İngiltere SKDM 2027: Türk Çelik ve Alüminyum İhracatçısı
-description: İngiltere SKDM'si 1 Ocak 2027'de başlıyor. Türk çelik ve alüminyum ihracatçısı için AB SKDM'den farkları, İngiliz alıcının isteyeceği veri ve 7 haftalık plan.
+description: İngiltere SKDM'si 1 Ocak 2027'de başlıyor. Türk çelik ve alüminyum ihracatçısı için AB SKDM'den farkları, İngiliz alıcının isteyeceği veri ve eylem planı.
 h1: İngiltere SKDM'si 1 Ocak 2027'de başlıyor: Türk çelik ve alüminyum ihracatçısı neyi hazırlamalı?
 ---
 
-Çelik ve alüminyum ihracatçılarımız 2026'yı AB'nin Sınırda Karbon Düzenleme Mekanizması (SKDM) verisiyle geçirdi. Yedi hafta sonra ikincisi başlıyor: Birleşik Krallık'ın (İngiltere) SKDM'si (UK CBAM), 1 Ocak 2027 ve sonrasında ithal edilen alüminyum, demir-çelik, çimento, gübre ve hidrojen ürünlerine uygulanacak (HMRC, CBAM policy summary, güncelleme 2 Kasım 2026).
+Çelik ve alüminyum ihracatçılarımız 2026'yı AB'nin Sınırda Karbon Düzenleme Mekanizması (SKDM) verisiyle geçirdi. 1 Ocak 2027'de ikincisi başlıyor: Birleşik Krallık'ın (İngiltere) SKDM'si (UK CBAM), 1 Ocak 2027 ve sonrasında ithal edilen alüminyum, demir-çelik, çimento, gübre ve hidrojen ürünlerine uygulanacak (HMRC, CBAM policy summary, güncelleme 2 Kasım 2026).
 
 AB sisteminin kopyası değil: eşik, takvim, oran ve üretici ülkede ödenen karbon fiyatının mahsubu farklı işliyor.
 
@@ -61,7 +61,7 @@ Ayrıca bkz. raporumuz: [SKDM: Gerçek mi Varsayılan mı? Metal İhracatı](/tr
 
 **Karbon Fiyatı Mahsubu (Carbon Price Relief)**, nitelikli bir karbon fiyatı ödenmişse ve bu, doğrulanmış bir karbon fiyatı doğrulama formuyla gösterilirse SKDM borcunu azaltıyor; ücretsiz tahsisler sıfır sayılıyor (HMRC, Work out your Carbon Price Relief, güncelleme 2 Kasım 2026). TR ETS pilot döneminde 2026 için yalnızca raporlama var; teslim yükümlülüğü 2027 emisyonlarıyla başlıyor (İklim Değişikliği Başkanlığı, 1045 sayılı duyuru, 1 Ekim 2026).
 
-Bizim okumamız şu: 2027'de ithal edilen mallar için TR ETS'den mahsup büyük olasılıkla sıfır olacak. Doğrulama formu 2025 ya da 2026'yı kapsamalı; TR ETS'de bu iki yılın hiçbiri için izin teslim yükümlülüğü yok. HMRC'nin rehberi onaylı sistemleri listelemiyor, nitelikli sistem için kriter koyuyor; sistemin bu kriterleri karşıladığını göstermek ithalatçıya düşüyor. Sonraki yıllar için TR ETS'nin bu kriterlere uyup uymadığının ayrıca değerlendirilmesi gerekecek. O durumda bile pilot dönem kuralları ücretsiz tahsisat öngörüyor ve HMRC ücretsiz tahsisatı sıfır fiyatla sayıyor. 2027 için İngiltere SKDM yükünün tamamını planlayın; mahsup çıkarsa bunu ek kazanç olarak görün.
+Bizim okumamız şu: 2027'de ithal edilen mallar için TR ETS'den mahsup büyük olasılıkla sıfır olacak. Doğrulama formu 2025 ya da 2026'yı kapsamalı; TR ETS'de bu iki yılın hiçbiri için izin teslim yükümlülüğü yok. HMRC'nin nitelikli karbon fiyatlandırma sistemleri için yayımladığı geçici liste (27 Ağustos 2026) aralarında AB ETS, Çin ulusal ETS'si ve Kazakistan ETS'sinin de bulunduğu 16 sistemi sayıyor; TR ETS listede yok. Liste kapsayıcı değil ve sistemin kriterleri karşıladığını göstermek yine ithalatçıya düşüyor. Sonraki yıllar için TR ETS'nin bu kriterlere uyup uymadığının ayrıca değerlendirilmesi gerekecek. O durumda bile pilot dönem kuralları ücretsiz tahsisat öngörüyor ve HMRC ücretsiz tahsisatı sıfır fiyatla sayıyor. 2027 için İngiltere SKDM yükünün tamamını planlayın; mahsup çıkarsa bunu ek kazanç olarak görün.
 
 ## "İngiltere'deki yük küçük, neden uğraşalım?"
 
@@ -71,7 +71,7 @@ Temkinli bir finans direktörü oranın düşük olduğunu ve birçok İngiliz a
 
 Üç rejim örtüşen veriyi farklı takvimlerle istiyor; TR ETS pilot tesislerinin ilk izleme metodolojisi planları için son gün 27 Ocak 2027 (bkz. [Türkiye ETS hazırlığı](/tr/cozumler/turkiye-ets-hazirligi)). Üçü için de ürün düzeyinde çıktı veren tek bir tesis modeli kurun. Akreditasyon kapsamları izin veriyorsa doğrulayıcınızdan AB ve İngiltere gerekliliklerini tek saha ziyaretinde karşılamasını isteyin.
 
-## 1 Ocak 2027'ye kadar yedi haftalık eylem listesi
+## 1 Ocak 2027'ye kadar eylem listesi
 
 1. **İngiliz müşterileri, teslim şekillerini ve her akıştaki ithalatçıyı** listeleyin.
 2. **Ürünleri İngiliz tarife kodlarıyla eşleştirin.**

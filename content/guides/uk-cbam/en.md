@@ -5,7 +5,7 @@ description: UK CBAM starts on 1 January 2027. What Turkish steel and aluminium 
 h1: UK CBAM from 1 January 2027: what Turkish steel and aluminium exporters must prepare
 ---
 
-Turkish steel and aluminium exporters spent 2026 on EU CBAM data. A second CBAM starts in seven weeks: the UK's applies to aluminium, iron and steel, cement, fertiliser and hydrogen goods imported into the UK on or after 1 January 2027 (HMRC, CBAM policy summary, updated 2 Nov 2026).
+Turkish steel and aluminium exporters spent 2026 on EU CBAM data. A second CBAM starts on 1 January 2027: the UK's applies to aluminium, iron and steel, cement, fertiliser and hydrogen goods imported into the UK on or after 1 January 2027 (HMRC, CBAM policy summary, updated 2 Nov 2026).
 
 It is not a copy of the EU system: threshold, calendar, rate and the treatment of a home carbon price all differ.
 
@@ -61,7 +61,7 @@ See also our report [CBAM: actual or default values for metal exporters](/en/ins
 
 **Carbon Price Relief** reduces the liability where a qualifying carbon price was paid, shown on a verified carbon pricing verification form; free allowances count at zero (HMRC, Work out your Carbon Price Relief, updated 2 Nov 2026). The TR ETS pilot requires reporting only for 2026; surrender starts with 2027 emissions (İklim Değişikliği Başkanlığı, announcement 1045, 1 Oct 2026).
 
-Our reading: for 2027 imports, relief from TR ETS is likely to be zero. The verification form must cover 2025 or 2026, and TR ETS required no allowances to be surrendered for either year. HMRC's guidance sets criteria for a qualifying scheme rather than listing approved ones, and the importer must show that the scheme meets them. For later years, TR ETS will have to be tested against those criteria. Even then, the pilot rules provide for free allocation, which HMRC counts at zero. Plan for the full charge and treat any relief as upside.
+Our reading: for 2027 imports, relief from TR ETS is likely to be zero. The verification form must cover 2025 or 2026, and TR ETS required no allowances to be surrendered for either year. HMRC's provisional list of qualifying carbon pricing schemes (27 August 2026) names 16 schemes, including the EU ETS, China's national ETS and the Kazakh ETS, but not TR ETS. The list is not exhaustive, and the importer must still show that a scheme meets the criteria. For later years, TR ETS will have to be tested against them. Even then, the pilot rules provide for free allocation, which HMRC counts at zero. Plan for the full charge and treat any relief as upside.
 
 ## "The UK charge is small. Why bother?"
 
@@ -71,7 +71,7 @@ A sceptical CFO will say the rate is low and many UK buyers sit below £50,000. 
 
 The three regimes ask for overlapping data on different calendars; TR ETS pilot plants owe first monitoring methodology plans by 27 January 2027 (see [Türkiye ETS readiness](/en/solutions/turkiye-ets-readiness)). Build one installation-level model with product-level outputs for all three. Where accreditation scopes allow, ask your verifier to cover EU and UK requirements in a single site visit.
 
-## A seven-week action list before 1 January 2027
+## An action list before 1 January 2027
 
 1. **List UK customers, Incoterms and the importer** on each flow.
 2. **Map products to UK commodity codes.**

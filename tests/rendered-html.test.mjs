@@ -1001,7 +1001,7 @@ test("publishes the Gulf market entry guide in both languages with FAQ markup, s
 test("publishes the UK CBAM 2027 guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
   const pages = [
     ["/en/insights/uk-cbam-2027-turkish-exporters", "UK CBAM 2027: What Turkish Steel and Aluminium Must Do", "/tr/icgoruler/ingiltere-skdm-2027-ihracatci", /<strong>£9\.69 per tCO2e for iron and steel<\/strong>/],
-    ["/tr/icgoruler/ingiltere-skdm-2027-ihracatci", "İngiltere SKDM 2027: Türk Çelik ve Alüminyum İhracatçısı", "/en/insights/uk-cbam-2027-turkish-exporters", /yedi haftalık eylem listesi/],
+    ["/tr/icgoruler/ingiltere-skdm-2027-ihracatci", "İngiltere SKDM 2027: Türk Çelik ve Alüminyum İhracatçısı", "/en/insights/uk-cbam-2027-turkish-exporters", /TR ETS listede yok/],
   ];
   const sitemap = await (await render("/sitemap.xml")).text();
   for (const [path, title, pair, body] of pages) {
