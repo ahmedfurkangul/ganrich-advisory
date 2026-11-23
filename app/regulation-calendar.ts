@@ -5,7 +5,7 @@
 
 import type { Lang } from "./content";
 
-export const CALENDAR_CHECKED = { date: "2026-10-24", en: "24 October 2026", tr: "24 Ekim 2026" } as const;
+export const CALENDAR_CHECKED = { date: "2026-11-22", en: "22 November 2026", tr: "22 Kasım 2026" } as const;
 
 export type RuleDate = {
   id: string;

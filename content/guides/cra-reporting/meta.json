@@ -1,0 +1,19 @@
+{
+  "key": "guideCraReporting",
+  "solution": "solutionCra",
+  "date": "2026-11-05",
+  "dateModified": "2026-11-07",
+  "checked": {
+    "en": "7 November 2026",
+    "tr": "7 Kasım 2026"
+  },
+  "image": "guideCraReporting",
+  "readingTime": {
+    "en": "9 min",
+    "tr": "9 dk"
+  },
+  "topic": {
+    "en": "CRA",
+    "tr": "CRA"
+  }
+}

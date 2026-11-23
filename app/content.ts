@@ -41,6 +41,8 @@ export type InsightArticle = {
   slug: string;
   type: string;
   title: string;
+  // Shorter title for search results when `title` is over 70 characters; the page heading keeps `title`.
+  seoTitle?: string;
   thesis: string;
   applicability: string;
   author: string;
@@ -101,6 +103,9 @@ export const insightCategories: Record<Lang, InsightCategory[]> = {
   ],
 };
 
+// Generic decision tools kept for existing links but noindex and out of the sitemap since 22 Nov 2026.
+export const NOINDEX_TOOLS: string[] = ["decisionAtlas", "decisionFramer", "marketCompass", "boardBriefBuilder", "aiValueLens", "decisionLabChangelog"];
+
 export const routeMap: Record<Lang, Record<string, string>> = {
   en: {
     ...advisoryRoutes.en,
@@ -119,6 +124,15 @@ export const routeMap: Record<Lang, Record<string, string>> = {
     scopeScanner: "decision-lab/eu-rule-scope-scanner",
     newsletter: "insights/regulation-updates",
     regulationCalendar: "insights/eu-regulation-calendar",
+    hubCbam: "insights/cbam",
+    hubCra: "insights/cra",
+    hubEudr: "insights/eudr",
+    hubTrEts: "insights/turkiye-ets",
+    hubPpwr: "insights/ppwr",
+    hubSupplierData: "insights/supplier-data",
+    buyerQuestions: "insights/eu-buyer-questions",
+    ruleGlossary: "insights/eu-rule-terms",
+    accessibility: "accessibility",
     decisionLabChangelog: "decision-lab/changelog",
     privateBriefing: "private-executive-briefing",
     about: "about",
@@ -163,6 +177,15 @@ export const routeMap: Record<Lang, Record<string, string>> = {
     scopeScanner: "karar-laboratuvari/ab-kural-kapsam-tarayicisi",
     newsletter: "icgoruler/mevzuat-bulteni",
     regulationCalendar: "icgoruler/ab-mevzuat-takvimi",
+    hubCbam: "icgoruler/skdm",
+    hubCra: "icgoruler/cra",
+    hubEudr: "icgoruler/eudr",
+    hubTrEts: "icgoruler/tr-ets",
+    hubPpwr: "icgoruler/ppwr",
+    hubSupplierData: "icgoruler/tedarikci-verisi",
+    buyerQuestions: "icgoruler/ab-alici-sorulari",
+    ruleGlossary: "icgoruler/ab-kural-terimleri",
+    accessibility: "erisilebilirlik",
     decisionLabChangelog: "karar-laboratuvari/degisiklik-gunlugu",
     privateBriefing: "ozel-yonetici-brifingi",
     about: "hakkimizda",

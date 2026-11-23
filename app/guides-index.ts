@@ -1,8 +1,24 @@
 import type { Lang } from "./content";
 
-// Light index of the long-form guides for client components (the library). Full text lives in guides-content.ts.
+// Light index of the long-form guides for client components (the library). Full text lives in content/guides/ (loaded by guides-content.ts).
 export type GuideIndexEntry = { key: string; solution: string; group?: "strategy"; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
+ {
+  "key": "guideSupplierData",
+  "solution": "solutionSupplierData",
+  "topic": {
+   "en": "Supplier data",
+   "tr": "Tedarikçi verisi"
+  },
+  "en": {
+   "h1": "Supplier sustainability data after the EU Omnibus: what EU customers can still ask Turkish suppliers for",
+   "description": "From 2027, EU customers may not ask suppliers with up to 1,000 staff for more than the voluntary standard. CBAM and EUDR data sit outside that cap."
+  },
+  "tr": {
+   "h1": "Omnibus sonrası tedarikçi sürdürülebilirlik verisi: AB müşterisi Türk tedarikçiden hâlâ ne isteyebilir?",
+   "description": "2027'den itibaren AB müşterisi 1.000'e kadar çalışanı olan tedarikçiden gönüllü standarttan fazlasını isteyemez. SKDM ve EUDR verisi bu sınırın dışında."
+  }
+ },
  {
   "key": "guideCbamDownstream",
   "solution": "solutionCbam",

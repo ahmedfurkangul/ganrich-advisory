@@ -23,7 +23,7 @@ export const solutionThemes: Record<Lang, Theme[]> = {
  ],
 };
 
-export const solutions: Record<Lang, Solution[]> = {
+export const allSolutions: Record<Lang, Solution[]> = {
  en: [
   { key: 'solutionCbam', theme: 'eu', title: 'CBAM Data Readiness', tagline: 'Turn scattered plant data into an emissions file your EU importer can use, and know whether actual values are worth the effort.', trigger: 'The definitive CBAM regime has applied since 1 January 2026. EU importers above the 50-tonne annual threshold must be authorised CBAM declarants, and many now ask their Turkish suppliers for installation-level emissions data.', audience: 'Finance, export and plant managers at iron, steel and aluminium producers selling into the EU, and the EU importers who rely on them.', question: 'Should we supply actual emissions data, or let our buyer rely on default values?', signals: ['An EU buyer has asked for installation or product-level emissions data.', 'Energy, production and input data sit in invoices, schedules and separate spreadsheets.', 'Nobody can yet say what actual versus default values mean for the price conversation.'], outcomes: ['A clear view of what each EU buyer actually needs, product by product', 'An emissions data file organised for independent verification', 'An actual-versus-default comparison you can take into commercial talks', 'A decision on whether a recurring data routine is worth building'], firstStep: 'A focused readiness review on one product and one EU buyer relationship, ending with a clear go or no-go on wider preparation.', boundaries: 'We prepare and organise data. We are not a verification body and do not issue verified statements. Customs classification and legal advice come from appointed specialists.', paper: { title: 'Actual or default? The CBAM data decision for Turkish metal exporters', slug: 'cbam-actual-or-default-e9f664d8' }, update: { title: 'The August guidance: what the Commission’s new CBAM rulebook asks of Turkish exporters in the first paying year', slug: 'cbam-august-guidance-turkish-exporters-58a4abcd' } },
   { key: 'solutionCra', theme: 'eu', title: 'CRA Incident Readiness', tagline: 'Be able to show, within hours, who decides, what gets reported and to whom when a product vulnerability is exploited.', trigger: 'Reporting obligations under the EU Cyber Resilience Act began on 11 September 2026. For actively exploited vulnerabilities and severe incidents, manufacturers owe an early warning within 24 hours and a notification within 72 hours.', audience: 'Turkish manufacturers of connected devices, industrial equipment and commercial software sold in the EU, usually led by the product, technology or quality head.', question: 'If an exploited vulnerability surfaced on a Friday night, could we meet the 24-hour clock?', signals: ['Several products and firmware versions are supported in the EU, but no one owns product incidents.', 'IT security is in place, yet product incidents follow no rehearsed path.', 'Release and component information is hard to assemble quickly.'], outcomes: ['A clear map of which products and versions are in scope', 'Named roles and an escalation path for product incidents', 'Prepared reporting drafts that fit the CRA timeline', 'Evidence from a realistic exercise, with gaps ranked by consequence'], firstStep: 'A tabletop exercise on one product family against the 24- and 72-hour timeline, followed by a scoped readiness plan.', boundaries: 'We do not certify products, run round-the-clock incident response, or take over the manufacturer’s reporting duty. EU legal advice is appointed separately where needed.', paper: { title: 'The 24-hour test: CRA incident readiness for manufacturers selling into the EU', slug: 'cra-the-24-hour-test-96989394' } },
@@ -122,6 +122,16 @@ export const solutionTags: Record<Lang, Record<SolutionKey, string[]>> = {
  },
 };
 
+// Retired on 22 Nov 2026 because they sit outside the EU-buyer positioning. Their pages answer a
+// permanent redirect to the target route key; their reports stay published (see allSolutions).
+export const retiredSolutions: Record<string, string> = { solutionEnergy: 'solutions', solutionStorage: 'solutions', solutionWater: 'solutions', solutionOrderDesk: 'aiDecisions', solutionMargin: 'solutions' };
+
+/** Programmes on offer: everything listed, linked and indexed. */
+export const solutions: Record<Lang, Solution[]> = {
+ en: allSolutions.en.filter(s => !(s.key in retiredSolutions)),
+ tr: allSolutions.tr.filter(s => !(s.key in retiredSolutions)),
+};
+
 export function solutionTagList(lang: Lang) {
  return [...new Set(solutions[lang].flatMap(solution => solutionTags[lang][solution.key]))].sort((a, b) => a.localeCompare(b, lang));
 }
@@ -133,8 +143,8 @@ export function solutionByKey(lang: Lang, key: string) {
 // EN and TR editions of each programme report, paired by position in the two language lists. Used for report hreflang.
 export function reportTranslation(lang: Lang, slug: string): string | undefined {
   const other: Lang = lang === 'en' ? 'tr' : 'en';
-  for (const [i, s] of solutions[lang].entries()) {
-    const o = solutions[other][i];
+  for (const [i, s] of allSolutions[lang].entries()) {
+    const o = allSolutions[other][i];
     if (s.paper?.slug === slug && o?.paper) return o.paper.slug;
     if (s.update?.slug === slug && o?.update) return o.update.slug;
   }

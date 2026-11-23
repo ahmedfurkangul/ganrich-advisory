@@ -1,10 +1,15 @@
 import { advisoryMeta } from "../../advisory-meta";
 import { guideByKey } from "../../guides-content";
+import { ruleHubs } from "../../rule-hubs-content";
+import { buyerQuestionsCopy } from "../../buyer-questions-content";
+import { ruleGlossaryCopy } from "../../rule-glossary";
+import { accessibilityCopy } from "../../accessibility-statement";
 import { routeLastModified } from "../../content-updated";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import Site from "../../site";
-import { insightArticles, insightCategoryForKind, insightIndex, Lang, pageKind, routeMap } from "../../content";
+import { insightArticles, insightCategoryForKind, insightIndex, Lang, NOINDEX_TOOLS, pageKind, routeMap } from "../../content";
+import { retiredSolutions } from "../../solutions-content";
 import { absoluteUrl, metaDescription, SITE_NAME, SITE_ORIGIN } from "../../site-config";
 import { breadcrumbParent, FOUNDER_SAME_AS, founderName, ids, offeringNodes, organizationNode, pageKeywords, webPageNode, websiteNode } from "../../structured-data";
 
@@ -23,7 +28,7 @@ const metaCopy = {
     aiDecisions: ["AI Decisions: Independent AI Advisory | Ganrich Advisory", "Independent of AI vendors: we help boards decide where AI is worth doing, choose and govern the partner who builds it, and check that the value arrives."],
     expertise: ["Expertise | Ganrich Advisory", "Decision-led strategy, growth, operating model, AI, organization, and execution expertise."],
     markets: ["Markets | Ganrich Advisory", "Regional perspectives across Türkiye, MENA, Europe, and Africa, grounded in market-specific evidence."],
-    insights: ["Technical Notes | Ganrich Advisory", "Whitepapers on CBAM, the Cyber Resilience Act, machinery, batteries, packaging, energy and applied AI, plus strategy articles, in one searchable library."],
+    insights: ["Insights | Ganrich Advisory", "Whitepapers on CBAM, the Cyber Resilience Act, machinery, batteries, packaging, energy and applied AI, plus strategy articles, in one searchable library."],
     article: ["Decision Quality in the Age of Applied AI | Ganrich Advisory", "A Ganrich perspective on framing AI value around evidence, judgement, and consequential decisions."],
     articleTransformation: ["From Transformation Activity to Value | Ganrich Advisory", "A practical perspective on using decision cadence, ownership, dependencies, and value signals to move transformation forward."],
     articleMarketEntry: ["Market Entry Is a Sequence of Commitments | Ganrich Advisory", "A framework for separating reversible learning from irreversible investment in market-entry decisions."],
@@ -35,6 +40,10 @@ const metaCopy = {
     aiValueLens: ["AI Value Lens | Ganrich Advisory", "Assess an AI use case across value, repeatability, readiness, adoption, and risk control."],
     studio: ["Opportunity Studio | Ganrich Advisory", "Five working tools behind our programmes: emissions records, order approval, incident response, accessibility fixes and product data, with human approval."],
     regulationCalendar: ["EU Regulation Calendar | Ganrich Advisory", "When CBAM, the Cyber Resilience Act, EUDR, PPWR, the Machinery and Battery Regulations and other EU rules apply to Turkish exporters, with official links."],
+    ...Object.fromEntries(ruleHubs.map(h => [h.key, [h.en.title, h.en.description]])),
+    buyerQuestions: [buyerQuestionsCopy.en.title, buyerQuestionsCopy.en.description],
+    ruleGlossary: [ruleGlossaryCopy.en.title, ruleGlossaryCopy.en.description],
+    accessibility: [accessibilityCopy.en.title, accessibilityCopy.en.description],
     newsletter: ["Sunday Brief: EU Regulation Updates | Ganrich Advisory", "A five-minute email every Sunday at 08:00 for Turkish exporters: what changed in CBAM, the CRA, EUDR and other EU rules, and what to check first."],
     scopeScanner: ["EU Rule Scope Scanner | Ganrich Advisory", "Five questions on what you sell into the EU and how, then the EU rules worth a closer look, with dates and where to start."],
     eudrCheck: ["EUDR Readiness Check | Ganrich Advisory", "Eight questions on whether your origin, geolocation and legality data is ready for your EU importer’s EUDR due-diligence statement, with an instant result."],
@@ -57,7 +66,7 @@ const metaCopy = {
     aiDecisions: ["Yapay Zekâ Kararları: Bağımsız Danışmanlık | Ganrich Advisory", "Tedarikçiden bağımsız yapay zekâ kararları: yapay zekânın nerede değer yarattığına karar verin, onu kuracak ortağı seçin ve değerin gelip gelmediğini izleyin."],
     expertise: ["Uzmanlık | Ganrich Advisory", "Strateji, büyüme, işletim modeli, yapay zekâ, organizasyon ve uygulama için karar odaklı uzmanlık."],
     markets: ["Coğrafyalar | Ganrich Advisory", "Türkiye, Orta Doğu ve Kuzey Afrika, Avrupa ve Afrika için pazara özgü kanıtlara dayalı bölgesel bakışlar."],
-    insights: ["Teknik Notlar | Ganrich Advisory", "SKDM (CBAM), Siber Dayanıklılık Yasası, makine, batarya, ambalaj, enerji ve uygulamalı yapay zekâ üzerine teknik notlar ve strateji makaleleri tek kütüphanede."],
+    insights: ["İçgörüler | Ganrich Advisory", "SKDM (CBAM), Siber Dayanıklılık Yasası, makine, batarya, ambalaj, enerji ve uygulamalı yapay zekâ üzerine teknik notlar ve strateji makaleleri tek kütüphanede."],
     article: ["Uygulamalı Yapay Zekâ Çağında Karar Kalitesi | Ganrich Advisory", "Yapay zekâ değerini kanıt, muhakeme ve kritik kararlar etrafında çerçeveleyen Ganrich bakışı."],
     articleTransformation: ["Dönüşüm Faaliyetinden Değere | Ganrich Advisory", "Dönüşümü ilerletmek için karar ritmini, sahipliği, bağımlılıkları ve değer göstergelerini ele alan uygulamalı bir bakış."],
     articleMarketEntry: ["Pazara Giriş, Taahhütler Dizisidir | Ganrich Advisory", "Pazara giriş kararlarında geri döndürülebilir öğrenmeyi geri döndürülemez yatırımdan ayıran bir çerçeve."],
@@ -69,6 +78,10 @@ const metaCopy = {
     aiValueLens: ["Yapay Zekâ Değer Merceği | Ganrich Advisory", "Bir yapay zekâ kullanım alanını değer, tekrarlanabilirlik, hazırlık, benimseme ve risk kontrolü üzerinden değerlendirin."],
     studio: ["Opportunity Studio: Beş Çalışma Aracı | Ganrich Advisory", "Programlarımızın arkasındaki beş çalışma aracı: emisyon kaydı, sipariş onayı, olay müdahalesi, erişilebilirlik ve ürün verisi; insan onayıyla."],
     regulationCalendar: ["AB Mevzuat Takvimi | Ganrich Advisory", "AB Yeşil Mutabakat ve dijital kurallarının Türk ihracatçılara uygulandığı tarihler: SKDM, CRA, EUDR, PPWR, Makine ve Batarya Tüzükleri; resmî kaynaklarla."],
+    ...Object.fromEntries(ruleHubs.map(h => [h.key, [h.tr.title, h.tr.description]])),
+    buyerQuestions: [buyerQuestionsCopy.tr.title, buyerQuestionsCopy.tr.description],
+    ruleGlossary: [ruleGlossaryCopy.tr.title, ruleGlossaryCopy.tr.description],
+    accessibility: [accessibilityCopy.tr.title, accessibilityCopy.tr.description],
     newsletter: ["Pazar Notu: Haftalık Mevzuat Bülteni | Ganrich Advisory", "Her Pazar 08:00'de ihracatçılar için 5 dakikalık e-posta: SKDM (CBAM), CRA, EUDR ve diğer AB kurallarında ne değişti, önce neye bakmalı."],
     scopeScanner: ["AB Kural Kapsam Tarayıcısı | Ganrich Advisory", "AB'ye ne sattığınızı ve nasıl sattığınızı beş soruda yanıtlayın; yakından bakmaya değer AB kurallarını tarihleriyle görün."],
     eudrCheck: ["EUDR Hazırlık Testi | Ganrich Advisory", "Menşe, coğrafi konum ve yasallık verinizin AB ithalatçınızın EUDR durum tespiti beyanına hazır olup olmadığını sekiz soruda görün; sonuç hemen ekranda."],
@@ -127,7 +140,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const category = kind.startsWith("category") ? insightCategoryForKind(lang, kind) : null;
   const trust = trustMeta[lang][kind as keyof typeof trustMeta.en];
   const [title, fullDescription] = article
-    ? [withBrand(article.title), article.thesis]
+    ? [withBrand(article.seoTitle ?? article.title), article.thesis]
     : category
       ? [`${lang === "en" ? `${category.label} Insights` : `${category.label} üzerine içgörüler`} | Ganrich Advisory`, category.description]
     : (trust ?? advisoryMeta(lang, kind) ?? metaCopy[lang][metaKind] ?? metaCopy[lang].home);
@@ -153,7 +166,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       types: { "application/rss+xml": `/${lang}/feed.xml` },
     },
     // Category pages only list a few notes each; the insights hub is the page to index.
-    robots: kind === "cookiePreferences" || kind === "studio" || category
+    robots: kind === "cookiePreferences" || kind === "studio" || category || NOINDEX_TOOLS.includes(kind)
       ? { index: false, follow: true }
       : { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
     openGraph: {
@@ -184,6 +197,8 @@ export default async function LocalizedPage({ params }: Props) {
   if (kind.startsWith("category")) permanentRedirect(`/${lang}/${routeMap[lang].insights}#strategy`);
   // The AI Value Diagnostic became the board diagnostic on the AI Decisions page.
   if (kind === "serviceAI") permanentRedirect(`/${lang}/${routeMap[lang].aiDecisions}#aiDiagnostic`);
+  // Programmes retired on 22 Nov 2026 (outside the EU-buyer positioning).
+  if (kind in retiredSolutions) permanentRedirect(`/${lang}/${routeMap[lang][retiredSolutions[kind]]}`);
   if (kind === "privateBriefing") permanentRedirect(`/${lang}/${routeMap[lang].contact}?service=briefing`);
   const trustTarget: Record<string, string> = { privacyCenter: "privacy", cookies: "privacy#cookies", vendors: "privacy#providers", dataRights: "privacy#rights", policyUpdates: "privacy#changes", terms: "legal#terms", aiTransparency: "legal#ai" };
   if (kind in trustTarget) { const [key, hash] = trustTarget[kind].split("#"); permanentRedirect(`/${lang}/${routeMap[lang][key]}${hash ? `#${hash}` : ""}`); }
@@ -196,7 +211,7 @@ export default async function LocalizedPage({ params }: Props) {
   const parent = article || category
     ? { name: lang === "en" ? "Insights" : "İçgörüler", url: absoluteUrl(`/${lang}/${routeMap[lang].insights}`) }
     : kind.startsWith("decision") || ["marketCompass", "boardBriefBuilder", "aiValueLens", "cbamCheck", "craCheck", "eudrCheck", "scopeScanner"].includes(kind)
-      ? { name: lang === "en" ? "Decision Lab" : "Karar Laboratuvarı", url: absoluteUrl(`/${lang}/${routeMap[lang].decisionLab}`) }
+      ? { name: lang === "en" ? "Readiness checks" : "Hazırlık testleri", url: absoluteUrl(`/${lang}/${routeMap[lang].decisionLab}`) }
       : breadcrumbParent(lang, kind);
   const description = article?.thesis ?? category?.description ?? (advisoryMeta(lang, kind) ?? metaCopy[lang][kind as keyof typeof metaCopy.en] ?? metaCopy[lang].home)[1];
   const modified = routeLastModified(kind);

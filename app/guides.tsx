@@ -6,6 +6,9 @@ import { Arrow } from "./arrow-icon";
 import { checks, type CheckId } from "./readiness-check-content";
 import { GuideCopy } from "./guide-copy";
 import { solutionPaperPath } from "./guide-paper";
+import { guideNextSteps } from "./guide-next-steps";
+import { guideShortAnswers } from "./guide-short-answers";
+import { hubBySolution, hubLabel } from "./rule-hub-index";
 
 // Long-form guides, rendered on the server: the full text is in the first HTML response.
 const url = (l: Lang, k: string) => "/" + l + "/" + routeMap[l][k];
@@ -56,21 +59,40 @@ function CheckStarter({ lang, solution }: { lang: Lang; solution: string }) {
   </aside>;
 }
 
+// The concrete next step for this guide's reader: one service, the contact form opened on that topic.
+function NextStep({ lang, guide }: { lang: Lang; guide: string }) {
+  const step = guideNextSteps[guide];
+  if (!step) return null;
+  const t = step[lang], en = lang === "en";
+  return <aside className="guide-next-step" aria-labelledby="guide-next-step-title">
+    <p className="kicker">{en ? "Next step" : "Sonraki adım"}</p>
+    <h2 id="guide-next-step-title">{t.title}</h2>
+    <p>{t.body}</p>
+    <div className="hero-actions"><a className="button light" data-analytics-event="contact_started" href={`${url(lang, "contact")}?service=${step.target}`}>{en ? "Ask about this" : "Bunu sorun"}</a><a className="text-link" href={url(lang, step.target)}>{en ? "See how this works" : "Nasıl çalıştığını görün"} <Arrow/></a></div>
+  </aside>;
+}
+
 export function GuidePage({ lang, kind }: { lang: Lang; kind: string }) {
   const g = guideByKey(kind)!, t = g[lang], en = lang === "en";
   // The check sits before the second section heading, so readers meet it after the opening section.
   const h2s = t.blocks.flatMap((b, i) => b.t === "h2" ? [i] : []);
   const checkAt = h2s[1] ?? h2s[0] ?? -1;
+  // The next step sits after the argument, before the FAQ and source list (or at the end).
+  let nextAt = t.blocks.findIndex(b => b.t === "faq" || b.t === "sources");
+  if (nextAt > 0 && t.blocks[nextAt - 1].t === "h2") nextAt -= 1;
+  if (nextAt < 0) nextAt = t.blocks.length;
   const published = new Date(g.date + "T12:00:00Z").toLocaleDateString(en ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" });
   return <>
-    <section className="advisory-hero guide-hero"><p className="kicker">{en ? "Technical note" : "Teknik not"} · {g.topic[lang]}</p><h1>{t.h1}</h1><p className="advisory-lead">{t.description}</p></section>
+    <section className="advisory-hero guide-hero"><p className="kicker">{en ? "Guide" : "Rehber"} · {g.topic[lang]}</p><h1>{t.h1}</h1><p className="advisory-lead">{t.description}</p></section>
     <article className="decision-note-body guide-body">
       <p className="note-byline">{en ? "Ahmed Furkan Gul" : "Ahmed Furkan Gül"} · Ganrich Advisory · <time dateTime={g.date}>{published}</time> · {g.readingTime[lang]}</p>
+      {guideShortAnswers[g.key] && <aside className="guide-short-answer" aria-label={en ? "Short answer" : "Kısa cevap"}><p className="kicker">{en ? "Short answer" : "Kısa cevap"}</p><p>{guideShortAnswers[g.key][lang]}</p></aside>}
       <figure className="guide-cover"><img src={`/guides/${g.image}-${lang}.webp`} width={1600} height={900} alt={t.h1} decoding="async"/></figure>
-      {t.blocks.map((b, i) => <Fragment key={i}>{i === checkAt && <CheckStarter lang={lang} solution={g.solution}/>}<Block b={b}/></Fragment>)}
+      {t.blocks.map((b, i) => <Fragment key={i}>{i === checkAt && <CheckStarter lang={lang} solution={g.solution}/>}{i === nextAt && <NextStep lang={lang} guide={g.key}/>}<Block b={b}/></Fragment>)}
+      {nextAt === t.blocks.length && <NextStep lang={lang} guide={g.key}/>}
       <GuideCopy lang={lang} guide={g.key} hasPdf={Boolean(solutionPaperPath(lang, g.solution))}/>
       <p className="note-status">{en ? `Dates and sources last checked ${g.checked.en}. General information, not legal advice.` : `Tarihler ve kaynaklar en son ${g.checked.tr} tarihinde kontrol edildi. Genel bilgidir, hukuki görüş değildir.`}</p>
-      <p className="notes-links"><a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All technical notes" : "Tüm teknik notlar"}</a></p>
+      <p className="notes-links">{hubBySolution[g.solution] && <><a className="text-link" href={url(lang, hubBySolution[g.solution])}>{hubLabel[lang]} <Arrow/></a> </>}<a className="text-link" href={url(lang, g.solution)}>{en ? "The related programme" : "İlgili program"} <Arrow/></a> <a className="text-link" href={url(lang, "insights")}>← {en ? "All insights" : "Tüm içgörüler"}</a></p>
     </article>
     <Conversation lang={lang}/>
   </>;

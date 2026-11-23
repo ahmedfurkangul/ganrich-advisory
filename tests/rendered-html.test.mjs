@@ -10,7 +10,8 @@ async function render(path = "/en") {
 
   return worker.fetch(
     new Request(`http://localhost${path}`, {
-      headers: { accept: "text/html", host: "localhost" },
+      // A browser user agent: vinext streams metadata into the body for requests without one.
+      headers: { accept: "text/html", host: "localhost", "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0 Safari/537.36" },
     }),
     { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
     { waitUntil() {}, passThroughOnException() {} },
@@ -202,9 +203,9 @@ test("publishes production-safe bilingual SEO, taxonomy, feeds, and discovery fi
   assert.match(article, /"Organization","ProfessionalService"/);
   assert.doesNotMatch(article, /localhost:3000/);
   assert.match(feedResponse.headers.get("content-type") ?? "", /^application\/rss\+xml/);
-  assert.match(feed, /<title>The Ganrich Brief<\/title>/);
+  assert.match(feed, /<title>Ganrich Advisory Insights<\/title>/);
   assert.match(feed, /decision-quality-applied-ai/);
-  assert.match(turkishFeed, /<title>Ganrich Bülteni<\/title>/);
+  assert.match(turkishFeed, /<title>Ganrich Advisory İçgörüler<\/title>/);
   assert.doesNotMatch(sitemap, /\/insights\/category\//);
   assert.match(sitemap, /https:\/\/ganrichadvisory\.com\/en\/insights\/decision-quality-applied-ai/);
   assert.match(sitemap, /hreflang="tr"/);
@@ -239,7 +240,7 @@ test("keeps principal internal links inside the published route inventory", asyn
       .map(match => match[1].replace(/&amp;/g, "&").split("?")[0])
       // Whitepaper pages come from D1 and are listed in reports-sitemap.xml, not the static sitemap.
       // Category pages are linked for browsing but are noindex, so they are left out of the sitemap.
-      .filter(path => !path.endsWith("/feed.xml") && !path.startsWith("/assets/") && !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(path) && !/^\/(en\/insights\/category|tr\/icgoruler\/kategori)\//.test(path));
+      .filter(path => !path.endsWith("/feed.xml") && !path.startsWith("/assets/") && !path.startsWith("/_next/") && !/\.(png|ico|svg|webmanifest)$/.test(path) && !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(path) && !/^\/(en\/insights\/category|tr\/icgoruler\/kategori)\//.test(path));
     for (const path of internalLinks) {
       assert.ok(sitemapPaths.has(path), `Internal link ${path} is absent from the canonical route inventory`);
     }
@@ -430,7 +431,7 @@ test("returns 404 for paths outside the /en and /tr trees", async () => {
 
 test("publishes the solutions programmes in both languages without prices or durations", async () => {
   const { routeMap } = await import("../app/content.ts").catch(() => ({ routeMap: null }));
-  const paths = ["/en/solutions", "/tr/cozumler", "/en/solutions/cbam-data-readiness", "/en/solutions/cra-incident-readiness", "/en/solutions/ai-order-desk-assistant", "/tr/cozumler/cbam-veri-hazirligi", "/tr/cozumler/sanayide-su-dengesi"];
+  const paths = ["/en/solutions", "/tr/cozumler", "/en/solutions/cbam-data-readiness", "/en/solutions/cra-incident-readiness", "/tr/cozumler/cbam-veri-hazirligi", "/tr/cozumler/turkiye-ets-hazirligi"];
   for (const path of paths) {
     const response = await render(path);
     assert.equal(response.status, 200, path);
@@ -440,7 +441,7 @@ test("publishes the solutions programmes in both languages without prices or dur
     assert.doesNotMatch(text, /€|\$\s?\d|\bUSD\b|\bEUR\b|\d+\s?(weeks?|months?|hafta|ay)\b/i, `${path} must not show prices or durations`);
   }
   const hub = await (await render("/en/solutions")).text();
-  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "AI Order Desk Assistant", "Industrial Water Balance"]) assert.match(hub, new RegExp(title));
+  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "Supplier Sustainability Data", "Türkiye ETS Readiness"]) assert.match(hub, new RegExp(title));
   const home = await (await render("/en")).text();
   assert.match(home, /href="\/en\/solutions"/);
   // Batch 2 (October 2026): each new programme renders in both languages and links its own whitepaper.
@@ -506,7 +507,7 @@ test("gives search engines and AI assistants tags, structured data, llms.txt and
   const org = graph(home).find(node => node["@id"] === "https://ganrichadvisory.com/#organization");
   assert.equal(org.email, "furkangul@ganrichadvisory.com");
   assert.ok(org.sameAs.includes("https://www.linkedin.com/company/135278307/"));
-  assert.equal(org.hasOfferCatalog.itemListElement.length, 29); // 21 programmes, 2 strategy services, 5 service models and AI Decisions
+  assert.equal(org.hasOfferCatalog.itemListElement.length, 24); // 16 programmes (5 retired on 22 Nov 2026), 2 strategy services, 5 service models and AI Decisions
   assert.ok(types(hub).includes("ItemList") && types(hub).includes("CollectionPage"));
   assert.ok(types(service).includes("Service"));
   const crumbs = graph(solution).find(node => node["@type"] === "BreadcrumbList").itemListElement.map(item => item.name);
@@ -540,7 +541,7 @@ test("homepage whitepapers match the solutions catalogue", async () => {
     readFile(new URL("../app/solutions-content.ts", import.meta.url), "utf8"),
   ]);
   const entries = [...home.matchAll(/key: "(\w+)", title: "([^"]+)", slug: "([^"]+)"/g)];
-  assert.equal(entries.length, 6);
+  assert.equal(entries.length, 4); // the Order Desk paper left the homepage with its programme (22 Nov 2026)
   for (const [, key, title, slug] of entries) {
     const line = catalogue.split("\n").find(l => l.includes(`key: '${key}'`) && l.includes(`slug: '${slug}'`));
     assert.ok(line, `${key} ${slug} is in solutions-content.ts`);
@@ -633,10 +634,10 @@ test("keeps the Opportunity Studio showcase reachable but unlinked and noindex, 
     assert.doesNotMatch(await (await render(path)).text(), /href="\/(en|tr)\/opportunity-studio|value="studio"/, `${path} links the Studio`);
   }
   assert.doesNotMatch(await (await render("/sitemap.xml")).text(), /opportunity-studio/);
-  const desk = await (await render("/en/solutions/ai-order-desk-assistant")).text();
-  assert.match(desk, /We do not build, resell or operate the software/);
-  assert.match(desk, /Do you build the assistant\?/);
-  assert.match(await (await render("/tr/cozumler/yapay-zeka-siparis-masasi")).text(), /Yazılımı geliştirmiyor, satmıyor veya işletmiyoruz/);
+  // The Order Desk programme was retired on 22 Nov 2026; its address now leads to AI Decisions.
+  const desk = await render("/en/solutions/ai-order-desk-assistant");
+  assert.equal(desk.status, 308);
+  assert.match(desk.headers.get("location") ?? "", /\/en\/expertise\/ai-decisions$/);
   await access(new URL("../public/studio/carbon-en.webp", import.meta.url));
 });
 
@@ -695,11 +696,11 @@ test("folds the trust pages into privacy, KVKK and legal, and redirects the old 
   assert.doesNotMatch(sitemap, /privacy-center|\/en\/cookies<|data-rights|ai-transparency|\/en\/terms<|policy-updates|\/en\/vendors</);
 });
 
-test("turns the Decision Lab into a readiness-check hub with the decision tools below", async () => {
+test("turns the Decision Lab into a readiness-check hub without the generic decision tools", async () => {
   const [en, tr] = await Promise.all(["/en/decision-lab", "/tr/karar-laboratuvari"].map(path => render(path).then(response => response.text())));
   for (const href of ["/en/decision-lab/cbam-readiness-check", "/en/decision-lab/cra-readiness-check", "/en/decision-lab/eudr-readiness-check"]) assert.match(en, new RegExp(`href="${href}"`));
   assert.equal((en.match(/Start the check/g) ?? []).length, 3);
-  assert.match(en, /href="\/en\/decision-lab\/decision-framer"/);
+  assert.doesNotMatch(en, /href="\/en\/decision-lab\/decision-framer"|lab-tools-archive/);
   assert.doesNotMatch(en, /Five instruments|tool-need/);
   assert.match(tr, /Hazırlık testleri/);
 });
@@ -707,11 +708,11 @@ test("turns the Decision Lab into a readiness-check hub with the decision tools 
 test("leads the solutions hub with the four flagship programmes and lists the rest below", async () => {
   const hub = await (await render("/en/solutions")).text();
   const flagship = hub.slice(hub.indexOf('id="flagship"'), hub.indexOf('id="more"'));
-  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "EUDR Traceability File", "AI Order Desk Assistant"]) assert.match(flagship, new RegExp(title));
+  for (const title of ["CBAM Data Readiness", "CRA Incident Readiness", "EUDR Traceability File", "Supplier Sustainability Data"]) assert.match(flagship, new RegExp(title));
   assert.doesNotMatch(flagship, /Industrial Water Balance|PFAS Substitution/);
   assert.equal((flagship.match(/Take the 2-minute check/g) ?? []).length, 3);
   const more = hub.slice(hub.indexOf('id="more"'), hub.indexOf('id="strategy"'));
-  for (const title of ["PFAS Substitution Programme", "Industrial Water Balance", "E-commerce Margin Clarity"]) assert.match(more, new RegExp(title));
+  for (const title of ["PFAS Substitution Programme", "Türkiye ETS Readiness", "NIS2 Supplier Security Evidence"]) assert.match(more, new RegExp(title));
   assert.doesNotMatch(more, /CBAM Data Readiness/);
   assert.doesNotMatch(hub, /aria-pressed/);
 });
@@ -766,8 +767,8 @@ test("keeps the header call to action sized to its label", async () => {
 
 test("lists whitepapers, articles and decision notes in one technical-notes library", async () => {
   for (const [path, title, paper, article] of [
-    ["/en/insights", /Technical Notes \| Ganrich Advisory/, /href="\/en\/insights\/report\/cbam-actual-or-default-e9f664d8"/, /href="\/en\/insights\/decision-quality-applied-ai"/],
-    ["/tr/icgoruler", /Teknik Notlar \| Ganrich Advisory/, /href="\/tr\/icgoruler\/rapor\/cbam-gercek-mi-varsayilan-mi-ef31215c"/, /href="\/tr\/icgoruler\/uygulamali-yapay-zeka-karar-kalitesi"/],
+    ["/en/insights", /Insights \| Ganrich Advisory/, /href="\/en\/insights\/report\/cbam-actual-or-default-e9f664d8"/, /href="\/en\/insights\/decision-quality-applied-ai"/],
+    ["/tr/icgoruler", /İçgörüler \| Ganrich Advisory/, /href="\/tr\/icgoruler\/rapor\/cbam-gercek-mi-varsayilan-mi-ef31215c"/, /href="\/tr\/icgoruler\/uygulamali-yapay-zeka-karar-kalitesi"/],
   ]) {
     const response = await render(path);
     assert.equal(response.status, 200, path);
@@ -789,7 +790,7 @@ test("publishes the EU regulation calendar with official sources and feeds the h
     assert.match(html, title);
     assert.match(html, source);
     assert.match(html, /href="https:\/\/eur-lex\.europa\.eu\/eli\/reg\/2024\/2847\/oj"/);
-    assert.match(html, /2026-10-24/);
+    assert.match(html, /2026-11-22/);
   }
   const home = await (await render("/tr")).text();
   assert.match(home, /href="\/tr\/icgoruler\/ab-mevzuat-takvimi"/);
@@ -912,11 +913,14 @@ test("publishes the EUDR and steel passport guides in both languages with full t
     assert.match(html, /\/og\/(en|tr)\/guide(Eudr2026|SteelDpp)\.png/);
     assert.match(html, /\/guides\/guide(Eudr2026|SteelDpp)-(en|tr)\.webp/);
   }
-  const [routes, index, content] = await Promise.all(["advisory-routes.ts", "guides-index.ts", "guides-content.ts"].map(f => readFile(new URL(`../app/${f}`, import.meta.url), "utf8")));
+  const [routes, index] = await Promise.all(["advisory-routes.ts", "guides-index.ts"].map(f => readFile(new URL(`../app/${f}`, import.meta.url), "utf8")));
+  const { guides } = await import("../scripts/load-guides.mjs");
+  const guidePaths = guides.flatMap(g => [g.en.path, g.tr.path]);
+  const guideH1s = guides.flatMap(g => [g.en.h1, g.tr.h1]);
   for (const p of ["insights/eudr-30-december-2026-turkish-exporters", "icgoruler/celik-dijital-urun-pasaportu-espr"]) {
-    assert.ok(routes.includes(`'${p}'`) && content.includes(`"path": "${p}"`), p);
+    assert.ok(routes.includes(`'${p}'`) && guidePaths.includes(p), p);
   }
-  for (const m of index.matchAll(/"h1": "((?:[^"\\]|\\.)*)"/g)) assert.ok(content.includes(`"h1": "${m[1]}"`), "index h1 matches content");
+  for (const m of index.matchAll(/"h1": "((?:[^"\\]|\\.)*)"/g)) assert.ok(guideH1s.includes(JSON.parse(`"${m[1]}"`)), "index h1 matches content");
   assert.match(await (await render("/tr/icgoruler")).text(), /Çelik Dijital Ürün Pasaportu: ESPR Türk çelik üreticisinden/);
 });
 
@@ -941,9 +945,11 @@ test("publishes the CBAM 2026 and CRA standards guides with FAQ markup, sitemap 
   }
   const tr = await (await render("/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets")).text();
   assert.equal((tr.match(/<li>Tesisiniz TR ETS pilot/g) ?? []).length, 2, "TR checklist has steps 4 and 6");
-  const content = await readFile(new URL("../app/guides-content.ts", import.meta.url), "utf8");
+  const { guides } = await import("../scripts/load-guides.mjs");
+  const content = JSON.stringify(guides);
   const links = [...new Set([...content.matchAll(/\]\((\/(?:en|tr)\/[^)]+)\)/g)].map(m => m[1]))];
-  for (const link of links) assert.equal((await render(link)).status, 200, `internal link ${link}`);
+  // Report pages come from D1, which the test worker does not have; reports-sitemap tests cover them.
+  for (const link of links.filter(l => !/^\/(en\/insights\/report|tr\/icgoruler\/rapor)\//.test(l))) assert.equal((await render(link)).status, 200, `internal link ${link}`);
 });
 
 test("publishes the CRA reporting (refrigeration) guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
@@ -995,7 +1001,7 @@ test("publishes the Gulf market entry guide in both languages with FAQ markup, s
 test("publishes the UK CBAM 2027 guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
   const pages = [
     ["/en/insights/uk-cbam-2027-turkish-exporters", "UK CBAM 2027: What Turkish Steel and Aluminium Must Do", "/tr/icgoruler/ingiltere-skdm-2027-ihracatci", /<strong>£9\.69 per tCO2e for iron and steel<\/strong>/],
-    ["/tr/icgoruler/ingiltere-skdm-2027-ihracatci", "İngiltere SKDM 2027: Türk Çelik ve Alüminyum İhracatçısı", "/en/insights/uk-cbam-2027-turkish-exporters", /AB–İngiltere Zirvesi Ortak Bildirisi, 49\. madde/],
+    ["/tr/icgoruler/ingiltere-skdm-2027-ihracatci", "İngiltere SKDM 2027: Türk Çelik ve Alüminyum İhracatçısı", "/en/insights/uk-cbam-2027-turkish-exporters", /TR ETS listede yok/],
   ];
   const sitemap = await (await render("/sitemap.xml")).text();
   for (const [path, title, pair, body] of pages) {
@@ -1491,7 +1497,7 @@ test("publishes the CBAM verifier 2026 guide in both languages with FAQ markup, 
 
 test("publishes every guide in both feeds and llms files, and dates only editorially dated sitemap URLs", async () => {
   const [{ guides, guideLastmod }, { notes }, { phaseTwoInsightArticles }] = await Promise.all([
-    import("../app/guides-content.ts"),
+    import("../scripts/load-guides.mjs"),
     import("../app/advisory-note-content.ts"),
     import("../app/phase-two-insights.ts"),
   ]);
@@ -1521,7 +1527,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   for (const article of phaseTwoInsightArticles.en) add(`/en/insights/${article.slug}`, article.date);
   for (const article of phaseTwoInsightArticles.tr) add(`/tr/icgoruler/${article.slug}`, article.date);
   // Only guides and legacy articles carry an editorial date; every other page omits lastmod.
-  assert.equal(expected.size, 36);
+  assert.equal(expected.size, 38);
 
   const [enFeed, trFeed, llms, llmsFull, sitemap, greenDeal, cbamGuide, craGuide, home, solution] = await Promise.all([
     render("/en/feed.xml").then(response => response.text()),
@@ -1541,7 +1547,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   const reportLinks = (items) => items.filter(item => /<link>[^<]*\/(?:insights\/report|icgoruler\/rapor)\//.test(item)).length;
   assert.equal(enItems.length, notes.en.length + phaseTwoInsightArticles.en.length + guides.length + reportLinks(enItems));
   assert.equal(trItems.length, notes.tr.length + phaseTwoInsightArticles.tr.length + guides.length + reportLinks(trItems));
-  assert.equal(guides.length, 12);
+  assert.equal(guides.length, 13);
 
   const guideNewest = guides.reduce((max, guide) => guideLastmod(guide) > max ? guideLastmod(guide) : max, "0000-00-00");
   const articleNewest = phaseTwoInsightArticles.en.reduce((max, article) => article.date > max ? article.date : max, "0000-00-00");
@@ -1573,7 +1579,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 146);
+  assert.equal(blocks.length, 144); // +2 supplier data hub, +2 accessibility statement, +2 supplier data guide, +2 rule terms page, +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1591,7 +1597,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
     assert.equal(value, expected.get(path), `${path} lastmod`);
   }
   for (const path of expected.keys()) assert.ok(seen.has(path), `${path} missing from sitemap`);
-  assert.equal(blocks.filter(block => block.includes("<lastmod>")).length, 36);
+  assert.equal(blocks.filter(block => block.includes("<lastmod>")).length, 38);
   for (const path of ["/en", "/tr", "/en/solutions", "/en/solutions/cbam-data-readiness", "/en/decision-lab", "/en/insights"]) {
     const block = blocks.find(item => item.includes(`https://ganrichadvisory.com${path}</loc>`));
     assert.ok(block, `${path} in sitemap`);
@@ -1612,4 +1618,348 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   assert.doesNotMatch(solution, /"dateModified"/);
   assert.match(greenDeal, /rel="canonical" href="https:\/\/ganrichadvisory\.com\/en\/insights\/turkiye-green-deal-action-plan-2026-2030-exporters"/);
   assert.match(greenDeal, /hrefLang="tr"/);
+});
+
+test("long-form guides end with a topic-specific next step", async () => {
+  const en = await (await render("/en/insights/cbam-verifier-turkish-installations-2026")).text();
+  assert.match(en, /class="guide-next-step"/);
+  assert.match(en, /Choosing a verifier\? Ask for a neutral shortlist\./);
+  assert.match(en, /href="\/en\/contact\?service=toolSelection"/);
+  assert.ok(en.indexOf("guide-next-step") < en.indexOf("guide-sources"), "next step comes before the source list");
+  const tr = await (await render("/tr/icgoruler/skdm-dogrulayici-secimi-2026")).text();
+  assert.match(tr, /Doğrulayıcı mı seçiyorsunuz\? Tarafsız bir kısa liste isteyin\./);
+  assert.match(tr, /href="\/tr\/iletisim\?service=toolSelection"/);
+  const { guides } = await import("../scripts/load-guides.mjs");
+  const { guideNextSteps } = await import("../app/guide-next-steps.ts");
+  for (const g of guides) assert.ok(guideNextSteps[g.key], `${g.key} has a next step`);
+});
+
+test("home page leads with EU buyer requests and the scope scanner", async () => {
+  const en = await (await render("/en")).text();
+  assert.match(en, /href="\/en\/decision-lab\/eu-rule-scope-scanner"[^>]*>Which EU rules reach your products\?/);
+  assert.ok(en.indexOf("buyer-desk-tile") < en.indexOf("Which request is on your desk?"), "buyer desk comes before the request cards");
+  assert.match(en, /href="\/en\/solutions\/cbam-data-readiness"><h3>Emissions data for each product/);
+  assert.match(en, /href="\/en\/solutions\/supplier-sustainability-data"><h3>Supplier sustainability questionnaires/);
+  assert.doesNotMatch(en, /Energy and water now shape the margin|order desk and online sales need help|New: EU Buyer Request Desk/);
+  const tr = await (await render("/tr")).text();
+  assert.match(tr, /Hangi AB kuralları ürünlerinizi etkiliyor\?/);
+  assert.match(tr, /Masanızda hangi talep var\?/);
+  assert.doesNotMatch(tr, /Enerji ve su marjı belirliyor|Yeni: AB Alıcı Talep Masası/);
+});
+
+test("renders page content inside <main> without a loading fallback", async () => {
+  for (const path of ["/en", "/tr", "/en/contact", "/tr/cozumler", "/en/insights/cbam-verifier-turkish-installations-2026", "/en/decision-lab/eu-rule-scope-scanner"]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    const main = html.match(/<main id="content">([\s\S]*?)<\/main>/);
+    assert.ok(main, `${path}: <main> is present`);
+    assert.match(main[1], /<h1[\s>]/, `${path}: the H1 is server-rendered inside <main>`);
+    assert.doesNotMatch(html, /<div hidden id="S:\d+">/, `${path}: no hidden streamed content`);
+    assert.doesNotMatch(html, /route-loading|Loading…|Yükleniyor…/, `${path}: no loading fallback`);
+  }
+});
+
+test("shows a founder card with photo, name and LinkedIn on the home page", async () => {
+  for (const [p, name] of [["/en", "Ahmed Furkan Gul"], ["/tr", "Ahmed Furkan Gül"]]) {
+    const html = await (await render(p)).text();
+    assert.match(html, /<div class="founder-card"><img src="\/people\/ahmed-furkan-gul-192.webp"/, p);
+    assert.match(html, new RegExp(`<strong>${name}</strong>`), p);
+    assert.match(html, /href="https:\/\/www.linkedin.com\/in\/furkangul\/"/, p);
+  }
+});
+
+test("opens every guide with a short answer box in both languages", async () => {
+  const { guides } = await import("../scripts/load-guides.mjs");
+  const paths = guides.flatMap(g => [`/en/${g.en.path}`, `/tr/${g.tr.path}`]);
+  for (const p of paths) {
+    const html = await (await render(p)).text();
+    assert.match(html, /<aside class="guide-short-answer" aria-label="(Short answer|Kısa cevap)">/, p);
+  }
+});
+
+test("uses one name per section: Insights for the library, Guide for long-form notes, Readiness checks for the tools", async () => {
+  const [guide, lib, check] = await Promise.all(["/en/insights/cbam-verifier-turkish-installations-2026", "/tr/icgoruler", "/en/decision-lab/cbam-readiness-check"].map(p => render(p).then(r => r.text())));
+  assert.match(guide, /<p class="kicker">Guide(<!-- -->)? · /);
+  assert.match(guide, /All insights/);
+  assert.doesNotMatch(guide, /Technical note ·|All technical notes/);
+  assert.match(lib, /İÇGÖRÜLER/);
+  assert.doesNotMatch(lib, /TEKNİK NOTLAR/);
+  assert.match(check, /"name":"Readiness checks"/);
+  const feed = await (await render("/en/feed.xml")).text();
+  assert.doesNotMatch(feed, /The Ganrich Brief/);
+});
+
+test("retires off-positioning programmes with a 308 and keeps generic decision tools out of the index", async () => {
+  for (const [path, target] of [["/en/solutions/measured-energy-retrofit", /\/en\/solutions$/], ["/tr/cozumler/gunes-ve-depolama-karari", /\/tr\/cozumler$/], ["/en/solutions/industrial-water-balance", /\/en\/solutions$/], ["/tr/cozumler/yapay-zeka-siparis-masasi", /\/tr\/uzmanlik\/yapay-zeka-kararlari$/], ["/en/solutions/e-commerce-margin-clarity", /\/en\/solutions$/]]) {
+    const response = await render(path);
+    assert.equal(response.status, 308, path);
+    assert.match(response.headers.get("location") ?? "", target, path);
+  }
+  const tool = await render("/en/decision-lab/decision-framer");
+  assert.equal(tool.status, 200);
+  assert.match(await tool.text(), /<meta name="robots" content="noindex, follow"/);
+  const sitemap = await (await render("/sitemap.xml")).text();
+  assert.doesNotMatch(sitemap, /measured-energy-retrofit|ai-order-desk|decision-framer|decision-atlas|ai-value-lens|board-brief|market-entry-compass|changelog/);
+  const [hub, contact, llms] = await Promise.all(["/en/solutions", "/en/contact", "/llms.txt"].map(path => render(path).then(r => r.text())));
+  for (const html of [hub, contact, llms]) assert.doesNotMatch(html, /Measured Energy Retrofit|Solar and Storage Decision|Industrial Water Balance|AI Order Desk Assistant|E-commerce Margin Clarity/);
+});
+
+test("publishes the EUDR rule hub in both languages and links it from the guide, programme and calendar", async () => {
+  for (const [p, h1] of [["/en/insights/eudr", /EUDR for Turkish exporters/], ["/tr/icgoruler/eudr", /Türk ihracatçılar için EUDR/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.match(html, /<aside class="guide-short-answer"/, p);
+    assert.match(html, /<ol class="hub-dates">/, p);
+    assert.match(html, /"@type":"FAQPage"/, p);
+    assert.match(html, /hrefLang="(en|tr)"/, p);
+  }
+  for (const p of ["/en/insights/eudr-30-december-2026-turkish-exporters", "/en/solutions/eudr-traceability", "/en/insights/eu-regulation-calendar"]) {
+    assert.match(await (await render(p)).text(), /href="\/en\/insights\/eudr"/, p);
+  }
+  const sitemap = await (await render("/sitemap.xml")).text();
+  assert.match(sitemap, /https:\/\/ganrichadvisory.com\/tr\/icgoruler\/eudr</);
+  assert.match(await (await render("/llms.txt")).text(), /EU rule hubs/);
+});
+
+test("publishes the CBAM rule hub with all CBAM guides and links it from the programme", async () => {
+  for (const [p, h1, guide] of [["/en/insights/cbam", /CBAM for Turkish exporters/, /href="\/en\/insights\/cbam-verifier-turkish-installations-2026"/], ["/tr/icgoruler/skdm", /Türk ihracatçılar için SKDM/, /href="\/tr\/icgoruler\/skdm-dogrulayici-secimi-2026"/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.match(html, guide, p);
+    assert.match(html, /"@type":"FAQPage"/, p);
+  }
+  assert.match(await (await render("/en/solutions/cbam-data-readiness")).text(), /href="\/en\/insights\/cbam"/);
+});
+
+test("publishes the CRA rule hub with both CRA guides", async () => {
+  for (const [p, h1] of [["/en/insights/cra", /Cyber Resilience Act for Turkish manufacturers/], ["/tr/icgoruler/cra", /Türk üreticiler için Siber Dayanıklılık Yasası/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.match(html, /"@type":"FAQPage"/, p);
+  }
+  assert.match(await (await render("/en/solutions/cra-incident-readiness")).text(), /href="\/en\/insights\/cra"/);
+});
+
+test("publishes the Türkiye ETS rule hub and links it from the programme", async () => {
+  for (const [p, h1] of [["/en/insights/turkiye-ets", /Türkiye ETS for covered plants/], ["/tr/icgoruler/tr-ets", /Kapsamdaki tesisler için Türkiye ETS/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.match(html, /27 (January|Ocak) 2027/, p);
+    assert.match(html, /"@type":"FAQPage"/, p);
+  }
+  assert.match(await (await render("/en/solutions/turkiye-ets-readiness")).text(), /href="\/en\/insights\/turkiye-ets"/);
+});
+
+test("publishes the EU Buyer Question Bank with 20 sourced answers and links it from the hubs", async () => {
+  for (const [p, h1] of [["/en/insights/eu-buyer-questions", /The questions your EU buyer will ask/], ["/tr/icgoruler/ab-alici-sorulari", /AB alıcınızın soracağı sorular/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.equal((html.match(/class="qb-item"/g) ?? []).length, 20, p);
+    const faq = html.match(/"@type":"FAQPage"[\s\S]*?"mainEntity":\[([\s\S]*?)\]\}/)?.[1] ?? "";
+    assert.equal((faq.match(/"@type":"Question"/g) ?? []).length, 20, p);
+  }
+  assert.match(await (await render("/en/insights/cbam")).text(), /href="\/en\/insights\/eu-buyer-questions#cbam"/);
+  assert.match(await (await render("/tr/icgoruler/tr-ets")).text(), /href="\/tr\/icgoruler\/ab-alici-sorulari#trets"/);
+});
+
+test("lists the rule hubs at the top of the Insights library", async () => {
+  for (const [p, hrefs] of [["/en/insights", ["/en/insights/cbam", "/en/insights/eudr", "/en/insights/cra", "/en/insights/turkiye-ets"]], ["/tr/icgoruler", ["/tr/icgoruler/skdm", "/tr/icgoruler/eudr", "/tr/icgoruler/cra", "/tr/icgoruler/tr-ets"]]]) {
+    const html = await (await render(p)).text();
+    assert.match(html, /class="section hub-strip"/, p);
+    for (const href of hrefs) assert.ok(html.includes(`href="${href}"`), `${p} links ${href}`);
+    assert.ok(html.includes(p.startsWith("/en") ? `href="/en/insights/eu-buyer-questions"` : `href="/tr/icgoruler/ab-alici-sorulari"`), `${p} links the question bank`);
+  }
+});
+
+test("sends a trial Content-Security-Policy in report-only mode", async () => {
+  const res = await render("/en");
+  const csp = res.headers.get("content-security-policy-report-only") ?? "";
+  assert.match(csp, /default-src 'self'/);
+  assert.match(csp, /object-src 'none'/);
+  assert.match(csp, /script-src 'self' 'unsafe-inline' https:\/\/static\.cloudflareinsights\.com/);
+  assert.match(res.headers.get("content-security-policy") ?? "", /frame-ancestors 'self'/);
+});
+
+test("publishes the PPWR rule hub with the PPWR whitepaper and links it from the programme", async () => {
+  for (const [p, h1, report] of [["/en/insights/ppwr", /PPWR for Turkish exporters/, "/en/insights/report/ppwr-packaging-file-7d6aa9bd"], ["/tr/icgoruler/ppwr", /Türk ihracatçılar için PPWR/, "/tr/icgoruler/rapor/ppwr-ambalaj-dosyasi-65f6be90"]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.ok(html.includes(`href="${report}"`), p);
+    assert.match(html, /"@type":"FAQPage"/, p);
+    assert.doesNotMatch(html, /eu-buyer-questions#ppwr|ab-alici-sorulari#ppwr/, p);
+  }
+  assert.match(await (await render("/en/solutions/eu-packaging-compliance")).text(), /href="\/en\/insights\/ppwr"/);
+  assert.match(await (await render("/en/insights")).text(), /href="\/en\/insights\/ppwr"/);
+});
+
+test("publishes the EU rule terms page built from the hub glossaries", async () => {
+  for (const [p, h1, term] of [["/en/insights/eu-rule-terms", /EU rule terms in English and Turkish/, /Yetkili SKDM beyan sahibi/], ["/tr/icgoruler/ab-kural-terimleri", /AB kural terimleri, Türkçe ve İngilizce/, /Authorised CBAM declarant/]]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.match(html, term, p);
+    assert.equal((html.match(/<table>/g) ?? []).length, 6, p); // one table per rule hub
+  }
+  assert.match(await (await render("/en/insights/cbam")).text(), /href="\/en\/insights\/eu-rule-terms"/);
+});
+
+test("publishes an accessibility statement in both languages, linked from every footer", async () => {
+  for (const [path, pair, h1, home] of [
+    ["/en/accessibility", "/tr/erisilebilirlik", "Accessibility statement", "/en"],
+    ["/tr/erisilebilirlik", "/en/accessibility", "Erişilebilirlik beyanı", "/tr"],
+  ]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`<h1>${h1}</h1>`), `${path} h1`);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /WCAG\) 2\.1/);
+    assert.match(html, /furkangul@ganrichadvisory\.com/);
+    assert.match(html, /22 (November|Kasım) 2026/);
+    assert.ok((await (await render(home)).text()).includes(`href="${path}"`), `${home} footer links ${path}`);
+  }
+});
+
+test("publishes the supplier sustainability data guide with the Omnibus cap and the product-rule split", async () => {
+  const pages = [
+    ["/en/insights/supplier-sustainability-data-omnibus-2027", "/tr/icgoruler/tedarikci-surdurulebilirlik-verisi-omnibus-2027", /Directive \(EU\) 2026\/470/, /up to 1,000 employees/, ["/en/insights/cbam", "/en/insights/eudr", "/en/insights/ppwr", "/en/insights/eu-buyer-questions", "/en/solutions/supplier-sustainability-data"]],
+    ["/tr/icgoruler/tedarikci-surdurulebilirlik-verisi-omnibus-2027", "/en/insights/supplier-sustainability-data-omnibus-2027", /\(AB\) 2026\/470/, /1\.000&#x27;e kadar çalışanı|1\.000'e kadar çalışanı/, ["/tr/icgoruler/skdm", "/tr/icgoruler/eudr", "/tr/icgoruler/ppwr", "/tr/icgoruler/ab-alici-sorulari", "/tr/cozumler/tedarikci-surdurulebilirlik-verisi"]],
+  ];
+  for (const [path, pair, directive, cap, links] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, directive, `${path} cites Omnibus I`);
+    assert.match(html, /2026\/1560/, `${path} cites the voluntary standard`);
+    assert.match(html, cap, `${path} states the cap`);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /\/og\/(en|tr)\/guideSupplierData\.png/);
+    assert.match(html, /\/guides\/guideSupplierData-(en|tr)\.webp/);
+    assert.doesNotMatch(html, /€|EUR \d|\d+ (million|billion|milyon|milyar)/, `${path} has no amounts`);
+    for (const link of links) {
+      assert.ok(html.includes(`href="${link}"`), `${path} links ${link}`);
+      assert.equal((await render(link)).status, 200, link);
+    }
+  }
+});
+
+test("publishes the supplier data rule hub with its guide and paper and links it from the programme", async () => {
+  for (const [p, h1, guide, report] of [
+    ["/en/insights/supplier-data", /Supplier sustainability data: what your EU customers can still ask you for/, "/en/insights/supplier-sustainability-data-omnibus-2027", "/en/insights/report/supplier-sustainability-data-after-omnibus-97a36c53"],
+    ["/tr/icgoruler/tedarikci-verisi", /Tedarikçi sürdürülebilirlik verisi: AB müşteriniz sizden hâlâ ne isteyebilir\?/, "/tr/icgoruler/tedarikci-surdurulebilirlik-verisi-omnibus-2027", "/tr/icgoruler/rapor/tedarikci-surdurulebilirlik-verisi-omnibus-82382d59"],
+  ]) {
+    const res = await render(p);
+    assert.equal(res.status, 200, p);
+    const html = await res.text();
+    assert.match(html, h1, p);
+    assert.ok(html.includes(`href="${guide}"`), `${p} links the guide`);
+    assert.ok(html.includes(`href="${report}"`), `${p} links the paper`);
+    assert.match(html, /2026\/1560/, p);
+    assert.match(html, /"@type":"FAQPage"/, p);
+    assert.doesNotMatch(html, /€|EUR \d/, p);
+  }
+  assert.match(await (await render("/en/solutions/supplier-sustainability-data")).text(), /href="\/en\/insights\/supplier-data"/);
+  assert.match(await (await render("/tr/icgoruler")).text(), /href="\/tr\/icgoruler\/tedarikci-verisi"/);
+});
+
+test("keeps rule hub, question bank and terms page titles short enough for search results", async () => {
+  for (const p of ["/en/insights/cbam", "/tr/icgoruler/skdm", "/en/insights/cra", "/tr/icgoruler/cra", "/en/insights/eudr", "/tr/icgoruler/eudr", "/en/insights/turkiye-ets", "/tr/icgoruler/tr-ets", "/en/insights/ppwr", "/tr/icgoruler/ppwr", "/en/insights/supplier-data", "/tr/icgoruler/tedarikci-verisi", "/en/insights/eu-buyer-questions", "/tr/icgoruler/ab-alici-sorulari", "/en/insights/eu-rule-terms", "/tr/icgoruler/ab-kural-terimleri"]) {
+    const html = await (await render(p)).text();
+    const title = html.match(/<title>([^<]*)<\/title>/)?.[1]?.replace(/&amp;/g, "&") ?? "";
+    assert.ok(title.length > 20 && title.length <= 70, `${p} title length ${title.length}: ${title}`);
+  }
+});
+
+test("tells visitors what to have to hand for the first review, without asking for confidential documents", async () => {
+  for (const [path, heading, codes, wait] of [
+    ["/en/contact", /Helpful to have to hand for the first review/, /CN or HS codes/, /Confidential documents can wait/],
+    ["/tr/iletisim", /Ön görüşmede elinizin altında olması faydalı olanlar/, /GTİP veya KN kodlarıyla/, /Gizli belgeler ilk adımda/],
+  ]) {
+    const html = await (await render(path)).text();
+    assert.match(html, heading);
+    assert.match(html, codes);
+    assert.match(html, wait);
+  }
+});
+
+test("states the Article 9 transfer mechanism in the KVKK notice", async () => {
+  const tr = await (await render("/tr/kvkk-aydinlatma-metni")).text();
+  assert.match(tr, /9\. maddesi uyarınca Kişisel Verileri Koruma Kurulu(?:'|&#x27;)nun ilan ettiği standart sözleşmelere dayanır/);
+  const en = await (await render("/en/turkiye-data-protection-notice")).text();
+  assert.match(en, /standard contracts announced by the Personal Data Protection Board under Article 9/);
+});
+
+test("shows no privacy bar, and keeps optional local storage off until chosen in Cookie preferences", async () => {
+  const controls = await readFile(new URL("../app/privacy-controls.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(controls, /privacy-banner/);
+  assert.match(controls, /export function optionalPreferencesEnabled\(\) \{\n  return Boolean\(readPreference\(\)\?\.functional\);/);
+  const privacy = await (await render("/en/privacy")).text();
+  assert.match(privacy, /22 November 2026 · Version 1\.4/);
+  const footer = await (await render("/tr")).text();
+  assert.match(footer, /Çerez tercihleri/);
+});
+
+test("shows a fictional EU buyer request response file on the sample work page, clearly labelled", async () => {
+  for (const [path, title, label, invented] of [
+    ["/en/sample-work", /CBAM data request from an EU importer/, /Illustrative \/ not client work/, /All names, requests and data in this example are invented/],
+    ["/tr/ornek-calismalar", /AB ithalatçısından SKDM \(CBAM\) veri talebi/, /Temsili \/ müşteri çalışması değildir/, /tüm isimler, talepler ve veriler uydurmadır/],
+  ]) {
+    const html = await (await render(path)).text();
+    assert.match(html, title);
+    assert.match(html, label);
+    assert.match(html, invented);
+    assert.match(html, /<table>/);
+  }
+});
+
+test("keeps long article titles short in search results while the page heading keeps the full title", async () => {
+  for (const [path, full] of [
+    ["/en/insights/turkiye-gulf-capital-corridor", "The Türkiye–Gulf capital corridor: what changed and what it means for operators"],
+    ["/tr/icgoruler/turkiye-korfez-sermaye-koridoru", "Türkiye–Körfez sermaye koridoru: ne değişti, işletmeler için ne anlama geliyor?"],
+    ["/tr/icgoruler/orta-olcekli-sanayide-yapay-zeka-degeri", "Orta ölçekli sanayi şirketlerinde yapay zekâ nerede ölçülebilir değer yaratır?"],
+  ]) {
+    const html = await (await render(path)).text();
+    const title = html.match(/<title>([^<]*)<\/title>/)?.[1] ?? "";
+    assert.ok(title.length <= 70, `${path} title length ${title.length}: ${title}`);
+    assert.ok(html.includes(`<h1>${full}</h1>`) || html.includes(full), `${path} keeps the full heading`);
+  }
+});
+
+test("records the KVKK transfer update as privacy notice version 1.5", async () => {
+  const en = await (await render("/en/privacy")).text();
+  assert.match(en, /22 November 2026 · Version 1\.5/);
+  assert.match(en, /Version 1\.5 · Reviewed 22 November 2026/);
+  const tr = await (await render("/tr/gizlilik")).text();
+  assert.match(tr, /22 Kasım 2026 · Sürüm 1\.5/);
+});
+
+test("keeps every guide in content/guides as canonical Markdown listed in order.json", async () => {
+  const { readdir } = await import("node:fs/promises");
+  const { formatGuideMarkdown, parseGuideMarkdown } = await import("../app/guide-markdown.ts");
+  const { guideOrder } = await import("../scripts/load-guides.mjs");
+  const root = new URL("../content/guides/", import.meta.url);
+  const dirs = (await readdir(root, { withFileTypes: true })).filter(d => d.isDirectory()).map(d => d.name).sort();
+  assert.deepEqual([...guideOrder].sort(), dirs, "order.json lists every guide folder once");
+  for (const slug of dirs) {
+    for (const lang of ["en", "tr"]) {
+      const source = await readFile(new URL(`${slug}/${lang}.md`, root), "utf8");
+      assert.equal(formatGuideMarkdown(parseGuideMarkdown(source, slug)), source, `${slug}/${lang}.md is canonical`);
+    }
+  }
+  assert.throws(() => parseGuideMarkdown("---\npath: a\ntitle: b\ndescription: c\nh1: d\n---\n\nline one\nline two\n"), /a paragraph is one line/);
 });

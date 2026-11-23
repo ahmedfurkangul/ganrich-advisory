@@ -73,6 +73,12 @@ const cards = {
     ["solutionMdr", "SOLUTIONS · EU MARKET ACCESS", "EU MDR Portfolio Transition"],
     ["solutionSupplierData", "SOLUTIONS · EU MARKET ACCESS", "Supplier Sustainability Data"],
     ["regulationCalendar", "INSIGHTS · EU REGULATION CALENDAR", "EU rules your buyers apply, 2026–2027"],
+    ["hubCbam", "INSIGHTS · CBAM", "CBAM: what your importer needs"],
+    ["hubCra", "INSIGHTS · CYBER RESILIENCE ACT", "CRA: what applies now"],
+    ["hubEudr", "INSIGHTS · EUDR", "EUDR: what your buyer will ask for"],
+    ["hubTrEts", "INSIGHTS · TÜRKİYE ETS", "Türkiye ETS: what the pilot asks"],
+    ["hubPpwr", "INSIGHTS · PACKAGING (PPWR)", "PPWR: the packaging file"],
+    ["hubSupplierData", "INSIGHTS · SUPPLIER DATA", "Supplier data after the Omnibus"],
   ],
   tr: [
     ["home", "STRATEJİK DANIŞMANLIK", "Sonraki adım. Sağlam bir kararla."],
@@ -136,6 +142,12 @@ const cards = {
     ["solutionMdr", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "AB MDR Portföy Geçişi"],
     ["solutionSupplierData", "ÇÖZÜMLER · AB PAZARINA ERİŞİM", "Tedarikçi Sürdürülebilirlik Verisi"],
     ["regulationCalendar", "İÇGÖRÜLER · AB MEVZUAT TAKVİMİ", "AB alıcınızın uyguladığı kurallar, 2026–2027"],
+    ["hubCbam", "İÇGÖRÜLER · SKDM", "SKDM: ithalatçınız ne isteyecek?"],
+    ["hubCra", "İÇGÖRÜLER · SİBER DAYANIKLILIK", "CRA: şimdi ne geçerli?"],
+    ["hubEudr", "İÇGÖRÜLER · EUDR", "EUDR: alıcınız ne isteyecek?"],
+    ["hubTrEts", "İÇGÖRÜLER · TÜRKİYE ETS", "TR ETS: pilot ne istiyor?"],
+    ["hubPpwr", "İÇGÖRÜLER · AMBALAJ (PPWR)", "PPWR: ambalaj dosyası"],
+    ["hubSupplierData", "İÇGÖRÜLER · TEDARİKÇİ VERİSİ", "Omnibus sonrası tedarikçi verisi"],
   ],
 };
 

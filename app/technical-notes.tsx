@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { insightArticles, insightHref, Lang, routeMap } from "./content";
 import { notes } from "./advisory-note-content";
-import { solutions } from "./solutions-content";
+import { allSolutions, retiredSolutions } from "./solutions-content";
 import { PdfInsightHubCards } from "./pdf-insight-cards";
 import { guideIndex } from "./guides-index";
 import { Arrow } from "./arrow-icon";
+import { hubStrip } from "./rule-hub-index";
 
 // The insights hub as one library: whitepapers, articles and decision notes in a single list,
 // filtered by area (EU rules, industry, AI, strategy) and searchable. The old category pages
@@ -19,14 +20,14 @@ const groups: Group[] = ["eu", "industry", "ai", "strategy"];
 
 const copy = {
   en: {
-    eyebrow: "TECHNICAL NOTES", title: "Notes you can use before the first call.",
+    eyebrow: "INSIGHTS", title: "Notes you can use before the first call.",
     intro: "Whitepapers on EU rules, energy and applied AI, plus articles and decision notes on strategy and growth, in one place. Every whitepaper is free to read in the browser.",
     all: "All", groups: { eu: "EU rules", industry: "Energy and industry", ai: "Applied AI", strategy: "Strategy and growth" },
     search: "Search", placeholder: "Search the notes", paper: "Whitepaper (PDF)", guide: "Guide", article: "Article", note: "Decision note",
     read: "Read", programme: "The programme", empty: "No note matches this search.", clear: "Clear search", count: (n: number) => `${n} notes`,
   },
   tr: {
-    eyebrow: "TEKNİK NOTLAR", title: "İlk görüşmeden önce işinize yarayacak notlar.",
+    eyebrow: "İÇGÖRÜLER", title: "İlk görüşmeden önce işinize yarayacak notlar.",
     intro: "AB kuralları, enerji ve uygulamalı yapay zekâ üzerine teknik notlar; strateji ve büyüme üzerine makaleler ve karar notları, tek yerde. Teknik notların tamamı tarayıcıda ücretsiz okunabilir.",
     all: "Tümü", groups: { eu: "AB kuralları", industry: "Enerji ve sanayi", ai: "Uygulamalı yapay zekâ", strategy: "Strateji ve büyüme" },
     search: "Ara", placeholder: "Notlarda arayın", paper: "Teknik not (PDF)", guide: "Rehber", article: "Makale", note: "Karar notu",
@@ -34,12 +35,14 @@ const copy = {
   },
 };
 
+const noSubscribe = () => () => {};
+
 export function libraryEntries(lang: Lang): Entry[] {
   const c = copy[lang];
   const reportBase = lang === "en" ? "/en/insights/report/" : "/tr/icgoruler/rapor/";
-  const papers: Entry[] = solutions[lang].flatMap(s => [s.update, s.paper].filter(p => !!p).map(p => ({
+  const papers: Entry[] = allSolutions[lang].flatMap(s => [s.update, s.paper].filter(p => !!p).map(p => ({
     id: p!.slug, group: s.theme, type: c.paper, topic: s.title, title: p!.title, summary: s.tagline,
-    href: reportBase + p!.slug, extra: { label: c.programme, href: url(lang, s.key) },
+    href: reportBase + p!.slug, extra: s.key in retiredSolutions ? undefined : { label: c.programme, href: url(lang, s.key) },
   })));
   const articles: Entry[] = insightArticles[lang].map((a, i) => ({
     id: a.slug, group: "strategy", type: c.article, topic: a.topic, title: a.title, summary: a.thesis, href: insightHref(lang, i),
@@ -57,13 +60,11 @@ export function TechnicalNotesLibrary({ lang }: { lang: Lang }) {
   const c = copy[lang];
   const locale = lang === "en" ? "en-GB" : "tr-TR";
   const entries = useMemo(() => libraryEntries(lang), [lang]);
-  const [filter, setFilter] = useState<"all" | Group>("all");
+  const [chosen, setFilter] = useState<"all" | Group | null>(null);
   const [query, setQuery] = useState("");
   // A link such as #strategy (used by the old category pages) opens the library with that filter.
-  useEffect(() => {
-    const hash = window.location.hash.slice(1);
-    if ((groups as string[]).includes(hash)) setFilter(hash as Group);
-  }, []);
+  const hash = useSyncExternalStore(noSubscribe, () => window.location.hash.slice(1), () => "");
+  const filter: "all" | Group = chosen ?? ((groups as string[]).includes(hash) ? hash as Group : "all");
   const list = useMemo(() => {
     const q = query.trim().toLocaleLowerCase(locale);
     return entries.filter(e => (filter === "all" || e.group === filter)
@@ -72,6 +73,7 @@ export function TechnicalNotesLibrary({ lang }: { lang: Lang }) {
   const knownSlugs = useMemo(() => entries.map(e => e.id), [entries]);
   return <>
     <section className="advisory-hero"><p className="kicker">{c.eyebrow}</p><h1>{c.title}</h1><p className="advisory-lead">{c.intro}</p></section>
+    <section className="section hub-strip" aria-labelledby="hub-strip-title"><h2 id="hub-strip-title">{hubStrip[lang].title}</h2><ul>{hubStrip[lang].items.map(h => <li key={h.key}><a href={"/" + lang + "/" + routeMap[lang][h.key]}><strong>{h.name}</strong><span>{h.line}</span></a></li>)}</ul><p className="hub-strip-more"><a className="text-link" href={"/" + lang + "/" + routeMap[lang].buyerQuestions}>{lang === "en" ? "20 questions EU buyers ask, answered" : "AB alıcılarının sorduğu 20 soru ve cevapları"} <Arrow/></a></p></section>
     <section className="section filter-row notes-filter">
       <div role="group" aria-label={c.eyebrow}>
         <button type="button" aria-pressed={filter === "all"} className={filter === "all" ? "active" : ""} onClick={() => setFilter("all")}>{c.all} · {entries.length}</button>

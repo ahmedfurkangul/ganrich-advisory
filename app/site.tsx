@@ -1,6 +1,6 @@
 "use client";
 
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { isServicePageKey } from "./service-page-index";
 import Image from "next/image";
 import { BoutiqueHome } from "./advisory";
@@ -24,6 +24,10 @@ const NotePage = lazy(() => import("./advisory-notes").then(m => ({default:m.Not
 const AiDecisionsPage = lazy(() => import("./ai-decisions").then(m => ({default:m.AiDecisionsPage})));
 const ServiceModelPage = lazy(() => import("./service-page").then(m => ({default:m.ServiceModelPage})));
 const GuidePage = lazy(() => import("./guides").then(m => ({default:m.GuidePage})));
+const AccessibilityPage = lazy(() => import("./accessibility-statement").then(m => ({default:m.AccessibilityPage})));
+const RuleGlossaryPage = lazy(() => import("./rule-glossary").then(m => ({default:m.RuleGlossaryPage})));
+const BuyerQuestionsPage = lazy(() => import("./buyer-questions").then(m => ({default:m.BuyerQuestionsPage})));
+const RuleHubPage = lazy(() => import("./rule-hubs").then(m => ({default:m.RuleHubPage})));
 import { AnalyticsBridge, LeadSignals } from "./analytics";
 import { insightIndex, Lang, pageKind, routeMap, switchHref } from "./content";
 import { BriefingTray } from "./intelligence-shell";
@@ -95,6 +99,7 @@ function Footer({ lang }: { lang: Lang }) {
       <a href={`/${lang}/${m.kvkk}`}>KVKK</a>
       <button type="button" onClick={openCookiePreferences}>{lang === "en" ? "Cookie preferences" : "Çerez tercihleri"}</button>
       <a href={`/${lang}/${m.legal}`}>{lang === "en" ? "Legal notice" : "Yasal bildirim"}</a>
+      <a href={`/${lang}/${m.accessibility}`}>{lang === "en" ? "Accessibility" : "Erişilebilirlik"}</a>
       <a href={`/${lang}/feed.xml`}>RSS <Arrow/></a>
     </nav>
     <div className="footer-base"><p>© {new Date().getFullYear()} Ganrich Advisory</p><p>{lang === "en" ? "Privacy controls · v1.0" : "Gizlilik kontrolleri · v1.0"}</p></div>
@@ -117,6 +122,10 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "sampleWork") page = <SampleWorkPage lang={lang}/>;
   if (kind.startsWith("note")) page = <NotePage lang={lang} kind={kind}/>;
   if (kind.startsWith("guide")) page = <GuidePage lang={lang} kind={kind}/>;
+  if (kind.startsWith("hub")) page = <RuleHubPage lang={lang} kind={kind}/>;
+  if (kind === "buyerQuestions") page = <BuyerQuestionsPage lang={lang}/>;
+  if (kind === "ruleGlossary") page = <RuleGlossaryPage lang={lang}/>;
+  if (kind === "accessibility") page = <AccessibilityPage lang={lang}/>;
   if (kind === "aiDecisions") page = <AiDecisionsPage lang={lang}/>;
   if (isServicePageKey(kind)) page = <ServiceModelPage lang={lang} kind={kind}/>;
   if (kind === "expertise") page = <ExpertisePage lang={lang}/>;
@@ -141,5 +150,8 @@ export default function Site({ lang, route }: SiteProps) {
   if (kind === "cookiePreferences") page = <CookiePreferencesPage lang={lang}/>;
   if (["privacy", "kvkk", "legal"].includes(kind)) page = <TrustContentPage lang={lang} kind={kind as "privacy" | "kvkk" | "legal"}/>;
   if (kind === "notFound") page = <PageHero eyebrow="404" title={lang === "en" ? "This page is not available." : "Bu sayfa mevcut değil."} intro={lang === "en" ? "Return to the Ganrich Advisory home page." : "Ganrich Advisory ana sayfasına dönün."}/>;
-  return <SiteLayout lang={lang} route={route}><Suspense fallback={<div className="route-loading" role="status">{lang === "en" ? "Loading…" : "Yükleniyor…"}</div>}>{page}</Suspense></SiteLayout>;
+  // No Suspense boundary around the page: the server waits for the lazy page
+  // module and streams the content inside <main>, so crawlers that do not run
+  // JavaScript (and readers with it off) get the full page, not a fallback.
+  return <SiteLayout lang={lang} route={route}>{page}</SiteLayout>;
 }

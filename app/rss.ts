@@ -38,7 +38,7 @@ export async function renderInsightFeed(lang: Lang) {
       <author>furkangul@ganrichadvisory.com (${escapeXml(article.author)})</author>
       <category>${escapeXml(article.topic)}</category>
       ${published ? `<pubDate>${published.toUTCString()}</pubDate>` : ""}
-      <source url="${feedUrl}">${isEn ? "The Ganrich Brief" : "Ganrich Bülteni"}</source>
+      <source url="${feedUrl}">${isEn ? "Ganrich Advisory Insights" : "Ganrich Advisory İçgörüler"}</source>
     </item>`,
     };
   });
@@ -57,7 +57,7 @@ export async function renderInsightFeed(lang: Lang) {
       <description>${escapeXml(report.shortSummary || report.executiveThesis)}</description>
       ${category ? `<category>${escapeXml(category)}</category>` : ""}
       ${published ? `<pubDate>${published.toUTCString()}</pubDate>` : ""}
-      <source url="${feedUrl}">${isEn ? "The Ganrich Brief" : "Ganrich Bülteni"}</source>
+      <source url="${feedUrl}">${isEn ? "Ganrich Advisory Insights" : "Ganrich Advisory İçgörüler"}</source>
     </item>`,
     };
   });
@@ -82,7 +82,7 @@ export async function renderInsightFeed(lang: Lang) {
       <author>furkangul@ganrichadvisory.com (${escapeXml(isEn ? "Ahmed Furkan Gul" : "Ahmed Furkan Gül")})</author>
       <category>${escapeXml(guide.topic[lang])}</category>
       ${published ? `<pubDate>${published.toUTCString()}</pubDate>` : ""}
-      <source url="${feedUrl}">${isEn ? "The Ganrich Brief" : "Ganrich Bülteni"}</source>
+      <source url="${feedUrl}">${isEn ? "Ganrich Advisory Insights" : "Ganrich Advisory İçgörüler"}</source>
     </item>`,
     };
   });
@@ -93,7 +93,7 @@ export async function renderInsightFeed(lang: Lang) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${isEn ? "The Ganrich Brief" : "Ganrich Bülteni"}</title>
+    <title>${isEn ? "Ganrich Advisory Insights" : "Ganrich Advisory İçgörüler"}</title>
     <link>${insightUrl}</link>
     <description>${isEn ? "Decision-ready perspectives from Ganrich Advisory." : "Ganrich Advisory’den karara hazır bakışlar."}</description>
     <language>${isEn ? "en-GB" : "tr-TR"}</language>
