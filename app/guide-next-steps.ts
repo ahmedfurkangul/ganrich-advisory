@@ -6,6 +6,9 @@ import type { Lang } from "./content";
 export type GuideNextStep = { target: string } & Record<Lang, { title: string; body: string }>;
 
 export const guideNextSteps: Record<string, GuideNextStep> = {
+  guideCbamDeclaration: { target: "solutionCbam",
+    en: { title: "Prepare the data the declaration will need.", body: "We turn the draft's fields into a file for your installation: trade data, embedded emissions, verification and the contract terms to settle before your buyer surrenders certificates." },
+    tr: { title: "Beyanın isteyeceği veriyi hazırlayın.", body: "Taslağın alanlarını tesisiniz için bir dosyaya çeviririz: ticari veri, gömülü emisyon, doğrulama ve alıcınız sertifikaları teslim etmeden önce netleştirilecek sözleşme hükümleri." } },
   guideSupplierData: { target: "solutionSupplierData",
     en: { title: "Turn your questionnaires into one base report.", body: "We review the sustainability requests you received, separate reporting requests from product-rule requests and plan one base report along the voluntary standard, with an owner for each figure." },
     tr: { title: "Anketlerinizi tek bir temel rapora dönüştürün.", body: "Aldığınız sürdürülebilirlik taleplerini inceler, raporlama taleplerini ürün kuralı taleplerinden ayırır ve gönüllü standarda göre, her rakamın bir sahibi olan tek bir temel rapor planlarız." } },

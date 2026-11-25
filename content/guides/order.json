@@ -1,4 +1,5 @@
 [
+  "cbam-declaration",
   "supplier-data",
   "cbam-downstream",
   "cbam-verifier",

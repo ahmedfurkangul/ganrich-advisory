@@ -1,0 +1,19 @@
+{
+  "key": "guideCbamDeclaration",
+  "solution": "solutionCbam",
+  "date": "2026-11-25",
+  "dateModified": "2026-11-25",
+  "checked": {
+    "en": "25 November 2026",
+    "tr": "25 Kasım 2026"
+  },
+  "image": "guideCbamDeclaration",
+  "readingTime": {
+    "en": "10 min",
+    "tr": "10 dk"
+  },
+  "topic": {
+    "en": "CBAM",
+    "tr": "SKDM (CBAM)"
+  }
+}
