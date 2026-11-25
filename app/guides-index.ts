@@ -4,6 +4,22 @@ import type { Lang } from "./content";
 export type GuideIndexEntry = { key: string; solution: string; group?: "strategy"; topic: Record<Lang, string> } & Record<Lang, { h1: string; description: string }>;
 export const guideIndex: GuideIndexEntry[] = [
  {
+  "key": "guideCbamDeclaration",
+  "solution": "solutionCbam",
+  "topic": {
+   "en": "CBAM",
+   "tr": "SKDM (CBAM)"
+  },
+  "en": {
+   "h1": "CBAM declaration 2027: what the Commission's draft rules mean for Turkish suppliers",
+   "description": "The Commission's draft rules on CBAM declarations are open for feedback until 17 Dec 2026: what changes for 2027 and the data Turkish suppliers will need."
+  },
+  "tr": {
+   "h1": "SKDM beyanı 2027: Komisyon'un taslak kuralları Türk tedarikçiye ne söylüyor?",
+   "description": "SKDM beyanı uygulama tüzüğü taslağı 17 Aralık 2026'ya kadar görüşe açık. 2027'deki ilk beyanda neler değişiyor, Türk tedarikçi hangi veriyi hazırlamalı?"
+  }
+ },
+ {
   "key": "guideSupplierData",
   "solution": "solutionSupplierData",
   "topic": {

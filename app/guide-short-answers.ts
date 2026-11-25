@@ -3,6 +3,10 @@ import type { Lang } from "./content";
 // A two- or three-sentence answer at the top of each guide. Every claim here is
 // stated, with its source, in the guide body; update both together.
 export const guideShortAnswers: Record<string, Record<Lang, string>> = {
+  guideCbamDeclaration: {
+    en: "On 19 November 2026 the European Commission opened a draft implementing regulation on CBAM declarations (Ares(2026)10806938) for feedback until 17 December 2026. It has not been adopted and can change; until it is, Regulation (EU) 2023/956 as amended applies. A Turkish exporter does not file the declaration, but the first one, due by 30 September 2027 for 2026 imports, is built from data only the producing installation holds.",
+    tr: "Avrupa Komisyonu 19 Kasım 2026'da SKDM beyanlarına ilişkin bir uygulama tüzüğü taslağını (Ares(2026)10806938) 17 Aralık 2026'ya kadar görüşe açtı. Taslak kabul edilmemiştir ve değişebilir; kabul edilene kadar değişik 2023/956 sayılı Tüzük'ün kuralları geçerlidir. Türk ihracatçı beyan vermez; 2026 ithalatı için 30 Eylül 2027'ye kadar verilecek ilk beyanın içindeki verinin önemli bir kısmını ise yalnızca üretim tesisi sağlayabilir.",
+  },
   guideSupplierData: {
     en: "Under the Omnibus I Directive, an EU customer that reports under the CSRD may not require a supplier with up to 1,000 employees to provide more sustainability information than the voluntary standard covers, for financial years from 2027. The cap does not cover data that product rules such as CBAM, EUDR, PPWR or the Battery Regulation require. One base report along the voluntary standard answers most questionnaires.",
     tr: "Omnibus I Direktifi'ne göre CSRD kapsamında raporlayan bir AB müşterisi, 2027'den itibaren başlayan hesap dönemlerinde 1.000'e kadar çalışanı olan tedarikçiden gönüllü standardın kapsadığından fazla sürdürülebilirlik bilgisi isteyemez. Sınır, SKDM, EUDR, PPWR veya Batarya Tüzüğü gibi ürün kurallarının istediği veriyi kapsamaz. Gönüllü standarda göre hazırlanan tek bir temel rapor anketlerin çoğunu yanıtlar.",

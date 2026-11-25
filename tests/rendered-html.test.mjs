@@ -1527,7 +1527,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   for (const article of phaseTwoInsightArticles.en) add(`/en/insights/${article.slug}`, article.date);
   for (const article of phaseTwoInsightArticles.tr) add(`/tr/icgoruler/${article.slug}`, article.date);
   // Only guides and legacy articles carry an editorial date; every other page omits lastmod.
-  assert.equal(expected.size, 38);
+  assert.equal(expected.size, 40);
 
   const [enFeed, trFeed, llms, llmsFull, sitemap, greenDeal, cbamGuide, craGuide, home, solution] = await Promise.all([
     render("/en/feed.xml").then(response => response.text()),
@@ -1547,7 +1547,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   const reportLinks = (items) => items.filter(item => /<link>[^<]*\/(?:insights\/report|icgoruler\/rapor)\//.test(item)).length;
   assert.equal(enItems.length, notes.en.length + phaseTwoInsightArticles.en.length + guides.length + reportLinks(enItems));
   assert.equal(trItems.length, notes.tr.length + phaseTwoInsightArticles.tr.length + guides.length + reportLinks(trItems));
-  assert.equal(guides.length, 13);
+  assert.equal(guides.length, 14);
 
   const guideNewest = guides.reduce((max, guide) => guideLastmod(guide) > max ? guideLastmod(guide) : max, "0000-00-00");
   const articleNewest = phaseTwoInsightArticles.en.reduce((max, article) => article.date > max ? article.date : max, "0000-00-00");
@@ -1579,7 +1579,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
   }
 
   const blocks = [...sitemap.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
-  assert.equal(blocks.length, 144); // +2 supplier data hub, +2 accessibility statement, +2 supplier data guide, +2 rule terms page, +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
+  assert.equal(blocks.length, 146); // +2 CBAM declaration guide (25 Nov 2026); +2 supplier data hub, +2 accessibility statement, +2 supplier data guide, +2 rule terms page, +2 PPWR hub, +2 buyer question bank, +2 TR ETS hub, +2 CRA hub, +2 CBAM hub, +2 EUDR hub (22 Nov 2026); 146 until 5 programmes were retired and 6 generic tools set to noindex (22 Nov 2026)
   const seen = new Set();
   for (const block of blocks) {
     const loc = block.match(/<loc>([^<]+)<\/loc>/)?.[1];
@@ -1597,7 +1597,7 @@ test("publishes every guide in both feeds and llms files, and dates only editori
     assert.equal(value, expected.get(path), `${path} lastmod`);
   }
   for (const path of expected.keys()) assert.ok(seen.has(path), `${path} missing from sitemap`);
-  assert.equal(blocks.filter(block => block.includes("<lastmod>")).length, 38);
+  assert.equal(blocks.filter(block => block.includes("<lastmod>")).length, 40);
   for (const path of ["/en", "/tr", "/en/solutions", "/en/solutions/cbam-data-readiness", "/en/decision-lab", "/en/insights"]) {
     const block = blocks.find(item => item.includes(`https://ganrichadvisory.com${path}</loc>`));
     assert.ok(block, `${path} in sitemap`);
@@ -1856,6 +1856,70 @@ test("publishes the supplier sustainability data guide with the Omnibus cap and 
       assert.equal((await render(link)).status, 200, link);
     }
   }
+});
+
+test("publishes the CBAM declaration 2027 guide in both languages with FAQ markup, sitemap entries and library cards", async () => {
+  const pages = [
+    ["/en/insights/cbam-declaration-draft-rules-2027-turkish-suppliers", "CBAM Declaration 2027: Draft Rules for Turkish Suppliers", "The Commission's draft rules on CBAM declarations are open for feedback until 17 Dec 2026: what changes for 2027 and the data Turkish suppliers will need.", "/tr/icgoruler/skdm-beyani-2027-taslak-uygulama-tuzugu", "CBAM declaration 2027: what the Commission's draft rules mean for Turkish suppliers", /href="\/en\/insights\/cbam-verifier-turkish-installations-2026"/, /Information as of 25 November 2026/],
+    ["/tr/icgoruler/skdm-beyani-2027-taslak-uygulama-tuzugu", "SKDM Beyanı 2027: Taslak Kurallar ve Türk Tedarikçi", "SKDM beyanı uygulama tüzüğü taslağı 17 Aralık 2026'ya kadar görüşe açık. 2027'deki ilk beyanda neler değişiyor, Türk tedarikçi hangi veriyi hazırlamalı?", "/en/insights/cbam-declaration-draft-rules-2027-turkish-suppliers", "SKDM beyanı 2027: Komisyon'un taslak kuralları Türk tedarikçiye ne söylüyor?", /href="\/tr\/icgoruler\/skdm-dogrulayici-secimi-2026"/, /Bilgiler 25 Kasım 2026 itibarıyla/],
+  ];
+  const [sitemap, enFeed, trFeed, llms] = await Promise.all([
+    render("/sitemap.xml").then(response => response.text()),
+    render("/en/feed.xml").then(response => response.text()),
+    render("/tr/feed.xml").then(response => response.text()),
+    render("/llms.txt").then(response => response.text()),
+  ]);
+  const shown = (html) => html.replace(/&#x27;|&apos;|&#39;/g, "'");
+  const internal = new Set();
+  for (const [path, title, description, pair, h1, link, footer] of pages) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    const text = shown(html);
+    assert.ok(html.includes(`<title>${title}</title>`), `${path} title`);
+    assert.ok(text.includes(`<meta name="description" content="${description}"`), `${path} description`);
+    assert.ok(text.includes(`<h1>${h1}</h1>`), `${path} h1`);
+    assert.ok(html.includes(`href="https://ganrichadvisory.com${pair}"`), `${path} hreflang pair`);
+    assert.match(html, /hrefLang="x-default" href="https:\/\/ganrichadvisory\.com\/en\/insights\/cbam-declaration-draft-rules-2027-turkish-suppliers"/);
+    assert.match(html, /"@type":"Article"/);
+    assert.match(html, /"datePublished":"2026-11-25"/);
+    assert.match(html, /"@type":"FAQPage"/);
+    assert.match(html, /property="og:image"[^>]*\/og\/(en|tr)\/guideCbamDeclaration\.png/);
+    assert.match(html, /name="twitter:image"[^>]*\/og\/(en|tr)\/guideCbamDeclaration\.png/);
+    assert.match(html, /\/guides\/guideCbamDeclaration-(en|tr)\.webp/);
+    assert.match(html, link, `${path} internal link`);
+    assert.match(text, footer, `${path} disclaimer`);
+    assert.doesNotMatch(html, /Birincil sorgu|Primary query|Status \(internal|Durum \(iç not|Red Team|Furkan publishes|Furkan Bey yayımlar/i, `${path} has no internal notes`);
+    const block = sitemap.split("<url>").find(part => part.includes(`https://ganrichadvisory.com${path}</loc>`));
+    assert.ok(block, `${path} in sitemap`);
+    assert.equal(block.match(/<lastmod>([^<]*)<\/lastmod>/)?.[1], "2026-11-25", `${path} lastmod`);
+    const feed = path.startsWith("/en/") ? enFeed : trFeed;
+    assert.ok(feed.includes(`<link>https://ganrichadvisory.com${path}</link>`), `${path} in feed`);
+    assert.ok(feed.includes(`<title>${escapeFeedXml(title)}</title>`), `${path} feed title`);
+    assert.ok(llms.includes(`https://ganrichadvisory.com${path}`), `${path} in llms.txt`);
+    const article = html.slice(html.indexOf("<article"), html.indexOf("</article>"));
+    for (const match of article.matchAll(/href="(\/(?:en|tr)\/[^"#?]+)"/g)) internal.add(match[1]);
+  }
+  for (const link of [
+    "/en/insights/cbam-default-values-2026-turkish-steel-aluminium",
+    "/en/insights/cbam-verifier-turkish-installations-2026",
+    "/en/insights/turkiye-ets-market-registry-cbam",
+    "/en/decision-lab/cbam-readiness-check",
+    "/en/insights/cbam-2026-update-tr-ets-cop31",
+    "/en/solutions/cbam-data-readiness",
+    "/en/insights/cbam-downstream-extension-2028-turkish-manufacturers",
+    "/tr/icgoruler/skdm-varsayilan-degerler-2026-gercek-emisyon",
+    "/tr/icgoruler/skdm-dogrulayici-secimi-2026",
+    "/tr/icgoruler/tr-ets-piyasasi-iks-hesabi-skdm",
+    "/tr/karar-laboratuvari/cbam-hazirlik-testi",
+    "/tr/icgoruler/skdm-2026-guncel-sertifika-fiyati-tr-ets",
+    "/tr/cozumler/cbam-veri-hazirligi",
+    "/tr/icgoruler/skdm-kapsam-genislemesi-2028-mamul-urun",
+  ]) assert.ok(internal.has(link), `article links ${link}`);
+  assert.match(shown(await (await render("/en/insights")).text()), /CBAM declaration 2027: what the Commission's draft rules mean for Turkish suppliers/);
+  assert.match(shown(await (await render("/tr/icgoruler")).text()), /SKDM beyanı 2027: Komisyon'un taslak kuralları Türk tedarikçiye ne söylüyor\?/);
+  assert.match(await (await render("/en/insights/cbam")).text(), /href="\/en\/insights\/cbam-declaration-draft-rules-2027-turkish-suppliers"/);
+  assert.match(await (await render("/tr/icgoruler/skdm")).text(), /href="\/tr\/icgoruler\/skdm-beyani-2027-taslak-uygulama-tuzugu"/);
 });
 
 test("publishes the supplier data rule hub with its guide and paper and links it from the programme", async () => {

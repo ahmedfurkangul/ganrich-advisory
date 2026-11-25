@@ -343,7 +343,7 @@ export const ruleHubs: RuleHub[] = [
     key: "hubCbam",
     solution: "solutionCbam",
     check: "cbamCheck",
-    guides: ["guideCbam2026", "guideCbamDefaults", "guideCbamVerifier", "guideTrEtsMarket", "guideUkCbam", "guideCbamDownstream"],
+    guides: ["guideCbamDeclaration", "guideCbam2026", "guideCbamDefaults", "guideCbamVerifier", "guideTrEtsMarket", "guideUkCbam", "guideCbamDownstream"],
     reports: {
       en: [{ slug: "cbam-actual-or-default-e9f664d8", title: "Actual or default? The CBAM data decision for Turkish metal exporters" }, { slug: "cbam-august-guidance-turkish-exporters-58a4abcd", title: "The August guidance: what the Commission's new CBAM rulebook asks of Turkish exporters" }],
       tr: [{ slug: "cbam-gercek-mi-varsayilan-mi-ef31215c", title: "Gerçek emisyon mu, varsayılan değer mi? Türk metal ihracatçıları için SKDM veri kararı" }, { slug: "skdm-agustos-rehberleri-turk-ihracatci-1d698fcc", title: "Ağustos rehberleri: SKDM (CBAM) ilk maliyet yılında Türk ihracatçıdan ne istiyor?" }],
