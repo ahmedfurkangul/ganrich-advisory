@@ -238,13 +238,13 @@ const pages: Record<Lang, Record<TrustKind, {
       label: "PRIVACY NOTICE",
       title: "Privacy, explained in plain language.",
       intro: "A factual account of the public website, its limited data surface, and the choices available to visitors.",
-      status: "Controller: Ahmed Furkan Gül (Ganrich Advisory) · furkangul@ganrichadvisory.com · Last updated 22 November 2026.",
+      status: "Controller: Ahmed Furkan Gül (Ganrich Advisory) · furkangul@ganrichadvisory.com · Last updated 27 November 2026.",
       sections: [
         ["Who is responsible", "Ahmed Furkan Gül publishes this site and offers advisory work under the name Ganrich Advisory, and is the controller of the personal data described here. Ganrich Advisory is not yet a registered company; this notice will be updated when one is formed. Contact: furkangul@ganrichadvisory.com."],
         ["What the public site handles", "Language choice, consent choice, and optional interface preferences may be stored locally on your device. Contact, briefing and whitepaper download details are transmitted securely and stored to review and respond to your request. What we receive is what you type: usually your name, email address, organisation and message, and for a check result or document request also the check or document concerned."],
         ["Why these technologies exist", "Essential technologies support secure delivery and remember the choice you make in the privacy control. Optional first-party storage remembers reading tools and drafts only when you allow it."],
         ["Cookieless visit statistics", "When a page is requested, the server records the page, the referring website, any campaign tags in the link, an approximate location derived from the network (country and city), the network operator, device type, browser, and operating system. No cookie is set and no IP address is stored. A pseudonymous code that changes every day lets us count unique visits per day without following anyone across days. Once a page has loaded, your browser sends a short signal that it displayed the page, which lets us tell real visits from automated clients. The same log counts the steps toward contacting us (a click on a contact button, starting the contact form, sending it) and whether a readiness check was started and reached its result. Only the step and the page are recorded, never what is typed or which answers you chose. These records are kept for 13 months and are used only to understand how the site is used."],
-        ["Regulation updates by email", "If you sign up for regulation updates, we store your email address, the language and page you signed up from, and when you confirmed. You join the list only after opening the link in the confirmation email. The address is used only to send these updates (the weekly Sunday Brief), through our email provider, which keeps a copy of the subscribed addresses and their language for sending, and is never shared or sold. Every email has an unsubscribe link; after unsubscribing we keep only a record that you opted out."],
+        ["Regulation updates by email", "If you sign up for regulation updates, we store your email address, the language and page you signed up from, and when you confirmed. You join the list only after opening the link in the confirmation email. The address is used only to send these updates (the monthly Ganrich Monthly Note), through our email provider, which keeps a copy of the subscribed addresses and their language for sending, and is never shared or sold. Every email has an unsubscribe link; after unsubscribing we keep only a record that you opted out."],
         ["Protection against misuse", "To stop repeated or automated form submissions, each submission is stored with a one-way code calculated from your network address and browser. The network address itself is not stored."],
         ["What is not active", "The current build does not set analytics or advertising cookies and does not run behavioural profiling, cross-site tracking, third-party media embeds, or external AI prompt processing."],
         ["Who receives the data", "Form submissions reach Ahmed Furkan Gül as email alerts. The site and its data run on service providers that act on our instructions: Cloudflare (hosting, database, file storage and security), Resend (sending the newsletter, confirmation and alert emails), Microsoft (the furkangul@ganrichadvisory.com mailbox) and Google (a Gmail mailbox that receives form alerts). Their servers are in the United States and other countries, so your data is transferred abroad. Data is never sold or used for anyone else's marketing, and is given to public authorities only when the law requires it."],
@@ -329,6 +329,7 @@ const pages: Record<Lang, Record<TrustKind, {
       title: "A visible record of meaningful changes.",
       intro: "Material changes will be dated and summarized here rather than silently folded into long text.",
       sections: [
+        ["27 November 2026 · Version 1.6", "The regulation newsletter changes from the weekly Sunday Brief to the monthly Ganrich Monthly Note. The data collected, and how consent and unsubscribe work, stay the same."],
         ["22 November 2026 · Version 1.5", "The KVKK notice now names the transfer mechanism for providers abroad: standard contracts announced by the Personal Data Protection Board under Article 9, signed with each provider and notified to the Board."],
         ["22 November 2026 · Version 1.4", "The privacy bar that appeared on every first visit is removed. Nothing changes in what is collected: optional local preferences stay off until you switch them on under Cookie preferences in the footer."],
         ["9 November 2026 · Version 1.3", "The regulation newsletter becomes the weekly Sunday Brief. Resend now also sends the newsletter and keeps the list of confirmed addresses and their language for that purpose."],
@@ -342,10 +343,10 @@ const pages: Record<Lang, Record<TrustKind, {
       label: "SERVICE PROVIDERS",
       title: "The services that run this site.",
       intro: "Each provider processes personal data only to deliver its service to us, on our instructions.",
-      status: "Last reviewed 9 November 2026.",
+      status: "Last reviewed 27 November 2026.",
       sections: [
         ["Cloudflare, Inc. (United States)", "Hosting, the database that stores form and newsletter records, file storage for whitepapers, security and access control for the editor area. Processes all data described in the privacy notice; servers worldwide."],
-        ["Resend, Inc. (United States)", "Sends the weekly newsletter and its confirmation emails, and form alerts to us. Keeps the list of confirmed newsletter addresses and their language. Processes email addresses and the content of those emails; sending is configured in its EU (Ireland) region."],
+        ["Resend, Inc. (United States)", "Sends the monthly newsletter and its confirmation emails, and form alerts to us. Keeps the list of confirmed newsletter addresses and their language. Processes email addresses and the content of those emails; sending is configured in its EU (Ireland) region."],
         ["Microsoft Corporation (United States)", "Hosts the furkangul@ganrichadvisory.com mailbox, which receives form alerts and your direct emails."],
         ["Google LLC (United States)", "Hosts a Gmail mailbox that also receives form alerts."],
         ["Not used", "No advertising network, data broker, analytics cookie provider or external AI service receives visitor data."],
@@ -357,13 +358,13 @@ const pages: Record<Lang, Record<TrustKind, {
       label: "GİZLİLİK BİLDİRİMİ",
       title: "Gizlilik, açık bir dille.",
       intro: "Kamuya açık sitenin sınırlı veri yüzeyini ve ziyaretçilere sunulan tercihleri olgulara dayalı olarak açıklar.",
-      status: "Veri sorumlusu: Ahmed Furkan Gül (Ganrich Advisory) · furkangul@ganrichadvisory.com · Son güncelleme 22 Kasım 2026.",
+      status: "Veri sorumlusu: Ahmed Furkan Gül (Ganrich Advisory) · furkangul@ganrichadvisory.com · Son güncelleme 27 Kasım 2026.",
       sections: [
         ["Sorumlu kişi", "Bu siteyi Ganrich Advisory adıyla yayımlayan ve bu adla danışmanlık hizmeti sunan Ahmed Furkan Gül, burada açıklanan kişisel verilerin veri sorumlusudur. Ganrich Advisory henüz tescilli bir şirket değildir; şirket kurulduğunda bu bildirim güncellenecektir. İletişim: furkangul@ganrichadvisory.com."],
         ["Kamuya açık sitede işlenenler", "Dil seçimi, gizlilik tercihi ve isteğe bağlı arayüz ayarları cihazınızda yerel olarak saklanabilir. İletişim, brifing ve teknik not indirme bilgileri, talebinizi incelemek ve yanıtlamak amacıyla güvenli biçimde iletilir ve saklanır. Bize ulaşan bilgiler yazdıklarınızdır: genellikle adınız, e-posta adresiniz, kurumunuz ve mesajınız; test sonucu veya belge talebinde ayrıca ilgili test ya da belge."],
         ["Teknolojilerin amacı", "Zorunlu teknolojiler güvenli sunumu sağlar ve gizlilik kontrolündeki kararınızı hatırlar. İsteğe bağlı birinci taraf depolama, yalnızca izin verdiğinizde okuma araçlarını ve taslakları hatırlar."],
         ["Çerezsiz ziyaret istatistikleri", "Bir sayfa istendiğinde sunucu; sayfayı, yönlendiren siteyi, bağlantıdaki kampanya etiketlerini, ağdan türetilen yaklaşık konumu (ülke ve şehir), ağ işletmecisini, cihaz türünü, tarayıcıyı ve işletim sistemini kaydeder. Çerez kullanılmaz ve IP adresi saklanmaz. Her gün değişen takma bir kod, kimseyi günler arasında izlemeden günlük tekil ziyaretleri saymamızı sağlar. Sayfa yüklendiğinde tarayıcınız sayfayı gösterdiğine dair kısa bir sinyal gönderir; bu, gerçek ziyaretleri otomatik istemcilerden ayırmamızı sağlar. Aynı kayıt, bize ulaşmaya giden adımları (iletişim düğmesine tıklama, iletişim formunu doldurmaya başlama, formu gönderme) ve bir hazırlık testinin başlatılıp sonuca ulaşıp ulaşmadığını da sayar. Yalnızca adım ve sayfa kaydedilir; yazılanlar ve seçtiğiniz cevaplar kaydedilmez. Bu kayıtlar 13 ay saklanır ve yalnızca sitenin nasıl kullanıldığını anlamak için kullanılır."],
-        ["E-postayla mevzuat bülteni", "Mevzuat bültenine kaydolursanız e-posta adresinizi, kaydolduğunuz dili ve sayfayı ve onay zamanını saklarız. Listeye ancak onay e-postasındaki bağlantıyı açtığınızda katılırsınız. Adresiniz yalnızca bu bülteni (haftalık Pazar Notu) e-posta hizmet sağlayıcımız aracılığıyla göndermek için kullanılır; sağlayıcı gönderim için onaylı adresleri ve dillerini saklar. Adresiniz paylaşılmaz veya satılmaz. Her e-postada kayıt iptal bağlantısı bulunur; iptalden sonra yalnızca vazgeçtiğinize dair kaydı tutarız."],
+        ["E-postayla mevzuat bülteni", "Mevzuat bültenine kaydolursanız e-posta adresinizi, kaydolduğunuz dili ve sayfayı ve onay zamanını saklarız. Listeye ancak onay e-postasındaki bağlantıyı açtığınızda katılırsınız. Adresiniz yalnızca bu bülteni (aylık Ganrich Aylık Not) e-posta hizmet sağlayıcımız aracılığıyla göndermek için kullanılır; sağlayıcı gönderim için onaylı adresleri ve dillerini saklar. Adresiniz paylaşılmaz veya satılmaz. Her e-postada kayıt iptal bağlantısı bulunur; iptalden sonra yalnızca vazgeçtiğinize dair kaydı tutarız."],
         ["Kötüye kullanıma karşı koruma", "Tekrarlanan veya otomatik form gönderimlerini önlemek için her gönderim, ağ adresiniz ve tarayıcınızdan hesaplanan tek yönlü bir kodla birlikte saklanır. Ağ adresinin kendisi saklanmaz."],
         ["Etkin olmayanlar", "Mevcut sürüm analitik veya reklam çerezi kullanmaz; davranışsal profilleme, siteler arası izleme, üçüncü taraf medya gömme veya haricî yapay zekâ istem işleme faaliyeti yürütmez."],
         ["Verilerin aktarıldığı taraflar", "Form gönderimleri Ahmed Furkan Gül'e e-posta bildirimi olarak ulaşır. Site ve veriler, talimatlarımız doğrultusunda çalışan şu hizmet sağlayıcılar üzerinde işletilir: Cloudflare (barındırma, veritabanı, dosya depolama ve güvenlik), Resend (bülten, onay ve bildirim e-postalarının gönderimi), Microsoft (furkangul@ganrichadvisory.com e-posta kutusu) ve Google (form bildirimlerini alan Gmail kutusu). Bu sağlayıcıların sunucuları ABD ve diğer ülkelerde bulunduğundan verileriniz yurt dışına aktarılır. Veriler satılmaz, başkalarının pazarlamasında kullanılmaz; kamu kurumlarına yalnızca kanunen zorunlu olduğunda verilir."],
@@ -448,6 +449,7 @@ const pages: Record<Lang, Record<TrustKind, {
       title: "Önemli değişiklikler için görünür kayıt.",
       intro: "Esaslı değişiklikler uzun metinlerin içine sessizce eklenmek yerine burada tarih ve özetle yayımlanır.",
       sections: [
+        ["27 Kasım 2026 · Sürüm 1.6", "Mevzuat bülteni haftalık Pazar Notu olmaktan çıkıp aylık Ganrich Aylık Not oldu. Toplanan veriler ile rıza ve kayıt iptali aynı kaldı."],
         ["22 Kasım 2026 · Sürüm 1.5", "KVKK aydınlatma metni yurt dışındaki sağlayıcılara aktarımın dayanağını artık açıkça belirtiyor: 9. madde uyarınca Kişisel Verileri Koruma Kurulu'nun ilan ettiği, her sağlayıcıyla imzalanıp Kurul'a bildirilen standart sözleşmeler."],
         ["22 Kasım 2026 · Sürüm 1.4", "Her ilk ziyarette görünen gizlilik şeridi kaldırıldı. Toplanan verilerde değişiklik yok: isteğe bağlı yerel tercihler, alt bilgideki Çerez tercihleri bölümünden siz açana kadar kapalı kalır."],
         ["9 Kasım 2026 · Sürüm 1.3", "Mevzuat bülteni haftalık Pazar Notu oldu. Resend artık bülteni de gönderiyor ve bu amaçla onaylı adreslerin listesini ve dillerini saklıyor."],
@@ -461,10 +463,10 @@ const pages: Record<Lang, Record<TrustKind, {
       label: "HİZMET SAĞLAYICILAR",
       title: "Bu siteyi işleten hizmetler.",
       intro: "Her sağlayıcı kişisel verileri yalnızca bize hizmetini sunmak için ve talimatlarımız doğrultusunda işler.",
-      status: "Son inceleme 9 Kasım 2026.",
+      status: "Son inceleme 27 Kasım 2026.",
       sections: [
         ["Cloudflare, Inc. (ABD)", "Barındırma, form ve bülten kayıtlarını tutan veritabanı, teknik notların dosya depolaması, editör alanının güvenliği ve erişim kontrolü. Gizlilik bildirimindeki tüm verileri işler; sunucuları dünya geneline yayılıdır."],
-        ["Resend, Inc. (ABD)", "Haftalık bülteni, bülten onay e-postalarını ve bize gelen form bildirimlerini gönderir. Onaylı bülten adreslerinin listesini ve dillerini saklar. E-posta adreslerini ve bu e-postaların içeriğini işler; gönderim AB (İrlanda) bölgesinden yapılandırılmıştır."],
+        ["Resend, Inc. (ABD)", "Aylık bülteni, bülten onay e-postalarını ve bize gelen form bildirimlerini gönderir. Onaylı bülten adreslerinin listesini ve dillerini saklar. E-posta adreslerini ve bu e-postaların içeriğini işler; gönderim AB (İrlanda) bölgesinden yapılandırılmıştır."],
         ["Microsoft Corporation (ABD)", "Form bildirimlerini ve doğrudan e-postalarınızı alan furkangul@ganrichadvisory.com e-posta kutusunu barındırır."],
         ["Google LLC (ABD)", "Form bildirimlerini de alan bir Gmail e-posta kutusunu barındırır."],
         ["Kullanılmayanlar", "Hiçbir reklam ağı, veri simsarı, analitik çerez sağlayıcısı veya haricî yapay zekâ hizmeti ziyaretçi verisi almaz."],
@@ -502,6 +504,6 @@ export function TrustContentPage({ lang, kind }: { lang: Lang; kind: TrustKind }
   return <TrustShell lang={lang} label={page.label} title={page.title} intro={page.intro}>
     <Sections sections={page.sections}/>
     {(mergedTrustParts[kind] ?? []).map(([part, anchor]) => { const p = pages[lang][part]; return <div key={part} id={anchor} className="trust-part"><header><span className="eyebrow">{p.label}</span><h2>{p.title}</h2><p>{p.intro}</p></header><Sections sections={p.sections}/></div>; })}
-    <p className="policy-version">{lang === "en" ? "Version 1.5 · Reviewed 22 November 2026" : "Sürüm 1.5 · İnceleme tarihi 22 Kasım 2026"}</p>
+    <p className="policy-version">{lang === "en" ? "Version 1.6 · Reviewed 27 November 2026" : "Sürüm 1.6 · İnceleme tarihi 27 Kasım 2026"}</p>
   </TrustShell>;
 }
