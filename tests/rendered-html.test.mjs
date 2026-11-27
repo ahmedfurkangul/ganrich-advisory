@@ -596,7 +596,7 @@ test("publishes the EUDR readiness check in both languages and links it from the
 });
 
 test("publishes the regulation newsletter page in both languages and offers sign-up on EU programmes", async () => {
-  for (const [path, title] of [["/en/insights/regulation-updates", /Regulation Updates \| Ganrich Advisory/], ["/tr/icgoruler/mevzuat-bulteni", /Mevzuat Bülteni \| Ganrich Advisory/]]) {
+  for (const [path, title] of [["/en/insights/regulation-updates", /Ganrich Monthly Note: EU Regulation Updates \| Ganrich Advisory/], ["/tr/icgoruler/mevzuat-bulteni", /Ganrich Aylık Not: Mevzuat Bülteni \| Ganrich Advisory/]]) {
     const response = await render(path);
     assert.equal(response.status, 200, path);
     const html = await response.text();
@@ -604,13 +604,15 @@ test("publishes the regulation newsletter page in both languages and offers sign
     assert.match(html, /rel="canonical"/);
   }
   const eu = await (await render("/tr/cozumler/eudr-izlenebilirlik")).text();
-  assert.match(eu, /Pazar Notu.{0,8}nu e-postayla alın/);
-  // The list is weekly now; the old "only when something changes" promise must not come back.
+  assert.match(eu, /Aylık Not.{0,8}u e-postayla alın/);
+  // The list is monthly now; the old "only when something changes" promise must not come back.
   const tr = await (await render("/tr/icgoruler/mevzuat-bulteni")).text();
-  assert.match(tr, /her Pazar 08:00/);
+  assert.match(tr, /ayda bir gönderilen kısa bir e-posta/);
+  assert.doesNotMatch(tr, /her Pazar 08:00/);
   assert.doesNotMatch(tr, /Yalnızca bilinmeye değer bir gelişme olduğunda/);
   const en = await (await render("/en/insights/regulation-updates")).text();
-  assert.match(en, /every Sunday at 08:00 Istanbul time/);
+  assert.match(en, /sent once a month/);
+  assert.doesNotMatch(en, /every Sunday at 08:00 Istanbul time/);
   assert.doesNotMatch(en, /Sent only when there is something worth knowing/);
   assert.match(await (await render("/en")).text(), /href="\/en\/insights\/regulation-updates"/);
   assert.match(await (await render("/tr/gizlilik")).text(), /E-postayla mevzuat bülteni/);
@@ -2004,12 +2006,16 @@ test("keeps long article titles short in search results while the page heading k
   }
 });
 
-test("records the KVKK transfer update as privacy notice version 1.5", async () => {
+test("records the KVKK transfer update as privacy notice version 1.5 and the monthly note as version 1.6", async () => {
   const en = await (await render("/en/privacy")).text();
   assert.match(en, /22 November 2026 · Version 1\.5/);
-  assert.match(en, /Version 1\.5 · Reviewed 22 November 2026/);
+  assert.match(en, /27 November 2026 · Version 1\.6/);
+  assert.match(en, /the monthly Ganrich Monthly Note/);
+  assert.match(en, /Version 1\.6 · Reviewed 27 November 2026/);
   const tr = await (await render("/tr/gizlilik")).text();
   assert.match(tr, /22 Kasım 2026 · Sürüm 1\.5/);
+  assert.match(tr, /27 Kasım 2026 · Sürüm 1\.6/);
+  assert.match(tr, /aylık Ganrich Aylık Not/);
 });
 
 test("keeps every guide in content/guides as canonical Markdown listed in order.json", async () => {
